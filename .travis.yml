@@ -6,7 +6,9 @@ cache:
   - node_modules
 before_script:
   - cd web
+  - echo $PWD
 script:
+  - npm install
   - npm test
   - npm run build
 # deploy:
