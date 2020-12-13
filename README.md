@@ -22,6 +22,7 @@ projekta i priložiti skriptu za popunu baze testnim podacima.
 - [React Redux Loading Bar](https://github.com/mironov/react-redux-loading-bar)
 - [React Progress Button](https://github.com/mathieudutour/react-progress-button)
 - [Chakra](https://chakra-ui.com/docs/getting-started)
+- [Jest](https://jestjs.io/)
 
 ### Backend
 
