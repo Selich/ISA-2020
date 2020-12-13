@@ -4,10 +4,9 @@ node_js:
 cache:
   directories:
   - node_modules
-script:
-  - cd src
-  - cd main
+before_script:
   - cd web
+script:
   - npm test
   - npm run build
 # deploy:
