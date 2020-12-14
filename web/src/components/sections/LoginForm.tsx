@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { Flex, FormErrorMessage, Button, FormControl, FormLabel, Input, Box, Stack } from "@chakra-ui/react";
 import FormInput from "./FormInput";
 import FormInputPassword from "./FormInputPassword";
+import axios from 'axios'
 
 
 interface IFormInputs {
@@ -20,7 +21,11 @@ export default function LoginForm(props: any){
   const { register, handleSubmit, errors, formState } = useForm<IFormInputs>({
     resolver: yupResolver(schema)
   });
-  const onSubmit = (data: IFormInputs) => console.log(data);
+  const onSubmit = (data: IFormInputs) =>
+    axios.post('URL',  data)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
+
   return (
     <Flex width="full" align="center" justifyContent="center">
     <form onSubmit={handleSubmit(onSubmit)}>
