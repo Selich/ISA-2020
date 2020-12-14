@@ -28,6 +28,7 @@ projekta i priložiti skriptu za popunu baze testnim podacima.
 
 - [Spring Boot](https://spring.io/projects/spring-boot)
 - [Redis](https://redis.io/)
+- [Azure](https://github.com/microsoft/azure-maven-plugins/blob/develop/azure-webapp-maven-plugin/README.md/)
 
 ### Slanje e-maila
 
