@@ -1,8 +1,13 @@
 package com.project.isa.model;
 
+import com.project.isa.model.auth.Patient;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
+//Pitanje-Da li veza LEK prepisan PACIJENTU je obican ManyToMany ili ima dodatna obelezja
+//Razlika PREPORUKE i PREPISANOG LEKA
 
 @Entity
 @Table(name="medicine")
@@ -10,7 +15,11 @@ public class Medicine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
+
+    @Column(name="code",unique = true)
+    private Long code;
 
     @Column(name="name")
     private String name;
@@ -49,5 +58,15 @@ public class Medicine {
 
     @OneToMany(mappedBy = "medicine")
     private Set<OrderedMedicine> orderedMedicine=new HashSet<OrderedMedicine>();
+
+    @OneToMany(mappedBy = "medicine")
+    private Set<Inventory> inventories=new HashSet<Inventory>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "alergic_to",
+            joinColumns = @JoinColumn(name = "medicine_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id",referencedColumnName = "id"))
+    Set<Patient> patientsAlergicTo= new HashSet<Patient>();
 
 }
