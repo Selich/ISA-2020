@@ -62,6 +62,9 @@ public class Medicine {
     @OneToMany(mappedBy = "medicine")
     private Set<Inventory> inventories=new HashSet<Inventory>();
 
+    @OneToMany(mappedBy = "pharmacy")
+    private Set<PharmacyInventory> pharmaciesThatOffer= new HashSet<PharmacyInventory>();
+
     @ManyToMany
     @JoinTable(
             name = "alergic_to",
