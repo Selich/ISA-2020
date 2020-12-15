@@ -13,6 +13,7 @@ public interface MedicineService {
     Medicine findOne(Long id);
 
     Medicine findOneByCode(Long code);
+    List<Medicine> findAllByType(String type);
 
     public Medicine create(Medicine medicine);
 

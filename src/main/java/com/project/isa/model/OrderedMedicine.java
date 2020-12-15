@@ -1,13 +1,16 @@
 package com.project.isa.model;
 
 import javax.persistence.*;
+
+import com.project.isa.model.pk.OrderedMedicinePK;
+
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name="ordered_medicine")
 public class OrderedMedicine implements Serializable {
+
+    private static final long serialVersionUID = 468913487073588994L;
 
     @EmbeddedId
     private OrderedMedicinePK id;

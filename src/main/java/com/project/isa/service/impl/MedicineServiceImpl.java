@@ -5,7 +5,6 @@ import com.project.isa.model.Medicine;
 import com.project.isa.repository.MedicineRepository;
 import com.project.isa.service.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +13,8 @@ import java.util.List;
 public class MedicineServiceImpl implements MedicineService {
 
 
-    @Autowired
     private MedicineRepository medicineRepository;
-    
+
     @Override
     public List<Medicine> findAll() {
         return medicineRepository.findAll();
@@ -30,6 +28,11 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     public Medicine findOneByCode(Long code) {
         return medicineRepository.findByCode(code);
+    }
+
+    @Override
+    public List<Medicine> findAllByType(String type){
+        return medicineRepository.findAllByType(type);
     }
 
     @Override

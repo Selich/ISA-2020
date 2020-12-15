@@ -1,11 +1,13 @@
 package com.project.isa.repository;
 
+import java.util.List;
+
 import com.project.isa.model.Medicine;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface MedicineRepository extends CrudRepository<Medicine,Long> {
 
     Medicine findOneById(Long id);

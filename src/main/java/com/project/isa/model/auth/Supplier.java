@@ -3,12 +3,8 @@ package com.project.isa.model.auth;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import javax.validation.constraints.*;
-
-
-
 @Entity
-@Table(name = "supplier")
+@Table(name = "suppliers")
 public class Supplier extends User{
 
 
@@ -18,7 +14,7 @@ public class Supplier extends User{
     }
 
     /*
-     @OneToMany(mappedBy = "supplier")
+    @OneToMany(mappedBy = "supplier")
     private Set<Inventory> inventories=new HashSet<Inventory>();
     */
 }
