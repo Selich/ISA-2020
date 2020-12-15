@@ -16,5 +16,10 @@ public class Patient extends User{
 
     List<TimeSlot> history;
 
+    /*
+    @ManyToMany(mappedBy = "patientsAlergicTo")
+    Set<Medicine> alergicTo=new HashSet<Medicine>();
+    * */
+
 
 }

@@ -17,4 +17,8 @@ public class Supplier extends User{
         super();
     }
 
+    /*
+     @OneToMany(mappedBy = "supplier")
+    private Set<Inventory> inventories=new HashSet<Inventory>();
+    */
 }
