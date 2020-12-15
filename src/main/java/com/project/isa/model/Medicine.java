@@ -5,48 +5,49 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="MEDICINE")
+@Table(name="medicine")
 public class Medicine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="NAME")
+    @Column(name="name")
     private String name;
 
     //Mozda napraviti enum- Antibiotik,anestetik...
-    @Column(name="TYPE")
+    @Column(name="type")
     private String type;
 
     //Oblik-prasak,pilula...
-    @Column(name="FORM")
+    @Column(name="form")
     private String form;
 
-    @Column(name="CONTENTS")
+    @Column(name="contents")
     private String contents;
 
-    @Column(name="PRODUCER")
+    @Column(name="producer")
     private String producer;
 
     //Da li je potreban recept da bi dobio ovaj lek
-    @Column(name="NEED_PERSCRIPTION")
-    private Boolean needPerscription;
+    // TODO: Refactor name @Selich
+    @Column(name="is_needed_prescription")
+    private Boolean isNeededPrescription;
 
     //Napomena
-    @Column(name="INFO")
+    @Column(name="info")
     private String info;
 
     //Alternativni lek
     @ManyToMany
-    @JoinTable(name = "ALTERNATIVES",
+    @JoinTable(name = "alternatives",
             joinColumns =
-            @JoinColumn(name = "MEDICINE", referencedColumnName = "id"),
+            @JoinColumn(name = "medicine", referencedColumnName = "id"),
             inverseJoinColumns =
-            @JoinColumn(name = "ALTERNATIVE", referencedColumnName = "id"))
+            @JoinColumn(name = "alternative", referencedColumnName = "id"))
     private Set<Medicine> alternatives= new HashSet<Medicine>();
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "medicine")
     private Set<OrderedMedicine> orderedMedicine=new HashSet<OrderedMedicine>();
 
 }

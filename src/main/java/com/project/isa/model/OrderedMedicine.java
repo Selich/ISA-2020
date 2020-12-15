@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="OREDERED_MEDICINE")
+@Table(name="ordered_medicine")
 public class OrderedMedicine implements Serializable {
 
     @EmbeddedId
@@ -14,15 +14,15 @@ public class OrderedMedicine implements Serializable {
 
     @ManyToOne
     @MapsId("order_id")
-    @JoinColumn(name="ORDER_ID")
+    @JoinColumn(name="order_id")
     private Order order;
 
     @ManyToOne
     @MapsId("medicine_id")
-    @JoinColumn(name="MEDICINE_ID")
+    @JoinColumn(name="medicine_id")
     private Medicine medicine;
 
-    @Column(name="AMOUNT",nullable = false)
+    @Column(name="amount", nullable = false)
     private Long amount;
 
 

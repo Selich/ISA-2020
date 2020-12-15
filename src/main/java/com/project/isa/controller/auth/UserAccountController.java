@@ -24,36 +24,36 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserAccountController {
 
-    @Autowired
-    private UserRepository userRepository;
+    // @Autowired
+    // private UserRepository userRepository;
 
-    @Autowired
-    private ConfirmationTokenRepository confirmationTokenRepository;
+    // @Autowired
+    // private ConfirmationTokenRepository confirmationTokenRepository;
 
-    @Autowired
-    private EmailSenderService emailSenderService;
+    // @Autowired
+    // private EmailSenderService emailSenderService;
 
-    @RequestMapping(value="/register", method = RequestMethod.GET)
-    public ModelAndView displayRegistration(ModelAndView modelAndView, User user)
-    {
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("register");
-        return modelAndView;
-    }
-    // public ResponseEntity create(@RequestBody KorisnikAdresaDAO kaDAO) throws Exception {
-    @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> login(@RequestParam String email, String pass) {
-        User user = userRepository.findByEmailIdIgnoreCase(email);
-        if(user.getPassword().equals(pass))
-            return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
+    // @RequestMapping(value="/register", method = RequestMethod.GET)
+    // public ModelAndView displayRegistration(ModelAndView modelAndView, User user)
+    // {
+    //     modelAndView.addObject("user", user);
+    //     modelAndView.setViewName("register");
+    //     return modelAndView;
+    // }
+    // // public ResponseEntity create(@RequestBody KorisnikAdresaDAO kaDAO) throws Exception {
+    // @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<UserDTO> login(@RequestParam String email, String pass) {
+    //     User user = userRepository.findByEmailIdIgnoreCase(email);
+    //     if(user.getPassword().equals(pass))
+    //         return new ResponseEntity<>(new UserDTO(user), HttpStatus.OK);
 
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    // }
 
 
-    @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO user){
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    // @PostMapping(value="/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    // public ResponseEntity<UserDTO> register(@RequestBody UserDTO user){
+    //     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         // User existingUser = userRepository.findByEmailIdIgnoreCase(user.getEmail());
         // if(existingUser != null)
@@ -85,27 +85,27 @@ public class UserAccountController {
         // }
 
         // return modelAndView;
-    }
+    // }
 
-    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
-    public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String confirmationToken)
-    {
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
+    // @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
+    // public ModelAndView confirmUserAccount(ModelAndView modelAndView, @RequestParam("token")String confirmationToken)
+    // {
+    //     ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
-        if(token != null)
-        {
-            User user = userRepository.findByEmailIdIgnoreCase(token.getUser().getEmail());
-            user.setEnabled(true);
-            userRepository.save(user);
-            modelAndView.setViewName("accountVerified");
-        }
-        else
-        {
-            modelAndView.addObject("message","The link is invalid or broken!");
-            modelAndView.setViewName("error");
-        }
+    //     if(token != null)
+    //     {
+    //         User user = userRepository.findByEmailIdIgnoreCase(token.getUser().getEmail());
+    //         user.setEnabled(true);
+    //         userRepository.save(user);
+    //         modelAndView.setViewName("accountVerified");
+    //     }
+    //     else
+    //     {
+    //         modelAndView.addObject("message","The link is invalid or broken!");
+    //         modelAndView.setViewName("error");
+    //     }
 
-        return modelAndView;
-    }
+    //     return modelAndView;
+    // }
     // getters and setters
 }

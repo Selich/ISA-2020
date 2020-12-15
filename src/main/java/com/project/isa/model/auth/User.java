@@ -8,12 +8,14 @@ import javax.persistence.*;
 
 import org.springframework.data.annotation.Id;
 
+//TODO: Ista tabela za sve
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     @Email
     @NotEmpty(message = "Email is required.")

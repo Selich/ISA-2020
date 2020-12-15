@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="ORDERS")
+@Table(name="orders")
 public class Order {
 
     @Id
@@ -14,12 +14,12 @@ public class Order {
     private Long id;
 
     //Rok dokle se moze dati ponuda
-    @Column(name="DEADLINE")
+    @Column(name="deadline")
     private Date deadline;
 
     @OneToMany(mappedBy = "order")
     private Set<Offer> offers= new HashSet<Offer>();
 
-    @OneToMany(mappedBy = "medicine")
+    @OneToMany(mappedBy = "order")
     private Set<OrderedMedicine> orderedMedicine=new HashSet<OrderedMedicine>();
 }
