@@ -3,8 +3,6 @@ import { Link } from "react-router-dom"
 //@ts-ignore
 import { Heading, Box, Flex, Text, Button, Stack, PseudoBox } from "@chakra-ui/react"
 
-import {CloseIcon} from '@chakra-ui/icons'
-
 const MenuItems = (props: any) => {
   const { children, isLast, to = "/", ...rest } = props
   return (
@@ -30,13 +28,13 @@ const Header = (props: any) => {
       justify="space-between"
       wrap="wrap"
       padding="1.5rem"
-      bg="teal.500"
+      bg="teal.600"
       color="white"
       {...props}
     >
       <Flex align="center" mr={5}>
         <Heading as="h1" size="lg" letterSpacing={"-.1rem"}>
-          Chakra UI
+          Pharmacy
         </Heading>
       </Flex>
 
@@ -67,9 +65,11 @@ const Header = (props: any) => {
         display={{ sm: show ? "block" : "none", md: "block" }}
         mt={{ base: 4, md: 0 }}
       >
-        <Button bg="transparent" border="1px">
-          Create account
-        </Button>
+        <Link to='/register'>
+          <Button bg="transparent" border="1px">
+            Create account
+          </Button>
+        </Link>
       </Box>
     </Flex>
   );
