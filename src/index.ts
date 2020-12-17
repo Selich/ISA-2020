@@ -8,6 +8,7 @@ import { UserResolver } from "./resolvers/user";
 import { RegisterInput } from "./resolvers/types/UserTypes";
 import { User } from "./entities/User";
 import { MedicineResolver } from "./resolvers/medicine";
+import cors from 'cors';
 
 
 const main = async () => {
@@ -15,33 +16,26 @@ const main = async () => {
   await orm.getMigrator().up();
 
   const app = express()
-  // const user = orm.em.create(User, {
-  //   email: "selicsh@gmail.com",
-  //   password: "1234",
-  //   confirmPassword: "1234",
-  //   role: "patient",
-  //   firstName: "Nikola",
-  //   lastName: "Selic",
-  //   gender: "Male",
-  //   dateOfBirth: "12/12/1994",
-  //   street: "street",
-  //   city: "Paracin",
-  //   country: "Serbia",
-  //   telephone: "1243123123"
-  // })
-  // await orm.em.persistAndFlush(user);
-
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, MedicineResolver],
+      resolvers: [UserResolver],
       validate: false
     }),
-    context: () => ({ em: orm.em })
+    context: ({ req, res }) => ({ em: orm.em, req , res })
 
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false
+  });
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true
+    })
+  )
 
   app.get('/', (req,res) => {
     res.send('test');
@@ -49,8 +43,7 @@ const main = async () => {
   app.listen(4000, () => {
     console.log('Server started on localhost:4000');
   })
-  // const users = await orm.em.find(User, {})
-  // console.log(users);
+
 };
 
 

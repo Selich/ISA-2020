@@ -21,8 +21,9 @@ interface IFormInputs {
 }
 
 
-export default function Register() {
+export default function Login() {
   const [date, setDate] = useState(new Date())
+  // const [, login] = useLoginMuatation();
   const router = useRouter();
   return (
       <Wrapper variant="small">
