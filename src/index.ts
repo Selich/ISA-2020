@@ -7,6 +7,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { UserResolver } from "./resolvers/user";
 import { RegisterInput } from "./resolvers/types/UserTypes";
 import { User } from "./entities/User";
+import { MedicineResolver } from "./resolvers/medicine";
 
 
 const main = async () => {
@@ -33,7 +34,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, MedicineResolver],
       validate: false
     }),
     context: () => ({ em: orm.em })
