@@ -1,0 +1,24 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "allz-db.etfg.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "database": "etfg_archive",
+            "username": "root",
+            "password": "x6SqXpsJzhUgHQn5t6JHc2Kugcv6Er2HknYUq2YM9J9fY3jj99pheA6EPw4N62Nz",
+            "name": "allz"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "local",
+            "database": "isa",
+            "username": "super_isa",
+            "password": "pass"
+        }
+    ]
+}

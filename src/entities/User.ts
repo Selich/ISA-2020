@@ -1,48 +1,61 @@
 import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { Address } from "./Address";
-import { PatientDetails } from "./PatientDetails";
 import { Role } from "./Role";
+import { Int, ObjectType, Field } from 'type-graphql';
 
 
+@ObjectType()
 @Entity()
 export class User {
 
+  @Field(() => Int)
   @PrimaryKey()
   id!: number;
 
+  @Field(() => String)
   @Property()
   email!: string;
 
+  @Field(() => String)
   @Property()
   password!: string;
 
-  @Property()
-  role!: Role;
+  @Field(() => String)
+  @Property({ nullable: true })
+  role!: string;
 
-  @Property()
+  @Field(() => String)
+  @Property({ nullable: true })
   firstName: string;
 
-  @Property()
+  @Field(() => String)
+  @Property({ nullable: true })
   lastName: string;
 
-  @Property()
+  @Field(() => String)
+  @Property({ nullable: true })
   gender: string;
 
+  @Field()
   @Property({ type: 'date', nullable: true })
   dateOfBirth: Date;
 
-  @Property()
+  @Field()
+  @Property({ nullable: true })
   address: Address;
 
-  @Property()
-  telephone: number;
+  @Field()
+  @Property({ nullable: true })
+  telephone: string;
 
   // @Property()
   // details: PatientDetails;
 
+  @Field()
   @Property({default: false})
   isEnabled: boolean;
 
+  @Field()
   @Property({nullable: true})
   averageRating: number;
 
