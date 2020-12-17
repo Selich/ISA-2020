@@ -7,7 +7,10 @@ export class Inventory{
   id!: number;
 
   @Property()
-  fk: number;
+  pharmacyID: number;
+
+  @Property()
+  supplierID: number;
 
   @Property()
   type: string;
@@ -17,4 +20,7 @@ export class Inventory{
 
   @Property()
   quantity: number;
+
+  @Property()
+  price: number;
 }

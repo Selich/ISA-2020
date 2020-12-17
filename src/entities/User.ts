@@ -1,7 +1,9 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { Address } from "./Address";
 import { Role } from "./Role";
 import { Int, ObjectType, Field } from 'type-graphql';
+import { PatientDetails } from "./PatientDetails";
+import { Appointment } from "./Appointment";
 
 
 @ObjectType()
@@ -11,6 +13,13 @@ export class User {
   @Field(() => Int)
   @PrimaryKey()
   id!: number;
+
+  @Property()
+  @OneToOne(() => PatientDetails, (details) => details.userId)
+  details: PatientDetails;
+
+  @Property()
+  schedule: Appointment[];
 
   @Field(() => String)
   @Property()

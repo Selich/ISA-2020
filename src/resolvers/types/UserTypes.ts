@@ -8,7 +8,7 @@ export class LoginInput {
 }
 @InputType()
 export class RegisterInput {
-;
+
   @Field()
   email: string;
   @Field()

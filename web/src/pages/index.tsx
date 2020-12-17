@@ -15,6 +15,7 @@ import { CTA } from '../components/CTA'
 import { Footer } from '../components/Footer'
 import LoginForm from '../components/sections/LoginForm'
 import { Header } from '../components/sections/Header'
+import DermLayout from '../components/layouts/DermLayout'
 import {
   Modal,
   ModalOverlay,
@@ -27,7 +28,12 @@ import {
   Button,
 } from "@chakra-ui/react"
 
-const Index = () => {
+const user = {
+  role: 'derm',
+  email: 'nesto'
+}
+
+const Index = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -40,6 +46,7 @@ const Index = () => {
 
         </ModalContent>
       </Modal>
+      <DermLayout/>
     </>
   )
 

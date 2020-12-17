@@ -14,4 +14,7 @@ export class Reservation{
 
   @Property()
   quantity: number;
+
+  @Property()
+  isDelivered: boolean;
 }

@@ -29,5 +29,4 @@ export class Rating {
   updatedAt = new Date();
 
 
-
 }

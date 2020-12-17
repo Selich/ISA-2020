@@ -64,7 +64,7 @@ export default function Register() {
                 mt={4}
                 type="submit"
                 isLoading={isSubmitting}
-                variantColor="teal"
+                colorScheme="teal"
               >
                 Register
               </Button>

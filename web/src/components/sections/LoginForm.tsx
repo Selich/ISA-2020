@@ -45,7 +45,7 @@ export default function LoginForm(props) {
                 type="submit"
                 onClick={props.onClose}
                 isLoading={isSubmitting}
-                variantColor="teal"
+                colorScheme="teal"
               >
               Submit
               </Button>

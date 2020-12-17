@@ -4,19 +4,33 @@
 - Student 1,3 ( Neautentifikovan korisnik, Korisnik/pacijent, Farmaceut/Dermatolog ) : Nikola Selić
 potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i priložiti skriptu za popunu baze testnim podacima.
 
-Pitanja
+
+### Potrebno
+- [ ] Kesiranje
+- [ ] Message queue obradjivanje zahteva
+- [ ] Validation 
+- [ ] Auth
+- [ ] Mail confirm
+- [ ] Forgot password
+- [ ] Travis CI
+- [ ] Employee posle ulogovanja sa nekom sifrom koju je admin dodao u bazu, salje notifikaciju, employee menja sifru
+- [ ] Async
+- [ ] Transactions ( upis u bazu ) ( 2 situacije )
+
+### Pitanja
 - Da li mogu farmaceuti i dermatolozi u istoj tabeli
 Activating the environment
-Frontend
-React Redux Loading Bar
-React Progress Button
-Chakra
-Jest
-Backend
-Spring Boot
-Redis
-Azure
-Slanje e-maila
+### Frontend
+- React 
+- Redux
+- Next.js
+- Chakra UI
+- Jest
+### Backend
+- Express.js
+- Redis
+- Azure
+### Slanje e-maila
 Za slanje emaila nije obezbeđen poseban servis. Možete koristiti sopstveni email nalog. Opciono, slanje notifikacija u vidu emaila možete da odradite korišćenjem message queue-a.
 
 Konkurentni pristup resursima u bazi

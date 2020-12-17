@@ -9,6 +9,11 @@ import { RegisterInput } from "./resolvers/types/UserTypes";
 import { User } from "./entities/User";
 import { MedicineResolver } from "./resolvers/medicine";
 import cors from 'cors';
+import redis from 'redis';
+import session from 'express-session';
+import connectRedis from 'connect-redis'
+
+
 
 
 const main = async () => {
@@ -16,7 +21,27 @@ const main = async () => {
   await orm.getMigrator().up();
 
   const app = express()
+  const RedisStore = connectRedis(session)
+  const redisClient = redis.createClient()
 
+  app.use(
+    session({
+      name: 'qid',
+      store: new RedisStore({
+        client: redisClient,
+        disableTouch: true
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+        httpOnly: true,
+        // csrf
+        sameSite: 'lax'
+      },
+      // make to env var
+      secret: 'somesecret',
+      resave: false
+    })
+  )
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [UserResolver],

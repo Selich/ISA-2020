@@ -1,4 +1,4 @@
-import { Entity, Property } from "@mikro-orm/core";
+import { Entity, OneToOne, Property } from "@mikro-orm/core";
 import { Complaint } from "./Complaint";
 import { Medicine } from "./Medicine";
 import { Rating } from "./Rating";
@@ -8,15 +8,15 @@ import { User } from "./User";
 
 
 @Entity()
-export class PatientDetails extends User{
+export class PatientDetails{
 
   // @OneToMany(() => Appointment, (appointment) => appointment.patient)
-  @Property()
-  schedule: Appointment[];
-
   // @OneToMany(() => Rating, (rating) => rating.patient)
   // @Property()
   // ratings: Rating[];
+  @Property()
+  @OneToOne(() => User, (user) => user.details)
+  userId: User;
 
   @Property()
   allergies: Medicine[];
