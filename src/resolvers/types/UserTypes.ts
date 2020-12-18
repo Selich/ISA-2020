@@ -32,14 +32,14 @@ export class RegisterInput {
   @Field()
   dateOfBirth: string;
 
-  @Field()
-  street: string;
+  // @Field()
+  // street: string;
 
-  @Field()
-  city: string;
+  // @Field()
+  // city: string;
 
-  @Field()
-  country: string;
+  // @Field()
+  // country: string;
 
   @Field()
   telephone: string;

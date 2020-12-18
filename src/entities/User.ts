@@ -1,8 +1,9 @@
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { Address } from "./Address";
 import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
+import { OneToOne } from '@mikro-orm/core';
 
 @ObjectType()
 @Entity()
@@ -12,9 +13,9 @@ export class User extends BaseEntity{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // @Field()
-  // @Column()
-  // details: PatientDetails;
+  @OneToOne(() => PatientDetails)
+  @JoinColumn()
+  details: PatientDetails;
 
   // @Field()
   // @Column()
@@ -44,13 +45,12 @@ export class User extends BaseEntity{
   @Column({ nullable: true})
   gender: string;
 
-  // // @Field()
-  // // @Column()
-  // // dateOfBirth: Date;
+  @Field()
+  @Column({ type: 'date', nullable: true})
+  dateOfBirth: Date;
 
-  // // @Field()
-  // // @Column()
-  // // address: Address;
+  // @ManyToOne(() => Address, address => address.users)
+  // address: Address;
 
   @Field()
   @Column({ nullable: true})

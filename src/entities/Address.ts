@@ -1,30 +1,36 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
-import { ObjectType, Field } from 'type-graphql';
+import { OneToMany, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { User } from './User';
 
 @ObjectType()
 @Entity()
-export class Address {
+export class Address extends BaseEntity{
 
-  @Field()
-  @PrimaryKey()
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
   id!: number;
 
+  // @OneToMany(() => User, user => user.address )
+  // users: User[]
+
   @Field()
-  @Property({ nullable: true, default:'' })
+  @Column({ nullable: true})
   street: string;
 
   @Field()
-  @Property({ nullable: true, default:'' })
+  @Column({ nullable: true})
   city: string;
 
   @Field()
-  @Property({ nullable: true, default:'' })
+  @Column({ nullable: true})
   country: string;
 
-  @Property()
+  @Field(() => String)
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property()
+  @Field(() => String)
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 

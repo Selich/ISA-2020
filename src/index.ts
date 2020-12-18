@@ -17,6 +17,8 @@ import 'reflect-metadata'
 import path from "path";
 import {createUserLoader} from './utils/createUserLoader'
 import { Medicine } from "./entities/Medicine";
+import { Address } from "./entities/Address";
+import { PatientDetails } from "./entities/PatientDetails";
 
 
 
@@ -34,7 +36,7 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [
       // __dirname + "./src/entities/*.ts"
-      User, Medicine
+      User, Medicine, Address, PatientDetails
     ],
   });
 

@@ -6,7 +6,7 @@ import { getConnection } from "typeorm";
 import argon2 from 'argon2';
 import { validateRegister } from '../utils/validators/validateRegister';
 import { validateLogin } from '../utils/validators/validateLogin';
-import { PatientDetails } from 'src/entities/PatientDetails';
+import { PatientDetails } from '../entities/PatientDetails';
 
 import { v4 } from "uuid";
 import { sendEmail } from '../utils/sendMail';
@@ -141,6 +141,13 @@ export class UserResolver{
   @Query(() => [User], { nullable: true })
   users(@Ctx() { req }: MyContext) {
     // you are not logged in
+    // const connection = getConnection()
+    // const users = connection
+    //   .getRepository(User)
+    //   .createQueryBuilder("user")
+    //   .leftJoinAndSelect("user.address", "address")
+    //   .getMany();
+    // return users
     return User.find()
 
   }
@@ -155,8 +162,15 @@ export class UserResolver{
     //   return { errors };
     // }
 
+    const connection = await getConnection()
     const hashedPassword = await argon2.hash(inputs.password);
     let user;
+    let patientDetails = new PatientDetails();
+    if(inputs.role === 'patient'){
+      patientDetails.score = 0
+      patientDetails.penalty = 0
+      await connection.manager.save(patientDetails)
+    }
     try {
       // User.create({}).save()
       const result = await getConnection()
@@ -164,9 +178,11 @@ export class UserResolver{
         .insert()
         .into(User)
         .values({
+          details: patientDetails,
           email: inputs.email,
           password: hashedPassword,
           firstName: inputs.firstName,
+          telephone: inputs.telephone,
           isEnabled: false,
           averageRating: 0
         })
