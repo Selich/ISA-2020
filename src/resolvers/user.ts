@@ -166,7 +166,9 @@ export class UserResolver{
         .values({
           email: inputs.email,
           password: hashedPassword,
-          firstName: inputs.firstName
+          firstName: inputs.firstName,
+          isEnabled: false,
+          averageRating: 0
         })
         .returning("*")
         .execute();
