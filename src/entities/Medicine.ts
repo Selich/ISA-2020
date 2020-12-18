@@ -1,17 +1,19 @@
-import { PrimaryKey, Property } from "@mikro-orm/core";
-import { Int, ObjectType, Field } from 'type-graphql';
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Int, ObjectType, Field, ID } from 'type-graphql';
 
-export class Medicine {
-  @Field(() => Int)
-  @PrimaryKey()
+@ObjectType()
+@Entity()
+export class Medicine extends BaseEntity{
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => String)
-  @Property()
+  @Column()
   title!: string;
 
   @Field(() => String)
-  @Property()
+  @Column()
   type: string;
 
   // Recursive
@@ -23,9 +25,13 @@ export class Medicine {
   // @OneToMany()
   // alternatives: Medicine[];
 
-  @Property()
+  @Field(() => String)
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property()
+  @Field(() => String)
+  @UpdateDateColumn()
   updatedAt = new Date();
+
+
 }

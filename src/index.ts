@@ -16,6 +16,7 @@ import {createConnection} from 'typeorm';
 import 'reflect-metadata'
 import path from "path";
 import {createUserLoader} from './utils/createUserLoader'
+import { Medicine } from "./entities/Medicine";
 
 
 
@@ -33,7 +34,7 @@ const main = async () => {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [
       // __dirname + "./src/entities/*.ts"
-      User
+      User, Medicine
     ],
   });
 
@@ -63,7 +64,7 @@ const main = async () => {
   )
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, MedicineResolver],
       validate: false
     }),
     context: ({ req, res}) => ({ req , res, redis,
