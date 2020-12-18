@@ -18,7 +18,7 @@ export class RegisterInput {
   confirmPassword: string;
 
   @Field(() => String)
-  role!: string;
+  role: string;
 
   @Field(() => String)
   firstName: string;
@@ -30,7 +30,7 @@ export class RegisterInput {
   gender: string;
 
   @Field()
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
   @Field()
   street: string;

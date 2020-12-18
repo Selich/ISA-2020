@@ -1,77 +1,75 @@
-import { Entity, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { Address } from "./Address";
-import { Role } from "./Role";
-import { Int, ObjectType, Field } from 'type-graphql';
+import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
 
-
 @ObjectType()
 @Entity()
-export class User {
+export class User extends BaseEntity{
 
-  @Field(() => Int)
-  @PrimaryKey()
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
-  @OneToOne(() => PatientDetails, (details) => details.userId)
-  details: PatientDetails;
-
-  @Property()
-  schedule: Appointment[];
-
-  @Field(() => String)
-  @Property()
-  email!: string;
-
-  @Field(() => String)
-  @Property()
-  password!: string;
-
-  @Field(() => String)
-  @Property({ nullable: true })
-  role!: string;
-
-  @Field(() => String)
-  @Property({ nullable: true })
-  firstName: string;
-
-  @Field(() => String)
-  @Property({ nullable: true })
-  lastName: string;
-
-  @Field(() => String)
-  @Property({ nullable: true })
-  gender: string;
-
-  @Field()
-  @Property({ type: 'date', nullable: true })
-  dateOfBirth: Date;
-
-  @Field()
-  @Property({ nullable: true })
-  address: Address;
-
-  @Field()
-  @Property({ nullable: true })
-  telephone: string;
-
-  // @Property()
+  // @Field()
+  // @Column()
   // details: PatientDetails;
 
+  // @Field()
+  // @Column()
+  // schedule: Appointment[];
+
+  @Field(() => String)
+  @Column()
+  email: string;
+
+  @Field(() => String)
+  @Column()
+  password: string;
+
   @Field()
-  @Property({default: false})
+  @Column({ nullable: true})
+  role: string;
+
+  @Field()
+  @Column({ nullable: true})
+  firstName: string;
+
+  @Field()
+  @Column({ nullable: true})
+  lastName: string;
+
+  @Field()
+  @Column({ nullable: true})
+  gender: string;
+
+  // // @Field()
+  // // @Column()
+  // // dateOfBirth: Date;
+
+  // // @Field()
+  // // @Column()
+  // // address: Address;
+
+  @Field()
+  @Column({ nullable: true})
+  telephone: string;
+
+  @Field()
+  @Column()
   isEnabled: boolean;
 
   @Field()
-  @Property({nullable: true})
+  @Column()
   averageRating: number;
 
-  @Property({ type: 'date'})
+  @Field(() => String)
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
+  @Field(() => String)
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 

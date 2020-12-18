@@ -12,13 +12,32 @@ import cors from 'cors';
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis'
+import {createConnection} from 'typeorm';
+import 'reflect-metadata'
+import path from "path";
+import {createUserLoader} from './utils/createUserLoader'
 
 
 
 
 const main = async () => {
-  const orm = await MikroORM.init(microConfig);
-  await orm.getMigrator().up();
+  const conn = await createConnection({
+    type: "postgres",
+    host: 'localhost',
+    port: 5432,
+    logging: true,
+    username: 'super_isa',
+    password: 'pass',
+    database: 'isa',
+    synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
+    entities: [
+      // __dirname + "./src/entities/*.ts"
+      User
+    ],
+  });
+
+  await conn.runMigrations();
 
   const app = express()
   const RedisStore = connectRedis(session)
@@ -47,7 +66,8 @@ const main = async () => {
       resolvers: [UserResolver],
       validate: false
     }),
-    context: ({ req, res }) => ({ em: orm.em, req , res })
+    context: ({ req, res}) => ({ req , res, redis,
+      userLoader : createUserLoader  })
 
   });
 
