@@ -2,21 +2,10 @@ import { StarIcon } from "@chakra-ui/icons"
 import { Image, Box, Badge } from "@chakra-ui/react"
 import React from "react"
 
-export default function Card() : any{
-  const property = {
-    imageUrl: "",
-    imageAlt: "",
-    beds: 3,
-    baths: 2,
-    title: "",
-    formattedPrice: "",
-    reviewCount: 34,
-    rating: 4,
-  }
-
+export default function Card(item): any{
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <Image src={property.imageUrl} alt={property.imageAlt} />
+    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" bg="white">
+      <Image src={item.image} alt="" />
 
       <Box p="6">
         <Box d="flex" alignItems="baseline">
@@ -31,7 +20,7 @@ export default function Card() : any{
             textTransform="uppercase"
             ml="2"
           >
-            {property.beds} beds &bull; {property.baths} baths
+            {item.type}
           </Box>
         </Box>
 
@@ -42,13 +31,13 @@ export default function Card() : any{
           lineHeight="tight"
           isTruncated
         >
-          {property.title}
+          {item.quantity}
         </Box>
 
         <Box>
-          {property.formattedPrice}
+          {item.price}
           <Box as="span" color="gray.600" fontSize="sm">
-            / wk
+            123123
           </Box>
         </Box>
 
@@ -58,11 +47,11 @@ export default function Card() : any{
             .map((_, i) => (
               <StarIcon
                 key={i}
-                color={i < property.rating ? "teal.500" : "gray.300"}
+                color={i < item.rating ? "teal.500" : "gray.300"}
               />
             ))}
           <Box as="span" ml="2" color="gray.600" fontSize="sm">
-            {property.reviewCount} reviews
+            {item.reviewCount} reviews
           </Box>
         </Box>
       </Box>

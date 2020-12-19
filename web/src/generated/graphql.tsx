@@ -20,6 +20,8 @@ export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
   users?: Maybe<Array<User>>;
+  medicines?: Maybe<Array<Medicine>>;
+  medicinesDetails?: Maybe<Array<Medicine>>;
 };
 
 export type User = {
@@ -40,11 +42,21 @@ export type User = {
 };
 
 
+export type Medicine = {
+  __typename?: 'Medicine';
+  id: Scalars['Float'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  createMedicine: MedicineResponse;
 };
 
 
@@ -55,6 +67,11 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   inputs: LoginInput;
+};
+
+
+export type MutationCreateMedicineArgs = {
+  inputs: MedicineDetailsInput;
 };
 
 export type UserResponse = {
@@ -79,6 +96,71 @@ export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
+export type MedicineResponse = {
+  __typename?: 'MedicineResponse';
+  errors?: Maybe<Array<FieldErrorMedicine>>;
+  details?: Maybe<MedicineDetails>;
+};
+
+export type FieldErrorMedicine = {
+  __typename?: 'FieldErrorMedicine';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type MedicineDetails = {
+  __typename?: 'MedicineDetails';
+  id: Scalars['ID'];
+  code: Scalars['String'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  points: Scalars['Float'];
+  form: Scalars['String'];
+  contents: Scalars['String'];
+  producer: Scalars['String'];
+  isPrescriptionRequired: Scalars['Boolean'];
+  info: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type MedicineDetailsInput = {
+  code: Scalars['String'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  points: Scalars['Float'];
+  form: Scalars['String'];
+  contents: Scalars['String'];
+  producer: Scalars['String'];
+  info: Scalars['String'];
+};
+
+export type CreateMedicineMutationVariables = Exact<{
+  code: Scalars['String'];
+  name: Scalars['String'];
+  type: Scalars['String'];
+  points: Scalars['Float'];
+  form: Scalars['String'];
+  contents: Scalars['String'];
+  producer: Scalars['String'];
+  info: Scalars['String'];
+}>;
+
+
+export type CreateMedicineMutation = (
+  { __typename?: 'Mutation' }
+  & { createMedicine: (
+    { __typename?: 'MedicineResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldErrorMedicine' }
+      & Pick<FieldErrorMedicine, 'field' | 'message'>
+    )>>, details?: Maybe<(
+      { __typename?: 'MedicineDetails' }
+      & Pick<MedicineDetails, 'name'>
+    )> }
+  ) }
+);
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
@@ -145,6 +227,28 @@ export type MeQuery = (
   )> }
 );
 
+export type MedicinesDetailsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MedicinesDetailsQuery = (
+  { __typename?: 'Query' }
+  & { medicinesDetails?: Maybe<Array<(
+    { __typename?: 'Medicine' }
+    & Pick<Medicine, 'id' | 'quantity' | 'price'>
+  )>> }
+);
+
+export type MedicinesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MedicinesQuery = (
+  { __typename?: 'Query' }
+  & { medicines?: Maybe<Array<(
+    { __typename?: 'Medicine' }
+    & Pick<Medicine, 'id' | 'quantity' | 'price'>
+  )>> }
+);
+
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -152,6 +256,25 @@ export const RegularUserFragmentDoc = gql`
   role
 }
     `;
+export const CreateMedicineDocument = gql`
+    mutation CreateMedicine($code: String!, $name: String!, $type: String!, $points: Float!, $form: String!, $contents: String!, $producer: String!, $info: String!) {
+  createMedicine(
+    inputs: {code: $code, name: $name, type: $type, points: $points, form: $form, contents: $contents, producer: $producer, info: $info}
+  ) {
+    errors {
+      field
+      message
+    }
+    details {
+      name
+    }
+  }
+}
+    `;
+
+export function useCreateMedicineMutation() {
+  return Urql.useMutation<CreateMedicineMutation, CreateMedicineMutationVariables>(CreateMedicineDocument);
+};
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(inputs: {email: $email, password: $password}) {
@@ -207,4 +330,30 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MedicinesDetailsDocument = gql`
+    query MedicinesDetails {
+  medicinesDetails {
+    id
+    quantity
+    price
+  }
+}
+    `;
+
+export function useMedicinesDetailsQuery(options: Omit<Urql.UseQueryArgs<MedicinesDetailsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MedicinesDetailsQuery>({ query: MedicinesDetailsDocument, ...options });
+};
+export const MedicinesDocument = gql`
+    query Medicines {
+  medicines {
+    id
+    quantity
+    price
+  }
+}
+    `;
+
+export function useMedicinesQuery(options: Omit<Urql.UseQueryArgs<MedicinesQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MedicinesQuery>({ query: MedicinesDocument, ...options });
 };

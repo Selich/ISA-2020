@@ -1,6 +1,8 @@
 query MedicinesDetails {
-  medicine {
-    ...DetailedMedicine
+  medicinesDetails {
+    id
+    quantity
+    price
   }
 }
 

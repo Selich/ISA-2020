@@ -33,7 +33,7 @@ export const Header: any = (props) => {
     body = (
       <Flex align="center">
         <Box mr={2}>Role:  {data.me.role}</Box>
-      <NextLink href="/admin-pharmacy/medicines">
+      <NextLink href="/admin-pharmacy/create-medicine">
         <Button as={Link} mr={4}>
           Create Medicine
         </Button>

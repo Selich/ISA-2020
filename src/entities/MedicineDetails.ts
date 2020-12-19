@@ -5,7 +5,7 @@ import { PatientDetails } from './PatientDetails';
 
 @ObjectType()
 @Entity()
-export class MedicineDetails{
+export class MedicineDetails extends BaseEntity{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -35,6 +35,10 @@ export class MedicineDetails{
   @Column()
   contents: string;
 
+  // @Field(() => String)
+  @Column()
+  image: string;
+
   @Field(() => String)
   @Column()
   producer: string;
@@ -50,8 +54,8 @@ export class MedicineDetails{
   @ManyToMany(() => PatientDetails, item => item.allergies)
   patientsAllergic: PatientDetails[];
 
-  @OneToMany(() => Medicine, item => item.details)
-  belongsTo: Medicine[];
+  // @OneToMany(() => Medicine, item => item.details)
+  // belongsTo: Medicine[];
 
   @Column({ type: Date })
   from: Date;

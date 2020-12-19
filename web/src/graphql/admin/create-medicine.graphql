@@ -1,0 +1,30 @@
+mutation CreateMedicine(
+    $code: String!
+    $name: String!
+    $type: String!
+    $points: Float!
+    $form: String!
+    $contents: String!
+    $producer: String!
+    $info: String!
+  ) {
+  createMedicine(inputs: {
+    code: $code
+    name: $name
+    type: $type
+    points: $points
+    form: $form
+    contents: $contents
+    producer: $producer
+    info: $info
+  }) {
+    errors {
+      field
+      message
+    }
+    details {
+        name
+    }
+  }
+}
+

@@ -1,6 +1,8 @@
 query Medicines {
   medicines {
-    ...RegularMedicine
+    id
+    quantity
+    price
   }
 }
 

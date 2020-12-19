@@ -19,6 +19,7 @@ import { useMutation } from "urql";
 import DateInput from '@opuscapita/react-dates'
 import router from "next/dist/next-server/lib/router/router";
 import { useRouter } from "next/router";
+import { Header } from "../components/sections/Header";
 
 interface IFormInputs {
   email: string
@@ -64,6 +65,8 @@ const Register : React.FC<registerProps> = ({}) => {
   const router = useRouter();
 
   return (
+    <>
+      <Header/>
       <Wrapper variant="small">
         <Formik
           initialValues={{
@@ -104,6 +107,7 @@ const Register : React.FC<registerProps> = ({}) => {
           )}
         </Formik>
       </Wrapper>
+    </>
     );
 }
 

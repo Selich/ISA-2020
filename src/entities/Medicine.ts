@@ -11,8 +11,8 @@ export class Medicine extends BaseEntity{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => MedicineDetails)
-  details: MedicineDetails;
+  // @ManyToOne(() => MedicineDetails)
+  // details: MedicineDetails;
 
   @ManyToOne(() => MedicineList)
   list: MedicineList;

@@ -10,9 +10,9 @@ import { __prod__ } from "./constants";
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import { createUserLoader } from './utils/createUserLoader'
 import dbConfig from './typeorm.config'
 import { UserResolver } from './resolvers/UserResolver';
+import { MedicineResolver } from './resolvers/MedicineResolver';
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -43,12 +43,11 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ UserResolver ],
+      resolvers: [ UserResolver, MedicineResolver ],
       validate: false
     }),
     context: ({ req, res}) => ({
-      req , res, redis,
-      userLoader : createUserLoader
+      req , res, redis
     })
   });
 
