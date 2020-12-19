@@ -31,19 +31,24 @@ export const Header: any = (props) => {
     // user is logged in
   } else {
     body = (
-    <Flex align="center">
-      <Box mr={2}>{data.me.email}</Box>
-      <Button
-          mr={4}
-          onClick={() => {
-            logout();
-          }}
-          isLoading={logoutFetching}
-          variant="link"
-        >
-          logout
+      <Flex align="center">
+        <Box mr={2}>Role:  {data.me.role}</Box>
+      <NextLink href="/admin-pharmacy/medicines">
+        <Button as={Link} mr={4}>
+          Create Medicine
         </Button>
-    </Flex>
+      </NextLink>
+        <Button
+            mr={4}
+            onClick={() => {
+              logout();
+            }}
+            isLoading={logoutFetching}
+            variant="link"
+          >
+          Logout
+          </Button>
+      </Flex>
     );
   }
 
