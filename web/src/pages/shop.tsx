@@ -29,9 +29,8 @@ import { useMedicinesQuery } from '../generated/graphql';
 const Shop = (): JSX.Element => {
   const [{ data }] = useMedicinesQuery({});
   const { isOpen, onOpen, onClose } = useDisclosure()
-  if(data.medicines){ console.log("err")}
-  const medicines = data.medicines
-  const testData = [
+  // const medicines = data.medicines
+  const medicines = [
     {
       image: "https://bit.ly/2Z4KKcF",
       imageAlt: "Rear view of modern home with pool",

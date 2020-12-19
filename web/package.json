@@ -23,6 +23,7 @@
     "next-auth": "^3.1.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.1.0",
     "react-ui-cards": "^2.0.0",
     "urql": "^1.11.4",
     "use-places-autocomplete": "^1.6.1",
