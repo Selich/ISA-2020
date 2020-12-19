@@ -1,37 +1,52 @@
 import { Complaint } from "./Complaint";
-import { Medicine } from "./Medicine";
-import { Rating } from "./Rating";
+import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne } from 'typeorm'
+import {  Field, ID, ObjectType} from 'type-graphql';
+import { Prescrition } from "./Prescription";
+import { Reservation } from "./Reservation";
+import { MedicineDetails } from "./MedicineDetails";
 import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
+import { Rating } from "./Rating";
 import { User } from "./User";
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { Int, ObjectType, Field, ID } from 'type-graphql';
 
 
 @ObjectType()
 @Entity()
 export class PatientDetails{
 
-  // @OneToMany(() => Appointment, (appointment) => appointment.patient)
-  // @OneToMany(() => Rating, (rating) => rating.patient)
-  // @Property()
-  // ratings: Rating[];
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id: number;
 
-  // @Column()
-  // allergies: Medicine[];
+  @OneToMany(() => Appointment, item => item.patient)
+  appointments: Appointment[];
 
-  // @OneToMany(() => Timeslot, (timeslot) => timeslot.patient)
-  // @Property()
-  // complaints: Complaint[];
+  @ManyToMany(() => MedicineDetails, item => item.patientsAllergic)
+  allergies: MedicineDetails[];
 
-  // @Property()
-  // tier: Tier;
+  @OneToMany(() => Prescrition, item => item.patient)
+  prescritions: Prescrition[];
 
+  @OneToMany(() => Reservation, item => item.patient)
+  reservations: Reservation[];
+
+  @OneToMany(() => Rating, item => item.patient)
+  ratings: Rating[];
+
+  @OneToMany(() => Complaint, item => item.patient)
+  complaints: Complaint[];
+
+  @OneToOne(() => User)
+  user: User;
+
+  @ManyToOne(() => Tier)
+  tier: Tier;
+
+  @Field()
   @Column()
   score: number;
 
+  @Field()
   @Column()
   penalty: number;
 

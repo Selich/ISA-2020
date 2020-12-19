@@ -1,29 +1,25 @@
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
 import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { MedicineDetails } from './MedicineDetails';
 
 @ObjectType()
 @Entity()
 export class Medicine extends BaseEntity{
-  @Field(() => ID)
+
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => String)
+  @ManyToOne(() => MedicineDetails)
+  details: MedicineDetails;
+
+  @Field()
   @Column()
-  title!: string;
+  quantity: number;
 
-  @Field(() => String)
+  @Field()
   @Column()
-  type: string;
-
-  // Recursive
-  // @ManyToOne({
-
-  // })
-  // alternatives: Medicine;
-
-  // @OneToMany()
-  // alternatives: Medicine[];
+  price: number;
 
   @Field(() => String)
   @CreateDateColumn()

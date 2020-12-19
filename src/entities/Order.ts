@@ -1,21 +1,21 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Order {
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property({ type: 'date'})
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
+  @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Property()
+  @Column()
   name!: string;
 
-  @Property()
+  @Column()
   privilege!: string;
 
 }

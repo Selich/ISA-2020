@@ -1,21 +1,5 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
 import LoginForm from '../components/sections/LoginForm'
 import { Header } from '../components/sections/Header'
-import DermLayout from '../components/layouts/DermLayout'
 import {
   Modal,
   ModalOverlay,
@@ -28,13 +12,27 @@ import {
   Button,
 } from "@chakra-ui/react"
 
-const user = {
-  role: 'derm',
-  email: 'nesto'
-}
+import mapStyles from '../styles/mapStyles'
 
+
+const mapStyle = {
+  width: '100vw',
+  height: '100vh',
+}
+const options = {
+  styles: mapStyles,
+  disableDefaultUI: true,
+  zoomControl: true,
+};
+
+// TODO! Maps! @Selich
+const center = {
+  lat: 12.9529,
+  log: 80.2413,
+}
 const Index = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <>
       <Header onOpen={onOpen} />
@@ -46,10 +44,10 @@ const Index = (): JSX.Element => {
 
         </ModalContent>
       </Modal>
-      <DermLayout/>
+      {/* <GoogleMap options={options} zoom={8} center={center} mapContainerStyle={mapStyle}/> */}
     </>
   )
 
 }
 
-export default Index
+export default Index;

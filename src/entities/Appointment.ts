@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
 import { Report } from "./Report";
 import { User } from "./User";
@@ -8,39 +9,42 @@ import { User } from "./User";
 @Entity()
 export class Appointment {
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  // consulting, examination
-  // pharmacist, dherm
-  @PrimaryKey()
-  type!: string;
+  // // consulting, examination
+  // // pharmacist, dherm
+  // @PrimaryKey()
+  // type!: string;
+
+  // // @Property()
+  // // patient: User;
+
+  @ManyToOne(() => User)
+  doctor: User;
+
+  @ManyToOne(() => PatientDetails)
+  patient: User;
 
   // @Property()
-  // patient: User;
+  // pharmacy: Pharmacy;
 
   // @Property()
-  // doctor: User;
+  // price: number;
 
-  @Property()
-  pharmacy: Pharmacy;
+  // @Property()
+  // report: Report;
 
-  @Property()
-  price: number;
+  // @Property({ type: Date })
+  // from: Date;
 
-  @Property()
-  report: Report;
+  // @Property({ type: Date })
+  // until: Date;
 
-  @Property({ type: Date })
-  from: Date;
+  // @Property()
+  // createdAt = new Date();
 
-  @Property({ type: Date })
-  until: Date;
-
-  @Property()
-  createdAt = new Date();
-
-  @Property()
-  updatedAt = new Date();
+  // @Property()
+  // updatedAt = new Date();
 
 }

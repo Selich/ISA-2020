@@ -1,24 +1,36 @@
-import { PrimaryKey, Property } from "@mikro-orm/core";
+import { Field } from "type-graphql";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
+import { Rating } from "./Rating";
+import { Reservation } from "./Reservation";
 
+@Entity()
 export class Pharmacy {
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
-  address: Address;
+  // @Column(())
+  // address: Address;
 
-  @Property()
+  @Column()
   long: number;
 
-  @Property()
+  @Column()
   lat: number;
 
-  @Property({ type: 'date'})
+  @OneToMany(() => Reservation, item => item.patient)
+  prescritions: Reservation[];
+
+  @OneToMany(() => Rating, item => item.pharmacy)
+  ratings: Rating[];
+
+  @Field(() => String)
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
+  @Field(() => String)
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 

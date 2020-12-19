@@ -1,31 +1,38 @@
-import { PrimaryKey, Property } from "@mikro-orm/core";
+import { Field, ID, ObjectType } from "type-graphql";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
+import { User } from "./User";
 
+@ObjectType()
+@Entity()
 export class Rating {
 
-  @PrimaryKey()
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
+  @ManyToOne(() => PatientDetails)
   patient: PatientDetails;
 
-  @Property()
-  doctor: number;
+  @ManyToOne(() => User, {nullable: true})
+  doctor: User;
 
-  @Property()
+  @ManyToOne(() => Pharmacy, {nullable: true})
   pharmacy: Pharmacy;
 
-  @Property()
+  @Field()
+  @Column()
   complain: string;
 
-  @Property()
+  @Field()
+  @Column()
   score: number;
 
-  @Property()
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property()
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 

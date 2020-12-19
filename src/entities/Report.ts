@@ -1,18 +1,15 @@
-import { Entity,  PrimaryKey, Property } from "@mikro-orm/core";
+import { CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Report{
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @PrimaryKey()
-  desc: string;
-
-  @Property()
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property()
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 }

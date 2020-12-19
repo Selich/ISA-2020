@@ -1,5 +1,5 @@
 import { OneToMany, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 import { User } from './User';
 
 @ObjectType()
@@ -10,8 +10,8 @@ export class Address extends BaseEntity{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // @OneToMany(() => User, user => user.address )
-  // users: User[]
+  @OneToMany(() => User, user => user.address )
+  users: User[]
 
   @Field()
   @Column({ nullable: true})

@@ -1,20 +1,22 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
-
-
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { PatientDetails } from "./PatientDetails";
 
 @Entity()
 export class Tier {
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
+  @Column()
   name: String;
 
-  @Property()
+  @Column()
   discount: number;
 
-  @Property()
+  @Column()
   score: number;
+
+  @OneToMany(() => PatientDetails, item => item.tier)
+  patients: PatientDetails[];
 
 }

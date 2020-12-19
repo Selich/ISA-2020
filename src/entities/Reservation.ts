@@ -1,20 +1,23 @@
-import { Entity,  PrimaryKey, Property } from "@mikro-orm/core";
+import { MedicineList } from "./MedicineList";
+import { Entity } from "typeorm/decorator/entity/Entity";
+import { Field } from "type-graphql";
+import { PatientDetails } from "./PatientDetails";
+import { Pharmacy } from "./Pharmacy";
+import { ManyToOne } from "typeorm";
 
 @Entity()
-export class Reservation{
+export class Reservation extends MedicineList{
 
-  @PrimaryKey()
-  id!: number;
+  @ManyToOne(() => Pharmacy)
+  pharmacy: Pharmacy;
 
-  @Property()
-  patient: number;
+  @ManyToOne(() => PatientDetails)
+  patient!: PatientDetails;
 
-  @Property()
-  medicine: number;
+  @Field()
+  deadline: Date;
 
-  @Property()
-  quantity: number;
-
-  @Property()
+  @Field()
   isDelivered: boolean;
+
 }

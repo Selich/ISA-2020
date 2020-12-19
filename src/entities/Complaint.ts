@@ -1,21 +1,25 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Field } from "type-graphql";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
 import { User } from "./User";
-
 
 @Entity()
 export class Complaint{
 
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
+  @ManyToOne(() => PatientDetails)
+  patient!: PatientDetails;
+
+  @Column()
   description: string;
 
-  @Property()
-  doctor: User;
+  // @Field()
+  // doctor: User;
 
-  @Property()
-  pharmacy: Pharmacy;
+  // @Entity()
+  // pharmacy: Pharmacy;
 
 }

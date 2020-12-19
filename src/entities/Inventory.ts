@@ -1,26 +1,21 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Field } from "type-graphql";
+import { Entity } from "typeorm/decorator/entity/Entity";
+import { OneToOne } from "typeorm/decorator/relations/OneToOne";
+import { MedicineList } from "./MedicineList";
+import { Pharmacy } from "./Pharmacy";
+import { User } from "./User";
 
 @Entity()
-export class Inventory{
+export class Inventory extends MedicineList{
 
-  @PrimaryKey()
-  id!: number;
+  @Field(() => User)
+  @OneToOne(() => User)
+  supplier: User;
 
-  @Property()
-  pharmacyID: number;
 
-  @Property()
-  supplierID: number;
+  @Field(() => Pharmacy)
+  @OneToOne(() => Pharmacy)
+  pharmacy: Pharmacy;
 
-  @Property()
-  type: string;
 
-  @Property()
-  medicine: number;
-
-  @Property()
-  quantity: number;
-
-  @Property()
-  price: number;
 }

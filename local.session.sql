@@ -1,1 +1,1 @@
-DROP TABLE public.user;
+SELECT * FROM public.user

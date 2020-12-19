@@ -7,30 +7,40 @@ import { FormInput } from './../../components/sections/FormInput';
 import { FormInputPassword } from './../../components/sections/FormInputPassword';
 import { Wrapper }  from './../../components/ui/Wrapper';
 import { Formik, Form } from "formik";
-
-
 import { useRouter } from "next/router";
-
-
-// @ts-ignore
-import DateInput from '@opuscapita/react-dates'
+import { useMutation } from 'urql';
+import { FieldError, useLoginMutation } from '../../generated/graphql';
 
 
 interface IFormInputs {
   email: string
   password: string
 }
+const toErrorMap = (errors: FieldError[]) => {
+  const errorMap: Record<string, string> = {};
+  errors.forEach(({ field, message }) => {
+    errorMap[field] = message;
+  });
+
+  return errorMap;
+};
 
 
 export default function LoginForm(props) {
-  const [date, setDate] = useState(new Date())
-  // const [, login] = useLoginMuatation();
+  const [{ fetching: loginFetch }, login] = useLoginMutation();
   const router = useRouter();
   return (
       <Wrapper variant="small">
         <Formik
-          initialValues={{ email: "", username: "", password: "" }}
-          onSubmit={() => console.log("test")}
+          initialValues={{ email: "", password: "" }}
+          onSubmit={async (values, { setErrors }) => {
+            const response = await login(values);
+            if (response.data?.login.errors) {
+              setErrors(toErrorMap(response.data.login.errors));
+            } else if (response.data?.login.user) {
+              router.push("/");
+            }
+          }}
         >
           {({ isSubmitting }) => (
             <Form>

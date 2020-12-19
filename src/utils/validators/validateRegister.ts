@@ -1,8 +1,6 @@
 import { RegisterInput } from "src/resolvers/types/UserTypes";
 
 export const validateRegister = (input: RegisterInput) => {
-  // TODO: Add regex for email @dusan0098
-  // TODO: Add validation for roles @dusan0098 @Selich
   if (!input.email.includes("@")) {
     return [
       {
@@ -17,15 +15,6 @@ export const validateRegister = (input: RegisterInput) => {
       {
         field: "password",
         message: "password not confirmed",
-      },
-    ];
-  }
-
-  if (!(input.gender.toLowerCase() in ['male', 'female', 'other'])) {
-    return [
-      {
-        field: "gender",
-        message: "not a valid gender",
       },
     ];
   }

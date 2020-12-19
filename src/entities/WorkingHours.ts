@@ -1,26 +1,33 @@
-import { PrimaryKey, Property } from "@mikro-orm/core";
+import { Field } from "type-graphql";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
+@Entity()
 export class WorkingHours {
 
-  @PrimaryKey()
+  @Field()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
+  @Field()
+  @Column()
   doctorID: number;
 
-  @Property()
+  @Field()
+  @Column()
   pharmacyID: number;
 
-  @Property({ type: Date })
+  @Field()
+  @Column()
   from: Date;
 
-  @Property({ type: Date })
+  @Field()
+  @Column()
   until: Date;
 
-  @Property()
+  @CreateDateColumn()
   createdAt = new Date();
 
-  @Property()
+  @UpdateDateColumn()
   updatedAt = new Date();
 
 

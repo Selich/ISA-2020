@@ -8,40 +8,10 @@ export class LoginInput {
 }
 @InputType()
 export class RegisterInput {
-
   @Field()
   email: string;
   @Field()
   password: string;
-
   @Field()
   confirmPassword: string;
-
-  @Field(() => String)
-  role: string;
-
-  @Field(() => String)
-  firstName: string;
-
-  @Field(() => String)
-  lastName: string;
-
-  @Field(() => String)
-  gender: string;
-
-  @Field()
-  dateOfBirth: string;
-
-  // @Field()
-  // street: string;
-
-  // @Field()
-  // city: string;
-
-  // @Field()
-  // country: string;
-
-  @Field()
-  telephone: string;
 }
-

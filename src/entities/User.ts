@@ -1,9 +1,9 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm'
 import { Address } from "./Address";
-import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
-import { OneToOne } from '@mikro-orm/core';
+import { Rating } from './Rating';
 
 @ObjectType()
 @Entity()
@@ -17,9 +17,8 @@ export class User extends BaseEntity{
   @JoinColumn()
   details: PatientDetails;
 
-  // @Field()
-  // @Column()
-  // schedule: Appointment[];
+  @OneToMany(() => Appointment, item => item.doctor)
+  schedule: Appointment[];
 
   @Field(() => String)
   @Column()
@@ -28,6 +27,9 @@ export class User extends BaseEntity{
   @Field(() => String)
   @Column()
   password: string;
+
+  @OneToMany(() => Rating, item => item.doctor)
+  ratings: Rating[];
 
   @Field()
   @Column({ nullable: true})
@@ -49,19 +51,19 @@ export class User extends BaseEntity{
   @Column({ type: 'date', nullable: true})
   dateOfBirth: Date;
 
-  // @ManyToOne(() => Address, address => address.users)
-  // address: Address;
+  @ManyToOne(() => Address)
+  address: Address;
 
   @Field()
   @Column({ nullable: true})
   telephone: string;
 
   @Field()
-  @Column()
+  @Column({ default: false })
   isEnabled: boolean;
 
   @Field()
-  @Column()
+  @Column({ default: 0 })
   averageRating: number;
 
   @Field(() => String)
