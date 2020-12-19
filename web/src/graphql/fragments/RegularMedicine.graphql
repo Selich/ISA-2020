@@ -1,0 +1,10 @@
+fragment RegularMedicine on Medicine {
+  id
+  quantity
+  price
+  details {
+    name
+    points
+  }
+}
+

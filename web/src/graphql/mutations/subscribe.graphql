@@ -1,0 +1,12 @@
+mutation Subscribe($id: ID!, $pharmacyId: ID!) {
+  subscribe(inputs: { id: $id, pharmacyId: $pharmacyId }) {
+    errors {
+      field
+      message
+    }
+    subscription {
+        id
+    }
+  }
+}
+

@@ -11,14 +11,16 @@ import { MedicineDetails } from "./entities/MedicineDetails";
 import { Pharmacy } from "./entities/Pharmacy";
 import { Prescrition } from "./entities/Prescription";
 import { Reservation } from "./entities/Reservation";
-import { Subscription } from "type-graphql";
 import { WorkingHours } from "./entities/WorkingHours";
+import { Subscription } from "./entities/Subscription";
 import { MedicineList } from "./entities/MedicineList";
 import { Order } from "./entities/Order";
 import { Rating } from "./entities/Rating";
-import { Report } from "./entities/Report";
+import { Reporting } from "./entities/Report";
 import { Tier } from "./entities/Tier";
 import { User } from "./entities/User";
+import { Holiday } from "./entities/Holiday";
+import { MedicineRequest } from "./entities/MedicineRequest";
 export default
     {
     type: "postgres",
@@ -35,15 +37,17 @@ export default
       Appointment,
       Complaint,
       Inventory,
+      Holiday,
       Medicine,
       MedicineDetails,
       MedicineList,
+      MedicineRequest,
       Order,
       PatientDetails,
       Pharmacy,
       Prescrition,
       Rating,
-      Report,
+      Reporting,
       Reservation,
       Subscription,
       Tier,

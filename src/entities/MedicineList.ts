@@ -9,7 +9,7 @@ export class MedicineList {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // @OneToMany(() => Medicine, medicine => medicine.)
+  @OneToMany(() => Medicine, medicine => medicine.list)
   medicines: Medicine[];
 
 }

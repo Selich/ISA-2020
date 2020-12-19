@@ -8,6 +8,7 @@ import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
 import { User } from "./User";
+import { Subscription } from "./Subscription";
 
 
 @ObjectType()
@@ -35,6 +36,9 @@ export class PatientDetails{
 
   @OneToMany(() => Complaint, item => item.patient)
   complaints: Complaint[];
+
+  @OneToMany(() => Subscription, item => item.user)
+  subscribers: Subscription;
 
   @OneToOne(() => User)
   user: User;

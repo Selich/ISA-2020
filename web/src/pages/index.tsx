@@ -106,6 +106,7 @@ const Index = ({
         </NextLink>
       </Stack>
       <Box w={{ base: "80%", sm: "60%", md: "50%" }} mb={{ base: 12, md: 0 }}>
+        {/* <Subscribe></Subscribe> */}
       </Box>
     </Flex>
 

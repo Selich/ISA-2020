@@ -23,6 +23,10 @@ export class MedicineDetails{
   @Column()
   type: string;
 
+  @Field()
+  @Column()
+  points: number;
+
   @Field(() => String)
   @Column()
   form: string;
@@ -48,6 +52,13 @@ export class MedicineDetails{
 
   @OneToMany(() => Medicine, item => item.details)
   belongsTo: Medicine[];
+
+  @Column({ type: Date })
+  from: Date;
+
+  @Column({ type: Date })
+  until: Date;
+
 
   @Field(() => String)
   @CreateDateColumn()

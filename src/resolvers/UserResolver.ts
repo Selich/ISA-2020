@@ -52,7 +52,7 @@ export class UserResolver{
     const hashedPassword = await argon2.hash(inputs.password);
     user.email = inputs.email;
     user.password = hashedPassword;
-    user.role = "admin";
+    user.role = "patient";
 
     await user.save()
     req.session.userId = user.id;

@@ -60,6 +60,11 @@ export const Header: any = (props) => {
             <Image src="../resources/logo.png"></Image>
           </Link>
         </NextLink>
+        <NextLink href="/shop">
+          <Button as={Link} mr={4}>
+            Shop
+          </Button>
+        </NextLink>
         <Box ml={"auto"}>{body}</Box>
       </Flex>
     </Flex>

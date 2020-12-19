@@ -1,25 +1,29 @@
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
+import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql';
-import { Pharmacy } from './Pharmacy';
 import { PatientDetails } from './PatientDetails';
+import { User } from './User';
 
 @ObjectType()
 @Entity()
-export class Subscription extends BaseEntity{
+export class EPrescrition{
 
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
   @ManyToOne(() => PatientDetails)
-  user: PatientDetails;
+  patient: PatientDetails;
+
+  @ManyToOne(() => User, { nullable: true })
+  employee: User;
 
   @Field()
   @Column()
-  isEnabled: boolean
+  isUsed: boolean;
 
-  @ManyToOne(() => Pharmacy)
-  pharmacy: Pharmacy;
+  @Field()
+  @Column()
+  hashCode: string
 
   @Field(() => String)
   @CreateDateColumn()
@@ -30,5 +34,5 @@ export class Subscription extends BaseEntity{
   updatedAt = new Date();
 
 
-}
 
+}

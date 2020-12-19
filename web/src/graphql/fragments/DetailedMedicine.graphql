@@ -1,0 +1,15 @@
+fragment DetailedMedicine on Medicine {
+  id
+  quantity
+  price
+  details {
+    points
+    name
+    form
+    type
+    contents
+    producer
+    isPrescriptionRequired
+  }
+}
+

@@ -3,7 +3,7 @@ import { Entity } from "typeorm/decorator/entity/Entity";
 import { Field } from "type-graphql";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
-import { ManyToOne } from "typeorm";
+import { Column, ManyToOne } from "typeorm";
 
 @Entity()
 export class Reservation extends MedicineList{
@@ -15,9 +15,12 @@ export class Reservation extends MedicineList{
   patient!: PatientDetails;
 
   @Field()
+  @Column()
   deadline: Date;
 
-  @Field()
-  isDelivered: boolean;
+  @Field({ nullable: true})
+  @Column({ default: null, nullable: true })
+  pickupDate: Date;
+
 
 }

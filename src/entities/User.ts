@@ -4,6 +4,7 @@ import { ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
 import { Rating } from './Rating';
+import { Holiday } from './Holiday';
 
 @ObjectType()
 @Entity()
@@ -13,13 +14,6 @@ export class User extends BaseEntity{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne(() => PatientDetails)
-  @JoinColumn()
-  details: PatientDetails;
-
-  @OneToMany(() => Appointment, item => item.doctor)
-  schedule: Appointment[];
-
   @Field(() => String)
   @Column()
   email: string;
@@ -27,9 +21,6 @@ export class User extends BaseEntity{
   @Field(() => String)
   @Column()
   password: string;
-
-  @OneToMany(() => Rating, item => item.doctor)
-  ratings: Rating[];
 
   @Field()
   @Column({ nullable: true})
@@ -42,6 +33,19 @@ export class User extends BaseEntity{
   @Field()
   @Column({ nullable: true})
   lastName: string;
+
+  @OneToMany(() => Holiday, item => item.employee)
+  holidays: Holiday[];
+
+  @OneToMany(() => Rating, item => item.doctor)
+  ratings: Rating[];
+
+  @OneToMany(() => Appointment, item => item.doctor)
+  schedule: Appointment[];
+
+  @OneToOne(() => PatientDetails)
+  @JoinColumn()
+  details: PatientDetails;
 
   @Field()
   @Column({ nullable: true})

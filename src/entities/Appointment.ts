@@ -1,50 +1,52 @@
-import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
-import { Report } from "./Report";
+import { Prescrition } from "./Prescription";
 import { User } from "./User";
 
-
-// TODO: HOLIDAYS
 @Entity()
-export class Appointment {
+export class Appointment extends BaseEntity{
 
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // // consulting, examination
-  // // pharmacist, dherm
-  // @PrimaryKey()
-  // type!: string;
-
-  // // @Property()
-  // // patient: User;
+  @ManyToOne(() => PatientDetails)
+  patient: User;
 
   @ManyToOne(() => User)
   doctor: User;
 
-  @ManyToOne(() => PatientDetails)
-  patient: User;
+  @ManyToOne(() => Pharmacy)
+  pharmacy: Pharmacy;
 
-  // @Property()
-  // pharmacy: Pharmacy;
+  @OneToOne(() => Prescrition, item => item.appointment)
+  prescription: Prescrition;
 
-  // @Property()
-  // price: number;
+  @Column()
+  type: string;
 
-  // @Property()
-  // report: Report;
+  @Column()
+  score: number;
 
-  // @Property({ type: Date })
-  // from: Date;
+  @Column()
+  price: number;
 
-  // @Property({ type: Date })
-  // until: Date;
+  @Column()
+  report: string;
 
-  // @Property()
-  // createdAt = new Date();
+  @Column()
+  isVisited: boolean;
 
-  // @Property()
-  // updatedAt = new Date();
+  @Column({ type: Date })
+  from: Date;
+
+  @Column({ type: Date })
+  until: Date;
+
+  @CreateDateColumn()
+  createdAt = new Date();
+
+  @UpdateDateColumn()
+  updatedAt = new Date();
 
 }
