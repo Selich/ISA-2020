@@ -9,7 +9,7 @@ import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
 import { User } from "./User";
 import { Pharmacy } from "./Pharmacy";
-import { EPrescrition } from "./EPrescription";
+
 
 
 @ObjectType()
@@ -25,20 +25,17 @@ export class PatientDetails{
 
   @ManyToMany(() => MedicineDetails, item => item.patientsAllergic)
   allergies: MedicineDetails[];
-
+ 
   @OneToMany(() => Prescrition, item => item.patient)
   prescritions: Prescrition[];
 
   @OneToMany(() => Reservation, item => item.patient)
   reservations: Reservation[];
 
-  @OneToMany(()=>EPrescrition,item=>item.patient)
-  ePrescriptions: EPrescrition[];
-
   @OneToMany(() => Rating, item => item.patient)
   ratings: Rating[];
 
-  @OneToMany(() => Complaint, item => item.patient)
+  @OneToMany(() => Complaint, item => item.author)
   complaints: Complaint[];
 
   @ManyToMany(() => Pharmacy, item => item.subscribers)

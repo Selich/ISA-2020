@@ -18,8 +18,19 @@ export class Prescrition extends MedicineList{
   @OneToOne(() => Appointment, item => item.prescription)
   appointment: Appointment;
 
+  //Obican ili ERecept
   @Field()
-  isUsed: boolean;
+  @Column()
+  type: string;
+
+  //New,Approved,Denied-za ERecept
+  @Field()
+  @Column()
+  state: string;
+
+  @Field()
+  @Column()
+  hashCode: string
 
   @Field()
   @Column()

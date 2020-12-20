@@ -5,7 +5,13 @@ import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
 import { Rating } from './Rating';
 import { Holiday } from './Holiday';
-import { Pharmacy } from './Pharmacy';
+import { WorkingHours } from './WorkingHours';
+import { Inventory } from './Inventory';
+import { Complaint } from './Complaint';
+import { Medicine } from './Medicine';
+import { MedicineRequest } from './MedicineRequest';
+import { Order } from './Order';
+import { Offer } from './Offer';
 
 @ObjectType()
 @Entity()
@@ -38,6 +44,11 @@ export class User extends BaseEntity{
   @ManyToMany(() => Pharmacy, item => item.employees)
   pharmacies: Pharmacy[];
 
+  
+
+  @OneToOne(() => Inventory, item=>item.supplier)
+  inventory: Inventory;
+
   @OneToMany(() => Holiday, item => item.employee)
   holidays: Holiday[];
 
@@ -47,6 +58,18 @@ export class User extends BaseEntity{
   @OneToMany(() => Appointment, item => item.doctor)
   schedule: Appointment[];
 
+  @OneToMany(()=>Complaint,item=>item.doctor)
+  complaints: Complaint[];
+
+  @OneToMany(() => MedicineRequest,item=>item.doctor)
+  requests: MedicineRequest[];
+
+  @OneToMany(() => Order,item=>item.admin)
+  orders: Order[];
+
+  @OneToMany(()=>Offer,item=>item.supplier)
+  offers: Offer[];
+  
   @OneToOne(() => PatientDetails)
   @JoinColumn()
   details: PatientDetails;

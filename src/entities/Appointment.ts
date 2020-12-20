@@ -1,4 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AppointmentDefinition } from "./AppointmentDefinition";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
 import { Prescrition } from "./Prescription";

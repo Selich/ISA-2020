@@ -14,7 +14,10 @@ export class Tier {
   discount: number;
 
   @Column()
-  score: number;
+  minScore: number;
+
+  @Column()
+  maxScore: number;
 
   @OneToMany(() => PatientDetails, item => item.tier)
   patients: PatientDetails[];

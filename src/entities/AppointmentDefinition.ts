@@ -11,19 +11,16 @@ export class AppointmentDefinition extends BaseEntity{
   type: string;
 
   @Column()
-  score: string;
+  price: number;
 
   @Column()
-  price: number;
+  pharmacyId: number;
 
   @Column({ type: Date })
   from: Date;
 
   @Column({ type: Date })
   until: Date;
-
-  @Column()
-  pharmacyId: number;
 
   @CreateDateColumn()
   createdAt = new Date();

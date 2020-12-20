@@ -12,9 +12,8 @@ export class Inventory extends MedicineList{
   @OneToOne(() => User)
   supplier: User;
 
-
   @Field(() => Pharmacy)
-  @OneToOne(() => Pharmacy)
+  @OneToOne(() => Pharmacy,item=>item.inventory)
   pharmacy: Pharmacy;
 
 
