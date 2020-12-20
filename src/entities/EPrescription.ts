@@ -17,9 +17,10 @@ export class EPrescrition{
   @ManyToOne(() => User, { nullable: true })
   employee: User;
 
+  //New,Approved,Denied
   @Field()
   @Column()
-  isUsed: boolean;
+  state: string;
 
   @Field()
   @Column()

@@ -3,6 +3,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, On
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { MedicineRequest } from "./MedicineRequest";
+import { PatientDetails } from "./PatientDetails";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
 import { Subscription } from "./Subscription";
@@ -18,6 +19,7 @@ import { User } from "./User";
 // ● zakaže savetovanje kod farmaceuta,
 // ● zakaže pregled kod dermatologa,
 // ● se pretplati na akcije i promocije koje definiše administrator apoteke.
+
 
 @Entity()
 export class Pharmacy extends BaseEntity{
@@ -52,8 +54,8 @@ export class Pharmacy extends BaseEntity{
   @OneToMany(() => Appointment, item => item.pharmacy)
   appointments: Appointment[];
 
-  @OneToMany(() => Subscription, item => item.pharmacy)
-  subscribers: Subscription;
+  @ManyToMany(() => PatientDetails)
+  subscribers: PatientDetails[];
 
   @OneToMany(() => Rating, item => item.pharmacy)
   ratings: Rating[];

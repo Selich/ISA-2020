@@ -1,5 +1,7 @@
 import { Field } from "type-graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Pharmacy } from "./Pharmacy";
+import { User } from "./User";
 
 @Entity()
 export class WorkingHours {
@@ -8,13 +10,11 @@ export class WorkingHours {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
-  @Column()
-  doctorID: number;
+  @ManyToMany(()=>User,item=>item.workingHours)
+  doctor: User;
 
-  @Field()
-  @Column()
-  pharmacyID: number;
+  @ManyToMany(()=>Pharmacy,item=>item.workingHours)
+  pharmacy: Pharmacy;
 
   @Field()
   @Column()

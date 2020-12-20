@@ -8,7 +8,8 @@ import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
 import { User } from "./User";
-import { Subscription } from "./Subscription";
+import { Pharmacy } from "./Pharmacy";
+import { EPrescrition } from "./EPrescription";
 
 
 @ObjectType()
@@ -31,14 +32,17 @@ export class PatientDetails{
   @OneToMany(() => Reservation, item => item.patient)
   reservations: Reservation[];
 
+  @OneToMany(()=>EPrescrition,item=>item.patient)
+  ePrescriptions: EPrescrition[];
+
   @OneToMany(() => Rating, item => item.patient)
   ratings: Rating[];
 
   @OneToMany(() => Complaint, item => item.patient)
   complaints: Complaint[];
 
-  @OneToMany(() => Subscription, item => item.user)
-  subscribers: Subscription;
+  @ManyToMany(() => Pharmacy, item => item.subscribers)
+  subscriptions: Pharmacy[];
 
   @OneToOne(() => User)
   user: User;
