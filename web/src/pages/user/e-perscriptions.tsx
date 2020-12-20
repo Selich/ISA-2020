@@ -38,40 +38,40 @@ interface IFormInputs {
   telephoneNumber: string,
 }
 
-const EPrescription : any = ({}) => {
+const EPrescription: any = ({ }) => {
   const router = useRouter();
 
   return (
     <>
-      <Header/>
-                <Table variant="simple">
-                  <Thead>
-                    <Tr>
-                      <Th>Item</Th>
-                      <Th isNumeric>Quantity</Th>
-                      <Th></Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>Aspirin</Td>
-                      <Td isNumeric>1</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Bensedin</Td>
-                      <Td isNumeric>3</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Cancer</Td>
-                      <Td isNumeric>2</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
+      <Header />
+      <Table variant="simple">
+        <Thead>
+          <Tr>
+            <Th>Item</Th>
+            <Th isNumeric>Quantity</Th>
+            <Th></Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          <Tr>
+            <Td>Aspirin</Td>
+            <Td isNumeric>1</Td>
+            <Td><Button colorScheme="red">X</Button></Td>
+          </Tr>
+          <Tr>
+            <Td>Bensedin</Td>
+            <Td isNumeric>3</Td>
+            <Td><Button colorScheme="red">X</Button></Td>
+          </Tr>
+          <Tr>
+            <Td>Cancer</Td>
+            <Td isNumeric>2</Td>
+            <Td><Button colorScheme="red">X</Button></Td>
+          </Tr>
+        </Tbody>
+      </Table>
     </>
-    );
+  );
 }
 
 

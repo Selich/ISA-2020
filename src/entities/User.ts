@@ -1,10 +1,11 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, ManyToMany } from 'typeorm'
 import { Address } from "./Address";
 import { ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
 import { Rating } from './Rating';
 import { Holiday } from './Holiday';
+import { Pharmacy } from './Pharmacy';
 
 @ObjectType()
 @Entity()
@@ -33,6 +34,9 @@ export class User extends BaseEntity{
   @Field()
   @Column({ nullable: true})
   lastName: string;
+
+  @ManyToMany(() => Pharmacy, item => item.employees)
+  pharmacies: Pharmacy[];
 
   @OneToMany(() => Holiday, item => item.employee)
   holidays: Holiday[];

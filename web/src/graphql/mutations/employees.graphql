@@ -1,0 +1,13 @@
+mutation Employees($pharmacyId: ID!) {
+  employees(inputs: { pharmacyId: $pharmacyId } ) {
+    errors {
+      field
+      message
+    }
+    users {
+        firstName,
+        lastName,
+        score
+    }
+  }
+}
