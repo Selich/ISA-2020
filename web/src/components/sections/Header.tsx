@@ -7,6 +7,7 @@ import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { GrBasket } from 'react-icons/gr'
 import UserMenu from "./UserMenu";
+import { Basket } from "../layouts/Basket";
 
 interface NavBarProps { }
 
@@ -36,65 +37,11 @@ export const Header: any = (props) => {
   } else {
     body = (
       <Flex align="center">
-        <Button ref={btnRef} onClick={onOpen}>
-          <Icon as={GrBasket} />
-        </Button>
-        <Drawer
-          size="md"
-          isOpen={isOpen}
-          placement="right"
-          onClose={onClose}
-          finalFocusRef={btnRef}
-        >
-          <DrawerOverlay>
-            <DrawerContent>
-              <DrawerCloseButton />
-              <DrawerHeader>Shopping Cart</DrawerHeader>
-
-              <DrawerBody>
-                <Table variant="simple">
-                  <TableCaption>Imperial to metric conversion factors</TableCaption>
-                  <Thead>
-                    <Tr>
-                      <Th>Item</Th>
-                      <Th isNumeric>Quantity</Th>
-                      <Th></Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>Aspirin</Td>
-                      <Td isNumeric>1</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Bensedin</Td>
-                      <Td isNumeric>3</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Cancer</Td>
-                      <Td isNumeric>2</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              </DrawerBody>
-
-              <DrawerFooter>
-                <Button variant="outline" mr={3} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button color="teal">Buy</Button>
-              </DrawerFooter>
-            </DrawerContent>
-          </DrawerOverlay>
-        </Drawer>
+        <Basket/>
         <Menu>
           <MenuButton as={Button} rightIcon={<Avatar name={data.me.email.split('@')[0]} src="" size="sm" pd={2} />} >
             {(data.me.role === "patient") ?
               data.me.email.split('@')[0] :
-
               data.me.role
             }
           </MenuButton>

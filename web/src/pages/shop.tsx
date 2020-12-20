@@ -22,6 +22,14 @@ import {
   Center,
 } from "@chakra-ui/react"
 import Card from '../components/ui/Card'
+import ReactCollapsingTable from 'react-collapsing-table'
+let rows = [
+  { id: 1, firstName: 'Paul', lastName: 'Darragh', }
+]
+let columns = [
+  { accessor: 'firstName', label: 'First Name', priorityLevel: 1, position: 1, minWidth: 150, },
+  { accessor: 'lastName', label: 'Last Name', priorityLevel: 2, position: 2, minWidth: 150, },
+]
 
 import React from 'react'
 import { useMedicinesQuery } from '../generated/graphql';
@@ -47,14 +55,13 @@ const Shop = (): JSX.Element => {
       title: "Modern home in city center in the heart of historic Los Angeles",
       formattedPrice: "$1,900.00",
       reviewCount: 34,
-      rating: 4,
+      rating: 3,
     }
   ]
 
   return (
     <>
       <Header onOpen={onOpen} />
-
       <Grid p={10} templateColumns="repeat(7, 1fr)" gap={1}>
         <GridItem colSpan={2} h="40" bg="tomato" p={3}>
           <Box maxW="sm" border-width="1px" rounded="lg" overflow="hidden" bg="red">
