@@ -12,7 +12,6 @@ import { Pharmacy } from "./entities/Pharmacy";
 import { Prescrition } from "./entities/Prescription";
 import { Reservation } from "./entities/Reservation";
 import { WorkingHours } from "./entities/WorkingHours";
-import { Subscription } from "./entities/Subscription";
 import { MedicineList } from "./entities/MedicineList";
 import { Order } from "./entities/Order";
 import { Rating } from "./entities/Rating";
@@ -49,7 +48,6 @@ export default
       Rating,
       Reporting,
       Reservation,
-      Subscription,
       Tier,
       User,
       WorkingHours

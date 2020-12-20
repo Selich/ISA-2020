@@ -1,17 +1,20 @@
 import { Field } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { MedicineRequest } from "./MedicineRequest";
+import { PatientDetails } from "./PatientDetails";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
-import { Subscription } from "./Subscription";
+import { WorkingHours } from "./WorkingHours";
+
 
 @Entity()
 export class Pharmacy extends BaseEntity{
 
   @PrimaryGeneratedColumn()
   id!: number;
+
 
   @OneToOne(() => Address)
   address: Address;
@@ -24,6 +27,10 @@ export class Pharmacy extends BaseEntity{
   @Column()
   lat: number;
 
+  //Svi Farm,Derm,Admini apoteke
+  @ManyToMany(()=>WorkingHours)
+  workingHours:WorkingHours[];
+
   @OneToMany(() => MedicineRequest, item => item.pharmacy)
   requests: MedicineRequest[];
 
@@ -33,8 +40,8 @@ export class Pharmacy extends BaseEntity{
   @OneToMany(() => Appointment, item => item.pharmacy)
   appointments: Appointment[];
 
-  @OneToMany(() => Subscription, item => item.pharmacy)
-  subscribers: Subscription;
+  @ManyToMany(() => PatientDetails)
+  subscribers: PatientDetails[];
 
   @OneToMany(() => Rating, item => item.pharmacy)
   ratings: Rating[];
