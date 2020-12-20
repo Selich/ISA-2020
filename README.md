@@ -5,6 +5,50 @@
 potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i priložiti skriptu za popunu baze testnim podacima.
 
 
+### Potrebne biblioteke za dev
+1) Instalirati node.js
+2) Instalirati yarn
+[link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+
+3) Instaliraj windows terminal
+[link](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
+4) Instalirace sve neophodne bibiloteke
+```bash
+cd <Naziv Projekta>
+yarn install
+```
+
+5) Pozivanjem npm u root dir u projektu: prefix npm
+    "start": "node dist/index.js",
+    "start-dev": "ts-node src/index.ts",
+    "dev": "node node_modules/madge/bin/cli.js --warning --circular --extensions js ./ && nodemon dist/index.js",
+    "dev2": "nodemon dist/index.js",
+    "watch": "tsc -w",
+    "create:migration": "mikro-orm migration:create"
+
+Potrebno je pokrenuti u zasebnom prozoru:
+1)
+```bash
+yarn watch
+```
+2)
+```bash
+yarn dev2
+```
+Da bi generisao nove zahteve potrebno je generisati nove graphql upite
+
+```bash
+yarn gen
+```
+To ce omoguciti da se pokrene server u dev-u.
+Da bi se pokrenuo frontend:
+```bash
+cd web
+yarn start
+
+
+
+
 ### Potrebno
 - [ ] Kesiranje
 - [ ] Message queue obradjivanje zahteva
@@ -16,6 +60,7 @@ potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i prilo�
 - [ ] Employee posle ulogovanja sa nekom sifrom koju je admin dodao u bazu, salje notifikaciju, employee menja sifru
 - [ ] Async
 - [ ] Transactions ( upis u bazu ) ( 2 situacije )
+
 
 ### Pitanja
 - Da li mogu farmaceuti i dermatolozi u istoj tabeli
