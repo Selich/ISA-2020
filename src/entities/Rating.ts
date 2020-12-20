@@ -23,10 +23,6 @@ export class Rating {
 
   @Field()
   @Column()
-  complain: string;
-
-  @Field()
-  @Column()
   score: number;
 
   @CreateDateColumn()

@@ -2,6 +2,7 @@ import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, Primary
 import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { Medicine } from './Medicine';
 import { PatientDetails } from './PatientDetails';
+import { Price } from './Price';
 
 @ObjectType()
 @Entity()
@@ -54,8 +55,14 @@ export class MedicineDetails extends BaseEntity{
   @ManyToMany(() => PatientDetails, item => item.allergies)
   patientsAllergic: PatientDetails[];
 
-  // @OneToMany(() => Medicine, item => item.details)
-  // belongsTo: Medicine[];
+  @ManyToMany(()=>MedicineDetails)
+  alternatives:MedicineDetails[];
+
+  @OneToMany(()=>Price,item=>item.medicine)
+  prices:Price[];
+
+  @OneToMany(() => Medicine, item => item.details)
+  belongsTo: Medicine[];
 
   @Column({ type: Date })
   from: Date;

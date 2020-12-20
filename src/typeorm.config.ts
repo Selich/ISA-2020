@@ -15,7 +15,7 @@ import { WorkingHours } from "./entities/WorkingHours";
 import { MedicineList } from "./entities/MedicineList";
 import { Order } from "./entities/Order";
 import { Rating } from "./entities/Rating";
-import { Reporting } from "./entities/Report";
+import { Report } from "./entities/Report";
 import { Tier } from "./entities/Tier";
 import { User } from "./entities/User";
 import { Holiday } from "./entities/Holiday";
@@ -46,7 +46,7 @@ export default
       Pharmacy,
       Prescrition,
       Rating,
-      Reporting,
+      Report,
       Reservation,
       Tier,
       User,

@@ -11,15 +11,19 @@ export class Complaint{
   id!: number;
 
   @ManyToOne(() => PatientDetails)
-  patient!: PatientDetails;
+  author!: PatientDetails;
+
+  //Nije Null ako je neki admin sistema odgovorio
+  @Column()
+  answer: string; 
 
   @Column()
   description: string;
 
-  // @Field()
-  // doctor: User;
+  @ManyToOne(()=>User)
+  doctor: User;
 
-  // @Entity()
-  // pharmacy: Pharmacy;
+  @ManyToOne(()=>Pharmacy)
+  pharmacy: Pharmacy;
 
 }

@@ -1,7 +1,7 @@
-import { CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Reporting{
+export class Report{
 
   @PrimaryGeneratedColumn()
   id!: number;

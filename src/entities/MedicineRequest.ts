@@ -12,7 +12,7 @@ export class MedicineRequest extends MedicineList{
   pharmacy: Pharmacy;
 
   @ManyToOne(() => User)
-  user: User;
+  doctor: User;
 
   @Field(() => String)
   @CreateDateColumn()
