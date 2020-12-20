@@ -9,6 +9,8 @@ potrebno je u README.md napisati taƒçno uputstvo za pokretanje projekta i prilo≈
 1) Instalirati node.js
 2) Instalirati yarn
 [link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+3) Instalirati postgres
+[link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 
 3) Instaliraj windows terminal
 [link](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
@@ -19,12 +21,8 @@ yarn install
 ```
 
 5) Pozivanjem npm u root dir u projektu: prefix npm
-    "start": "node dist/index.js",
-    "start-dev": "ts-node src/index.ts",
-    "dev": "node node_modules/madge/bin/cli.js --warning --circular --extensions js ./ && nodemon dist/index.js",
     "dev2": "nodemon dist/index.js",
     "watch": "tsc -w",
-    "create:migration": "mikro-orm migration:create"
 
 Potrebno je pokrenuti u zasebnom prozoru:
 1)
