@@ -19,12 +19,7 @@ potrebno je u README.md napisati taƒçno uputstvo za pokretanje projekta i prilo≈
 cd <Naziv Projekta>
 yarn install
 ```
-
-5) Pozivanjem npm u root dir u projektu: prefix npm
-    "dev2": "nodemon dist/index.js",
-    "watch": "tsc -w",
-
-Potrebno je pokrenuti u zasebnom prozoru:
+5) Potrebno je pokrenuti u zasebnom prozoru:
 1)
 ```bash
 yarn watch
@@ -43,9 +38,7 @@ Da bi se pokrenuo frontend:
 ```bash
 cd web
 yarn start
-
-
-
+```
 
 ### Potrebno
 - [ ] Kesiranje
