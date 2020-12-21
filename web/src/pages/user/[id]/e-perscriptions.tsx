@@ -21,7 +21,7 @@ import { useMutation } from "urql";
 
 // @ts-ignore
 import { useRouter } from "next/router";
-import { Header } from "../../components/sections/Header";
+import { Header } from "../../../components/sections/Header";
 
 interface IFormInputs {
   email: string

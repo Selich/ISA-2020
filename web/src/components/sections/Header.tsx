@@ -33,7 +33,6 @@ export const Header: any = (props) => {
         </NextLink>
       </Flex>
     );
-    // user is logged in
   } else {
     body = (
       <Flex align="center">

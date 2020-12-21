@@ -1,10 +1,6 @@
 import React from "react";
 import { Image, Box, Link, Flex, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
-import LoginLayout from '../layouts/LoginLayout'
-import { useLogoutMutation, useMeQuery } from "../../generated/graphql";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { GrBasket } from 'react-icons/gr'
 
 interface NavBarProps { }

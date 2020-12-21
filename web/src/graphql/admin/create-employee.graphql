@@ -1,0 +1,23 @@
+mutation CreateEmployee(
+    $email: String!,
+    $firstName: String!
+    $lastName: String!
+    $role: String!
+) {
+  createEmployee(inputs: {
+      email: $email,
+      firstName: $firstName,
+      lastName: $lastName,
+      role: $role,
+  }
+  ) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      email
+    }
+  }
+}

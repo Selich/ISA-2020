@@ -6,37 +6,17 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Button,
   Box,
   Flex,
   Heading,
-  Link,
   Stack,
 } from "@chakra-ui/react"
 
-import mapStyles from '../styles/mapStyles'
 import React from 'react'
 
 
-const mapStyle = {
-  width: '100vw',
-  height: '100vh',
-}
-const options = {
-  styles: mapStyles,
-  disableDefaultUI: true,
-  zoomControl: true,
-};
-
-// TODO! Maps! @Selich
-const center = {
-  lat: 12.9529,
-  log: 80.2413,
-}
 const Index = ({
   title,
   subtitle,
@@ -49,15 +29,6 @@ const Index = ({
 
   return (
     <>
-      <Header onOpen={onOpen} />
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Login</ModalHeader>
-          <LoginForm isOpen={isOpen} onClose={onClose}/>
-
-        </ModalContent>
-      </Modal>
     <Flex
       align="center"
       justify={{ base: "center", md: "space-around", xl: "space-between" }}
