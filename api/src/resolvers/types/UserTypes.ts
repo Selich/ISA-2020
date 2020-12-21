@@ -25,6 +25,22 @@ export class RegisterInput {
   password: string;
   @Field()
   confirmPassword: string;
+  @Field()
+  firstName: string;
+  @Field()
+  lastName: string;
+  @Field()
+  telephone: string;
+  @Field()
+  gender: string;
+  @Field()
+  street: string;
+  @Field()
+  city: string;
+  @Field()
+  country: string;
+  @Field()
+  dateOfBirth: string;
 }
 @InputType()
 export class EmployeeInput {

@@ -12,27 +12,27 @@ const main = async () => {
 
   const app = express()
   app.use( cors({ origin: "http://localhost:4000", credentials: true }))
-  app.get('/medicine', (req, res) => {
-    conn.getRepository(Medicine)
-    .createQueryBuilder('medicine')
-    .leftJoinAndSelect("medicine.list", "inventory")
-    .where("inventory.pharmacy = :pharmacy", { pharmacy: req.pharmacyID })
-  });
+  // app.get('/medicine', (req, res) => {
+  //   conn.getRepository(Medicine)
+  //   .createQueryBuilder('medicine')
+  //   .leftJoinAndSelect("medicine.list", "inventory")
+  //   .where("inventory.pharmacy = :pharmacy", { pharmacy: req.pharmacyID })
+  // });
 
-  app.post('/reserveMedicine', async (req, res) => {
-    const medicine: Medicine|undefined = await conn.getRepository(Medicine)
-    .createQueryBuilder('medicine')
-    .leftJoinAndSelect("medicine.list", "inventory")
-    .where("inventory.pharmacy = :pharmacy", { pharmacy: req.pharmacyID })
-    .andWhere("medicine.id = :id", {id: req.id })
-    .getOne()
+  // app.post('/reserveMedicine', async (req, res) => {
+  //   const medicine: Medicine|undefined = await conn.getRepository(Medicine)
+  //   .createQueryBuilder('medicine')
+  //   .leftJoinAndSelect("medicine.list", "inventory")
+  //   .where("inventory.pharmacy = :pharmacy", { pharmacy: req.pharmacyID })
+  //   .andWhere("medicine.id = :id", {id: req.id })
+  //   .getOne()
 
-    const tempMedicine = medicine
-    tempMedicine?.quantity -= req.quantity
+  //   const tempMedicine = medicine
+  //   tempMedicine?.quantity -= req.quantity
 
-    await conn.getRepository(Medicine).save(tempMedicine)
-    return "POST"
-  });
+  //   await conn.getRepository(Medicine).save(tempMedicine)
+  //   return "POST"
+  // });
 
   app.post('/medicine', (req, res) => {
     console.log(req);
@@ -48,7 +48,7 @@ const main = async () => {
     return res.send('DELETE HTTP method on user resource');
   });
 
-  app.listen(4001, () => { console.log('medicineService\nlocalhost:4002'); })
+  app.listen(4002, () => { console.log('medicineService\nlocalhost:4002'); })
 
 };
 

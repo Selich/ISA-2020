@@ -1,4 +1,4 @@
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm'
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinTable } from 'typeorm'
 import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { MedicineDetails } from './MedicineDetails';
 import { MedicineList } from './MedicineList';
@@ -7,14 +7,18 @@ import { MedicineList } from './MedicineList';
 @Entity()
 export class Medicine extends BaseEntity{
 
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  // @ManyToOne(() => MedicineDetails)
-  // details: MedicineDetails;
+  @Field(() => MedicineDetails)
+  @ManyToOne(() => MedicineDetails, item => item.belongsTo ,{ eager: true, cascade: true, nullable:true})
+  @JoinTable()
+  details: MedicineDetails;
 
-  @ManyToOne(() => MedicineList)
+  @Field(() => MedicineList)
+  @ManyToOne(() => MedicineList, item => item.medicines ,{ eager: true, cascade: true, nullable:true})
+  @JoinTable()
   list: MedicineList;
 
   @Field()

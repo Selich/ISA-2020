@@ -1,25 +1,35 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ObjectType, Field, ID } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
 import { Prescrition } from "./Prescription";
 import { User } from "./User";
 
+@ObjectType()
 @Entity()
 export class Appointment extends BaseEntity{
 
+
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => PatientDetails)
-  patient: User;
+  @Field(() => PatientDetails)
+  @ManyToOne(() => PatientDetails, item => item.appointments,  { eager: true, cascade: true })
+  @JoinTable()
+  patient: PatientDetails;
 
-  @ManyToOne(() => User)
+  @Field(() => User)
+  @ManyToOne(() => User, item => item.schedule,  { eager: true, cascade: true })
+  @JoinTable()
   doctor: User;
 
   @ManyToOne(() => Pharmacy)
   pharmacy: Pharmacy;
 
-  @OneToOne(() => Prescrition, item => item.appointment)
+  @Field(() => Prescrition)
+  @OneToOne(() => Prescrition, item => item.appointment ,{ eager: true, cascade: true, nullable:true})
+  @JoinColumn()
   prescription: Prescrition;
 
   @Column()

@@ -11,7 +11,6 @@ import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import dbConfig from './typeorm.config'
 import { UserResolver } from './resolvers/api/user/user';
-import { MedicineResolver } from './resolvers/api/user/userMedicine';
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -42,7 +41,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ UserResolver, MedicineResolver ],
+      resolvers: [ UserResolver ],
       validate: false
     }),
     context: ({ req, res}) => ({

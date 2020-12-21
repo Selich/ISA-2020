@@ -1,17 +1,22 @@
 import { MedicineList } from "./MedicineList";
 import { Entity } from "typeorm/decorator/entity/Entity";
-import { Field } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import { Pharmacy } from "./Pharmacy";
-import { CreateDateColumn, ManyToOne, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, JoinTable, ManyToOne, UpdateDateColumn } from "typeorm";
 import { User } from "./User";
 
+@ObjectType()
 @Entity()
 export class MedicineRequest extends MedicineList{
 
-  @ManyToOne(() => Pharmacy)
+  @Field(() => Pharmacy)
+  @ManyToOne(() => Pharmacy, item => item.requests,  { cascade: true })
+  @JoinTable()
   pharmacy: Pharmacy;
 
-  @ManyToOne(() => User)
+  @Field(() => User)
+  @ManyToOne(() => User, item => item.requests,  { eager: true, cascade: true })
+  @JoinTable()
   user: User;
 
   @Field(() => String)

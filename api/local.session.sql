@@ -1,1 +1,1 @@
-SELECT * FROM public.user
+DELETE FROM public.patient_details

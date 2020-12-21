@@ -1,5 +1,5 @@
 import { Complaint } from "./Complaint";
-import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne, BaseEntity } from 'typeorm'
+import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne, BaseEntity, JoinColumn } from 'typeorm'
 import {  Field, ID, ObjectType} from 'type-graphql';
 import { Prescrition } from "./Prescription";
 import { Reservation } from "./Reservation";
@@ -21,16 +21,20 @@ export class PatientDetails extends BaseEntity{
   @OneToMany(() => Appointment, item => item.patient)
   appointments: Appointment[];
 
+  @Field(() => [MedicineDetails])
   @ManyToMany(() => MedicineDetails, item => item.patientsAllergic)
   allergies: MedicineDetails[];
 
-  @OneToMany(() => Prescrition, item => item.patient)
+  @Field(() => [Prescrition])
+  @OneToMany(() => Prescrition, item => item.patient, {eager:true})
   prescritions: Prescrition[];
 
-  @OneToMany(() => Reservation, item => item.patient)
+  @Field(() => [Reservation])
+  @OneToMany(() => Reservation, item => item.patient, {eager:true})
   reservations: Reservation[];
 
-  @OneToMany(() => Rating, item => item.patient)
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, item => item.patient, {eager: true})
   ratings: Rating[];
 
   @OneToMany(() => Complaint, item => item.patient)

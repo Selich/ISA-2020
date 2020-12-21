@@ -1,6 +1,8 @@
-import { Field } from "type-graphql";
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { User } from "./User";
 
+@ObjectType()
 @Entity()
 export class WorkingHours {
 
@@ -8,9 +10,10 @@ export class WorkingHours {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
-  @Column()
-  doctorID: number;
+  @Field(() => User)
+  @ManyToOne(() => User, item => item.workingHours)
+  @JoinTable()
+  doctorID: User;
 
   @Field()
   @Column()

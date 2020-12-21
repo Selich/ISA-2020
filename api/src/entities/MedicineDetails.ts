@@ -54,8 +54,8 @@ export class MedicineDetails extends BaseEntity{
   @ManyToMany(() => PatientDetails, item => item.allergies)
   patientsAllergic: PatientDetails[];
 
-  // @OneToMany(() => Medicine, item => item.details)
-  // belongsTo: Medicine[];
+  @OneToMany(() => Medicine, item => item.details)
+  belongsTo: Medicine[];
 
   @Column({ type: Date })
   from: Date;

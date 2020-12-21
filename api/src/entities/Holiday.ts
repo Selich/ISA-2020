@@ -1,16 +1,20 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ID, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { PatientDetails } from "./PatientDetails";
 import { Pharmacy } from "./Pharmacy";
-import { Report } from "./Report";
 import { User } from "./User";
 
+@ObjectType()
 @Entity()
 export class Holiday extends BaseEntity{
 
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => User)
+  @Field(() => User)
+  @ManyToOne(() => User, item => item.holidays)
+  @JoinTable()
   employee: User;
 
   @Column({ type: Date })

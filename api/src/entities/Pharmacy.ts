@@ -1,18 +1,22 @@
-import { Field } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ID, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { MedicineRequest } from "./MedicineRequest";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
 
+@ObjectType()
 @Entity()
 export class Pharmacy extends BaseEntity{
 
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne(() => Address)
+  @Field(() => Address)
+  @OneToOne(() => Address, item => item.pharmacy,{ eager: true, cascade: true, nullable:true})
+  @JoinColumn()
   address: Address;
 
   @Field()
@@ -23,15 +27,22 @@ export class Pharmacy extends BaseEntity{
   @Column()
   lat: number;
 
-  @OneToMany(() => MedicineRequest, item => item.pharmacy)
+  @Field(() => [MedicineRequest])
+  @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true})
   requests: MedicineRequest[];
 
   @OneToMany(() => Reservation, item => item.patient)
   prescritions: Reservation[];
 
-  @OneToMany(() => Appointment, item => item.pharmacy)
+  @Field(() => [Appointment])
+  @OneToMany(() => Appointment, item => item.pharmacy, {eager: true})
   appointments: Appointment[];
 
+  @Field(() => [Reservation])
+  @OneToMany(() => Reservation, item => item.pharmacy)
+  reservations: Reservation[];
+
+  @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.pharmacy)
   ratings: Rating[];
 

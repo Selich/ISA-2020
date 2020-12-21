@@ -1,4 +1,4 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable } from 'typeorm'
 import { Address } from "./Address";
 import { ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
@@ -6,10 +6,12 @@ import { Appointment } from "./Appointment";
 import { Rating } from './Rating';
 import { Holiday } from './Holiday';
 import { WorkingHours } from './WorkingHours';
+import { MedicineRequest } from './MedicineRequest';
 
+// ! WORKS, DONT TOUCH
 @ObjectType()
 @Entity()
-export class User extends BaseEntity{
+export class User extends BaseEntity {
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -24,18 +26,19 @@ export class User extends BaseEntity{
   password: string;
 
   @Field()
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   role: string;
 
   @Field()
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   firstName: string;
 
   @Field()
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   lastName: string;
 
-  @OneToMany(() => Holiday, item => item.employee)
+  @Field(() => [Holiday])
+  @OneToMany(() => Holiday, item => item.employee, { eager: true})
   holidays: Holiday[];
 
   @OneToMany(() => Rating, item => item.doctor)
@@ -44,26 +47,34 @@ export class User extends BaseEntity{
   @OneToMany(() => Appointment, item => item.doctor)
   schedule: Appointment[];
 
-  @OneToMany(() => WorkingHours, item => item.doctorID)
+  @Field(() => [WorkingHours])
+  @OneToMany(() => WorkingHours, item => item.doctorID, { eager: true})
   workingHours: WorkingHours[];
 
-  @OneToOne(() => PatientDetails)
+  @Field(() =>  [MedicineRequest])
+  @OneToMany(() => MedicineRequest, item => item.user)
+  requests: MedicineRequest[];
+
+  @Field(() => PatientDetails)
+  @OneToOne(() => PatientDetails, item => item.user ,{ eager: true, cascade: true, nullable:true})
   @JoinColumn()
   details: PatientDetails;
 
   @Field()
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   gender: string;
 
-  @Field()
-  @Column({ type: 'date', nullable: true})
+  @Field(() => String)
+  @Column({ type: 'date', nullable: true })
   dateOfBirth: Date;
 
-  @ManyToOne(() => Address)
+  @Field(() => Address)
+  @ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true })
+  @JoinTable()
   address: Address;
 
   @Field()
-  @Column({ nullable: true})
+  @Column({ nullable: true })
   telephone: string;
 
   @Field()

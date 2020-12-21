@@ -2,8 +2,8 @@ import {Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graph
 import { MyContext } from '../../../types';
 import { MedicineDetails } from '../../../entities/MedicineDetails';
 import { Medicine } from '../../../entities/Medicine';
-import { FieldError } from '../../../resolvers/types/ErrorTypes';
-import { PatientDetails } from 'src/entities/PatientDetails';
+import { FieldError } from '../../types/ErrorTypes';
+import { PatientDetails } from '../../../entities/PatientDetails';
 
 @ObjectType()
 class MedicineResponse {
@@ -38,13 +38,13 @@ export class MedicineResolver{
     // }
 
     const details = new MedicineDetails();
-    details.code = inputs.code
-    details.name = inputs.name
-    details.type = inputs.type
-    details.points = inputs.points
-    details.form = inputs.form
-    details.producer = inputs.producer
-    details.info = inputs.info
+    // details.code = inputs.code
+    // details.name = inputs.name
+    // details.type = inputs.type
+    // details.points = inputs.points
+    // details.form = inputs.form
+    // details.producer = inputs.producer
+    // details.info = inputs.info
 
     await details.save()
 

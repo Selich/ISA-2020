@@ -1,5 +1,7 @@
+import { ObjectType } from "type-graphql";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
+@ObjectType()
 @Entity()
 export class Order {
 
@@ -15,7 +17,5 @@ export class Order {
   @Column()
   name!: string;
 
-  @Column()
-  privilege!: string;
 
 }
