@@ -3,7 +3,6 @@ import cors from 'cors';
 import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis'
-import path from "path";
 import 'reflect-metadata'
 
 import { __prod__ } from "./constants";
@@ -11,8 +10,8 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import dbConfig from './typeorm.config'
-import { UserResolver } from './resolvers/UserResolver';
-import { MedicineResolver } from './resolvers/MedicineResolver';
+import { UserResolver } from './resolvers/api/user/user';
+import { MedicineResolver } from './resolvers/api/user/userMedicine';
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -53,9 +52,7 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  // app.use(cors())
-
-  app.listen(4000, () => { console.log(''); })
+  app.listen(4000, () => { console.log('localhost:4000'); })
 
 };
 

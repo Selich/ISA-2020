@@ -1,8 +1,5 @@
-import {Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
+import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
 import { MyContext } from '../types';
-import { User } from 'src/entities/User';
-import { validateRegister } from 'src/utils/validators/validateRegister';
-import { RegisterInput } from './types/UserTypes';
 import { MedicineDetails } from '../entities/MedicineDetails';
 import { Medicine } from '../entities/Medicine';
 import { MedicineDetailsInput } from './types/MedicineTypes';
@@ -52,3 +49,4 @@ export class MedicineResolver{
     return { details };
   }
 }
+

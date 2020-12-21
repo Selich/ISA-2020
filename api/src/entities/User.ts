@@ -5,6 +5,7 @@ import { PatientDetails } from "./PatientDetails";
 import { Appointment } from "./Appointment";
 import { Rating } from './Rating';
 import { Holiday } from './Holiday';
+import { WorkingHours } from './WorkingHours';
 
 @ObjectType()
 @Entity()
@@ -42,6 +43,9 @@ export class User extends BaseEntity{
 
   @OneToMany(() => Appointment, item => item.doctor)
   schedule: Appointment[];
+
+  @OneToMany(() => WorkingHours, item => item.doctorID)
+  workingHours: WorkingHours[];
 
   @OneToOne(() => PatientDetails)
   @JoinColumn()

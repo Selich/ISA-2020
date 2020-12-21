@@ -1,5 +1,5 @@
 import { Complaint } from "./Complaint";
-import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne } from 'typeorm'
+import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne, BaseEntity } from 'typeorm'
 import {  Field, ID, ObjectType} from 'type-graphql';
 import { Prescrition } from "./Prescription";
 import { Reservation } from "./Reservation";
@@ -8,12 +8,11 @@ import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
 import { User } from "./User";
-import { Subscription } from "./Subscription";
 
 
 @ObjectType()
 @Entity()
-export class PatientDetails{
+export class PatientDetails extends BaseEntity{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -36,9 +35,6 @@ export class PatientDetails{
 
   @OneToMany(() => Complaint, item => item.patient)
   complaints: Complaint[];
-
-  @OneToMany(() => Subscription, item => item.user)
-  subscribers: Subscription;
 
   @OneToOne(() => User)
   user: User;

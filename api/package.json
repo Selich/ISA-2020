@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "start-dev": "ts-node src/index.ts",
-    "dev": "node node_modules/madge/bin/cli.js --warning --circular --extensions js ./ && nodemon dist/index.js",
-    "dev2": "nodemon dist/index.js",
+    "start": "node dist/api.js",
+    "start-dev": "ts-node src/api.ts",
+    "dev": "node node_modules/madge/bin/cli.js --warning --circular --extensions js ./ && nodemon dist/api.js",
+    "dev2": "nodemon dist/api.js",
     "watch": "tsc -w",
     "create:migration": "mikro-orm migration:create"
   },

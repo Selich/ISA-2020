@@ -5,7 +5,6 @@ import { Appointment } from "./Appointment";
 import { MedicineRequest } from "./MedicineRequest";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
-import { Subscription } from "./Subscription";
 
 @Entity()
 export class Pharmacy extends BaseEntity{
@@ -32,9 +31,6 @@ export class Pharmacy extends BaseEntity{
 
   @OneToMany(() => Appointment, item => item.pharmacy)
   appointments: Appointment[];
-
-  @OneToMany(() => Subscription, item => item.pharmacy)
-  subscribers: Subscription;
 
   @OneToMany(() => Rating, item => item.pharmacy)
   ratings: Rating[];

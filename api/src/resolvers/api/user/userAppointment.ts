@@ -1,36 +1,30 @@
-import { User } from '../entities/User';
+import { User } from '../../../entities/User';
 import { ObjectType, InputType, Field, Mutation, Resolver, Query, Ctx, Arg, Int} from 'type-graphql';
-import { MyContext } from '../types';
+import { MyContext } from '../../../types';
 import { Appointment } from 'src/entities/Appointment';
-import { AppointmentInput } from './types/AppointmentTypes';
+import { AppointmentInput } from '../../types/AppointmentTypes';
+import { getRepository } from 'typeorm';
 
-@ObjectType()
-class UserResponse {
-  @Field(() => [Error], {nullable: true})
-  errors?: Error[]
-  @Field(() => User, { nullable: true})
-  user?: User
-}
 
-@Resolver()
-export class AppointmentResolver{
-  @Query(() => [Appointment])
-  appointments(
-    @Ctx() { em }: MyContext): Promise<Appointment[]> {
-    return em.find(Appointment, {})
-  }
+@Resolver(Appointment)
+export class ApiAppointmentResolver{
 
   @Query(() => Appointment, {nullable: true})
-  appointment(
+  getAppointmentsByPatient(
     @Arg('id', () => Int) id: number,
-    @Ctx() { em }: MyContext): Promise<Appointment | null> {
-    return em.findOne(Appointment, {id})
+    @Ctx() {  }: MyContext): Promise<Appointment[] | null> {
+      return getRepository(Appointment)
+        .createQueryBuilder("appointment")
+        .innerJoinAndSelect("appointment.patient", "patient_details")
+        .innerJoinAndSelect("patient_details.user", "user")
+        .where("user.id = :id", { id: id })
+        .getMany()
   }
 
   @Mutation(() => Appointment)
   async create(
     @Arg("inputs") inputs: AppointmentInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { }: MyContext
   ){
     // const errors = validateAppointment(inputs);
     // if (errors) return errors;
