@@ -51,7 +51,8 @@ export default function LoginForm(props) {
                 <FormInputPassword name="password" placeholder="password" label="Password" type="password" />
               </Box>
               <Button
-                mt={4}
+                mt={8}
+                size="md"
                 type="submit"
                 onClick={props.onClose}
                 isLoading={isSubmitting}
