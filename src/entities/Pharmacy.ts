@@ -11,8 +11,7 @@ import { PatientDetails } from "./PatientDetails";
 import { Price } from "./Price";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
-import { Subscription } from "./Subscription";
-import { User } from "./User";
+import { WorkingHours } from "./WorkingHours";
 // Na stranici profila apoteke potrebno je prikazati sledeće informacije:
 // ● listu dermatologa i farmaceuta koji su zaposleni u njoj,
 // ● listu lekova koje apoteka ima na stanju,
@@ -40,9 +39,6 @@ export class Pharmacy extends BaseEntity{
   @OneToOne(() => Address)
   address: Address;
 
-  @Field()
-  @Column()
-  name: string;
 
   @Field()
   @Column()
