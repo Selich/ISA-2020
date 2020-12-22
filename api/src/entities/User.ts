@@ -7,6 +7,8 @@ import { Rating } from './Rating';
 import { Holiday } from './Holiday';
 import { WorkingHours } from './WorkingHours';
 import { MedicineRequest } from './MedicineRequest';
+import { Order } from './Order';
+import { Offer } from './Offer';
 
 // ! WORKS, DONT TOUCH
 @ObjectType()
@@ -50,6 +52,14 @@ export class User extends BaseEntity {
   @Field(() => [WorkingHours])
   @OneToMany(() => WorkingHours, item => item.doctorID, { eager: true})
   workingHours: WorkingHours[];
+
+  @Field(() => [Order])
+  @OneToMany(() => Order, item => item.admin)
+  orders: Order[];
+
+  @Field(() => [Offer])
+  @OneToMany(() => Offer, item => item.supplier)
+  offers: Offer[];
 
   @Field(() =>  [MedicineRequest])
   @OneToMany(() => MedicineRequest, item => item.user)

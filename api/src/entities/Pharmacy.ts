@@ -5,6 +5,7 @@ import { Appointment } from "./Appointment";
 import { Complaint } from "./Complaint";
 import { Inventory } from "./Inventory";
 import { MedicineRequest } from "./MedicineRequest";
+import { Order } from "./Order";
 import { Price } from "./Price";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
@@ -53,6 +54,10 @@ export class Pharmacy extends BaseEntity{
   @Field(() => [Reservation])
   @OneToMany(() => Reservation, item => item.pharmacy)
   reservations: Reservation[];
+
+  @Field(() => [Order])
+  @OneToMany(() => Order, item => item.pharmacy)
+  orders: Order[];
 
   @Field(() => [Complaint])
   @OneToMany(() => Complaint, item => item.pharmacy)
