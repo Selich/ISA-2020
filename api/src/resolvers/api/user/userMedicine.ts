@@ -4,6 +4,9 @@ import { MedicineDetails } from '../../../entities/MedicineDetails';
 import { Medicine } from '../../../entities/Medicine';
 import { FieldError } from '../../types/ErrorTypes';
 import { PatientDetails } from '../../../entities/PatientDetails';
+import { Reservation } from 'src/entities/Reservation';
+import { Pharmacy } from 'src/entities/Pharmacy';
+import { Inventory } from 'src/entities/Inventory';
 
 @ObjectType()
 class MedicineResponse {
@@ -15,39 +18,30 @@ class MedicineResponse {
 }
 @Resolver(Medicine)
 export class MedicineResolver{
-  @Mutation(() => MedicineResponse)
-  async reserveMedicine(
-    @Arg("inputs") inputs: Medicine,
+  @Mutation(() => Reservation)
+  async reservation(
+    @Arg("inputs") inputs: Reservation,
     @Ctx() { req }: MyContext
-  ): Promise<MedicineResponse> {
+  ): Promise<Reservation> {
 
     const profile = await PatientDetails.getRepository()
                           .createQueryBuilder('patient_details')
                           .leftJoinAndSelect("patient_details.user", "user")
                           .where("user.id = :id", { id: req.session.userId })
-                          .getOne()
+                          .getOneOrFail()
 
-    // const
-    // switch(profile?.tier.name){
-    //     case value:
 
-    //       break;
+    const list = inputs.medicines
+    const arr : any[]= []
+    list.forEach(item => arr.push(item.id))
 
-    //     default:
-    //       break;
-    // }
+    const pharmInv = Inventory.findOneOrFail({pharmacy: inputs.pharmacy})
+    const items = (await pharmInv).medicines.filter(item => arr.includes(item.id))
 
-    const details = new MedicineDetails();
-    // details.code = inputs.code
-    // details.name = inputs.name
-    // details.type = inputs.type
-    // details.points = inputs.points
-    // details.form = inputs.form
-    // details.producer = inputs.producer
-    // details.info = inputs.info
+    inputs.medicines = items
+    inputs.patient = profile
+    await inputs.save()
 
-    await details.save()
-
-    return { details };
+    return inputs ;
   }
 }

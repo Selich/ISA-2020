@@ -4,7 +4,7 @@ import { Medicine } from './Medicine';
 
 @ObjectType()
 @Entity()
-export class MedicineList {
+export class MedicineList extends BaseEntity{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()

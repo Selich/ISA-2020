@@ -1,0 +1,11 @@
+version: '3'
+services:
+  deploy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # nginx: 9000 -> aws: 80
+    ports:
+      - '80:80'
+
