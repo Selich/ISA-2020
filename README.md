@@ -5,7 +5,7 @@
 potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i priložiti skriptu za popunu baze testnim podacima.
 
 
-### Potrebne biblioteke za dev
+### Dependencies for dev
 1) Instalirati node.js
 2) Instalirati yarn
 [link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
@@ -20,32 +20,25 @@ cd <Naziv Projekta>
 yarn install
 ```
 
-5) Pozivanjem npm u root dir u projektu: prefix npm
-    "dev2": "nodemon dist/index.js",
-    "watch": "tsc -w",
-
-Potrebno je pokrenuti u zasebnom prozoru:
-1)
+### Run scripts
+Pozivanje:
+- api dev
 ```bash
-yarn watch
+./run_api.sh
 ```
-2)
+- web frontend dev
 ```bash
-yarn dev2
+./run_api.sh
+```
+- zajedno
+```bash
+./run_api.sh
 ```
 Da bi generisao nove zahteve potrebno je generisati nove graphql upite
 
 ```bash
 yarn gen
 ```
-To ce omoguciti da se pokrene server u dev-u.
-Da bi se pokrenuo frontend:
-```bash
-cd web
-yarn start
-
-
-
 
 ### Potrebno
 - [ ] Kesiranje
