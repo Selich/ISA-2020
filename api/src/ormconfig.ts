@@ -22,33 +22,12 @@ import { Holiday } from "./entities/Holiday";
 import { MedicineRequest } from "./entities/MedicineRequest";
 export default
     {
-    type: "postgres",
+    type: process.env.DATABASE_TYPE,
     host: 'localhost',
     port: 5432,
     logging: true,
-    username: 'super_isa',
-    password: 'pass',
-    database: 'isa',
-    synchronize: true,
-    migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [
-      Address,
-      Appointment,
-      Complaint,
-      Inventory,
-      Holiday,
-      Medicine,
-      MedicineDetails,
-      MedicineList,
-      MedicineRequest,
-      Order,
-      PatientDetails,
-      Pharmacy,
-      Prescrition,
-      Rating,
-      Reporting,
-      Reservation,
-      Tier,
-      User,
-      WorkingHours
-    ]} as ConnectionOptions;
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DATABASE,
+    synchronize: !!process.env.ORM_SYNC,
+  } as ConnectionOptions;

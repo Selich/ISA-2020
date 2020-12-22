@@ -4,23 +4,30 @@ import redis from 'redis';
 import session from 'express-session';
 import connectRedis from 'connect-redis'
 import 'reflect-metadata'
-
 import { __prod__ } from "./constants";
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import dbConfig from './typeorm.config'
+import dbConfig from './ormconfig'
 import { UserResolver } from './resolvers/api/user/user';
+import path from 'path'
 
 const main = async () => {
-  const conn = await createConnection(dbConfig);
+  const conn = await createConnection(
+    {
+      ...dbConfig,
+      migrations: [path.join(__dirname, "./migrations/*")],
+      entities: [path.join(__dirname, "./entities/*")],
+    });
 
   await conn.runMigrations();
 
   const app = express()
   const RedisStore = connectRedis(session)
+  // const redis = new Redis(process.env.REDIS_URL)
   const redisClient = redis.createClient()
-  app.use( cors({ origin: "http://localhost:3000", credentials: true }))
+  app.set("proxy", 1)
+  app.use( cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
 
   app.use(
     session({
@@ -32,9 +39,11 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365,
         httpOnly: true,
-        sameSite: 'lax'
+        sameSite: 'lax',
+        secure: __prod__,
+        domain: __prod__ ? process.env.DOMAIN : undefined
       },
-      secret: 'somesecret',
+      secret: process.env.SESSION_SECRET,
       resave: false
     })
   )
@@ -51,7 +60,9 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(4000, () => { console.log('localhost:4000'); })
+  app.listen(parseInt(process.env.PORT), () => {
+    console.log('localhost');
+  })
 
 };
 

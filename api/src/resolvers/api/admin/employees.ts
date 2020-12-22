@@ -39,7 +39,7 @@ export class EmployeeResolver {
     const wh = new WorkingHours()
     const list : WorkingHours[] = []
     const newUser = await user.save()
-    wh.doctorID = newUser.id
+    wh.doctorID = await User.findOneOrFail({id: newUser.id})
     wh.pharmacyID = 1
     const l = list.concat(wh)
 
