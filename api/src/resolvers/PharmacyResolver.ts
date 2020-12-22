@@ -1,7 +1,7 @@
 import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
 import { MyContext } from '../types';
-import { MedicineDetails } from '../entities/MedicineDetails';
 import { Medicine } from '../entities/Medicine';
+import { MedicineItem } from '../entities/MedicineItem';
 import { MedicineDetailsInput } from './types/MedicineTypes';
 
 @ObjectType()
@@ -16,8 +16,8 @@ class MedicineResponse {
   @Field(() => [FieldErrorMedicine], { nullable: true })
   errors?: FieldErrorMedicine[];
 
-  @Field(() => MedicineDetails, { nullable: true })
-  details?: MedicineDetails;
+  @Field(() => Medicine, { nullable: true })
+  details?: Medicine;
 }
 @Resolver(Medicine)
 export class MedicineResolver{
@@ -35,7 +35,7 @@ export class MedicineResolver{
     @Ctx() { req }: MyContext
   ): Promise<MedicineResponse> {
 
-    const details = new MedicineDetails();
+    const details = new Medicine();
     details.code = inputs.code
     details.name = inputs.name
     details.type = inputs.type

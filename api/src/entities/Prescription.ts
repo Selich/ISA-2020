@@ -1,5 +1,5 @@
-import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { CreateDateColumn, UpdateDateColumn, Column, Entity, ManyToOne, OneToOne } from 'typeorm'
+import { ObjectType, Field } from 'type-graphql';
 import { PatientDetails } from './PatientDetails';
 import { MedicineList } from './MedicineList';
 import { User } from './User';
@@ -19,7 +19,12 @@ export class Prescrition extends MedicineList{
   appointment: Appointment;
 
   @Field()
+  @Column()
   isUsed: boolean;
+
+  @Field()
+  @Column()
+  hashCode: string;
 
   @Field()
   @Column()

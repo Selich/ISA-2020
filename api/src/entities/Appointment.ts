@@ -9,7 +9,6 @@ import { User } from "./User";
 @Entity()
 export class Appointment extends BaseEntity{
 
-
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
@@ -32,15 +31,19 @@ export class Appointment extends BaseEntity{
   @JoinColumn()
   prescription: Prescrition;
 
+  @Field()
   @Column()
   type: string;
 
+  @Field()
   @Column()
   score: number;
 
+  @Field()
   @Column()
   price: number;
 
+  @Field()
   @Column()
   report: string;
 

@@ -1,6 +1,6 @@
 import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { Int, ObjectType, Field, ID } from 'type-graphql';
-import { Medicine } from './Medicine';
+import { MedicineItem } from './MedicineItem';
 
 @ObjectType()
 @Entity()
@@ -10,9 +10,9 @@ export class MedicineList extends BaseEntity{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => [Medicine])
-  @OneToMany(() => Medicine, medicine => medicine.list)
-  medicines: Medicine[];
+  @Field(() => [MedicineItem])
+  @OneToMany(() => MedicineItem, medicine => medicine.list)
+  medicines: MedicineItem[];
 
 }
 

@@ -3,7 +3,7 @@ import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToO
 import {  Field, ID, ObjectType} from 'type-graphql';
 import { Prescrition } from "./Prescription";
 import { Reservation } from "./Reservation";
-import { MedicineDetails } from "./MedicineDetails";
+import { Medicine } from "./Medicine";
 import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
@@ -21,9 +21,9 @@ export class PatientDetails extends BaseEntity{
   @OneToMany(() => Appointment, item => item.patient)
   appointments: Appointment[];
 
-  @Field(() => [MedicineDetails])
-  @ManyToMany(() => MedicineDetails, item => item.patientsAllergic)
-  allergies: MedicineDetails[];
+  @Field(() => [Medicine])
+  @ManyToMany(() => Medicine, item => item.patientsAllergic)
+  allergies: Medicine[];
 
   @Field(() => [Prescrition])
   @OneToMany(() => Prescrition, item => item.patient, {eager:true})

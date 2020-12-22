@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
+import { Complaint } from "./Complaint";
 import { MedicineRequest } from "./MedicineRequest";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
@@ -41,6 +42,10 @@ export class Pharmacy extends BaseEntity{
   @Field(() => [Reservation])
   @OneToMany(() => Reservation, item => item.pharmacy)
   reservations: Reservation[];
+
+  @Field(() => [Complaint])
+  @OneToMany(() => Complaint, item => item.pharmacy)
+  complaints: Complaint[];
 
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.pharmacy)

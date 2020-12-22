@@ -1,7 +1,7 @@
 import {Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
 import { MyContext } from '../../../types';
-import { MedicineDetails } from '../../../entities/MedicineDetails';
 import { Medicine } from '../../../entities/Medicine';
+import { MedicineItem } from '../../../entities/MedicineItem';
 import { FieldError } from '../../types/ErrorTypes';
 import { PatientDetails } from '../../../entities/PatientDetails';
 import { Reservation } from 'src/entities/Reservation';
@@ -13,8 +13,8 @@ class MedicineResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  @Field(() => MedicineDetails, { nullable: true })
-  details?: MedicineDetails;
+  @Field(() => Medicine, { nullable: true })
+  details?: Medicine;
 }
 @Resolver(Medicine)
 export class MedicineResolver{
