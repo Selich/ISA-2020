@@ -3,7 +3,9 @@ import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, On
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { Complaint } from "./Complaint";
+import { Inventory } from "./Inventory";
 import { MedicineRequest } from "./MedicineRequest";
+import { Price } from "./Price";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
 
@@ -27,6 +29,15 @@ export class Pharmacy extends BaseEntity{
   @Field()
   @Column()
   lat: number;
+
+  @Field(() => Inventory)
+  @OneToOne(() => Inventory, item => item.pharmacy ,{ eager: true, cascade: true, nullable:true})
+  @JoinColumn()
+  inventory: Inventory;
+
+  @Field(() => [Price])
+  @OneToMany(() => Price, item => item.pharmacy ,{ eager: true })
+  prices: Price[];
 
   @Field(() => [MedicineRequest])
   @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true})

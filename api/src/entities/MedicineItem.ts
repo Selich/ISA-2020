@@ -29,6 +29,10 @@ export class MedicineItem extends BaseEntity{
   @Column()
   price: number;
 
+  @Field()
+  @Column({ type:  'citext'})
+  instructions: string;
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt = new Date();

@@ -1,12 +1,13 @@
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany } from 'typeorm'
-import { Int, ObjectType, Field, ID } from 'type-graphql';
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinColumn } from 'typeorm'
+import { ObjectType, Field, ID } from 'type-graphql';
 import { MedicineItem } from './MedicineItem';
 import { PatientDetails } from './PatientDetails';
 import { MedicineRequest } from './MedicineRequest';
+import { Price } from './Price';
 
 @ObjectType()
 @Entity()
-export class Medicine extends BaseEntity{
+export class Medicine extends BaseEntity {
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -28,24 +29,24 @@ export class Medicine extends BaseEntity{
   @Column()
   points: number;
 
-  @Field(() => String)
+  @Field()
   @Column()
   form: string;
 
-  @Field(() => String)
+  @Field()
   @Column()
   contents: string;
+
+  @Field()
+  @Column()
+  producer: string;
 
   @Field(() => File)
   @Column()
   image: string;
 
-  @Field(() => String)
-  @Column()
-  producer: string;
-
   @Field(() => Boolean)
-  @Column({default: false})
+  @Column({ default: false })
   isPrescriptionRequired: boolean;
 
   @Field(() => String)
@@ -58,12 +59,22 @@ export class Medicine extends BaseEntity{
   @OneToMany(() => MedicineRequest, item => item.medicine)
   requests: MedicineRequest[];
 
-  @OneToMany(() => MedicineItem, item => item.details)
-  belongsTo: Medicine[];
+  @OneToMany(() => Price, item => item.medicine)
+  prices: Price[];
 
+  @OneToMany(() => MedicineItem, item => item.details)
+  belongsTo: MedicineItem[];
+
+  @Field(() => [Medicine])
+  @ManyToMany(() => Medicine, item => item.alternatives, { lazy: true })
+  @JoinColumn()
+  alternatives: Medicine[];
+
+  @Field(() => String)
   @Column({ type: Date })
   from: Date;
 
+  @Field(() => String)
   @Column({ type: Date })
   until: Date;
 
