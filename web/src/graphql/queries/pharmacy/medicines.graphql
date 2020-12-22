@@ -1,8 +1,0 @@
-query Medicines {
-  medicines {
-    id
-    quantity
-    price
-  }
-}
-

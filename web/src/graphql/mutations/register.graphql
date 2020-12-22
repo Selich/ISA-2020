@@ -1,5 +1,29 @@
-mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
-  register(inputs: { email: $email, password: $password, confirmPassword: $confirmPassword }) {
+mutation Register(
+    $email: String!,
+    $password: String!,
+    $confirmPassword: String!
+    $firstName: String!
+    $lastName: String!
+    $gender: String!
+    $telephone: String!
+    $dateOfBirth: String!
+    $street: String!
+    $city: String!
+    $country: String!
+    ) {
+  register(inputs: {
+      email: $email,
+      password: $password,
+      confirmPassword: $confirmPassword,
+      firstName: $firstName,
+      lastName: $lastName,
+      dateOfBirth: $dateOfBirth,
+      gender: $gender,
+      telephone: $telephone
+      street: $street
+      city: $city
+      country: $country
+      }) {
     errors {
       field
       message

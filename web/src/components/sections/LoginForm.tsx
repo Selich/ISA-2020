@@ -26,7 +26,7 @@ const toErrorMap = (errors: FieldError[]) => {
 };
 
 
-export default function LoginForm(props) {
+export default function LoginForm({onClose}) {
   const [{ fetching: loginFetch }, login] = useLoginMutation();
   const router = useRouter();
   return (
@@ -34,6 +34,8 @@ export default function LoginForm(props) {
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
+            console.log(values);
+
             const response = await login(values);
             if (response.data?.login.errors) {
               setErrors(toErrorMap(response.data.login.errors));
@@ -54,7 +56,6 @@ export default function LoginForm(props) {
                 mt={8}
                 size="md"
                 type="submit"
-                onClick={props.onClose}
                 isLoading={isSubmitting}
                 colorScheme="teal"
               >

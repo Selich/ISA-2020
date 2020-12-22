@@ -7,13 +7,13 @@ import RegisterForm from "./RegisterForm";
 export const RegisterModal: any = ({ onOpen, isOpen, onClose }) => {
   const btnRef = React.useRef()
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader><Text fontSize="3xl"> Login User: </Text> </ModalHeader>
+        <ModalHeader><Text fontSize="3xl"> Register User: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <RegisterForm />
+          <RegisterForm onClose={onClose}/>
         </ModalBody>
         <ModalFooter >
           <Text color="gray.500" isTruncated>

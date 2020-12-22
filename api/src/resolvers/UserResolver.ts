@@ -1,14 +1,12 @@
-import { User } from '../../../entities/User';
+import { User } from '../entities/User';
 import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
-import { MyContext } from '../../../types';
-import { UserResponse, EmployeeInput, LoginInput, RegisterInput } from '../../types/UserTypes';
+import { MyContext } from '../types';
+import { UserResponse, EmployeeInput, LoginInput, RegisterInput } from './types/UserTypes';
 import argon2 from 'argon2';
-import { validateRegister } from '../../../utils/validators/validateRegister';
+import { validateRegister } from '../utils/validators/validateRegister';
 import { getRepository } from 'typeorm';
-import { WorkingHours } from '../../../entities/WorkingHours';
-import { PatientDetails } from '../../../entities/PatientDetails';
-import { Address } from '../../../entities/Address';
-import { Tier } from 'src/entities/Tier';
+import { PatientDetails } from '../entities/PatientDetails';
+import { Address } from '../entities/Address';
 
 
 @Resolver(User)

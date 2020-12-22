@@ -9,13 +9,21 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import dbConfig from './ormconfig'
-import { UserResolver } from './resolvers/api/user/user';
+import { UserResolver } from './resolvers/UserResolver';
 import path from 'path'
 
 const main = async () => {
   const conn = await createConnection(
     {
-      ...dbConfig,
+      type: 'postgres' ,
+      // process.env.DATABASE_TYPE,
+      host: 'localhost',
+      port: 5432,
+      logging: true,
+      username: 'super_isa',
+      password: 'pass',
+      database: 'isa',
+      synchronize: !!process.env.ORM_SYNC,
       migrations: [path.join(__dirname, "./migrations/*")],
       entities: [path.join(__dirname, "./entities/*")],
     });

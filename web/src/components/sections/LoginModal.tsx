@@ -13,7 +13,7 @@ export const LoginModal: any = ({ onOpen, isOpen, onClose }) => {
         <ModalHeader><Text fontSize="3xl"> Login User: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm />
+          <LoginForm onClose={onClose}/>
         </ModalBody>
         <ModalFooter >
           <Text color="gray.500" isTruncated>

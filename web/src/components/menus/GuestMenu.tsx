@@ -7,28 +7,29 @@ import { RegisterModal } from "../sections/RegisterModal";
 
 
 export const GuestMenu: any = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const loginModal = useDisclosure()
+  const registerModal = useDisclosure()
   const btnRef = React.useRef()
   const router = useRouter();
   return (
     <>
       <Flex align="center">
-        <Button onClick={onOpen} as={Link} mr={4}>
+        <Button onClick={loginModal.onOpen} as={Link} mr={4}>
           Login
         </Button>
-        <Button onClick={onOpen} as={Link} mr={4}>
+        <Button onClick={registerModal.onOpen} as={Link} mr={4}>
           Register
         </Button>
       </Flex>
       <LoginModal
-        onOpen={onOpen}
-        isOpen={isOpen}
-        onClose={onClose}
+        onOpen={loginModal.onOpen}
+        isOpen={loginModal.isOpen}
+        onClose={loginModal.onClose}
       />
       <RegisterModal
-        onOpen={onOpen}
-        isOpen={isOpen}
-        onClose={onClose}
+        onOpen={registerModal.onOpen}
+        isOpen={registerModal.isOpen}
+        onClose={registerModal.onClose}
       />
     </>
   );
