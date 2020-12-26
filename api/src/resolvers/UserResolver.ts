@@ -48,12 +48,11 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
 
-    const errors = validateRegister(inputs);
-    if (errors) { return { errors }; }
+    // const errors = validateRegister(inputs);
+    // if (errors.length > 0) { return { errors }; }
 
     const user = new User();
     const hashedPassword = await argon2.hash(inputs.password);
-
 
     // const address = await Address.findOne({where:[
     //   { street: inputs.street.toLowerCase()},
@@ -79,7 +78,6 @@ export class UserResolver {
     user.lastName = inputs.lastName;
     user.telephone = inputs.telephone;
     user.gender = inputs.gender;
-    user.dateOfBirth = new Date(inputs.dateOfBirth);
     user.role = "patient";
 
     // const profile = new PatientDetails()
@@ -96,7 +94,7 @@ export class UserResolver {
     // profile.save()
     // user.details = profile
 
-    await user.save()
+    user.save()
     req.session.userId = user.id;
 
     return { user };
@@ -118,7 +116,7 @@ export class UserResolver {
     const valid = await argon2.verify(user.password, inputs.password);
     if (!valid) {
       return {
-        errors: [{ field: "email", message: "that email doesn't exist" }],
+        errors: [{ field: "password", message: "that email doesn't exist" }],
       };
     }
 

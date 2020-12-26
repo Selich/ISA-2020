@@ -381,7 +381,7 @@ export type HolidayInput = {
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'email' | 'role'>
+  & Pick<User, 'id' | 'firstName' | 'lastName' | 'telephone' | 'gender' | 'email' | 'role'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -481,6 +481,10 @@ export type PharmsQuery = (
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
+  firstName
+  lastName
+  telephone
+  gender
   email
   role
 }
