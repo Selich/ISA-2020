@@ -41,9 +41,9 @@ export class Medicine extends BaseEntity {
   @Column()
   producer: string;
 
-  @Field(() => File)
-  @Column()
-  image: string;
+  // @Field(() => File)
+  // @Column()
+  // image: string;
 
   @Field(() => Boolean)
   @Column({ default: false })

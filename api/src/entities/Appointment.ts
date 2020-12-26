@@ -23,7 +23,9 @@ export class Appointment extends BaseEntity{
   @JoinTable()
   doctor: User;
 
-  @ManyToOne(() => Pharmacy)
+  @Field(() => User)
+  @ManyToOne(() => Pharmacy, item => item.appointments,  { eager: true, cascade: true })
+  @JoinTable()
   pharmacy: Pharmacy;
 
   @Field(() => Prescrition)

@@ -16,6 +16,10 @@ export class AppointmentDefinition extends BaseEntity{
 
   @Field()
   @Column()
+  delta: number;
+
+  @Field()
+  @Column()
   score: string;
 
   @Field()

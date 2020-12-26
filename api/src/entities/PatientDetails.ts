@@ -26,15 +26,15 @@ export class PatientDetails extends BaseEntity{
   allergies: Medicine[];
 
   @Field(() => [Prescrition])
-  @OneToMany(() => Prescrition, item => item.patient, {eager:true})
+  @OneToMany(() => Prescrition, item => item.patient)
   prescritions: Prescrition[];
 
   @Field(() => [Reservation])
-  @OneToMany(() => Reservation, item => item.patient, {eager:true})
+  @OneToMany(() => Reservation, item => item.patient)
   reservations: Reservation[];
 
   @Field(() => [Rating])
-  @OneToMany(() => Rating, item => item.patient, {eager: true})
+  @OneToMany(() => Rating, item => item.patient)
   ratings: Rating[];
 
   @OneToMany(() => Complaint, item => item.patient)

@@ -3,7 +3,6 @@ import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react'
 import { FieldError, useRegisterMutation } from '../../generated/graphql';
-import register from '../../pages/register';
 import { FormInput } from '../sections/FormInput';
 import { FormInputPassword } from '../sections/FormInputPassword';
 import { Wrapper } from '../ui/Wrapper';
@@ -16,7 +15,7 @@ const toErrorMap = (errors: FieldError[]) => {
 
   return errorMap;
 };
-export default function RegisterLayout({onClose}) {
+export default function RegisterLayout({ onClose }) {
   const [, register] = useRegisterMutation();
   const router = useRouter();
   return (
@@ -26,6 +25,14 @@ export default function RegisterLayout({onClose}) {
           email: "",
           password: "",
           confirmPassword: "",
+          firstName: "",
+          lastName: "",
+          telephone: "",
+          gender: "",
+          street: "",
+          city: "",
+          country: "",
+          dateOfBirth: ""
         }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register(values);

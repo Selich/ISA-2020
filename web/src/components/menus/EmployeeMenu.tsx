@@ -21,9 +21,14 @@ export const EmployeeMenu: any = ({ user }) => {
           }
         </MenuButton>
         <MenuList>
+          <NextLink href="/[id]/profile">
+            <MenuItem minH="48px">
+              <span>Profile</span>
+            </MenuItem>
+          </NextLink>
           <NextLink href="/:id/appointments">
             <MenuItem minH="48px">
-              <span></span>
+              <span>Appointment</span>
             </MenuItem>
           </NextLink>
           <NextLink href="/:id/complaints">
@@ -39,11 +44,6 @@ export const EmployeeMenu: any = ({ user }) => {
           <NextLink href="/:id/reservations">
             <MenuItem minH="48px">
               <span>Reservations</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/[id]/profile">
-            <MenuItem minH="48px">
-              <span>Profile</span>
             </MenuItem>
           </NextLink>
           <MenuItem ref={btnRef} onClick={onOpen} minH="48px">

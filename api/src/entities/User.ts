@@ -40,7 +40,7 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Field(() => [Holiday])
-  @OneToMany(() => Holiday, item => item.employee, { eager: true})
+  @OneToMany(() => Holiday, item => item.employee)
   holidays: Holiday[];
 
   @OneToMany(() => Rating, item => item.doctor)
@@ -50,7 +50,7 @@ export class User extends BaseEntity {
   schedule: Appointment[];
 
   @Field(() => [WorkingHours])
-  @OneToMany(() => WorkingHours, item => item.doctorID, { eager: true})
+  @OneToMany(() => WorkingHours, item => item.doctorID)
   workingHours: WorkingHours[];
 
   @Field(() => [Order])

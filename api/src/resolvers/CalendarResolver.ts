@@ -12,7 +12,7 @@ class CalendarItem{
 }
 
 @Resolver(User)
-export class MedicineRequestResolver {
+export class CalendarResolver {
 
   // #43
   @Query(() => Holiday, { nullable: true })

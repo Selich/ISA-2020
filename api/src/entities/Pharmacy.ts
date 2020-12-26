@@ -12,16 +12,20 @@ import { Reservation } from "./Reservation";
 
 @ObjectType()
 @Entity()
-export class Pharmacy extends BaseEntity{
+export class Pharmacy extends BaseEntity {
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => Address)
-  @OneToOne(() => Address, item => item.pharmacy,{ eager: true, cascade: true, nullable:true})
+  @OneToOne(() => Address, item => item.pharmacy, { eager: true, cascade: true, nullable: true })
   @JoinColumn()
   address: Address;
+
+  @Field()
+  @Column()
+  name: string;
 
   @Field()
   @Column()
@@ -32,23 +36,23 @@ export class Pharmacy extends BaseEntity{
   lat: number;
 
   @Field(() => Inventory)
-  @OneToOne(() => Inventory, item => item.pharmacy ,{ eager: true, cascade: true, nullable:true})
+  @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true})
   @JoinColumn()
   inventory: Inventory;
 
   @Field(() => [Price])
-  @OneToMany(() => Price, item => item.pharmacy ,{ eager: true })
+  @OneToMany(() => Price, item => item.pharmacy, { eager: true })
   prices: Price[];
 
   @Field(() => [MedicineRequest])
-  @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true})
+  @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true })
   requests: MedicineRequest[];
 
   @OneToMany(() => Reservation, item => item.patient)
   prescritions: Reservation[];
 
   @Field(() => [Appointment])
-  @OneToMany(() => Appointment, item => item.pharmacy, {eager: true})
+  @OneToMany(() => Appointment, item => item.pharmacy)
   appointments: Appointment[];
 
   @Field(() => [Reservation])

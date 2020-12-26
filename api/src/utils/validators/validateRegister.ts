@@ -19,7 +19,7 @@ export const validateRegister = (input: RegisterInput) => {
       },
     ];
   }
-  return null;
+  return [];
 };
 
 export const validateAdmin = async (userId: any) => {

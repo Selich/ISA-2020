@@ -56,6 +56,9 @@ const client = createClient({
               { query: MeDocument },
               _result,
               (result, query) => {
+                if(!result.register)
+                  return null
+
                 if (result.register.errors) {
                   return query;
                 } else {

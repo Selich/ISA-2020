@@ -1,7 +1,7 @@
 import { User } from '../entities/User';
 import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
 import { MyContext } from '../types';
-import { UserResponse, EmployeeInput, LoginInput, RegisterInput } from './types/UserTypes';
+import { UserResponse, LoginInput, RegisterInput } from './types/UserTypes';
 import argon2 from 'argon2';
 import { validateRegister } from '../utils/validators/validateRegister';
 import { getRepository } from 'typeorm';
@@ -19,12 +19,6 @@ export class UserResolver {
     : await User.findOne({ id: req.session.userId });
   }
 
-  @Query(() => User, { nullable: true })
-  async test(@Ctx() { req }: MyContext) {
-    const user = await User.findOne({ id: 44 });
-    return user
-  }
-
   //!  DOES NOT WORK
   @Query(() => User, { nullable: true })
   async getMyProfile(@Ctx() { req }: MyContext) {
@@ -36,12 +30,12 @@ export class UserResolver {
   }
 
   @Query(() => [User], { nullable: true })
-  usersByPharm(
+  async usersByPharm(
     @Arg("pharmId") pharmId: Number,
     @Arg("role") role: String,
     @Ctx() { }: MyContext
   ) {
-    return getRepository(User)
+    return await getRepository(User)
       .createQueryBuilder("user")
       .leftJoinAndSelect("user.workingHours", "working_hours")
       .where("user.role = :role", { role: role })
@@ -54,30 +48,29 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
 
-    const errors = validateRegister(inputs);
-    if (errors) { return { errors }; }
+    // const errors = validateRegister(inputs);
+    // if (errors.length > 0) { return { errors }; }
 
     const user = new User();
     const hashedPassword = await argon2.hash(inputs.password);
 
+    // const address = await Address.findOne({where:[
+    //   { street: inputs.street.toLowerCase()},
+    //   { city: inputs.city.toLowerCase()},
+    //   { country: inputs.country.toLowerCase()}
+    // ]})
 
-    const address = await Address.findOne({where:[
-      { street: inputs.street.toLowerCase()},
-      { city: inputs.city.toLowerCase()},
-      { country: inputs.country.toLowerCase()}
-    ]})
 
-
-    if(!address) {
-      const newAddress = new Address()
-      newAddress.street = inputs.street
-      newAddress.city = inputs.city
-      newAddress.country = inputs.country
-      newAddress.save()
-      user.address = newAddress;
-    } else {
-      user.address = address;
-    }
+    // if(!address) {
+    //   const newAddress = new Address()
+    //   newAddress.street = inputs.street
+    //   newAddress.city = inputs.city
+    //   newAddress.country = inputs.country
+    //   newAddress.save()
+    //   user.address = newAddress;
+    // } else {
+    //   user.address = address;
+    // }
 
     user.email = inputs.email;
     user.password = hashedPassword;
@@ -85,24 +78,23 @@ export class UserResolver {
     user.lastName = inputs.lastName;
     user.telephone = inputs.telephone;
     user.gender = inputs.gender;
-    user.dateOfBirth = new Date(inputs.dateOfBirth);
     user.role = "patient";
 
-    const profile = new PatientDetails()
-    profile.allergies = []
-    profile.appointments = []
-    profile.complaints = []
-    profile.penalty = 0
-    profile.prescritions = []
-    profile.ratings = []
-    profile.reservations = []
-    profile.score = 0
-    // TODO: Find what the tiers are
-    // profile.tier = new Tier()
-    profile.save()
-    user.details = profile
+    // const profile = new PatientDetails()
+    // profile.allergies = []
+    // profile.appointments = []
+    // profile.complaints = []
+    // profile.penalty = 0
+    // profile.prescritions = []
+    // profile.ratings = []
+    // profile.reservations = []
+    // profile.score = 0
+    // // TODO: Find what the tiers are
+    // // profile.tier = new Tier()
+    // profile.save()
+    // user.details = profile
 
-    await user.save()
+    user.save()
     req.session.userId = user.id;
 
     return { user };
@@ -124,7 +116,7 @@ export class UserResolver {
     const valid = await argon2.verify(user.password, inputs.password);
     if (!valid) {
       return {
-        errors: [{ field: "email", message: "that email doesn't exist" }],
+        errors: [{ field: "password", message: "that email doesn't exist" }],
       };
     }
 
@@ -146,5 +138,23 @@ export class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  //TODO: #42
+  @Mutation(() => UserResponse)
+  async updateProfile(
+    @Arg("inputs") inputs: LoginInput,
+    @Ctx() { req }: MyContext
+  ): Promise<any> {
+
+    return
+  }
+  @Mutation(() => UserResponse)
+  async changePass(
+    @Arg("inputs") inputs: LoginInput,
+    @Ctx() { req }: MyContext
+  ): Promise<any> {
+
+    return
   }
 }
