@@ -15,26 +15,9 @@ import { MedicineItem } from 'src/entities/MedicineItem';
 
 
 const mapPrice = async (arr: Inventory):  Promise<any> =>{
-  const medicines = arr.medicines
-      // .createQueryBuilder("user")
-      // .leftJoinAndSelect("user.workingHours", "working_hours")
-      // .where("user.role = :role", { role: role })
-      // .andWhere("working_hours.pharmacyID = :ID", { ID: pharmId })
-      // .getMany();
-
   return await Price.getRepository().createQueryBuilder('price')
   .where('price.pharmacy = :pharm', {pharm: arr.pharmacy})
   .innerJoinAndSelect('price.medicine', 'medicines.medicine')
-  const price = await Price.find( {pharmacy: arr.pharmacy})
-  // medicines.map(item => item.price = price.price )
-  // arr.medicines.map(item => item.price = arr.pharmacy.)
-  // const arr = item.details.prices.filter(val => val.pharmacy == inv..filter(temp => temp.))
-
-
-
-
-
-
 }
 
 @Resolver()

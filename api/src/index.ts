@@ -8,34 +8,28 @@ import { __prod__ } from "./constants";
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import dbConfig from './ormconfig'
 import { UserResolver } from './resolvers/UserResolver';
 import path from 'path'
 
+import { EmployeeResolver } from './resolvers/EmployeeResolver';
+import { AppointmentResolver } from './resolvers/AppointmentResolver';
+import { HolidayResolver } from './resolvers/HolidayResolver';
+import { PharmacyResolver } from './resolvers/PharmacyResolver';
+import { ShopResolver } from './resolvers/ShopResolver';
+import { CalendarResolver } from './resolvers/CalendarResolver';
+import { MedicineRequestResolver } from './resolvers/MedicineRequestResolver';
+import dbConfig from './ormconfig'
+
 const main = async () => {
-  const conn = await createConnection(
-    {
-      type: 'postgres' ,
-      // process.env.DATABASE_TYPE,
-      host: 'localhost',
-      port: 5432,
-      logging: true,
-      username: 'super_isa',
-      password: 'pass',
-      database: 'isa',
-      synchronize: !!process.env.ORM_SYNC,
-      migrations: [path.join(__dirname, "./migrations/*")],
-      entities: [path.join(__dirname, "./entities/*")],
-    });
+  const conn = await createConnection(dbConfig);
 
   await conn.runMigrations();
 
   const app = express()
   const RedisStore = connectRedis(session)
-  // const redis = new Redis(process.env.REDIS_URL)
   const redisClient = redis.createClient()
-  app.set("proxy", 1)
-  app.use( cors({ origin: process.env.CORS_ORIGIN, credentials: true }))
+
+  app.use( cors({ origin: 'http://localhost:3000' , credentials: true }))
 
   app.use(
     session({
@@ -48,17 +42,19 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365,
         httpOnly: true,
         sameSite: 'lax',
-        secure: __prod__,
-        domain: __prod__ ? process.env.DOMAIN : undefined
       },
-      secret: process.env.SESSION_SECRET,
+      secret: 'somesecret',
       resave: false
     })
   )
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ UserResolver ],
+      resolvers: [
+        UserResolver, CalendarResolver, AppointmentResolver,
+        HolidayResolver, EmployeeResolver, MedicineRequestResolver, PharmacyResolver,
+        ShopResolver
+      ],
       validate: false
     }),
     context: ({ req, res}) => ({
@@ -68,8 +64,8 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(parseInt(process.env.PORT), () => {
-    console.log('localhost');
+  app.listen(4000, () => {
+    console.log('localhost:4000');
   })
 
 };

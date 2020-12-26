@@ -1,10 +1,10 @@
 import { Field, ObjectType } from "type-graphql";
-import { Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class WorkingHours {
+export class WorkingHours extends BaseEntity{
 
   @Field()
   @PrimaryGeneratedColumn()

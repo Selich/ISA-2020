@@ -1,25 +1,19 @@
-import {Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
-import { MyContext } from '../../../types';
-import { Medicine } from '../../../entities/Medicine';
-import { MedicineItem } from '../../../entities/MedicineItem';
-import { FieldError } from '../../types/ErrorTypes';
-import { PatientDetails } from '../../../entities/PatientDetails';
-import { Reservation } from 'src/entities/Reservation';
-import { Pharmacy } from 'src/entities/Pharmacy';
-import { Inventory } from 'src/entities/Inventory';
+import { MyContext } from "../types";
+import { Query, Ctx, Mutation, Resolver, Arg } from "type-graphql";
+import { Reservation } from "../entities/Reservation";
+import { PatientDetails } from "../entities/PatientDetails";
+import { Inventory } from "../entities/Inventory";
 
-@ObjectType()
-class MedicineResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+@Resolver(Reservation)
+export class ReservationResolver {
 
-  @Field(() => Medicine, { nullable: true })
-  details?: Medicine;
-}
-@Resolver(Medicine)
-export class MedicineResolver{
+  @Query(() => Reservation, { nullable: true })
+  async reservation( @Ctx() { req }: MyContext) {
+  }
+
+  // Menjamo kolicine
   @Mutation(() => Reservation)
-  async reservation(
+  async createReservation(
     @Arg("inputs") inputs: Reservation,
     @Ctx() { req }: MyContext
   ): Promise<Reservation> {
@@ -43,5 +37,12 @@ export class MedicineResolver{
     await inputs.save()
 
     return inputs ;
+  } async create( @Ctx() { req, res }: MyContext) {
+  }
+
+  // #43
+  // Change state to used
+  @Mutation(() => Reservation)
+  async useReservation( @Ctx() { req, res }: MyContext) {
   }
 }

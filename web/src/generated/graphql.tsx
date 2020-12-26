@@ -19,15 +19,44 @@ export type Scalars = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
-  test?: Maybe<User>;
   getMyProfile?: Maybe<User>;
   usersByPharm?: Maybe<Array<User>>;
+  holiday?: Maybe<Holiday>;
+  getAppointmentsByPatient?: Maybe<Appointment>;
+  appointments?: Maybe<Array<Appointment>>;
+  appointment?: Maybe<Appointment>;
+  getPatientsByLoggedIn?: Maybe<User>;
+  getPharmByDate?: Maybe<Appointment>;
+  createExamination?: Maybe<Appointment>;
+  medicines?: Maybe<Array<Medicine>>;
+  pharmacies?: Maybe<Array<Pharmacy>>;
 };
 
 
 export type QueryUsersByPharmArgs = {
   role: Scalars['String'];
   pharmId: Scalars['Float'];
+};
+
+
+export type QueryGetAppointmentsByPatientArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryAppointmentArgs = {
+  date: Scalars['DateTime'];
+};
+
+
+export type QueryGetPharmByDateArgs = {
+  from: Scalars['DateTime'];
+};
+
+
+export type QueryPharmaciesArgs = {
+  quantity: Scalars['Float'];
+  medicineItemID: Scalars['Float'];
 };
 
 export type User = {
@@ -71,7 +100,7 @@ export type WorkingHours = {
 export type MedicineRequest = {
   __typename?: 'MedicineRequest';
   id: Scalars['ID'];
-  medicines: Array<Medicine>;
+  medicine: Medicine;
   pharmacy: Pharmacy;
   user: User;
   createdAt: Scalars['String'];
@@ -80,17 +109,6 @@ export type MedicineRequest = {
 
 export type Medicine = {
   __typename?: 'Medicine';
-  id: Scalars['ID'];
-  details: MedicineDetails;
-  list: MedicineList;
-  quantity: Scalars['Float'];
-  price: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
-export type MedicineDetails = {
-  __typename?: 'MedicineDetails';
   id: Scalars['ID'];
   code: Scalars['String'];
   name: Scalars['String'];
@@ -101,25 +119,26 @@ export type MedicineDetails = {
   producer: Scalars['String'];
   isPrescriptionRequired: Scalars['Boolean'];
   info: Scalars['String'];
+  alternatives: Array<Medicine>;
+  from: Scalars['String'];
+  until: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-};
-
-export type MedicineList = {
-  __typename?: 'MedicineList';
-  id: Scalars['ID'];
-  medicines: Array<Medicine>;
 };
 
 export type Pharmacy = {
   __typename?: 'Pharmacy';
   id: Scalars['ID'];
   address: Address;
+  name: Scalars['String'];
   long: Scalars['Float'];
   lat: Scalars['Float'];
+  inventory: Inventory;
+  prices: Array<Price>;
   requests: Array<MedicineRequest>;
   appointments: Array<Appointment>;
   reservations: Array<Reservation>;
+  complaints: Array<Complaint>;
   ratings: Array<Rating>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -135,18 +154,61 @@ export type Address = {
   updatedAt: Scalars['String'];
 };
 
+export type Inventory = {
+  __typename?: 'Inventory';
+  id: Scalars['ID'];
+  medicines: Array<MedicineItem>;
+  supplier: User;
+  pharmacy: Pharmacy;
+};
+
+export type MedicineItem = {
+  __typename?: 'MedicineItem';
+  id: Scalars['ID'];
+  details: Medicine;
+  list: MedicineList;
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  instructions: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type MedicineList = {
+  __typename?: 'MedicineList';
+  id: Scalars['ID'];
+  medicines: Array<MedicineItem>;
+};
+
+export type Price = {
+  __typename?: 'Price';
+  id: Scalars['ID'];
+  pharmacy: Pharmacy;
+  medicine: Medicine;
+  price: Scalars['Float'];
+  from: Scalars['String'];
+  until: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Appointment = {
   __typename?: 'Appointment';
   id: Scalars['ID'];
   patient: PatientDetails;
   doctor: User;
+  pharmacy: User;
   prescription: Prescrition;
+  type: Scalars['String'];
+  score: Scalars['Float'];
+  price: Scalars['Float'];
+  report: Scalars['String'];
 };
 
 export type PatientDetails = {
   __typename?: 'PatientDetails';
   id: Scalars['ID'];
-  allergies: Array<MedicineDetails>;
+  allergies: Array<Medicine>;
   prescritions: Array<Prescrition>;
   reservations: Array<Reservation>;
   ratings: Array<Rating>;
@@ -157,8 +219,9 @@ export type PatientDetails = {
 export type Prescrition = {
   __typename?: 'Prescrition';
   id: Scalars['ID'];
-  medicines: Array<Medicine>;
+  medicines: Array<MedicineItem>;
   isUsed: Scalars['Boolean'];
+  hashCode: Scalars['String'];
   deadline: Scalars['DateTime'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -167,7 +230,7 @@ export type Prescrition = {
 export type Reservation = {
   __typename?: 'Reservation';
   id: Scalars['ID'];
-  medicines: Array<Medicine>;
+  medicines: Array<MedicineItem>;
   pharmacy: Pharmacy;
   deadline: Scalars['String'];
   pickupDate: Scalars['String'];
@@ -180,11 +243,29 @@ export type Rating = {
   score: Scalars['Float'];
 };
 
+export type Complaint = {
+  __typename?: 'Complaint';
+  id: Scalars['ID'];
+  patient: PatientDetails;
+  pharmacy: Pharmacy;
+  description: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   register?: Maybe<UserResponse>;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updateProfile: UserResponse;
+  changePass: UserResponse;
+  createEmployee: UserResponse;
+  updateEmployee: Holiday;
+  scheduleConsultations?: Maybe<Appointment>;
+  create: Holiday;
+  createHolidays: Holiday;
+  update: Holiday;
 };
 
 
@@ -195,6 +276,36 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   inputs: LoginInput;
+};
+
+
+export type MutationUpdateProfileArgs = {
+  inputs: LoginInput;
+};
+
+
+export type MutationChangePassArgs = {
+  inputs: LoginInput;
+};
+
+
+export type MutationCreateEmployeeArgs = {
+  inputs: EmployeeInput;
+};
+
+
+export type MutationUpdateEmployeeArgs = {
+  input: EmployeeInput;
+};
+
+
+export type MutationScheduleConsultationsArgs = {
+  appointment: UserPharm;
+};
+
+
+export type MutationCreateHolidaysArgs = {
+  inputs: HolidayInput;
 };
 
 export type UserResponse = {
@@ -226,6 +337,46 @@ export type RegisterInput = {
 export type LoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type EmployeeInput = {
+  id: Scalars['Float'];
+  email: Scalars['String'];
+  role: Scalars['String'];
+  password: Scalars['String'];
+  confirmPassword: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  telephone: Scalars['String'];
+  gender: Scalars['String'];
+  street: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
+  dateOfBirth: Scalars['String'];
+};
+
+export type UserPharm = {
+  from: Scalars['DateTime'];
+  pharmacy: PharmDto;
+};
+
+export type PharmDto = {
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  rating: Scalars['Float'];
+  price: AppointmentDefinitionDto;
+};
+
+export type AppointmentDefinitionDto = {
+  type: Scalars['String'];
+  score: Scalars['String'];
+  price: Scalars['Float'];
+};
+
+export type HolidayInput = {
+  employeeId: Scalars['Float'];
+  from: Scalars['String'];
+  until: Scalars['String'];
 };
 
 export type RegularUserFragment = (

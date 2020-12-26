@@ -8,22 +8,8 @@ import { FormInputPassword } from './../../components/sections/FormInputPassword
 import { Wrapper }  from './../../components/ui/Wrapper';
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
-import { useMutation } from 'urql';
 import { FieldError, useLoginMutation } from '../../generated/graphql';
-
-
-interface IFormInputs {
-  email: string
-  password: string
-}
-const toErrorMap = (errors: FieldError[]) => {
-  const errorMap: Record<string, string> = {};
-  errors.forEach(({ field, message }) => {
-    errorMap[field] = message;
-  });
-
-  return errorMap;
-};
+import { toErrorMap } from '../../utils/errorMap';
 
 
 export default function LoginForm({onClose}) {
@@ -34,10 +20,9 @@ export default function LoginForm({onClose}) {
         <Formik
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
-            console.log(values);
-
             const response = await login(values);
             if (response.data?.login.errors) {
+              console.log(response.data.login.errors);
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
               router.push("/");
