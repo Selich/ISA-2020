@@ -4,13 +4,6 @@ import { Header } from "../../components/sections/Header";
 import { useMeQuery } from "../../generated/graphql";
 
 
-interface IFormInputs {
-  email: string
-  password: string
-  firstName: string
-  lastName: string
-}
-
 
 export default function Profile() {
   const [{ data, fetching }] = useMeQuery();
@@ -18,8 +11,6 @@ export default function Profile() {
     <>
       <Header />
       <SimpleGrid minChildWidth="410px">
-
-
       <Box
         m="4"
         p="8"
@@ -34,8 +25,14 @@ export default function Profile() {
         h="400px"
       >
         <Box align="left">
-          <Avatar name={data.me.email.split('@')[0]} src="" size="xl" margin={4} pd={3} />
+          <Avatar name={data.me.email.split('@')[0]} src="" size="2xl" margin={4} pd={3} />
           <Text>{data.me.firstName} {data.me.lastName}</Text>
+          <Text fontSize={17}>Address:</Text>
+          <Text fontSize={14}>
+            {data.me.address.street + " "
+            + data.me.address.city + " "
+            + data.me.address.country}
+          </Text>
         </Box>
       </Box>
       </SimpleGrid>

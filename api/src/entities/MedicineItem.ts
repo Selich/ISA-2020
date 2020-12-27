@@ -22,11 +22,11 @@ export class MedicineItem extends BaseEntity{
   list: MedicineList;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   quantity: number;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   price: number;
 
   @Field()

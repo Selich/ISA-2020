@@ -1,0 +1,9 @@
+fragment InputExam on Appointment {
+    from
+    until
+    discount
+    doctor {
+        firstName
+        lastName
+    }
+}

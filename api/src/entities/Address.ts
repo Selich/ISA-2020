@@ -1,19 +1,20 @@
 import { OneToMany, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, JoinTable, OneToOne } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID, InputType } from 'type-graphql';
 import { User } from './User';
 import { Pharmacy } from './Pharmacy';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class Address extends BaseEntity {
+export class Address extends Model{
 
-  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
   @OneToMany(() => User, user => user.address )
   users: User[]
 
+  // @Field(() => Pharmacy)
   @OneToOne(() => Pharmacy)
   pharmacy: Pharmacy
 
@@ -28,14 +29,6 @@ export class Address extends BaseEntity {
   @Field()
   @Column({ nullable: true })
   country: string;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
 
 
 }

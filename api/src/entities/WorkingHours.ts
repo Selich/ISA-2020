@@ -13,7 +13,7 @@ export class WorkingHours extends BaseEntity{
   @Field(() => User)
   @ManyToOne(() => User, item => item.workingHours)
   @JoinTable()
-  doctorID: User;
+  doctor: User;
 
   @Field()
   @Column()
@@ -21,11 +21,11 @@ export class WorkingHours extends BaseEntity{
 
   @Field()
   @Column()
-  from: Date;
+  from: string;
 
   @Field()
   @Column()
-  until: Date;
+  until: string;
 
   @CreateDateColumn()
   createdAt = new Date();

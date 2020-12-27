@@ -1,0 +1,11 @@
+query AppointmentsInInterval($inputs: GetDermExam!) {
+  appointmentsInInterval (inputs: $inputs){
+      appointments{
+          id
+
+      }
+      onVacation
+  }
+}
+
+

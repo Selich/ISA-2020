@@ -1,32 +1,27 @@
 import { User } from '../entities/User';
 import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
 import { MyContext } from '../types';
-import { UserResponse, LoginInput, RegisterInput } from './types/UserTypes';
+import { UserResponse, LoginInput, UserDTO } from './types/UserTypes';
 import argon2 from 'argon2';
 import { validateRegister } from '../utils/validators/validateRegister';
 import { getRepository } from 'typeorm';
 import { PatientDetails } from '../entities/PatientDetails';
 import { Address } from '../entities/Address';
+import { validateLogin } from '../utils/validators/validateLogin';
 
 
 @Resolver(User)
 export class UserResolver {
-  // ME
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     return (!req.session.userId)
-    ? null
-    : await User.findOne({ id: req.session.userId });
+      ? null
+      : await User.findOne({ id: req.session.userId });
   }
-
-  //!  DOES NOT WORK
-  @Query(() => User, { nullable: true })
-  async getMyProfile(@Ctx() { req }: MyContext) {
-    if (!req.session.userId)
-      return null
-    const user = await User.findOne({ id: req.session.userId });
-
-    return user
+  @Query(() => [User], { nullable: true })
+  async users(@Ctx() { req }: MyContext) {
+      return await User.find({});
   }
 
   @Query(() => [User], { nullable: true })
@@ -42,83 +37,42 @@ export class UserResolver {
       .andWhere("working_hours.pharmacyID = :ID", { ID: pharmId })
       .getMany();
   }
-  @Mutation(() => UserResponse, {nullable: true})
+
+  @Mutation(() => UserResponse, { nullable: true })
   async register(
-    @Arg("inputs") inputs: RegisterInput,
+    @Arg("inputs") inputs: UserDTO,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
+    let { email, password, confirmPassword, role } = inputs
 
-    // const errors = validateRegister(inputs);
-    // if (errors.length > 0) { return { errors }; }
+    password = await argon2.hash(inputs.password);
+    inputs.password = password
+    const user = await User.save(new User({...inputs}))
+    await Address.save(new Address({...inputs.address, user}))
+    if(role === 'patient')
+      await PatientDetails.save(new PatientDetails({user}))
 
-    const user = new User();
-    const hashedPassword = await argon2.hash(inputs.password);
-
-    // const address = await Address.findOne({where:[
-    //   { street: inputs.street.toLowerCase()},
-    //   { city: inputs.city.toLowerCase()},
-    //   { country: inputs.country.toLowerCase()}
-    // ]})
-
-
-    // if(!address) {
-    //   const newAddress = new Address()
-    //   newAddress.street = inputs.street
-    //   newAddress.city = inputs.city
-    //   newAddress.country = inputs.country
-    //   newAddress.save()
-    //   user.address = newAddress;
-    // } else {
-    //   user.address = address;
-    // }
-
-    user.email = inputs.email;
-    user.password = hashedPassword;
-    user.firstName = inputs.firstName;
-    user.lastName = inputs.lastName;
-    user.telephone = inputs.telephone;
-    user.gender = inputs.gender;
-    user.role = "patient";
-
-    // const profile = new PatientDetails()
-    // profile.allergies = []
-    // profile.appointments = []
-    // profile.complaints = []
-    // profile.penalty = 0
-    // profile.prescritions = []
-    // profile.ratings = []
-    // profile.reservations = []
-    // profile.score = 0
-    // // TODO: Find what the tiers are
-    // // profile.tier = new Tier()
-    // profile.save()
-    // user.details = profile
-
-    user.save()
-    req.session.userId = user.id;
-
-    return { user };
+    return { user }
   }
-
-
   @Mutation(() => UserResponse)
   async login(
-    @Arg("inputs") inputs: LoginInput,
+    @Arg("inputs") inputs: UserDTO,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
 
-    const user = await User.findOne({ email: inputs.email });
-    if (!user) {
-      return {
-        errors: [{ field: "email", message: "that email doesn't exist" }],
-      };
-    }
-    const valid = await argon2.verify(user.password, inputs.password);
-    if (!valid) {
-      return {
-        errors: [{ field: "password", message: "that email doesn't exist" }],
-      };
-    }
+    const user = await User.findOneOrFail({ email: inputs.email });
+    // if (!user) {
+    //   return {
+    //     errors: [{ field: "email", message: "that email doesn't exist" }],
+    //   };
+    // }
+    // const valid = await argon2.verify(user.password, inputs.password);
+
+    // if (!valid) {
+    //   return {
+    //     errors: [{ field: "email", message: "that email doesn't exist" }],
+    //   };
+    // }
 
     req.session.userId = user.id;
 

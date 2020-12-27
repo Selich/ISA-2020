@@ -1,7 +1,7 @@
 import { User } from "../../entities/User";
-import { RegisterInput } from "../../resolvers/types/UserTypes";
+import { UserDTO } from "../../resolvers/types/UserTypes";
 
-export const validateRegister = (input: RegisterInput) => {
+export const validateRegister = (input: UserDTO) => {
   if (!input.email.includes("@")) {
     return [
       {

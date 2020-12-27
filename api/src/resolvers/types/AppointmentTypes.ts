@@ -1,6 +1,8 @@
-import { Appointment } from 'src/entities/Appointment';
+import { Appointment } from '../../entities/Appointment';
 import { InputType, Field, ObjectType } from 'type-graphql';
 import { FieldError } from './ErrorTypes';
+
+
 
 @ObjectType()
 export class AppointmentResponse {

@@ -1,11 +1,14 @@
 mutation Login($email: String!, $password: String!) {
-  login(inputs: { email: $email, password: $password} ) {
-    errors {
-      field
-      message
-    }
-    user {
-        ...RegularUser
+  login(inputs: {
+    email: $email,
+    password: $password,
+  }){
+    user{
+      email,
+      address{
+        street
+      }
+
     }
   }
 }

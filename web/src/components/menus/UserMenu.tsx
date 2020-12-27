@@ -4,11 +4,13 @@ import { Text, Flex, Button, Heading, Menu, MenuButton, Avatar, Icon, Drawer, Dr
 import { Basket } from "../layouts/Basket";
 import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
 import { useLogoutMutation } from "../../generated/graphql";
+import { useRouter } from "next/router";
 
 
 export const UserMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
+  const router = useRouter();
   const btnRef = React.useRef()
   return (
     <Flex align="center">
@@ -33,14 +35,14 @@ export const UserMenu: any = ({ user }) => {
           </Center>
           </NextLink>
           <hr/>
-          <NextLink href="/schedule">
-            <MenuItem minH="48px">
-              <span>Schedule Consultations</span>
-            </MenuItem>
-          </NextLink>
           <NextLink href="/user/appointments">
             <MenuItem minH="48px">
               <span>Appointments</span>
+            </MenuItem>
+          </NextLink>
+          <NextLink href="/user/consultations">
+            <MenuItem minH="48px">
+              <span>Consultations</span>
             </MenuItem>
           </NextLink>
           <NextLink href="/user/complaints">
@@ -66,6 +68,7 @@ export const UserMenu: any = ({ user }) => {
             mr={4}
             onClick={() => {
               logout();
+              router.push("/");
             }}
             isLoading={logoutFetching}
             variant="link"

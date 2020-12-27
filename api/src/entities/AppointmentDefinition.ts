@@ -1,47 +1,35 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Model } from "./Model";
+import { Pharmacy } from "./Pharmacy";
 
 
 @ObjectType()
 @Entity()
-export class AppointmentDefinition extends BaseEntity{
+export class AppointmentDefinition extends Model{
 
-  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   type: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   delta: number;
 
   @Field()
-  @Column()
-  score: string;
+  @Column({ nullable: true })
+  score: number;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   price: number;
 
-  @Field()
-  @Column({ type: Date })
-  from: Date;
-
-  @Field()
-  @Column({ type: Date })
-  until: Date;
-
-  @Field()
-  @Column()
-  pharmacyId: number;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
+  @Field(() => Pharmacy)
+  @ManyToOne(() => Pharmacy, item => item.requests,  { cascade: true, nullable: true})
+  @JoinTable()
+  pharmacy: Pharmacy;
 
 }

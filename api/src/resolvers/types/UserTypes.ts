@@ -1,6 +1,7 @@
 import { User } from '../../entities/User';
 import { InputType, Field, ObjectType } from 'type-graphql';
 import { FieldError } from './ErrorTypes';
+import { Address } from '../../entities/Address';
 
 @ObjectType()
 export class UserResponse {
@@ -18,28 +19,47 @@ export class LoginInput {
   password: string;
 }
 @InputType()
-export class RegisterInput {
+export class DoctorDTO {
+  @Field({nullable: true})
+  id: number
+  @Field({nullable: true})
+  email: string
+  @Field({nullable: true})
+  firstName: string
+  @Field({nullable: true})
+  lastName: string
+}
+@InputType()
+export class AddressDTO {
+  @Field({ nullable: true})
+  street: string;
+  @Field({ nullable: true})
+  country: string;
+  @Field({ nullable: true})
+  city: string;
+}
+
+@InputType()
+export class UserDTO {
   @Field()
   email: string;
   @Field()
   password: string;
-  @Field()
+  @Field({ nullable: true})
   confirmPassword: string;
-  @Field()
+  @Field({ nullable: true})
   firstName: string;
-  @Field()
+  @Field({ nullable: true})
   lastName: string;
-  @Field()
+  @Field({ nullable: true})
   telephone: string;
-  @Field()
+  @Field({ nullable: true})
   gender: string;
-  @Field()
-  street: string;
-  @Field()
-  city: string;
-  @Field()
-  country: string;
-  @Field()
+  @Field(() => AddressDTO, {nullable: true})
+  address: Address;
+  @Field({ nullable: true})
+  role: string;
+  @Field({ nullable: true})
   dateOfBirth: string;
 }
 @InputType()

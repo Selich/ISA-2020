@@ -1,4 +1,4 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
 import { Address } from "./Address";
 import { ObjectType, Field, ID } from 'type-graphql';
 import { PatientDetails } from "./PatientDetails";
@@ -7,26 +7,36 @@ import { Rating } from './Rating';
 import { Holiday } from './Holiday';
 import { WorkingHours } from './WorkingHours';
 import { MedicineRequest } from './MedicineRequest';
+import { IsEmail, IsEnum, Length } from 'class-validator'
+import { Model } from './Model';
 
-// ! WORKS, DONT TOUCH
+const roles = [
+    'patient', 'derm', 'pharm', 'admin', 'sysadmin'
+]
+
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class User extends Model {
 
-  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true})
+  @IsEmail()
   email: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true})
   password: string;
 
   @Field()
-  @Column({ nullable: true })
+  @Column({
+    type: 'enum',
+    enum: roles,
+    nullable: true
+  })
+  @IsEnum(roles)
   role: string;
 
   @Field()
@@ -38,21 +48,22 @@ export class User extends BaseEntity {
   lastName: string;
 
   @Field(() => [Holiday])
-  @OneToMany(() => Holiday, item => item.employee)
+  @OneToMany(() => Holiday, item => item.employee, {nullable: true})
   holidays: Holiday[];
 
-  @OneToMany(() => Rating, item => item.doctor)
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, item => item.doctor, {nullable: true})
   ratings: Rating[];
 
-  @OneToMany(() => Appointment, item => item.doctor)
+  @OneToMany(() => Appointment, item => item.doctor, {nullable: true})
   schedule: Appointment[];
 
   @Field(() => [WorkingHours])
-  @OneToMany(() => WorkingHours, item => item.doctorID)
+  @OneToMany(() => WorkingHours, item => item.doctor, {nullable: true})
   workingHours: WorkingHours[];
 
   @Field(() =>  [MedicineRequest])
-  @OneToMany(() => MedicineRequest, item => item.user)
+  @OneToMany(() => MedicineRequest, item => item.user, {nullable: true})
   requests: MedicineRequest[];
 
   @Field(() => PatientDetails)
@@ -82,16 +93,8 @@ export class User extends BaseEntity {
   isEnabled: boolean;
 
   @Field()
-  @Column({ default: 0 })
+  @Column({ default: 0, nullable: true} )
   averageRating: number;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
 
 
 }

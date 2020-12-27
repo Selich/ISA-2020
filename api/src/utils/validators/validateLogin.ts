@@ -1,17 +1,21 @@
-import { LoginInput } from "src/resolvers/types/UserTypes";
+import { User } from "src/entities/User";
+import { LoginInput, UserDTO } from "../../resolvers/types/UserTypes";
+import argon2 from 'argon2';
 
-export const validateLogin = (input: LoginInput) => {
-  // TODO: Add regex for email @dusan0098
-  // TODO: Add validation for roles @dusan0098 @Selich
-  if (!input.email.includes("@")) {
-    return [
-      {
-        field: "email",
-        message: "invalid email",
-      },
-    ];
-  }
+export const validateLogin = async (input: UserDTO, user: User) => {
+    if (!user) {
+      return {
+        errors: [{ field: "email", message: "that email doesn't exist" }],
+      };
+    }
+    const valid = await argon2.verify(user.password, input.password);
 
-  return null;
+    if (!valid) {
+      return {
+        errors: [{ field: "email", message: "that email doesn't exist" }],
+      };
+    }
+  return []
+
 };
 

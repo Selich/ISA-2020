@@ -3,66 +3,14 @@ import { User } from "../entities/User";
 import { MyContext } from "../types";
 import { Query, Ctx, Mutation, Resolver, Field, InputType, Arg, Int } from "type-graphql";
 import { Pharmacy } from "../entities/Pharmacy";
-import { Address } from "../entities/Address";
+import { AddressDTO, DoctorDTO } from "./types/UserTypes";
 import { Rating } from "../entities/Rating";
 import { AppointmentDefinition } from "../entities/AppointmentDefinition";
 import { userInfo } from "os";
 import { getRepository } from "typeorm";
 import { AppointmentResponse } from "./types/AppointmentTypes";
+import { UserConsulation, AppointmentDTO, AdminExam, PharmacyDTO } from "./types/dtos";
 
-@InputType()
-class UserDTO {
-  @Field()
-  firstName: string
-  @Field()
-  lastName: string
-}
-@InputType()
-class AppointmentDefinitionDTO {
-
-  @Field()
-  type: string;
-  @Field()
-  score: string;
-  @Field()
-  price: number;
-
-}
-@InputType()
-class PharmDTO {
-  @Field()
-  id: number
-  @Field()
-  name: string
-  @Field()
-  rating: number
-  @Field()
-  price: AppointmentDefinitionDTO
-}
-
-@InputType()
-class UserPharm {
-  @Field()
-  from: Date
-  @Field()
-  pharmacy: PharmDTO
-}
-
-
-
-@InputType()
-class AppointmentRequest {
-  @Field()
-  from: Date
-  @Field()
-  until: Date
-  @Field()
-  firstName: string
-  @Field()
-  lastName: string
-  @Field()
-  pharmacyName: string
-}
 function addMinutes(date: Date, minutes: number) {
   return new Date(date.getTime() + minutes * 60000);
 }
@@ -92,11 +40,8 @@ export class AppointmentResolver {
   async appointments(
     @Ctx() { req }: MyContext
   ): Promise<Appointment[]> {
-    const appointments = await Appointment.find({})
-    if(!appointments)
-      return []
+    return await Appointment.find({})
 
-    return appointments
   }
   @Query(() => Appointment, { nullable: true })
   async appointment(
@@ -122,63 +67,94 @@ export class AppointmentResolver {
   async getPharmByDate(
     @Arg("from") from: Date,
     @Ctx() { req }: MyContext
-  ): Promise<Pharmacy[]> {
+  ){
 
     const pharmacists = await User.getRepository().createQueryBuilder('user')
       .innerJoinAndSelect("user.working_hours", "working_hours", "user.role = :role", { role: 'pharm' })
       .innerJoinAndSelect("user.holidays", "holiday")
       .getMany();
 
-    const ids = pharmacists.filter(async item => getAvailable(
-      from,
-      addMinutes(from, (await AppointmentDefinition.findOneOrFail({ pharmacyId: item.workingHours[0].pharmacyID })).delta),
-      item
-    )).map(item => item.workingHours[0].pharmacyID)
+    // const ids = pharmacists.filter(async item => getAvailable(
+    //   from,
+    //   // addMinutes(from, (await AppointmentDefinition.findOneOrFail({ pharmacy: item.workingHours[0].pharmacy })).delta),
+    //   item
+    // )).map(item => item.workingHours[0].pharmacyID)
 
-    return await Pharmacy.findByIds(ids)
+    // return await Pharmacy.findByIds(ids)
 
   }
 
   @Mutation(() => Appointment, { nullable: true })
-  async scheduleConsultations(
-    @Arg("appointment") inputs: UserPharm,
+  async scheduleConsultation(
+    @Arg("inputs") inputs: UserConsulation,
     @Ctx() { req }: MyContext
   ) {
     const user = await User.findOneOrFail({ id: req.session.userId })
-    if (!(req.session.role == 'patient')) {
-      return null
-    }
+    // if (!(req.session.role == 'patient')) {
+    //   return null
+    // }
+
     return null
 
+  }
+  @Mutation(() => Appointment, { nullable: true })
+  async scheduleExam(
+    @Arg("inputs") inputs: AppointmentDTO,
+    @Ctx() { req }: MyContext
+  ): Promise<Appointment> {
+    const user = await User.findOneOrFail({ id: req.session.userId })
+    const appointment = await Appointment.findOneOrFail({ id: inputs.id })
+    appointment.patient = user.details
+    appointment.save()
+    return appointment
 
   }
-  @Query(() => Appointment, { nullable: true })
-  async createExamination(
+  @Mutation(() => Pharmacy, { nullable: true })
+  async createPharmacy(
+    @Arg("inputs") inputs: PharmacyDTO,
     @Ctx() { req }: MyContext
   ) {
-    if (!( req.session.role == 'derm')) {
-      return null
-    }
-    return null
+    return await Pharmacy.save(new Pharmacy({...inputs}))
+  }
 
+  @Query(() => [Pharmacy], { nullable: true })
+  async pharmacies() {
+    return await Pharmacy.find({})
+  }
+  @Query(() => [Appointment], { nullable: true })
+  async examinations() {
+    return await Appointment.find({type: 'derm'})
+  }
+  @Query(() => [Appointment], { nullable: true })
+  async consultations() {
+    return await Appointment.find({type: 'pharm'})
   }
 
 
-  // pharm razlika
-  // derm nema mogucnost davanja lekova pacijentu (rezervacija)
-    // const errors = validateAppointment(inputs);
-    // if (errors) return errors;
-    //!  1. check if holiday for derm
-    //!  2. check workhours
-    //!   2.1  get for doc workhors from workhours table for pharmacyID
-    //!   2.2  if from > workhouk.from and until < workhout.until
-    //!  3. check if there exists a appointment
-    //!   3.1 get all apointments for that day
-    //!   3.2 for term in days_term: if from > term.from and until < term.until and patientId == null
-    //!   dermID | time | ... pacientid == null
-    //!   3.2.1 if collision -> err
-    //!   3.2.2 if not collision -> save term
-    //!  4. Save appointment to
 
-    // const tempUser = await em.findOne(Appointment, {email: inputs.email})
+  @Mutation(() => Appointment, { nullable: true })
+  async createExam(
+    @Arg("inputs") inputs: AdminExam,
+    @Ctx() { req }: MyContext
+  ) {
+    let {price, type, from, until ,discount } = inputs
+    const doctor = await User.findOneOrFail({ email: inputs.doctor.email })
+    const pharmacy = await Pharmacy.findOneOrFail({ name: inputs.pharmacy.name})
+    const definition = await AppointmentDefinition.findOneOrFail({ type: 'derm' })
+    price = definition.price * (1 - discount)
+    const appointment = await Appointment.save(new Appointment({
+      price, type, from, until, discount,
+      doctor, pharmacy
+    }))
+    // appointment.from = inputs.from
+    // appointment.until = inputs.until
+    // appointment.pharmacy = (!req.session.pharmacy)
+    // ? await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
+    // : req.session.pharmacy
+    // appointment.score = definition.score
+    // appointment.doctor = doctor
+    // appointment.save()
+
+    return appointment
+  }
 }

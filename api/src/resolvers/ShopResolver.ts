@@ -1,7 +1,7 @@
 import { User } from '../entities/User';
 import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
 import { MyContext } from '../types';
-import { UserResponse, EmployeeInput, LoginInput, RegisterInput } from './types/UserTypes';
+import { UserResponse, EmployeeInput, LoginInput } from './types/UserTypes';
 import argon2 from 'argon2';
 import { validateRegister } from '../utils/validators/validateRegister';
 import { getRepository } from 'typeorm';
@@ -11,7 +11,7 @@ import { Inventory } from '../entities/Inventory';
 import { Medicine } from '../entities/Medicine';
 import { Pharmacy } from '../entities/Pharmacy';
 import { Price } from '../entities/Price';
-import { MedicineItem } from 'src/entities/MedicineItem';
+import { MedicineItem } from '../entities/MedicineItem';
 
 
 const mapPrice = async (arr: Inventory):  Promise<any> =>{
@@ -30,26 +30,6 @@ export class ShopResolver {
   ): Promise<Medicine[]>{
 
     return await Medicine.find({})
-
-  }
-
-  @Query(() => [Pharmacy], { nullable: true })
-  async pharmacies(
-    @Arg("medicineItemID") medicineItemID: number,
-    @Arg("quantity") quantity: number,
-    @Ctx() { }: MyContext
-  ): Promise<Pharmacy[]>{
-
-    //! TODO:  transaction
-    const list = Inventory.find({})
-    ;(await list).filter(item => item.pharmacy != null)
-
-    const newList: Inventory[] = (await list).filter(item => item.medicines.filter(item =>
-      (item.id == medicineItemID) && (item.quantity >= quantity)))
-
-    const ids = newList.map(item => item.pharmacy)
-
-    return await ids
 
   }
 }

@@ -8,15 +8,14 @@ import { Tier } from "./Tier";
 import { Appointment } from "./Appointment";
 import { Rating } from "./Rating";
 import { User } from "./User";
+import { Model } from "./Model";
 
 
 @ObjectType()
 @Entity()
-export class PatientDetails extends BaseEntity{
-
-  @Field(() => ID)
+export class PatientDetails extends Model{
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @OneToMany(() => Appointment, item => item.patient)
   appointments: Appointment[];
@@ -43,15 +42,16 @@ export class PatientDetails extends BaseEntity{
   @OneToOne(() => User)
   user: User;
 
+  @Field(() => Tier)
   @ManyToOne(() => Tier)
   tier: Tier;
 
   @Field()
-  @Column()
+  @Column({nullable: true})
   score: number;
 
   @Field()
-  @Column()
+  @Column({nullable: true})
   penalty: number;
 
 }
