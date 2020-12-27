@@ -19,23 +19,18 @@ export class UserResolver {
       ? null
       : await User.findOne({ id: req.session.userId });
   }
+
   @Query(() => [User], { nullable: true })
   async users(@Ctx() { req }: MyContext) {
       return await User.find({});
   }
 
   @Query(() => [User], { nullable: true })
-  async usersByPharm(
-    @Arg("pharmId") pharmId: Number,
-    @Arg("role") role: String,
-    @Ctx() { }: MyContext
+  async usersBy(
+    @Arg("inputs") inputs: UserDTO,
+    @Ctx() { req }: MyContext
   ) {
-    return await getRepository(User)
-      .createQueryBuilder("user")
-      .leftJoinAndSelect("user.workingHours", "working_hours")
-      .where("user.role = :role", { role: role })
-      .andWhere("working_hours.pharmacyID = :ID", { ID: pharmId })
-      .getMany();
+      return await User.find({...inputs});
   }
 
   @Mutation(() => UserResponse, { nullable: true })
@@ -44,16 +39,22 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let { email, password, confirmPassword, role } = inputs
+    if (password === confirmPassword) { return { errors: [{ field: "confirmPassword", message: "Passwords need to match" }], }};
 
+    let user = await User.findOne({email: email})
     password = await argon2.hash(inputs.password);
-    inputs.password = password
-    const user = await User.save(new User({...inputs}))
+    inputs.password = password;
+    (!user)
+      ? user = await User.save(new User({...inputs}))
+      // @ts-ignore
+      : user = await User.update({id: user.id}, {...inputs})
+
     await Address.save(new Address({...inputs.address, user}))
     if(role === 'patient')
       await PatientDetails.save(new PatientDetails({user}))
-
     return { user }
   }
+
   @Mutation(() => UserResponse)
   async login(
     @Arg("inputs") inputs: UserDTO,
@@ -61,18 +62,12 @@ export class UserResolver {
   ): Promise<UserResponse> {
 
     const user = await User.findOneOrFail({ email: inputs.email });
-    // if (!user) {
-    //   return {
-    //     errors: [{ field: "email", message: "that email doesn't exist" }],
-    //   };
-    // }
-    // const valid = await argon2.verify(user.password, inputs.password);
+    if (!user) { return { errors: [{ field: "email", message: "that email doesn't exist" }], };
+    }
+    const valid = await argon2.verify(user.password, inputs.password);
 
-    // if (!valid) {
-    //   return {
-    //     errors: [{ field: "email", message: "that email doesn't exist" }],
-    //   };
-    // }
+    if (!valid) { return { errors: [{ field: "email", message: "that email doesn't exist" }], };
+    }
 
     req.session.userId = user.id;
 

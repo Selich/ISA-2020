@@ -2,10 +2,11 @@ import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, Primary
 import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { Medicine } from './Medicine';
 import { MedicineList } from './MedicineList';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class MedicineItem extends BaseEntity{
+export class MedicineItem extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -33,13 +34,6 @@ export class MedicineItem extends BaseEntity{
   @Column({ type:  'citext'})
   instructions: string;
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
 
 
 }

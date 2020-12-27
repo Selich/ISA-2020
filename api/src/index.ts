@@ -15,11 +15,11 @@ import { EmployeeResolver } from './resolvers/EmployeeResolver';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
 import { HolidayResolver } from './resolvers/HolidayResolver';
 import { PharmacyResolver } from './resolvers/PharmacyResolver';
-import { ShopResolver } from './resolvers/ShopResolver';
 import { CalendarResolver } from './resolvers/CalendarResolver';
 import { MedicineRequestResolver } from './resolvers/MedicineRequestResolver';
 import dbConfig from './ormconfig'
 import { AppointmentDefinitionResolver } from './resolvers/AppointmentDefinitionResolver';
+import { MedicineResolver } from './resolvers/MedicineResolver';
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -54,7 +54,7 @@ const main = async () => {
       resolvers: [
         UserResolver, CalendarResolver, AppointmentResolver,
         HolidayResolver, EmployeeResolver, MedicineRequestResolver, PharmacyResolver,
-        ShopResolver, AppointmentDefinitionResolver
+        AppointmentDefinitionResolver, MedicineResolver
       ],
       validate: false
     }),

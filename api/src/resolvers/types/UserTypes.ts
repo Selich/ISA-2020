@@ -41,9 +41,9 @@ export class AddressDTO {
 
 @InputType()
 export class UserDTO {
-  @Field()
+  @Field({ nullable: true})
   email: string;
-  @Field()
+  @Field({ nullable: true})
   password: string;
   @Field({ nullable: true})
   confirmPassword: string;

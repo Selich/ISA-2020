@@ -1,6 +1,9 @@
 import { Pharmacy } from "../../entities/Pharmacy";
 import { Field, Float, ID, InputType, Int } from "type-graphql";
-import { AddressDTO, DoctorDTO } from "./UserTypes";
+import { AddressDTO, DoctorDTO, UserDTO } from "./UserTypes";
+import { User } from "../../entities/User";
+import { MedicineList } from "../../entities/MedicineList";
+import { MedicineItem } from "src/entities/MedicineItem";
 
 @InputType()
 export class PharmacyDTO {
@@ -13,13 +16,6 @@ export class PharmacyDTO {
   long: number
   @Field({nullable: true})
   lat: number
-}
-@InputType()
-export class UserDTO {
-  @Field()
-  firstName: string
-  @Field()
-  lastName: string
 }
 @InputType()
 export class AppointmentDTO {
@@ -50,6 +46,55 @@ export class UserConsulation {
   from: Date
   @Field()
   pharmacy: PharmDTO
+}
+
+@InputType()
+export class MedicineDTO {
+  @Field({nullable: true})
+  name: string
+  @Field({nullable: true})
+  code: string
+  // @Field(() => [MedicineDTO], {nullable: true})
+  alternatives: MedicineDTO[];
+}
+
+
+@InputType()
+export class MedicineItemDTO {
+  @Field(() => MedicineListDTO,{nullable: true})
+  list: MedicineList;
+  @Field({ nullable: true})
+  quantity: number;
+  @Field({nullable: true})
+  price: number;
+  @Field({nullable: true})
+  details: MedicineDTO;
+  @Field({nullable: true})
+  name: string
+  @Field({nullable: true})
+  pharmacy: PharmDTO
+}
+
+@InputType()
+export class MedicineListDTO {
+  @Field({nullable: true})
+  type: string;
+  @Field(() => MedicineItemDTO,{nullable: true})
+  medicines: MedicineItem[];
+  @Field(() => UserDTO, { nullable: true })
+  supplier: User;
+  @Field(() => PharmacyDTO, { nullable: true })
+  pharmacy: Pharmacy;
+}
+@InputType()
+export class InventoryDTO{
+
+  @Field(() => UserDTO)
+  supplier: User;
+
+  @Field(() => PharmacyDTO)
+  pharmacy: Pharmacy;
+
 }
 @InputType()
 export class AdminExam {

@@ -4,12 +4,12 @@ import { MedicineItem } from './MedicineItem';
 import { PatientDetails } from './PatientDetails';
 import { MedicineRequest } from './MedicineRequest';
 import { Price } from './Price';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class Medicine extends BaseEntity {
+export class Medicine extends Model {
 
-  @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -18,27 +18,27 @@ export class Medicine extends BaseEntity {
   code!: string;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true})
   name!: string;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true})
   type: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   points: number;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   form: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   contents: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true})
   producer: string;
 
   // @Field(() => File)
@@ -50,41 +50,31 @@ export class Medicine extends BaseEntity {
   isPrescriptionRequired: boolean;
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: true})
   info: string;
 
-  @ManyToMany(() => PatientDetails, item => item.allergies)
+  @ManyToMany(() => PatientDetails, item => item.allergies, { nullable: true})
   patientsAllergic: PatientDetails[];
 
-  @OneToMany(() => MedicineRequest, item => item.medicine)
+  @OneToMany(() => MedicineRequest, item => item.medicine, {nullable: true})
   requests: MedicineRequest[];
 
-  @OneToMany(() => Price, item => item.medicine)
+  @OneToMany(() => Price, item => item.medicine, { nullable: true})
   prices: Price[];
 
-  @OneToMany(() => MedicineItem, item => item.details)
+  @OneToMany(() => MedicineItem, item => item.details, { nullable: true})
   belongsTo: MedicineItem[];
 
-  @Field(() => [Medicine])
-  @ManyToMany(() => Medicine, item => item.alternatives, { lazy: true })
+  @ManyToMany(() => Medicine, item => item.alternatives, { lazy: true ,  nullable: true})
   @JoinColumn()
   alternatives: Medicine[];
 
   @Field(() => String)
-  @Column({ type: Date })
+  @Column({ type: Date,  nullable: true})
   from: Date;
 
   @Field(() => String)
-  @Column({ type: Date })
+  @Column({ type: Date, nullable: true})
   until: Date;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

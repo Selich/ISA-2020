@@ -1,10 +1,11 @@
 import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { Int, ObjectType, Field, ID } from 'type-graphql';
 import { MedicineItem } from './MedicineItem';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class MedicineList extends BaseEntity{
+export class MedicineList extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()

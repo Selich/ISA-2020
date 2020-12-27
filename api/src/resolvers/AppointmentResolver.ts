@@ -24,17 +24,6 @@ async function getAvailable(from: Date, until: Date, user: User): Promise<boolea
 
 @Resolver(Appointment)
 export class AppointmentResolver {
-  @Query(() => Appointment, { nullable: true })
-  getAppointmentsByPatient(
-    @Arg('id', () => Int) id: number,
-    @Ctx() { }: MyContext): Promise<Appointment[] | null> {
-    return getRepository(Appointment)
-      .createQueryBuilder("appointment")
-      .innerJoinAndSelect("appointment.patient", "patient_details")
-      .innerJoinAndSelect("patient_details.user", "user")
-      .where("user.id = :id", { id: id })
-      .getMany()
-  }
 
   @Query(() => [Appointment], { nullable: true })
   async appointments(
