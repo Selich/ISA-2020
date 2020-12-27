@@ -52,7 +52,6 @@ export class MedicineResolver {
       }
     }
   }
-  // Dobije sve apoteke
   @Query(() => [Medicine], { nullable: true })
   async medicines(
     @Arg("inputs") inputs: MedicineDTO,

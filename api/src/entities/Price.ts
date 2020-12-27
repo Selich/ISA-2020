@@ -1,13 +1,12 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Medicine } from "./Medicine";
-import { PatientDetails } from "./PatientDetails";
+import { Model } from "./Model";
 import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Price extends BaseEntity{
+export class Price extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -30,18 +29,5 @@ export class Price extends BaseEntity{
   @Field(() => String)
   @Column()
   from: Date;
-
-  @Field(() => String)
-  @Column()
-  until: Date;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

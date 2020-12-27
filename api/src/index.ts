@@ -20,6 +20,7 @@ import { MedicineRequestResolver } from './resolvers/MedicineRequestResolver';
 import dbConfig from './ormconfig'
 import { AppointmentDefinitionResolver } from './resolvers/AppointmentDefinitionResolver';
 import { MedicineResolver } from './resolvers/MedicineResolver';
+import { PriceResolver } from './resolvers/PriceResolver';
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -54,7 +55,7 @@ const main = async () => {
       resolvers: [
         UserResolver, CalendarResolver, AppointmentResolver,
         HolidayResolver, EmployeeResolver, MedicineRequestResolver, PharmacyResolver,
-        AppointmentDefinitionResolver, MedicineResolver
+        AppointmentDefinitionResolver, MedicineResolver, PriceResolver
       ],
       validate: false
     }),

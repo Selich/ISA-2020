@@ -3,7 +3,8 @@ import { Field, Float, ID, InputType, Int } from "type-graphql";
 import { AddressDTO, DoctorDTO, UserDTO } from "./UserTypes";
 import { User } from "../../entities/User";
 import { MedicineList } from "../../entities/MedicineList";
-import { MedicineItem } from "src/entities/MedicineItem";
+import { MedicineItem } from "../../entities/MedicineItem";
+import { Medicine } from "../../entities/Medicine";
 
 @InputType()
 export class PharmacyDTO {
@@ -152,3 +153,21 @@ export class AppointmentDefinitionDTO {
   pharmacy: Pharmacy;
 
 }
+
+@InputType()
+export class PriceDTO {
+  @Field(() => PharmacyDTO)
+  pharmacy: Pharmacy;
+
+  @Field(() => MedicineDTO)
+  medicine: Medicine;
+
+  @Field()
+  price: number;
+
+  @Field(() => String)
+  from: Date;
+}
+
+
+
