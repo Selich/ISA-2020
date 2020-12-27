@@ -30,6 +30,10 @@ export class MedicineItem extends Model{
   @Column({ nullable: true})
   price: number;
 
+  @Field(() => String)
+  @Column({ nullable: true})
+  dateOfPurchase: Date;
+
   @Field()
   @Column({ type:  'citext'})
   instructions: string;

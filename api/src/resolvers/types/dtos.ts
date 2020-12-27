@@ -141,6 +141,30 @@ export class AppointmentRequest {
 }
 
 @InputType()
+export class ReservationDTO{
+
+  @Field(() => PharmacyDTO, { nullable: true })
+  pharmacy: Pharmacy;
+
+  @Field(() => [MedicineItemDTO], { nullable: true })
+  medicines: MedicineItemDTO[];
+
+  // @Field(() => PatientDetails)
+  // patient: PatientDetails;
+
+  @Field(() => String, { nullable: true })
+  deadline: Date;
+
+  @Field(() => String, { nullable: true })
+  pickupDate: Date;
+
+  @Field({ nullable: true })
+  isBought: boolean;
+
+  @Field({ nullable: true })
+  totalSum: number;
+}
+@InputType()
 export class AppointmentDefinitionDTO {
 
   @Field({ nullable: true})

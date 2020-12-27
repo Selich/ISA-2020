@@ -16,7 +16,7 @@ export class Reservation extends MedicineList{
 
   @ManyToOne(() => PatientDetails, item => item.reservations,  {  cascade: true })
   @JoinTable()
-  patient!: PatientDetails;
+  patient: PatientDetails;
 
   @Field(() => String)
   @Column({ type: 'date', nullable: true })
@@ -26,5 +26,11 @@ export class Reservation extends MedicineList{
   @Column({ type: 'date', nullable: true })
   pickupDate: Date;
 
+  @Field()
+  @Column({nullable: true })
+  isBought: boolean;
 
+  @Field()
+  @Column({nullable: true })
+  totalSum: number;
 }
