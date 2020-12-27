@@ -139,6 +139,17 @@ export class AppointmentRequest {
   @Field()
   pharmacyName: string
 }
+@InputType()
+export class TierDTO{
+  @Field()
+  name: String;
+
+  @Field()
+  discount: number;
+
+  @Field()
+  score: number;
+}
 
 @InputType()
 export class ReservationDTO{

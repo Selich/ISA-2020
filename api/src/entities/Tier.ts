@@ -1,10 +1,11 @@
 import { Field, ObjectType } from "type-graphql";
 import { Entity, Column, OneToMany, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
+import { Model } from "./Model";
 import { PatientDetails } from "./PatientDetails";
 
 @ObjectType()
 @Entity()
-export class Tier extends BaseEntity{
+export class Tier extends Model{
 
   @PrimaryGeneratedColumn()
   id!: number;
@@ -19,7 +20,11 @@ export class Tier extends BaseEntity{
 
   @Field()
   @Column()
-  score: number;
+  scoreMin: number;
+
+  @Field()
+  @Column()
+  scoreMax: number;
 
   @Field(() => [PatientDetails])
   @OneToMany(() => PatientDetails, item => item.tier)
