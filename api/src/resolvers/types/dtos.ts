@@ -58,6 +58,16 @@ export class MedicineDTO {
   alternatives: MedicineDTO[];
 }
 
+@InputType()
+export class HolidayDTO {
+  @Field(() => String)
+  from: Date;
+  @Field(() => String)
+  until: Date;
+  @Field(() => UserDTO)
+  user: UserDTO;
+}
+
 
 @InputType()
 export class MedicineItemDTO {

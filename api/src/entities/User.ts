@@ -48,7 +48,7 @@ export class User extends Model {
   lastName: string;
 
   @Field(() => [Holiday])
-  @OneToMany(() => Holiday, item => item.employee, {nullable: true})
+  @OneToMany(() => Holiday, item => item.user, {nullable: true})
   holidays: Holiday[];
 
   @Field(() => [Rating])

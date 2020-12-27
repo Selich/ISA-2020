@@ -1,36 +1,57 @@
 import { MyContext } from "../types";
 import { Query, Ctx, Mutation, Resolver, Arg } from "type-graphql";
 import { Holiday } from "../entities/Holiday";
-import { HolidayInput } from "./types/UserTypes";
+import { HolidayInput, UserDTO } from "./types/UserTypes";
 import { validateAdmin } from "../utils/validators/validateRegister";
 import { User } from "../entities/User";
+import { HolidayDTO } from "./types/dtos";
 
 @Resolver(Holiday)
 export class HolidayResolver {
 
   // #43
-  @Query(() => Holiday, { nullable: true })
-  async holiday(@Ctx() { req }: MyContext) {
+  @Query(() => [Holiday], { nullable: true })
+  async holidays() {
+    return await Holiday.find({})
   }
 
-  // #43
-  @Mutation(() => Holiday)
-  async create(@Ctx() { req, res }: MyContext) {
+
+  @Query(() => [Holiday], { nullable: true })
+  async holidaysByUser(
+    @Arg("inputs") inputs: UserDTO
+  ) {
+    const user = await User.findOneOrFail({email: inputs.email})
+    return user.holidays
   }
-  @Mutation(() => Holiday)
-  async createHolidays(
-    @Arg("inputs") inputs: HolidayInput,
-    @Ctx() { req }: MyContext
-  ): Promise<Holiday> {
 
-    const errors = validateAdmin(req.session.userId);
-    const user = await User.findOneOrFail(inputs.employeeId)
-    const holiday = new Holiday()
-    holiday.from = new Date(inputs.from)
-    holiday.until = new Date(inputs.until)
-    holiday.employee = user
+  @Mutation(() => Holiday, { nullable: true })
+  async scheduleHoliday(
+    @Ctx() { req }: MyContext,
+    @Arg("inputs") inputs: HolidayDTO
+  ) {
+    let { from, until } = inputs
+    if(!req.session.userId) return null
+    const user = await User.findOneOrFail({id: req.session.userId})
 
-    return holiday
+    from = new Date(from)
+    until = new Date(until)
+    let isApproved = false
 
+    return await Holiday.save(new Holiday({from,until,user,isApproved}))
   }
+
+  @Mutation(() => Holiday, { nullable: true })
+  async approveHoliday(
+    @Arg("inputs") inputs: HolidayDTO,
+  ) {
+    let { from, until } = inputs
+    const user = await User.findOneOrFail({email: inputs.user.email})
+
+    from = new Date(from)
+    until = new Date(until)
+    let isApproved = true
+
+    return await Holiday.update({user: user},{from,until,user,isApproved})
+  }
+
 }
