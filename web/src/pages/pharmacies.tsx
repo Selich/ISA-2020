@@ -1,6 +1,7 @@
-import { Table, Thead, TableCaption, Tr, Th, Td, Grid, Center, Tabs, TabList, Tab, TabPanel, Flex, TabPanels, GridItem, Tbody } from '@chakra-ui/react';
+import { Table, Thead, TableCaption, Tr, Th, Td, Grid, Center, Tabs, TabList, Tab, TabPanel, Flex, TabPanels, GridItem, Tbody, Box, SimpleGrid } from '@chakra-ui/react';
 import React from "react";
 import { Header } from '../components/sections/Header';
+import { usePharmsQuery } from '../generated/graphql';
 
 
 interface IFormInputs {
@@ -10,62 +11,48 @@ interface IFormInputs {
 
 
 export default function Pharmacies() {
+  const [{ data, fetching }] = usePharmsQuery();
+
   return (
     <>
       <Header />
-      <Flex
-        align="center"
-        justify={{ base: "center", md: "space-around", xl: "space-between" }}
-        direction={{ base: "column-reverse", md: "row" }}
-        p={10}
+      <SimpleGrid minChildWidth="410px">
+      <Box
+        m="4"
+        p="8"
+        border="1px"
+        rounded="2px"
+        borderColor="gray.300"
+        boxShadow="md"
+        bg="grey.200"
+        color="#2d383c"
+        fontSize="2rem"
+        textAlign="center"
+        h="400px"
       >
-        <Grid p={10} templateColumns="repeat(10, 3fr)" gap={1}>
-          <GridItem colStart={2} colEnd={16}>
-
-            <Tabs isFitted variant="enclosed">
-              <TabList mb="1em">
-                <Tab>One</Tab>
-                <Tab>Two</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel>
+        <Box align="left">
                   <Table variant="simple">
-                    <TableCaption>Imperial to metric conversion factors</TableCaption>
                     <Thead>
                       <Tr>
-                        <Th>To convert</Th>
-                        <Th>into</Th>
-                        <Th isNumeric>multiply by</Th>
+                        <Th>Name: </Th>
+                        <Th>Address: </Th>
+                        <Th>Map</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
+                      {data && data.pharmacies &&
+                      data.pharmacies.map(pharm => (
                       <Tr>
-                        <Td>inches</Td>
-                        <Td>millimetres (mm)</Td>
-                        <Td isNumeric>25.4</Td>
+                        <Td>{pharm.name}</Td>
+                        <Td>{pharm.address.street} {pharm.address.city}</Td>
+                        <Td>Show Map</Td>
                       </Tr>
-                      <Tr>
-                        <Td>feet</Td>
-                        <Td>centimetres (cm)</Td>
-                        <Td isNumeric>30.48</Td>
-                      </Tr>
-                      <Tr>
-                        <Td>yards</Td>
-                        <Td>metres (m)</Td>
-                        <Td isNumeric>0.91444</Td>
-                      </Tr>
+                      ))}
                     </Tbody>
                   </Table>
-                </TabPanel>
-                <TabPanel>
-                  <p>two!</p>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </GridItem>
-        </Grid>
-
-      </Flex>
+        </Box>
+      </Box>
+      </SimpleGrid>
     </>
   );
 }

@@ -1,15 +1,12 @@
-import { OneToMany, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, JoinTable, OneToOne } from 'typeorm'
-import { ObjectType, Field, ID, InputType } from 'type-graphql';
-import { User } from './User';
-import { Pharmacy } from './Pharmacy';
-import { Model } from './Model';
+import { Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, Column } from "typeorm";
+import { Model } from "./Model";
+import { ObjectType, Field, InputType } from "type-graphql";
+import { Pharmacy } from "./Pharmacy";
+import User from "./User";
 
 @ObjectType()
 @Entity()
 export class Address extends Model{
-
-  @PrimaryGeneratedColumn()
-  id!: number;
 
   @OneToMany(() => User, user => user.address )
   users: User[]

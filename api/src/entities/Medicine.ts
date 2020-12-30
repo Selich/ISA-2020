@@ -1,7 +1,7 @@
 import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinColumn } from 'typeorm'
-import { ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID, InputType } from 'type-graphql';
 import { MedicineItem } from './MedicineItem';
-import { PatientDetails } from './PatientDetails';
+import Patient from './Patient';
 import { MedicineRequest } from './MedicineRequest';
 import { Price } from './Price';
 import { Model } from './Model';
@@ -9,9 +9,6 @@ import { Model } from './Model';
 @ObjectType()
 @Entity()
 export class Medicine extends Model {
-
-  @PrimaryGeneratedColumn()
-  id!: number;
 
   @Field(() => String)
   @Column({ unique: true })
@@ -53,8 +50,8 @@ export class Medicine extends Model {
   @Column({ nullable: true})
   info: string;
 
-  @ManyToMany(() => PatientDetails, item => item.allergies, { nullable: true})
-  patientsAllergic: PatientDetails[];
+  @ManyToMany(() => Patient, item => item.allergies, { nullable: true})
+  patientsAllergic: Patient[];
 
   @OneToMany(() => MedicineRequest, item => item.medicine, {nullable: true})
   requests: MedicineRequest[];

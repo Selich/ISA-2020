@@ -9,5 +9,4 @@ fragment RegularUser on User {
   telephone
   gender
   email
-  role
 }

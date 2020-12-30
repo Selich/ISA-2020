@@ -1,7 +1,7 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 import { Entity, Column, OneToMany, PrimaryGeneratedColumn, BaseEntity } from "typeorm";
 import { Model } from "./Model";
-import { PatientDetails } from "./PatientDetails";
+import Patient from "./Patient";
 
 @ObjectType()
 @Entity()
@@ -26,8 +26,8 @@ export class Tier extends Model{
   @Column()
   scoreMax: number;
 
-  @Field(() => [PatientDetails])
-  @OneToMany(() => PatientDetails, item => item.tier)
-  patients: PatientDetails[];
+  @Field(() => [Patient])
+  @OneToMany(() => Patient, item => item.tier)
+  patients: Patient[];
 
 }

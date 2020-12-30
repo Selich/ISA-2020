@@ -1,11 +1,11 @@
-mutation Register( $inputs: UserDTO!) {
+mutation Register($inputs: RegisterPatientDTO!) {
   register(inputs: $inputs) {
     errors {
       field
       message
     }
     user {
-        email
+      ...RegularUser
     }
   }
 }

@@ -1,17 +1,8 @@
 import { MyContext } from "../types";
 import { Query, Ctx, Mutation, Resolver, Field, InputType, Arg } from "type-graphql";
 import { Holiday } from "../entities/Holiday";
-import { User } from "../entities/User";
 
-@InputType()
-class CalendarItem{
-  @Field()
-  id: number;
-  @Field()
-  email: string;
-}
-
-@Resolver(User)
+@Resolver()
 export class CalendarResolver {
 
   // #43

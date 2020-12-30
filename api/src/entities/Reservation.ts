@@ -1,7 +1,7 @@
 import { MedicineList } from "./MedicineList";
 import { Entity } from "typeorm/decorator/entity/Entity";
-import { Field, ObjectType } from "type-graphql";
-import { PatientDetails } from "./PatientDetails";
+import { Field, InputType, ObjectType } from "type-graphql";
+import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
 import { Column, JoinTable, ManyToOne } from "typeorm";
 
@@ -14,9 +14,9 @@ export class Reservation extends MedicineList{
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @ManyToOne(() => PatientDetails, item => item.reservations,  {  cascade: true })
+  @ManyToOne(() => Patient, item => item.reservations,  {  cascade: true })
   @JoinTable()
-  patient: PatientDetails;
+  patient: Patient;
 
   @Field(() => String)
   @Column({ type: 'date', nullable: true })

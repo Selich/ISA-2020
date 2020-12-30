@@ -1,21 +1,19 @@
-import { Complaint } from "./Complaint";
-import {  Column, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, OneToOne, BaseEntity, JoinColumn } from 'typeorm'
-import {  Field, ID, ObjectType} from 'type-graphql';
-import { Prescrition } from "./Prescription";
-import { Reservation } from "./Reservation";
-import { Medicine } from "./Medicine";
-import { Tier } from "./Tier";
+import { ObjectType, Field, InputType } from "type-graphql";
+import { Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, Column } from "typeorm";
 import { Appointment } from "./Appointment";
+import { Complaint } from "./Complaint";
+import { Medicine } from "./Medicine";
+import { Pharmacy } from "./Pharmacy";
+import { Prescrition } from "./Prescription";
 import { Rating } from "./Rating";
-import { User } from "./User";
-import { Model } from "./Model";
+import { Reservation } from "./Reservation";
+import { Tier } from "./Tier";
+import User from "./User";
 
 
 @ObjectType()
 @Entity()
-export class PatientDetails extends Model{
-  @PrimaryGeneratedColumn()
-  id!: number;
+export default class Patient extends User{
 
   @OneToMany(() => Appointment, item => item.patient)
   appointments: Appointment[];
@@ -36,11 +34,12 @@ export class PatientDetails extends Model{
   @OneToMany(() => Rating, item => item.patient)
   ratings: Rating[];
 
+  @Field(() => [Pharmacy])
+  @ManyToMany(() => Pharmacy, item => item.subscribers)
+  subscriptions: Pharmacy[];
+
   @OneToMany(() => Complaint, item => item.patient)
   complaints: Complaint[];
-
-  @OneToOne(() => User)
-  user: User;
 
   @Field(() => Tier)
   @ManyToOne(() => Tier)
@@ -54,4 +53,9 @@ export class PatientDetails extends Model{
   @Column({nullable: true})
   penalty: number;
 
+  @Field()
+  @Column({ default: false })
+  isEnabled: boolean;
+
 }
+

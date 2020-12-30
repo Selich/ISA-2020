@@ -14,9 +14,10 @@ import { Flex, Box } from "@chakra-ui/react";
 export const Header: any = () => {
   const [{ data, fetching }] = useMeQuery();
   let body = null;
-  if (fetching) {
+  // let data = { me: { email: "email", password: "password", role:"patient"}}
+  if (false) {
   } else if (!data?.me) {
-    body = (<GuestMenu/>)
+    body = ( <GuestMenu/>)
   } else {
     if(data.me.role === "patient")
       body = ( <UserMenu user={data.me}/>)

@@ -1,6 +1,0 @@
-mutation CreateExam( $inputs: AdminExam!) {
-  createExam(inputs: $inputs ) {
-        from
-        until
-  }
-}

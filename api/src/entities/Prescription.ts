@@ -1,19 +1,19 @@
 import { CreateDateColumn, UpdateDateColumn, Column, Entity, ManyToOne, OneToOne } from 'typeorm'
-import { ObjectType, Field } from 'type-graphql';
-import { PatientDetails } from './PatientDetails';
+import { ObjectType, Field, InputType } from 'type-graphql';
+import  Patient  from "./Patient";
 import { MedicineList } from './MedicineList';
-import { User } from './User';
 import { Appointment } from './Appointment';
+import { Employee } from './Employee';
 
 @ObjectType()
 @Entity()
 export class Prescrition extends MedicineList{
 
-  @ManyToOne(() => PatientDetails)
-  patient: PatientDetails;
+  @ManyToOne(() => Patient)
+  patient: Patient;
 
-  @ManyToOne(() => User)
-  employee: User;
+  @ManyToOne(() => Employee)
+  employee: Employee;
 
   @OneToOne(() => Appointment, item => item.prescription)
   appointment: Appointment;
@@ -29,14 +29,5 @@ export class Prescrition extends MedicineList{
   @Field()
   @Column()
   deadline: Date;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

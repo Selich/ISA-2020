@@ -21,11 +21,18 @@ export default function LoginForm({onClose}) {
           initialValues={{ email: "", password: "" }}
           onSubmit={async (values, { setErrors }) => {
             const response = await login(values);
+            // @ts-ignore
             if (response.data?.login.errors) {
+            // @ts-ignore
               console.log(response.data.login.errors);
+            // @ts-ignore
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
-              router.push("/");
+              let user = response.data.login.user
+            // @ts-ignore
+              // router.push(`/${user.role}/${user.id}`);
+              onClose()
+              router.reload()
             }
           }}
         >

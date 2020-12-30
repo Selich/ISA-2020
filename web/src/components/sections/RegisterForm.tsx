@@ -27,17 +27,17 @@ export default function RegisterLayout({ onClose }) {
           confirmPassword: "",
           firstName: "",
           lastName: "",
-          telephone: "",
-          gender: "",
           street: "",
           city: "",
           country: "",
-          dateOfBirth: ""
+          telephone: "",
+          gender: "",
+          dateOfBirth: "",
+          address: {}
         }}
         onSubmit={async (values, { setErrors }) => {
-          // @ts-ignore
+          let { street, city, country } = values
           values.address = { street, city, country }
-          // @ts-ignore
           const response = await register(values);
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));

@@ -1,7 +1,6 @@
 import { MyContext } from "../types";
 import { Query, Ctx, Mutation, Resolver, Field, InputType, Arg } from "type-graphql";
 import { Holiday } from "../entities/Holiday";
-import { User } from "../entities/User";
 
 @InputType()
 class CalendarItem{
@@ -11,7 +10,7 @@ class CalendarItem{
   email: string;
 }
 
-@Resolver(User)
+@Resolver()
 export class MedicineRequestResolver {
 
   // #43

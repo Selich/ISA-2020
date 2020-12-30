@@ -1,21 +1,17 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PatientDetails } from "./PatientDetails";
+import { Model } from "./Model";
+import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Complaint{
+export class Complaint extends Model{
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => PatientDetails)
-  @ManyToOne(() => PatientDetails, item => item.complaints,  { eager: true, cascade: true })
+  @Field(() => Patient)
+  @ManyToOne(() => Patient, item => item.complaints,  { eager: true, cascade: true })
   @JoinTable()
-  patient: PatientDetails;
+  patient: Patient;
 
   @Field(() => Pharmacy)
   @ManyToOne(() => Pharmacy, item => item.reservations,  { eager: true, cascade: true })

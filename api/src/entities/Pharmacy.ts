@@ -1,5 +1,5 @@
-import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { AppointmentDefinition } from "./AppointmentDefinition";
@@ -7,6 +7,7 @@ import { Complaint } from "./Complaint";
 import { Inventory } from "./Inventory";
 import { MedicineRequest } from "./MedicineRequest";
 import { Model } from "./Model";
+import  Patient  from "./Patient";
 import { Price } from "./Price";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
@@ -60,6 +61,10 @@ export class Pharmacy extends Model {
   @OneToMany(() => Appointment, item => item.pharmacy,{nullable: true})
   appointments: Appointment[];
 
+  @Field(() => [Patient])
+  @ManyToMany(() => Patient, item => item.subscriptions,{nullable: true})
+  subscribers: Patient[];
+
   @Field(() => [Reservation])
   @OneToMany(() => Reservation, item => item.pharmacy,{nullable: true})
   reservations: Reservation[];
@@ -71,7 +76,6 @@ export class Pharmacy extends Model {
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.pharmacy,{nullable: true})
   ratings: Rating[];
-
 
 }
 

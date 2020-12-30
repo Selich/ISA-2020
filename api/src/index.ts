@@ -8,24 +8,17 @@ import { __prod__ } from "./constants";
 import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import { UserResolver } from './resolvers/UserResolver';
+import { PatientResolver } from './resolvers/PatientResolver';
 import path from 'path'
 
-import { EmployeeResolver } from './resolvers/EmployeeResolver';
-import { AppointmentResolver } from './resolvers/AppointmentResolver';
-import { HolidayResolver } from './resolvers/HolidayResolver';
-import { PharmacyResolver } from './resolvers/PharmacyResolver';
-import { CalendarResolver } from './resolvers/CalendarResolver';
-import { MedicineRequestResolver } from './resolvers/MedicineRequestResolver';
 import dbConfig from './ormconfig'
-import { AppointmentDefinitionResolver } from './resolvers/AppointmentDefinitionResolver';
-import { MedicineResolver } from './resolvers/MedicineResolver';
-import { PriceResolver } from './resolvers/PriceResolver';
-import { TierResolver } from './resolvers/TierResolver';
+import { AuthResolver } from './resolvers/AuthResolver';
+
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
 
+  // await conn.dropDatabase();
   await conn.runMigrations();
 
   const app = express()
@@ -54,9 +47,8 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [
-        UserResolver, CalendarResolver, AppointmentResolver,
-        HolidayResolver, EmployeeResolver, MedicineRequestResolver, PharmacyResolver,
-        AppointmentDefinitionResolver, MedicineResolver, PriceResolver, TierResolver
+        PatientResolver, AuthResolver
+
       ],
       validate: false
     }),

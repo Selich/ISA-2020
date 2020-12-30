@@ -1,19 +1,16 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./User";
+import { Employee } from "./Employee";
+import { Model } from "./Model";
 
 @ObjectType()
 @Entity()
-export class WorkingHours extends BaseEntity{
+export class WorkingHours extends Model{
 
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => User)
-  @ManyToOne(() => User, item => item.workingHours)
+  @Field(() =>  Employee)
+  @ManyToOne(() => Employee, item => item.workingHours)
   @JoinTable()
-  doctor: User;
+  employee:  Employee;
 
   @Field()
   @Column()
@@ -26,12 +23,5 @@ export class WorkingHours extends BaseEntity{
   @Field()
   @Column()
   until: string;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

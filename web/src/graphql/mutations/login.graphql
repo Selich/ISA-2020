@@ -4,11 +4,7 @@ mutation Login($email: String!, $password: String!) {
     password: $password,
   }){
     user{
-      email,
-      address{
-        street
-      }
-
+      email
     }
   }
 }

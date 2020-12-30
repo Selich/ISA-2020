@@ -7,12 +7,10 @@ import { usePharmsQuery } from '../../generated/graphql'
 
 const Pharmacists = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [{ data }] = usePharmsQuery({});
 
   return (
     <>
       <Header onOpen={onOpen} />
-      {data.usersByPharm}
     </>
   )
 

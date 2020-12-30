@@ -1,12 +1,12 @@
 import React from 'react'
-import { Header } from '../../components/sections/Header'
+import { Header } from '../components/sections/Header'
 import {
   useDisclosure,
   Box,
   Grid,
   GridItem,
 } from "@chakra-ui/react"
-import Card from '../../components/ui/Card'
+import Card from '../components/ui/Card'
 
 const Shop = (): JSX.Element => {
   const { isOpen, onOpen, onClose } = useDisclosure()

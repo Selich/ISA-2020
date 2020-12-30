@@ -1,5 +1,0 @@
-query Pharms($pharmId: Float!) {
-  usersByPharm (pharmId: $pharmId, role: "pharm"){
-    ...RegularUser
-  }
-}

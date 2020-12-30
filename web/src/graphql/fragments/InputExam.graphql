@@ -2,7 +2,7 @@ fragment InputExam on Appointment {
     from
     until
     discount
-    doctor {
+    employee {
         firstName
         lastName
     }

@@ -19,12 +19,12 @@ export const UserMenu: any = ({ user }) => {
         <MenuButton as={Button} rightIcon={<Avatar name={user.email.split('@')[0]} src="" size="sm" pd={2} />} >
         </MenuButton>
         <MenuList>
-          <NextLink href="/user/profile">
+          <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
           <Center>
           <Avatar name={user.email.split('@')[0]} src="" size="lg" margin={3} pd={3} />
           </Center>
           </NextLink>
-          <NextLink href="/user/profile">
+          <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
           <Center>
             <Text color='grey' pd={1} fontSize='md' margin={2}>
           {(user.role === "patient") ?

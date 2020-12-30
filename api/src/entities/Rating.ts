@@ -1,22 +1,23 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PatientDetails } from "./PatientDetails";
+import { Employee } from "./Employee";
+import { Model } from "./Model";
+import Patient from './Patient';
 import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Rating {
+export class Rating extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => PatientDetails)
-  patient: PatientDetails;
+  @ManyToOne(() => Patient, { nullable: true, eager: true })
+  patient: Patient;
 
-  @ManyToOne(() => User, {nullable: true})
-  doctor: User;
+  @ManyToOne(() => Employee, {nullable: true})
+  employee: Employee;
 
   @ManyToOne(() => Pharmacy, {nullable: true})
   pharmacy: Pharmacy;
@@ -24,16 +25,4 @@ export class Rating {
   @Field()
   @Column()
   complain: string;
-
-  @Field()
-  @Column()
-  score: number;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
-
 }

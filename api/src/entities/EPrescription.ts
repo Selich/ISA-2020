@@ -1,7 +1,7 @@
 import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql';
-import { PatientDetails } from './PatientDetails';
-import { User } from './User';
+import Patient from './Patient';
+import { Employee } from './Employee';
 
 @ObjectType()
 @Entity()
@@ -11,11 +11,11 @@ export class EPrescrition{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => PatientDetails)
-  patient: PatientDetails;
+  @ManyToOne(() => Patient)
+  patient: Patient;
 
-  @ManyToOne(() => User, { nullable: true })
-  employee: User;
+  @ManyToOne(() => Employee, { nullable: true })
+  employee: Employee;
 
   @Field()
   @Column()

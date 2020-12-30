@@ -1,11 +1,14 @@
-import { Text, Box, Flex, Center, SimpleGrid, Avatar } from "@chakra-ui/react";
-import React from "react";
-import { Header } from "../../components/sections/Header";
-import { useMeQuery } from "../../generated/graphql";
+import React from 'react'
+import { useRouter } from 'next/router'
+import { Text, SimpleGrid, Box, Avatar } from '@chakra-ui/react'
+import { Header } from '../../components/sections/Header'
+import { useMeQuery } from '../../generated/graphql'
 
+export const Profile = () => {
+  const router = useRouter()
+  const { id } = router.query
+  const [{ data, fetching }] = useMeQuery();
 
-export default function Consultations() {
-  const data = {}
   return (
     <>
       <Header />
@@ -36,8 +39,7 @@ export default function Consultations() {
       </Box>
       </SimpleGrid>
     </>
-  );
+  )
 }
 
-
-
+export default Profile

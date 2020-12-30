@@ -1,9 +1,7 @@
-import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { ObjectType, Field, InputType } from "type-graphql";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable, Column } from "typeorm";
+import { Employee } from "./Employee";
 import { Model } from "./Model";
-import { PatientDetails } from "./PatientDetails";
-import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
 
 @ObjectType()
 @Entity()
@@ -12,10 +10,10 @@ export class Holiday extends Model{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => User)
-  @ManyToOne(() => User, item => item.holidays)
+  @Field(() => Employee)
+  @ManyToOne(() => Employee, item => item.holidays)
   @JoinTable()
-  user: User;
+  employee: Employee;
 
   @Field(() => String)
   @Column({ type: Date, nullable: true})
