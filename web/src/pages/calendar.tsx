@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
 import { CreateAppointmentModal } from '../components/sections/CreateAppointmentModal'
+import { ExaminationModal } from '../components/sections/ExaminationModal'
 import { Header } from '../components/sections/Header'
-import { useDisclosure,Link,Box,Flex,Button } from '@chakra-ui/react'
+import { HStack, useDisclosure,Link,Box,Flex,Button } from '@chakra-ui/react'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
@@ -14,11 +15,12 @@ const DnDCalendar = withDragAndDrop(Calendar);
 
 export const MyCalendar: any = () => {
   const modal = useDisclosure()
+  const appModal = useDisclosure()
   const events = [
       {
         start: moment().toDate(),
         end: moment().add(1, "days").toDate(),
-        title: "Some title",
+        title: "Dusan Urosevic: Tegoba duse",
       },
     ]
 
@@ -35,6 +37,26 @@ export const MyCalendar: any = () => {
   const onEventDrop = (data) => {
     console.log(data);
   }
+	const Event =({ event }) => {
+  return (
+    <span>
+      <strong>{event.title}</strong>
+      {event.desc && ':  ' + event.desc}
+    </span>
+  )
+}
+
+const EventAgenda = ({ event }) => {
+  return (
+    <span>
+			<HStack>
+		  <Button size="sm" onClick={appModal.onOpen}>Join</Button>
+      <em style={{ fontSize: 19 }}>{event.title}</em>
+      <p>{event.desc}</p>
+		</HStack>
+    </span>
+  )
+}
 
     return (
 			<>
@@ -59,11 +81,17 @@ export const MyCalendar: any = () => {
       >
         <DnDCalendar
           defaultDate={moment().toDate()}
-          defaultView="month"
           events={events}
+					defaultView={Views.AGENDA}
           localizer={localizer}
           onEventDrop={onEventDrop}
           onEventResize={onEventResize}
+		    	components={{
+						event: Event,
+						agenda: {
+							event: EventAgenda,
+						},
+					}}
           resizable
           style={{ height: "550px" }}
         />
@@ -72,6 +100,11 @@ export const MyCalendar: any = () => {
         onOpen={modal.onOpen}
         isOpen={modal.isOpen}
         onClose={modal.onClose}
+      />
+      <ExaminationModal
+        onOpen={appModal.onOpen}
+        isOpen={appModal.isOpen}
+        onClose={appModal.onClose}
       />
 	</>
     );
