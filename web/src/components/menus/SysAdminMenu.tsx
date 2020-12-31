@@ -12,7 +12,6 @@ export const SysAdminMenu: any = ({ user }) => {
   const btnRef = React.useRef()
   return (
     <Flex align="center">
-      <Basket />
       <Menu>
         <MenuButton as={Button} rightIcon={<Avatar name={user.email.split('@')[0]} src="" size="sm" pd={2} />} >
           {(user.role === "patient") ?
@@ -21,56 +20,27 @@ export const SysAdminMenu: any = ({ user }) => {
           }
         </MenuButton>
         <MenuList>
-          <NextLink href="/:id/appointments">
+          <NextLink href="/admin/medicines">
             <MenuItem minH="48px">
-              <span></span>
+              <span>Medicines</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/:id/complaints">
+          <NextLink href="/admin/employees">
             <MenuItem minH="48px">
-              <span>Complaints</span>
+              <span>Employees</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/:id/history">
+          <NextLink href="/admin/catalogue">
             <MenuItem minH="48px">
-              <span>History</span>
+              <span>Catalogue</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/:id/reservations">
+          <NextLink href="/admin/tiers">
             <MenuItem minH="48px">
-              <span>Reservations</span>
+              <span>Tiers</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/[id]/profile">
-            <MenuItem minH="48px">
-              <span>Profile</span>
-            </MenuItem>
-          </NextLink>
-          <MenuItem ref={btnRef} onClick={onOpen} minH="48px">
-            <span>E-prescription (Modal)</span>
-          </MenuItem>
-          <MenuItem
-            mr={4}
-            onClick={() => {
-              logout();
-            }}
-            isLoading={logoutFetching}
-            variant="link"
-            minH="48px">
-            <span>Logout</span>
-          </MenuItem>
-        </MenuList>
-        <Drawer
-          size="md"
-          isOpen={isOpen}
-          placement="right"
-          onClose={onClose}
-          finalFocusRef={btnRef}
-        >
-          <DrawerOverlay>
-            <EPrescriptionDrawer onClose={onClose} />
-          </DrawerOverlay>
-        </Drawer>
+				</MenuList>
       </Menu>
 
     </Flex>

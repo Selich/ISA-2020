@@ -1,16 +1,32 @@
-import { Text, Box, Flex, Center, SimpleGrid, Avatar } from "@chakra-ui/react";
 import React from "react";
+import { Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { HistoryModal } from "../../components/sections/HistoryModal";
+import { SubscriptionModal } from "../../components/sections/SubscriptionModal";
+import { AppointmentsModal } from "../../components/sections/AppointmentsModal";
 import { Header } from "../../components/sections/Header";
 import { useMeQuery } from "../../generated/graphql";
 
 
 
 export default function Profile() {
-  const [{ data, fetching }] = useMeQuery();
+  let [{ data, fetching }] = useMeQuery();
+  const subModal = useDisclosure()
+  const histModal = useDisclosure()
+  const appModal = useDisclosure()
+	data = {
+		me: {
+			email: "selich.work@gmail.com",
+			address: {
+				street: "Poenkareova",
+				city: "Novi Sad",
+				country: "Serbia",
+			}
+		}
+	}
   return (
     <>
       <Header />
-      <SimpleGrid minChildWidth="410px">
       <Box
         m="4"
         p="8"
@@ -24,6 +40,7 @@ export default function Profile() {
         textAlign="center"
         h="400px"
       >
+      <SimpleGrid columns={2}>
         <Box align="left">
           <Avatar name={data.me.email.split('@')[0]} src="" size="2xl" margin={4} pd={3} />
           <Text>{data.me.firstName} {data.me.lastName}</Text>
@@ -34,8 +51,28 @@ export default function Profile() {
             + data.me.address.country}
           </Text>
         </Box>
+        <Box align="right">
+					<Box> <Button w={180} onClick={subModal.onOpen}>Subscription</Button> </Box>
+					<Box> <Button w={180} onClick={histModal.onOpen}>History</Button> </Box>
+					<Box> <Button w={180} onClick={appModal.onOpen}>Appointments</Button> </Box>
+        </Box>
+			</SimpleGrid>
       </Box>
-      </SimpleGrid>
+      <HistoryModal
+        onOpen={histModal.onOpen}
+        isOpen={histModal.isOpen}
+        onClose={histModal.onClose}
+      />
+      <AppointmentsModal
+        onOpen={appModal.onOpen}
+        isOpen={appModal.isOpen}
+        onClose={appModal.onClose}
+      />
+      <SubscriptionModal
+        onOpen={subModal.onOpen}
+        isOpen={subModal.isOpen}
+        onClose={subModal.onClose}
+      />
     </>
   );
 }

@@ -1,21 +1,48 @@
-import { Header } from '../../components/sections/Header'
-import {
-  useDisclosure,
-} from "@chakra-ui/react"
+import { Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
+import React from "react";
+import { useRouter } from "next/router";
+import { Header } from "../../components/sections/Header";
+import { PriceModal } from "../../components/sections/PriceModal";
+import DataTable from 'react-data-table-component'
 
-const Profile = (): JSX.Element => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  // ! GET USERS DATA
-  // const [{ data }] = usePharmsQuery({});
+
+
+const data = [
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
+]
+const columns = [
+	{name: "Pharmacy", selector:"pharmacy"},
+	{name: "Type", selector:"type"},
+	{name: "Price", selector:"price", sortable:true},
+	{cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
+]
+
+export default function Catalogue() {
+  const modal = useDisclosure()
+  const btnRef = React.useRef()
+  const router = useRouter();
 
   return (
     <>
-      <Header onOpen={onOpen} />
+    <Header/>
+		<Box m={10} mx={20}>
+		<Button onClick={modal.onOpen} colorScheme="teal">Create New Price</Button>
+	  <DataTable
+      data={data}
+      columns={columns}
+      selectableRows
+    />
+		</Box>
+      <PriceModal
+        onOpen={modal.onOpen}
+        isOpen={modal.isOpen}
+        onClose={modal.onClose}
+      />
     </>
-  )
-
+  );
 }
-
-export default Profile;
-
-

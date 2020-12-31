@@ -9,7 +9,7 @@
     "dev": "concurrently 'tsc -w' 'nodemon -q -r dotenv/config dist/index.js'",
     "watch": "tsc -w",
     "build": "yarn test && tsc",
-    "test": "mocha -r ts-node/register test/**/*.ts",
+    "test": "jest --watch",
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
     "create:migration": "typeorm migration:create -n Init",
     "generate:migration": "typeorm migration:generate -n Generate"
@@ -32,6 +32,8 @@
     "@types/uuid": "^8.3.0",
     "chai": "^4.2.0",
     "gen-env-types": "^1.0.4",
+    "graphql-tester": "^0.0.5",
+    "jest": "^26.6.3",
     "mocha": "^8.2.1",
     "nodemon": "^2.0.6",
     "supertest": "^6.0.1",

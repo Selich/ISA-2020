@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { Header } from "../../components/sections/Header";
 import { MedicineModal } from "../../components/sections/MedicineModal";
+import DataTable from 'react-data-table-component'
 
 
 interface IFormInputs {
@@ -12,12 +13,19 @@ interface IFormInputs {
 }
 
 
-const medicines = [
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200}
+const data = [
+	{name: "lek1", type:"tip1"},
+	{name: "lek1", type:"tip1"},
+	{name: "lek1", type:"tip1"},
+	{name: "lek1", type:"tip1"},
+	{name: "lek1", type:"tip1"},
 
+]
+
+const columns = [
+	{name: "Name", selector:"name"},
+	{name: "Type", selector:"type"},
+	{cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
 ]
 
 export default function Medicines() {
@@ -32,7 +40,7 @@ export default function Medicines() {
     setSearchTerm(event.target.value);
   };
  React.useEffect(() => {
-    const results = medicines.filter(item =>
+    const results = data.filter(item =>
       item.name.toLowerCase().includes(searchTerm)
     );
     setSearchResults(results);
@@ -40,62 +48,12 @@ export default function Medicines() {
   return (
     <>
     <Header/>
-			<Center>
-		<Flex  m={10} minW="90%">
-				<Box>
-				<FormLabel >Search:</FormLabel>
-				<Input
-					mt={0}
-					type="text"
-					placeholder="Search"
-					value={searchTerm}
-					onChange={handleChange}
-				/>
-			</Box>
-				<HStack>
-				<FormLabel >Activated?</FormLabel>
-				<Switch />
-			</HStack>
-				<Box>
-				<FormLabel >Type:</FormLabel>
-				<Select placeholder="All">
-					{[... new Set(medicines.map(item => item.type))].map(item => (
-						<option value={item}>{item}</option>
-
-					))}
-				</Select>
-			</Box>
-			</Flex>
-		  </Center>
-			<Center>
-			<Table variant="simple" maxW="80%">
-				<Thead>
-					<Tr>
-						<Th>Medicine</Th>
-						<Th>Type</Th>
-						<Th isNumeric>Price</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-				{medicines.map(item => (
-					<Tr onClick={() => alert("test")}>
-						<Td>{item.name}</Td>
-						<Td>{item.type}</Td>
-						<Td isNumeric>{item.price}</Td>
-						<Button m={3} size="sm" colorScheme="red"
-								onClick={() => medicines.push(item)}
-						>X</Button>
-					</Tr>
-
-				))}
-				</Tbody>
-			</Table>
-		</Center>
-      <MedicineModal
-        onOpen={medicineModal.onOpen}
-        isOpen={medicineModal.isOpen}
-        onClose={medicineModal.onClose}
-      />
+		<Box m={10} mx={10}>
+	  <DataTable
+      data={data}
+      columns={columns}
+			selectableRows/>
+		</Box>
     </>
   );
 }
