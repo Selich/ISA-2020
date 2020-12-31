@@ -1,6 +1,6 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import LoginForm from "./LoginForm";
+import LoginForm from "./forms/LoginForm";
 import { FaFacebook } from 'react-icons/fa'
 
 

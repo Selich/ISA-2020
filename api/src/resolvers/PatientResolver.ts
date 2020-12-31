@@ -20,7 +20,7 @@ export class PatientResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("inputs") inputs: RegisterPatientDTO,
-    @Ctx() { req }: MyContext
+    @Ctx() { req, mailer }: MyContext
   ) {
     let { email, password, confirmPassword, address } = inputs
     let { street, city, country } = address
@@ -31,8 +31,6 @@ export class PatientResolver {
     inputs.password = await argon2.hash(inputs.password);
     inputs.role = 'patient'
 
-    console.log(user);
-
 
     user = await Patient.save(new Patient({ ...inputs }))
     let temp = await Address.findOne({...address})
@@ -41,10 +39,23 @@ export class PatientResolver {
     else
       inputs.address = temp
 
-    user = await Patient.save(new Patient({ ...inputs }))
+    user = await Patient.save(new Patient({ ...inputs, isEnables:false }))
 
+		let info = await mailer.send({
+			from: '"ISA-Service" <foo@someaddrs.com>',
+
+
+		})
     return { user }
   }
+  @Mutation(() => UserResponse)
+  async confirmRegistration(
+    @Arg("inputs") inputs: UserDTO,
+    @Ctx() { req }: MyContext
+  ){
+
+	}
+	
 
   @Mutation(() => UserResponse)
   async login(

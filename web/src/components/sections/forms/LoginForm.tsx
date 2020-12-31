@@ -3,13 +3,13 @@ import { Box, FormControl, FormLabel, Button, Flex, Select, Stack } from '@chakr
 // import { yupResolver } from '@hookform/resolvers/yup';
 import React from "react";
 import { useState } from "react";
-import { FormInput } from './../../components/sections/FormInput';
-import { FormInputPassword } from './../../components/sections/FormInputPassword';
-import { Wrapper }  from './../../components/ui/Wrapper';
+import { FormInput } from './../../../components/sections/FormInput';
+import { FormInputPassword } from './../../../components/sections/FormInputPassword';
+import { Wrapper }  from './../../../components/ui/Wrapper';
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
-import { FieldError, useLoginMutation } from '../../generated/graphql';
-import { toErrorMap } from '../../utils/errorMap';
+import { FieldError, useLoginMutation } from '../../../generated/graphql';
+import { toErrorMap } from '../../../utils/errorMap';
 
 
 export default function LoginForm({onClose}) {

@@ -22,6 +22,11 @@ export const LeftMenu: any = () => {
             Pharmicies
         </Button>
         </NextLink>
+				<NextLink href="/admin/medicines">
+          <Button as={Link} mr={3}>
+            Medicines
+        </Button>
+        </NextLink>
         </>
   );
 };

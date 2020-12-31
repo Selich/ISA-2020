@@ -2,10 +2,10 @@ import { Box, Button, FormControl, FormLabel, Grid, Select } from '@chakra-ui/re
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react'
-import { FieldError, useRegisterMutation } from '../../generated/graphql';
-import { FormInput } from '../sections/FormInput';
-import { FormInputPassword } from '../sections/FormInputPassword';
-import { Wrapper } from '../ui/Wrapper';
+import { FieldError, useRegisterMutation } from '../../../generated/graphql';
+import { FormInput } from '../../sections/FormInput';
+import { FormInputPassword } from '../../sections/FormInputPassword';
+import { Wrapper } from '../../ui/Wrapper';
 
 const toErrorMap = (errors: FieldError[]) => {
   const errorMap: Record<string, string> = {};

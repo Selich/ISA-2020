@@ -12,7 +12,17 @@ import { PatientResolver } from './resolvers/PatientResolver';
 import path from 'path'
 
 import dbConfig from './ormconfig'
+import nodemailer from 'nodemailer'
+import mg from 'nodemailer-mailgun-transport'
 import { AuthResolver } from './resolvers/AuthResolver';
+
+
+const mailerOptions = {
+		host: "smtp:ethereal.email",
+		port: 587,
+		secure: false,
+}
+
 
 
 const main = async () => {
@@ -24,6 +34,13 @@ const main = async () => {
   const app = express()
   const RedisStore = connectRedis(session)
   const redisClient = redis.createClient()
+
+
+	let testAccount = await nodemailer.createTestAccount();
+	let mailer = nodemailer.createTransport({
+		...mailerOptions,
+		auth: { user: testAccount.user, pass: testAccount.pass }
+	})
 
   app.use( cors({ origin: 'http://localhost:3000' , credentials: true }))
 
@@ -53,7 +70,7 @@ const main = async () => {
       validate: false
     }),
     context: ({ req, res}) => ({
-      req , res, redis
+      req , res, redis, mailer
     })
   });
 
