@@ -16,7 +16,7 @@ export const Header: any = () => {
 	data = {
 		me: {
 			email: "selich.work@",
-			role: "sys-admin"
+			role: "patient"
 		}
 	}
   let body = null;
