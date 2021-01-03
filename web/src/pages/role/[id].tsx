@@ -11,7 +11,6 @@ export const Profile = () => {
 
   return (
     <>
-      <Header />
       <SimpleGrid minChildWidth="410px">
       <Box
         m="4"

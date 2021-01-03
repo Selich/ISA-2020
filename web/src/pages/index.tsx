@@ -13,7 +13,6 @@ const Index = ({
 }): JSX.Element => {
   return (
     <>
-    <Header/>
     {/* @ts-ignore */}
       <HomeLayout/>
     </>

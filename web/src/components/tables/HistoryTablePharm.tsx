@@ -1,6 +1,7 @@
-import { Avatar, Text, Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
+import { Text, Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure, Avatar } from "@chakra-ui/react";
 import React from "react";
 import DataTable from "react-data-table-component";
+import AppointmentDetailsTable from "./AppointmentDetailsTable";
 
 
 const data = [
@@ -16,14 +17,13 @@ const data = [
 const columns = [
     { name: "Doctor", selector: "doctor.lastName" },
     { name: "Pharmacy", selector: "pharmacy" },
-    { name: "Type", selector: "type" },
     { name: "Price", selector: "price", sortable: true },
     { name: "Date", selector: "from", sortable: true },
     // {cell: row => <div><Button size="sm" colorScheme='teal'>Subscribe</Button></div> },
 ]
 
 
-export default function AppointmentTable() {
+export default function HistoryTablePharm() {
     return (
         <>
             <Box>
@@ -50,9 +50,12 @@ export const ExpandedComponent = ({ data }) => {
                     <Text>Rating: {data.doctor.averageRating}</Text>
                     <Text>Date: {data.from}</Text>
                 </Box>
+                <Box m={6}>
+                    <AppointmentDetailsTable/>
+                </Box>
             </SimpleGrid>
-            <Button disabled={true}>Rate</Button>
-            <Button disabled={true}>Report</Button>
+            <Button>Rate</Button>
+            <Button>Report</Button>
         </>
     )
 

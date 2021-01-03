@@ -31,6 +31,7 @@ export default function LoginForm({onClose}) {
               let user = response.data.login.user
             // @ts-ignore
               // router.push(`/${user.role}/${user.id}`);
+              
               onClose()
               router.reload()
             }

@@ -1,1 +1,0 @@
-// daje i cenu

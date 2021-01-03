@@ -1,8 +1,6 @@
 import React from 'react'
-import { MdMap } from "react-icons/md"
-import dynamic from 'next/dynamic'
+import { MdCancel  } from "react-icons/md"
 import {
-    SimpleGrid, Text, Avatar,
     Box,
     Button,
     HStack,
@@ -14,8 +12,6 @@ import faker from 'faker'
 import DataTable from 'react-data-table-component'
 import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
 import { MapViewModal } from '../sections/modal/MapViewModal'
-import { RateModal } from '../sections/modal/RateModal'
-import { SubscribeModal } from '../sections/modal/SubscribeModal'
 
 const createUser = () => ({
     id: faker.random.uuid(),
@@ -43,10 +39,10 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 const PharmaciesTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
+    const mapView = useDisclosure()
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const filteredItems = fakeUsers.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
-
-
+    const selectedItemModal = useDisclosure()
     const columns = [
         {
             name: 'Name',
@@ -54,9 +50,24 @@ const PharmaciesTable = (): JSX.Element => {
             sortable: true,
         },
         {
+            name: 'Street',
+            selector: 'street',
+            sortable: true,
+        },
+        {
+            name: 'City',
+            selector: 'city',
+            sortable: true,
+        },
+        {
             name: 'Rating',
             selector: 'rating',
             sortable: true,
+        },
+        {
+            name: '',
+            button: true,
+            cell: (val) => <Button onClick={mapView.onOpen} size="sm" colorScheme="red" color="white"><Icon size="md" as={MdCancel} />Unsubscribe</Button>
         },
     ];
 
@@ -74,7 +85,7 @@ const PharmaciesTable = (): JSX.Element => {
         <>
             {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
             <DataTable
-                title="Pharmacy List"
+                title="Subscription List"
                 columns={columns}
                 data={filteredItems}
                 pagination
@@ -82,61 +93,19 @@ const PharmaciesTable = (): JSX.Element => {
                 subHeader
                 subHeaderComponent={subHeaderComponentMemo}
                 persistTableHead
-                expandableRows
-                expandableRowsComponent={<ExpandedComponent data={this} />}
             />
-        </>
-    )
-
-}
-export const ExpandedComponent = ({ data }) => {
-
-    const subscribeModal = useDisclosure()
-    const rateModal = useDisclosure()
-    const mapModal = useDisclosure()
-    return (
-        <>
-            <SimpleGrid columns={2}>
-                <Box m={6}>
-                    <Avatar margin={4} pd={3} />
-                    <Text>{data.name}</Text>
-                    <Text>{data.type}</Text>
-                    <Text>Rating: {data.rating}</Text>
-                </Box>
-                <Box m={6}>
-                    <Text>Prescription Required? {(data.isPrescriptionRequired) ? "T":"X"}</Text>
-                    <Text>Producer: {data.producer}</Text>
-                    <Text>Information:</Text>
-                    <Text>{data.info}</Text>
-                    <HStack>
-                        <Button size="sm" onClick={(val) => mapModal.onOpen()} colorScheme='teal' >Map</ Button>
-                        <Button size="sm" onClick={(val) => rateModal.onOpen()} colorScheme='teal' >Rate</ Button>
-                        <Button size="sm" onClick={(val) => subscribeModal.onOpen()} colorScheme='teal' >Subscribe</ Button>
-                    </HStack>
-                </Box>
-            </SimpleGrid>
-            <Button disabled={true}>Rate</Button>
+            <PharmacyProfileModal
+                onOpen={selectedItemModal.onOpen}
+                isOpen={selectedItemModal.isOpen}
+                onClose={selectedItemModal.onClose}
+            />
             <MapViewModal
-                data={data}
-                onOpen={mapModal.onOpen}
-                isOpen={mapModal.isOpen}
-                onClose={mapModal.onClose}
-            />
-            <RateModal
-                onOpen={rateModal.onOpen}
-                isOpen={rateModal.isOpen}
-                data={data}
-                onClose={rateModal.onClose}
-            />
-            <SubscribeModal
-                data={data}
-                onOpen={subscribeModal.onOpen}
-                isOpen={subscribeModal.isOpen}
-                onClose={subscribeModal.onClose}
+                onOpen={mapView.onOpen}
+                isOpen={mapView.isOpen}
+                onClose={mapView.onClose}
             />
         </>
     )
 
 }
-
 export default PharmaciesTable;

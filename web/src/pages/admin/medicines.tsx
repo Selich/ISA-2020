@@ -72,7 +72,6 @@ const Medicines = (): JSX.Element => {
     }, [filterText, resetPaginationToggle]);
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
                 <Button colorScheme="teal">Create New</Button>
                 <DataTable

@@ -11,10 +11,9 @@ const Appointments = (): JSX.Element => {
 
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
-                <Button onClick={createExamModal.onOpen} colorScheme="teal">Schedule Exam</Button>
-                <Button onClick={createConsultModal.onOpen} colorScheme="teal">Schedule Consultations</Button>
+                <Button m={4} onClick={createExamModal.onOpen} colorScheme="teal">Schedule Exam</Button>
+                <Button m={4} onClick={createConsultModal.onOpen} colorScheme="teal">Schedule Consultations</Button>
                 <AppointmentTable/>
             </Box>
         </>

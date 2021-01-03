@@ -1,30 +1,15 @@
 import React from "react";
-import { Formik, Form } from "formik";
 import {
-  FormControl,
-  FormLabel,
-  Input,
-  FormErrorMessage,
-  Box,
   Button,
-  Avatar,
-  Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerOverlay,
   Icon,
-  Stack,
   useDisclosure,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Tab,
   Table,
-  TableCaption,
   TabList,
   TabPanel,
   TabPanels,
@@ -39,15 +24,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-import { useLogoutMutation } from "../../generated/graphql";
-
 const EPrescriptionDrawer: any = ({ onClose }) => {
   const { isOpen, onOpen } = useDisclosure()
 

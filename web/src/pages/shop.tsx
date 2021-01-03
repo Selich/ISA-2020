@@ -8,7 +8,6 @@ const EPrescriptions = (): JSX.Element => {
 
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
                 <MedicinesTable/>
             </Box>

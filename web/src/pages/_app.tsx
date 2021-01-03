@@ -1,9 +1,10 @@
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react'
+import { Header } from '../components/sections/Header'
 import { Provider, createClient, dedupExchange, fetchExchange } from "urql";
 import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
 import { Provider as AuthProvider } from 'next-auth/client'
 import { useRouter } from "next/router";
-
+import { addItem, editItem, removeItem } from '../utils/cart'
 
 
 
@@ -79,11 +80,13 @@ const client = createClient({
 import theme from '../theme'
 import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
 import Index from './index';
+import { useEffect, useState } from 'react';
 
 
 function MyApp({ Component, pageProps }) {
   const [{ data, fetching }] = useMeQuery();
   const router = useRouter();
+
   let role = ""
   let allowed = true;
   if(data){ role = data.me.role }
@@ -100,6 +103,7 @@ function MyApp({ Component, pageProps }) {
           useSystemColorMode: true,
         }}
       >
+        <Header/>
         <ComponentToRender {...pageProps} />
       </ColorModeProvider>
     </ChakraProvider>

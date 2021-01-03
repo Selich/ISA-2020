@@ -41,11 +41,6 @@ export const UserMenu: any = ({ user }) => {
               <span>Appointments</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/calendar">
-            <MenuItem minH="48px">
-              <span>Calendar</span>
-            </MenuItem>
-          </NextLink>
           <NextLink href="/user/consultations">
             <MenuItem minH="48px">
               <span>Consultations</span>
@@ -64,6 +59,11 @@ export const UserMenu: any = ({ user }) => {
           <NextLink href="/user/reservations">
             <MenuItem minH="48px">
               <span>Reservations</span>
+            </MenuItem>
+          </NextLink>
+          <NextLink href="/user/subscriptions">
+            <MenuItem minH="48px">
+              <span>Subscriptions</span>
             </MenuItem>
           </NextLink>
           <NextLink href="/user/eprescriptions">

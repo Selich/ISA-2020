@@ -28,7 +28,6 @@ export default function Profile() {
 	}
   return (
     <>
-      <Header />
       <Box
         m="4"
         p="8"

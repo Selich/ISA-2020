@@ -1,8 +1,7 @@
 import React from 'react'
-import { Header } from '../../components/sections/Header'
 import {
+    SimpleGrid,Avatar,Text,Box,
     Slider, SliderTrack, SliderFilledTrack, SliderThumb, Select,
-    Box,
     Button,
     HStack,
     Input,
@@ -10,14 +9,23 @@ import {
     FormLabel,
 } from "@chakra-ui/react"
 import faker from 'faker'
+// import { FaCancel } from 'react-icons'
 import DataTable from 'react-data-table-component'
 import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
 import { Basket } from '../layouts/Basket'
+import { addItem } from '../../utils/cart'
+import { PharmacyBuyModal } from '../sections/modal/PharmacyBuyModal'
 
 const createUser = () => ({
     id: faker.random.uuid(),
     name: faker.company.companyName(),
-    rating: faker.random.number(10)
+    type: faker.company.companyName(),
+    producer: faker.company.companyName(),
+    rating: faker.random.number(10),
+    isPrescriptionRequired: faker.random.boolean(),
+    points: faker.random.number(10),
+    form: faker.random.alphaNumeric(),
+    info: faker.lorem.paragraph()
 });
 
 const createUsers = (numUsers = 5) =>
@@ -50,25 +58,6 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
     </>
 );
 
-const columns = [
-    {
-        name: 'Name',
-        selector: 'name',
-        sortable: true,
-    },
-    {
-        name: 'Rating',
-        selector: 'rating',
-        sortable: true,
-    },
-    {
-        name: '',
-        button: true,
-        cell: () => <Button onClick={(val) => {
-
-
-        }
-        } colorScheme = 'teal' > Buy</ Button>, }, ];
 
 const openModal = (item, onOpen) => {
     onOpen()
@@ -79,6 +68,18 @@ const PharmaciesTable = (): JSX.Element => {
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const filteredItems = fakeUsers.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
     const selectedItemModal = useDisclosure()
+    const buyItemModal = useDisclosure()
+    const columns = [
+        { name: 'Name', selector: 'name', sortable: true, },
+        { name: 'Type', selector: 'type', sortable: true, },
+        { name: 'Form', selector: 'form', sortable: true, },
+        { name: 'Rating', selector: 'rating', sortable: true, },
+        {
+            name: '',
+            button: true,
+            cell: () => <Button size="sm" onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>,
+        }
+    ];
 
     const subHeaderComponentMemo = React.useMemo(() => {
         const handleClear = () => {
@@ -101,9 +102,14 @@ const PharmaciesTable = (): JSX.Element => {
                 subHeader
                 expandableRows
                 subHeaderComponent={subHeaderComponentMemo}
-                selectableRows
                 persistTableHead
-                expandableRowsComponent={(val) => <MedicineDetails item={val} />}
+                    expandableRowsComponent={<ExpandedComponent data={this} />}
+            />
+            <PharmacyBuyModal
+        onOpen={buyItemModal.onOpen}
+        isOpen={buyItemModal.isOpen}
+        onClose={buyItemModal.onClose}
+            
             />
         </>
     )
@@ -111,11 +117,29 @@ const PharmaciesTable = (): JSX.Element => {
 }
 export default PharmaciesTable;
 
-const MedicineDetails = ({ item }) => {
+export const ExpandedComponent = ({ data }) => {
 
     return (
-        <div>{item}</div>
-
+        <>
+            <SimpleGrid columns={2}>
+                <Box m={6}>
+                    <Avatar margin={4} pd={3} />
+                    <Text>{data.name}</Text>
+                    <Text>{data.type}</Text>
+                    <Text>Form: {data.form}</Text>
+                    <Text>Rating: {data.rating}</Text>
+                </Box>
+                <Box m={6}>
+                    <Text>Prescription Required? {(data.isPrescriptionRequired) ? "T":"X"}</Text>
+                    <Text>Producer: {data.producer}</Text>
+                    <Text>Information:</Text>
+                    <Text>{data.info}</Text>
+                    <Text>Points Earned: {data.points}</Text>
+                    <Button size="sm" onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>
+                </Box>
+            </SimpleGrid>
+            <Button disabled={true}>Rate</Button>
+        </>
     )
 
 }

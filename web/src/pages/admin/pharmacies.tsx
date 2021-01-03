@@ -11,7 +11,6 @@ const Pharmacies = (): JSX.Element => {
 
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
                 <Button onClick={createModal.onOpen} colorScheme="teal">Create New Tier</Button>
                 <PharmaciesTable/>

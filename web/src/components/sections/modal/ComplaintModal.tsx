@@ -1,6 +1,5 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import PrescriptionTable from "../../layouts/pharmacy/PrescriptionTable";
 import ComplaintForm from "../forms/ComplaintForm";
 import HolidayForm from "../forms/HolidayForm";
 

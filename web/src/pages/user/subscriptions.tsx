@@ -1,20 +1,18 @@
 import React from 'react'
 import { Box, Button, useDisclosure, } from "@chakra-ui/react"
-import PharmaciesTable from '../components/tables/PharmaciesTable'
+import SubscriptionTable from '../../components/tables/SubscriptionTable';
 
 
-
-
-const Pharmacies = (): JSX.Element => {
+const Subscriptions = (): JSX.Element => {
 
     return (
         <>
             <Box m={10} mx={20}>
-                <PharmaciesTable/>
+                <SubscriptionTable/>
             </Box>
         </>
     )
 
 }
 
-export default Pharmacies;
+export default Subscriptions;

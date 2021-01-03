@@ -29,7 +29,6 @@ export default function Holidays() {
 
   return (
     <>
-    <Header/>
 		<Box m={10} mx={20}>
 		<Button onClick={modal.onOpen} colorScheme="teal">Create New Price</Button>
 	  <DataTable

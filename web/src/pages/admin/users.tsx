@@ -8,8 +8,8 @@ import {
 } from "@chakra-ui/react"
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
-import { ProfileModal } from '../components/sections/modal/ProfileModal'
-import { Header } from '../components/sections/Header'
+import { ProfileModal } from '../../components/sections/modal/ProfileModal'
+import { Header } from '../../components/sections/Header'
 
 const createUser = () => ({
     id: faker.random.uuid(),
@@ -70,7 +70,6 @@ const Users = (): JSX.Element => {
     }, [filterText, resetPaginationToggle]);
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
                 {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
                 <DataTable

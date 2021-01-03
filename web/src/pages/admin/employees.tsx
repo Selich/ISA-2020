@@ -74,7 +74,6 @@ const Medicines = (): JSX.Element => {
     }, [filterText, resetPaginationToggle]);
     return (
         <>
-            <Header />
             <Box m={10} mx={20}>
 				<Button onClick={createEmployeeModal.onOpen} size="sm" mx={3} colorScheme="teal">Create New Employee</Button>
 				<Button onClick={createAdminModal.onOpen} as={Link} size="sm" mx={3} colorScheme="teal">Create New Admin</Button>
