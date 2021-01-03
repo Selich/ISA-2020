@@ -1,6 +1,6 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import PriceForm from "./forms/PriceForm";
+import PriceForm from "../forms/PriceForm";
 
 
 export const PriceModal: any = ({ onOpen, isOpen, onClose }) => {

@@ -1,15 +1,13 @@
-import { useDisclosure, Box, Avatar, SimpleGrid, Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import TierForm from "./forms/TierForm";
+import { Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useMeQuery } from "../../../generated/graphql";
 
 
-export const PharmacyProfileModal: any = ({ onOpen, isOpen, onClose }) => {
-  const btnRef = React.useRef()
-  const subModal = useDisclosure()
-  const histModal = useDisclosure()
-  const appModal = useDisclosure()
-	let data = {
+
+export default function ProfileForm({onClose}) {
+  let [{ data, fetching }] = useMeQuery();
+	data = {
 		me: {
 			email: "selich.work@gmail.com",
 			address: {
@@ -20,12 +18,7 @@ export const PharmacyProfileModal: any = ({ onOpen, isOpen, onClose }) => {
 		}
 	}
   return (
-    <Modal  isOpen={isOpen} onClose={onClose} size="2xl">
-      <ModalOverlay />
-      <ModalContent maxW="56rem" maxH="106rem">
-        <ModalHeader><Text fontSize="3xl">Create Tier: </Text> </ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
+    <>
       <Box
         m="4"
         p="8"
@@ -50,15 +43,10 @@ export const PharmacyProfileModal: any = ({ onOpen, isOpen, onClose }) => {
             + data.me.address.country}
           </Text>
         </Box>
-        <Box align="right">
-        </Box>
-			</SimpleGrid>
+		</SimpleGrid>
       </Box>
-        </ModalBody>
-        <ModalFooter >
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    </>
   );
+}
 
-};
+

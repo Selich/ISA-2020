@@ -1,23 +1,22 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import LoginForm from "./forms/LoginForm";
 import { FaFacebook } from 'react-icons/fa'
+import CreateEmployeeForm from "../forms/CreateEmployeeForm";
 
 
-export const LoginModal: any = ({ onOpen, isOpen, onClose }) => {
-  const btnRef = React.useRef()
+export const CreateEmployeeModal: any = ({ onOpen, isOpen, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader><Text fontSize="3xl"> Login User: </Text> </ModalHeader>
+        <ModalHeader><Text fontSize="3xl"> Register User: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm onClose={onClose}/>
+          <CreateEmployeeForm onClose={onClose}/>
         </ModalBody>
         <ModalFooter >
           <Text color="gray.500" isTruncated>
-          Or login using:
+          Or register using:
           </Text>
           <HStack>
             <Button size="sm" m={7} colorScheme="facebook" leftIcon={<FaFacebook />}>

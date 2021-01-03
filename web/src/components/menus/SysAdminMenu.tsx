@@ -1,13 +1,14 @@
 import React from "react";
 import NextLink from "next/link";
-import { Flex, Button, Heading, Menu, MenuButton, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr, MenuItem, MenuList } from "@chakra-ui/react";
+import { Flex, Button, Heading, Menu, MenuButton, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr, MenuItem, MenuList, Link } from "@chakra-ui/react";
 import { Basket } from "../layouts/Basket";
 import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
 import { useLogoutMutation } from "../../generated/graphql";
+import { CreateEmployeeModal } from "../sections/modal/CreateEmployeeModal";
 
 
 export const SysAdminMenu: any = ({ user }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const createEmployee = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const btnRef = React.useRef()
   return (
@@ -20,6 +21,11 @@ export const SysAdminMenu: any = ({ user }) => {
           }
         </MenuButton>
         <MenuList>
+          <NextLink href="/admin/pharmacies">
+            <MenuItem minH="48px">
+              <span>Pharmacies</span>
+            </MenuItem>
+          </NextLink>
           <NextLink href="/admin/medicines">
             <MenuItem minH="48px">
               <span>Medicines</span>
@@ -28,11 +34,6 @@ export const SysAdminMenu: any = ({ user }) => {
           <NextLink href="/admin/employees">
             <MenuItem minH="48px">
               <span>Employees</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/admin/catalogue">
-            <MenuItem minH="48px">
-              <span>Catalogue</span>
             </MenuItem>
           </NextLink>
           <NextLink href="/admin/tiers">

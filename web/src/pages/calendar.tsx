@@ -3,8 +3,8 @@ import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { CreateAppointmentModal } from '../components/sections/CreateAppointmentModal'
-import { ExaminationModal } from '../components/sections/ExaminationModal'
+import { CreateAppointmentModal } from '../components/sections/modal/CreateAppointmentModal'
+import { ExaminationModal } from '../components/sections/modal/ExaminationModal'
 import { Header } from '../components/sections/Header'
 import { HStack, useDisclosure,Link,Box,Flex,Button } from '@chakra-ui/react'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";

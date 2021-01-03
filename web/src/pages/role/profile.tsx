@@ -1,11 +1,12 @@
 import React from "react";
 import { Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { HistoryModal } from "../../components/sections/HistoryModal";
-import { SubscriptionModal } from "../../components/sections/SubscriptionModal";
-import { AppointmentsModal } from "../../components/sections/AppointmentsModal";
+import { HistoryModal } from "../../components/sections/modal/HistoryModal";
+import { SubscriptionModal } from "../../components/sections/modal/SubscriptionModal";
+import { AppointmentsModal } from "../../components/sections/modal/AppointmentsModal";
 import { Header } from "../../components/sections/Header";
 import { useMeQuery } from "../../generated/graphql";
+import { ScheduleExamModal } from "../../components/sections/modal/ScheduleExamModal";
 
 
 
@@ -14,6 +15,7 @@ export default function Profile() {
   const subModal = useDisclosure()
   const histModal = useDisclosure()
   const appModal = useDisclosure()
+  const scheduleModal = useDisclosure()
 	data = {
 		me: {
 			email: "selich.work@gmail.com",
@@ -55,6 +57,7 @@ export default function Profile() {
 					<Box> <Button w={180} onClick={subModal.onOpen}>Subscription</Button> </Box>
 					<Box> <Button w={180} onClick={histModal.onOpen}>History</Button> </Box>
 					<Box> <Button w={180} onClick={appModal.onOpen}>Appointments</Button> </Box>
+					<Box> <Button w={180} onClick={scheduleModal.onOpen}>Schedule Appointment</Button> </Box>
         </Box>
 			</SimpleGrid>
       </Box>
@@ -72,6 +75,11 @@ export default function Profile() {
         onOpen={subModal.onOpen}
         isOpen={subModal.isOpen}
         onClose={subModal.onClose}
+      />
+      <ScheduleExamModal
+        onOpen={scheduleModal.onOpen}
+        isOpen={scheduleModal.isOpen}
+        onClose={scheduleModal.onClose}
       />
     </>
   );

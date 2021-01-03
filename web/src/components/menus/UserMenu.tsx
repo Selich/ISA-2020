@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 
 export const UserMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const penaltiesModal = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const router = useRouter();
   const btnRef = React.useRef()
@@ -65,8 +66,16 @@ export const UserMenu: any = ({ user }) => {
               <span>Reservations</span>
             </MenuItem>
           </NextLink>
+          <NextLink href="/user/eprescriptions">
+            <MenuItem minH="48px">
+              <span>E-prescriptions</span>
+            </MenuItem>
+          </NextLink>
           <MenuItem ref={btnRef} onClick={onOpen} minH="48px">
             <span>E-prescription (Modal)</span>
+          </MenuItem>
+          <MenuItem ref={btnRef} onClick={penaltiesModal.onOpen} minH="48px">
+            <span>Penalties</span>
           </MenuItem>
           <hr/>
           <MenuItem
@@ -93,7 +102,6 @@ export const UserMenu: any = ({ user }) => {
           </DrawerOverlay>
         </Drawer>
       </Menu>
-
     </Flex>
   );
 };

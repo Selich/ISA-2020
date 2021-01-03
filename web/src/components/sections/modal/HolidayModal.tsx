@@ -1,8 +1,9 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
+import HolidayForm from "../forms/HolidayForm";
 
 
-export const CreateAppointmentModal: any = ({ onOpen, isOpen, onClose }) => {
+export const HolidayModal: any = ({ onOpen, isOpen, onClose }) => {
   const btnRef = React.useRef()
   return (
     <Modal  isOpen={isOpen} onClose={onClose} size="2xl">
@@ -11,6 +12,7 @@ export const CreateAppointmentModal: any = ({ onOpen, isOpen, onClose }) => {
         <ModalHeader><Text fontSize="3xl">Create Tier: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
+          <HolidayForm onClose={onClose}/>
         </ModalBody>
         <ModalFooter >
         </ModalFooter>

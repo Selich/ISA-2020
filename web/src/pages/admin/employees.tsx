@@ -1,101 +1,109 @@
-import { Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import { Table, Thead, Tbody, Tr, Th, Td, TableCaption } from "@chakra-ui/react"
-import React from "react";
-import { useRouter } from "next/router";
-import { Header } from "../../components/sections/Header";
-import { MedicineModal } from "../../components/sections/MedicineModal";
+import React from 'react'
+import { Header } from '../../components/sections/Header'
+import {
+    Box,
+    Button,
+    HStack,
+    Input,
+	Link,
+    useDisclosure,
+} from "@chakra-ui/react"
+import ReservationsTable from '../../components/tables/ReservationsTable'
+import faker from 'faker'
+import DataTable from 'react-data-table-component'
+import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines'
+import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
+import CreateEmployee from './create-employee'
+import { CreateEmployeeModal } from '../../components/sections/modal/CreateEmployeeModal'
+import { CreateAdminModal } from '../../components/sections/modal/CreateAdminModal'
 
+const createUser = () => ({
+});
 
-interface IFormInputs {
-  email: string
-  password: string
-}
+const createUsers = (numUsers = 5) =>
+    new Array(numUsers).fill(undefined).map(createUser);
 
+const fakeUsers = createUsers(2000);
 
-const medicines = [
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200},
-	{name: "lek1", type:"tip1", price:200}
-
-]
-
-export default function Catalogue() {
-  const medicineModal = useDisclosure()
-  const btnRef = React.useRef()
-  const router = useRouter();
- const [searchTerm, setSearchTerm] = React.useState("");
- const [searchResults, setSearchResults] = React.useState([]);
- const [isActive, setIsActive] = React.useState(true);
-
- const handleChange = event => {
-    setSearchTerm(event.target.value);
-  };
- React.useEffect(() => {
-    const results = medicines.filter(item =>
-      item.name.toLowerCase().includes(searchTerm)
-    );
-    setSearchResults(results);
-  }, [searchTerm]);
-  return (
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <>
-    <Header/>
-			<Center>
-		<Flex  m={10} minW="90%">
-				<Box>
-				<FormLabel >Search:</FormLabel>
-				<Input
-					mt={0}
-					type="text"
-					placeholder="Search"
-					value={searchTerm}
-					onChange={handleChange}
-				/>
-			</Box>
-				<HStack>
-				<FormLabel >Activated?</FormLabel>
-				<Switch />
-			</HStack>
-				<Box>
-				<FormLabel >Type:</FormLabel>
-				<Select placeholder="All">
-					{[... new Set(medicines.map(item => item.type))].map(item => (
-						<option value={item}>{item}</option>
-
-					))}
-				</Select>
-			</Box>
-			</Flex>
-		  </Center>
-			<Center>
-			<Table variant="simple" maxW="80%">
-				<Thead>
-					<Tr>
-						<Th>Medicine</Th>
-						<Th>Type</Th>
-						<Th isNumeric>Price</Th>
-					</Tr>
-				</Thead>
-				<Tbody>
-				{medicines.map(item => (
-					<Tr onClick={() => alert("test")}>
-						<Td>{item.name}</Td>
-						<Td>{item.type}</Td>
-						<Td isNumeric>{item.price}</Td>
-						<Button m={3} size="sm" colorScheme="red"
-								onClick={() => medicines.push(item)}
-						>X</Button>
-					</Tr>
-
-				))}
-				</Tbody>
-			</Table>
-		</Center>
-      <MedicineModal
-        onOpen={medicineModal.onOpen}
-        isOpen={medicineModal.isOpen}
-        onClose={medicineModal.onClose}
-      />
+        <HStack>
+        <Input id="search" type="text" placeholder="Search" aria-label="Search Input" value={filterText} onChange={onFilter} />
+        <Button type="button" onClick={onClear}>X</Button>
+        </HStack>
     </>
-  );
+);
+
+const columns = [
+    {
+        name: 'Name',
+        selector: 'name',
+        sortable: true,
+    },
+    {
+        name: 'Email',
+        selector: 'email',
+        sortable: true,
+    },
+  
+];
+
+const openModal = (item, onOpen) => {
+    onOpen()
+    
+
 }
+
+const Medicines = (): JSX.Element => {
+    const [filterText, setFilterText] = React.useState('');
+    const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+  const filteredItems = fakeUsers .filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase())) ;
+    const selectedItemModal = useDisclosure()
+    const createEmployeeModal = useDisclosure()
+    const createAdminModal = useDisclosure()
+
+    const subHeaderComponentMemo = React.useMemo(() => {
+        const handleClear = () => {
+            if (filterText) {
+                setResetPaginationToggle(!resetPaginationToggle);
+                setFilterText('');
+            }
+        };
+
+        return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+    }, [filterText, resetPaginationToggle]);
+    return (
+        <>
+            <Header />
+            <Box m={10} mx={20}>
+				<Button onClick={createEmployeeModal.onOpen} size="sm" mx={3} colorScheme="teal">Create New Employee</Button>
+				<Button onClick={createAdminModal.onOpen} as={Link} size="sm" mx={3} colorScheme="teal">Create New Admin</Button>
+                <DataTable
+                    title="Employee List"
+                    columns={columns}
+                    data={filteredItems}
+                    pagination
+                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                    subHeader
+                    subHeaderComponent={subHeaderComponentMemo}
+                    selectableRows
+                    onSelectedRowsChange={(item) => openModal(item.selectedRows[0], selectedItemModal.onOpen)}
+                    persistTableHead
+                />
+            </Box>
+      <CreateEmployeeModal
+        onOpen={createEmployeeModal.onOpen}
+        isOpen={createEmployeeModal.isOpen}
+        onClose={createEmployeeModal.onClose}
+      />
+      <CreateAdminModal
+        onOpen={createAdminModal.onOpen}
+        isOpen={createAdminModal.isOpen}
+        onClose={createAdminModal.onClose}
+      />
+        </>
+    )
+
+}
+
+export default Medicines;

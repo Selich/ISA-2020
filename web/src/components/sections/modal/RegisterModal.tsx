@@ -1,7 +1,7 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
 import { FaFacebook } from 'react-icons/fa'
-import RegisterForm from "./forms/RegisterForm";
+import RegisterForm from "../forms/RegisterForm";
 
 
 export const RegisterModal: any = ({ onOpen, isOpen, onClose }) => {

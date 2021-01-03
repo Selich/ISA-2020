@@ -11,13 +11,13 @@ import ReservationsTable from '../../components/tables/ReservationsTable'
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
 import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines'
-import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
 
 const createUser = () => ({
     id: faker.random.uuid(),
-    street: faker.address.streetAddress(),
-    city: faker.address.city(),
-    name: faker.company.companyName()
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    bio: faker.lorem.sentence(),
+    image: faker.image.avatar(),
 });
 
 const createUsers = (numUsers = 5) =>
@@ -28,7 +28,7 @@ const fakeUsers = createUsers(2000);
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <>
         <HStack>
-        <Input id="search" type="text" placeholder="Search" aria-label="Search Input" value={filterText} onChange={onFilter} />
+        <Input id="search" type="text" placeholder="Filter By id" aria-label="Search Input" value={filterText} onChange={onFilter} />
         <Button type="button" onClick={onClear}>X</Button>
         </HStack>
     </>
@@ -45,7 +45,11 @@ const columns = [
         selector: 'name',
         sortable: true,
     },
-  
+    {
+        name: 'Email',
+        selector: 'email',
+        sortable: true,
+    },
 ];
 
 const openModal = (item, onOpen) => {
@@ -54,10 +58,10 @@ const openModal = (item, onOpen) => {
 
 }
 
-const Medicines = (): JSX.Element => {
+const Reservations = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = fakeUsers .filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase())) ;
+    const filteredItems = fakeUsers.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
     const selectedItemModal = useDisclosure()
 
     const subHeaderComponentMemo = React.useMemo(() => {
@@ -74,9 +78,9 @@ const Medicines = (): JSX.Element => {
         <>
             <Header />
             <Box m={10} mx={20}>
-                <Button colorScheme="teal">Create New</Button>
+                {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
                 <DataTable
-                    title="Medicine List"
+                    title="Contact List"
                     columns={columns}
                     data={filteredItems}
                     pagination
@@ -88,7 +92,7 @@ const Medicines = (): JSX.Element => {
                     persistTableHead
                 />
             </Box>
-      <PharmacyProfileModal
+      <ConfirmMedicinesModal
         onOpen={selectedItemModal.onOpen}
         isOpen={selectedItemModal.isOpen}
         onClose={selectedItemModal.onClose}
@@ -98,4 +102,4 @@ const Medicines = (): JSX.Element => {
 
 }
 
-export default Medicines;
+export default Reservations;

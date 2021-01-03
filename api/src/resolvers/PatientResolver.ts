@@ -41,11 +41,11 @@ export class PatientResolver {
 
     user = await Patient.save(new Patient({ ...inputs, isEnables:false }))
 
-		let info = await mailer.send({
-			from: '"ISA-Service" <foo@someaddrs.com>',
+		// let info = await mailer.send({
+		// 	from: '"ISA-Service" <foo@someaddrs.com>',
 
 
-		})
+		// })
     return { user }
   }
   @Mutation(() => UserResponse)

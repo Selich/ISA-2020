@@ -1,23 +1,13 @@
 import React from 'react'
 import { Header } from '../../components/sections/Header'
-import {
-    Box,
-    Button,
-    HStack,
-    Input,
-    useDisclosure,
-} from "@chakra-ui/react"
-import ReservationsTable from '../../components/tables/ReservationsTable'
+import { Box, Button, HStack, Input, useDisclosure, } from "@chakra-ui/react"
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
-import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines'
 import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
+import { EPrescriptionModal } from '../sections/modal/EPrescriptionModal'
 
 const createUser = () => ({
     id: faker.random.uuid(),
-    street: faker.address.streetAddress(),
-    city: faker.address.city(),
-    name: faker.company.companyName()
 });
 
 const createUsers = (numUsers = 5) =>
@@ -36,28 +26,35 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 const columns = [
     {
-        name: 'ID',
-        selector: 'id',
-        sortable: true,
-    },
-    {
         name: 'Name',
         selector: 'name',
         sortable: true,
     },
-  
+    {
+        name: 'Street',
+        selector: 'street',
+        sortable: true,
+    },
+    {
+        name: 'City',
+        selector: 'city',
+        sortable: true,
+    },
+    {
+        name: 'Rating',
+        selector: 'rating',
+        sortable: true,
+    },
 ];
 
 const openModal = (item, onOpen) => {
     onOpen()
-    
-
 }
 
-const Medicines = (): JSX.Element => {
+const EPrescriptionsTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-  const filteredItems = fakeUsers .filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase())) ;
+    const filteredItems = fakeUsers .filter(item => item.id && item.id.toLowerCase().includes(filterText.toLowerCase())) ;
     const selectedItemModal = useDisclosure()
 
     const subHeaderComponentMemo = React.useMemo(() => {
@@ -72,11 +69,9 @@ const Medicines = (): JSX.Element => {
     }, [filterText, resetPaginationToggle]);
     return (
         <>
-            <Header />
-            <Box m={10} mx={20}>
-                <Button colorScheme="teal">Create New</Button>
+                {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
                 <DataTable
-                    title="Medicine List"
+                    title="EPrescriptions"
                     columns={columns}
                     data={filteredItems}
                     pagination
@@ -87,8 +82,7 @@ const Medicines = (): JSX.Element => {
                     onSelectedRowsChange={(item) => openModal(item.selectedRows[0], selectedItemModal.onOpen)}
                     persistTableHead
                 />
-            </Box>
-      <PharmacyProfileModal
+      <EPrescriptionModal
         onOpen={selectedItemModal.onOpen}
         isOpen={selectedItemModal.isOpen}
         onClose={selectedItemModal.onClose}
@@ -97,5 +91,4 @@ const Medicines = (): JSX.Element => {
     )
 
 }
-
-export default Medicines;
+export default EPrescriptionsTable;

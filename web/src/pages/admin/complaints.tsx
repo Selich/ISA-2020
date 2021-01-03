@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { Header } from "../../components/sections/Header";
 import DataTable from "react-data-table-component";
 import { TierModal } from "../../components/sections/modal/TierModal";
+import { ComplaintModal } from "../../components/sections/modal/ComplaintModal";
 
 
 interface IFormInputs {
@@ -45,7 +46,7 @@ export default function Catalogue() {
       selectableRows
     />
 		</Box>
-      <TierModal
+      <ComplaintModal
         onOpen={modal.onOpen}
         isOpen={modal.isOpen}
         onClose={modal.onClose}
