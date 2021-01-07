@@ -2,10 +2,11 @@ import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedCol
 import { ObjectType, Field, ID } from 'type-graphql';
 import Patient from './Patient';
 import { Employee } from './Employee';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class EPrescrition{
+export class EPrescription extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -24,15 +25,5 @@ export class EPrescrition{
   @Field()
   @Column()
   hashCode: string
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
-
 
 }

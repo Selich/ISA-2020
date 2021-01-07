@@ -4,7 +4,7 @@ import { Appointment } from "./Appointment";
 import { Complaint } from "./Complaint";
 import { Medicine } from "./Medicine";
 import { Pharmacy } from "./Pharmacy";
-import { Prescrition } from "./Prescription";
+import { Prescription } from "./Prescription";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
 import { Tier } from "./Tier";
@@ -22,9 +22,9 @@ export default class Patient extends User{
   @ManyToMany(() => Medicine, item => item.patientsAllergic)
   allergies: Medicine[];
 
-  @Field(() => [Prescrition])
-  @OneToMany(() => Prescrition, item => item.patient)
-  prescritions: Prescrition[];
+  @Field(() => [Prescription])
+  @OneToMany(() => Prescription, item => item.patient)
+  prescritions: Prescription[];
 
   @Field(() => [Reservation])
   @OneToMany(() => Reservation, item => item.patient)

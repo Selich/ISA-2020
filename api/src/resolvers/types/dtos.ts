@@ -1,9 +1,10 @@
 import { Medicine } from "../../entities/Medicine";
 import { Pharmacy } from "../../entities/Pharmacy";
-import { InputType, Field, ObjectType } from "type-graphql";
+import { InputType, Field, ObjectType, Float } from "type-graphql";
 import { FieldError } from "./ErrorTypes";
 import User from "../../entities/User";
 import Patient from "../../entities/Patient";
+import { FieldsOnCorrectTypeRule } from "graphql";
 
 @InputType()
 export class TierDTO {
@@ -15,6 +16,63 @@ export class TierDTO {
   scoreMin: number;
   @Field()
   scoreMax: number;
+}
+@InputType()
+export class MedicineDTO {
+
+  @Field(() => String)
+  code!: string;
+  @Field(() => String)
+  name!: string;
+  @Field(() => String)
+  type: string;
+  @Field()
+  points: number;
+  @Field()
+  form: string;
+  @Field()
+  contents: string;
+  @Field()
+  producer: string;
+  // @Field(() => File)
+  // image: string;
+  @Field(() => Boolean)
+  isPrescriptionRequired: boolean;
+  @Field(() => String)
+  info: string;
+  @Field(() => [Float]) 
+  prices: number[];
+  @Field(() => [MedicineDTO])
+  alternatives: MedicineDTO[];
+  @Field(() => String)
+  from: Date;
+  @Field(() => String)
+  until: Date;
+}
+
+@InputType()
+export class MedicineItemDTO {
+
+  @Field(() => MedicineDTO)
+  details: MedicineDTO;
+
+  @Field()
+  quantity: number;
+
+  @Field()
+  price: number;
+
+  @Field(() => String)
+  dateOfPurchase: Date;
+
+  @Field()
+  instructions: string;
+}
+
+@InputType()
+export class MedicineListDTO {
+  @Field(() => [MedicineItemDTO])
+  list: MedicineItemDTO[];
 }
 
 @InputType()
@@ -155,63 +213,4 @@ export class AppointmentDTO {
   @Field(() => String)
   until: Date;
 
-}
-@InputType()
-export class PriceDTO {
-  @Field(() => Pharmacy)
-  pharmacy: Pharmacy;
-
-  @Field(() => Medicine)
-  medicine: Medicine;
-
-  @Field()
-  price: number;
-
-  @Field(() => String)
-  from: Date;
-}
-
-@InputType()
-export class MedicineDTO {
-
-  @Field(() => String)
-  code!: string;
-
-  @Field(() => String)
-  name!: string;
-
-  @Field(() => String)
-  type: string;
-
-  @Field()
-  points: number;
-
-  @Field()
-  form: string;
-
-  @Field()
-  contents: string;
-
-  @Field()
-  producer: string;
-
-  // @Field(() => File)
-  // image: string;
-
-  @Field(() => Boolean)
-  isPrescriptionRequired: boolean;
-
-  @Field(() => String)
-  info: string;
-
-  @Field(() => [PriceDTO])
-  prices: PriceDTO[];
-
-  @Field(() => [MedicineDTO])
-  alternatives: MedicineDTO[];
-
-  @Field(() => String)
-  from: Date;
-  @Field(() => String)
-  until: Date;
 }

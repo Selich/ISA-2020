@@ -4,7 +4,7 @@ import { Employee } from "./Employee";
 import { Model } from "./Model";
 import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { Prescrition } from "./Prescription";
+import { Prescription } from "./Prescription";
 
 @ObjectType()
 @Entity()
@@ -25,10 +25,10 @@ export class Appointment extends Model{
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @Field(() => Prescrition)
-  @OneToOne(() => Prescrition, item => item.appointment ,{  cascade: true, nullable:true})
+  @Field(() => Prescription)
+  @OneToOne(() => Prescription, item => item.appointment ,{  cascade: true, nullable:true})
   @JoinColumn()
-  prescription: Prescrition;
+  prescription: Prescription;
 
   @Field()
   @Column({ nullable: true})
