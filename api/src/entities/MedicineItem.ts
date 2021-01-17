@@ -35,7 +35,7 @@ export class MedicineItem extends Model{
   dateOfPurchase: Date;
 
   @Field()
-  @Column({ type:  'citext'})
+	@Column({ nullable: true })
   instructions: string;
 
 

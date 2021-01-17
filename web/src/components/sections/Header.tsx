@@ -13,12 +13,12 @@ import { Flex, Box } from "@chakra-ui/react";
 
 export const Header: any = () => {
   let [{ data, fetching }] = useMeQuery();
-	data = {
-		me: {
-			email: "selich.work@",
-			role: "patient"
-		}
-	}
+	// data = {
+	// 	me: {
+	// 		email: "selich.work@",
+	// 		role: "patient"
+	// 	}
+	// }
   let body = null;
   // let data = { me: { email: "email", password: "password", role:"patient"}}
   if (false) {

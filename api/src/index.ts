@@ -36,6 +36,8 @@ const mailerOptions = {
 const main = async () => {
   const conn = await createConnection(dbConfig);
 
+	conn.dropDatabase()
+
 
   const address = await Address.save(new Address({
     street: "poenkareova 22", city: "city", country:"country"
@@ -67,10 +69,6 @@ const main = async () => {
     isUsed: false,
     deadline: null
   }))
-
-
-
-
 
   const app = express()
   const RedisStore = connectRedis(session)

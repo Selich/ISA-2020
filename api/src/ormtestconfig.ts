@@ -13,7 +13,7 @@ export default
     type: "postgres",
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
+    username: 'super_isa',
     password: process.env.DATABASE_PASSWORD,
     // url: 'postgres://super_user:pass@localhost:5432/isa_test',
     synchronize: true,

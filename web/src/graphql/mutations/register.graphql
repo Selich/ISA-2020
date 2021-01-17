@@ -5,7 +5,9 @@ mutation Register($inputs: RegisterPatientDTO!) {
       message
     }
     user {
-      ...RegularUser
+      email
+      firstName
+      lastName
     }
   }
 }
