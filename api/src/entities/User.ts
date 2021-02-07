@@ -30,11 +30,11 @@ export default abstract class User extends Model {
   @IsEnum(roles)
   role: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   firstName: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   lastName: string;
 

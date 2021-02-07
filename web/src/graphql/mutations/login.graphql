@@ -5,6 +5,25 @@ mutation Login($email: String!, $password: String!) {
   }){
     user{
       email
+      firstName
+      lastName
+      role
+      appointments {
+        employee {
+          firstName
+          lastName
+          email
+          averageRating
+        }
+        begin
+        end
+        type
+        isVisited
+        price
+        pharmacy {
+          name
+        }
+      }
     }
   }
 }

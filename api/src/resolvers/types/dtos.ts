@@ -119,6 +119,9 @@ export class AddressDTO {
 }
 @ObjectType()
 export class UserResponse {
+  @Field(() => String, { nullable: true })
+  token?: String;
+
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 

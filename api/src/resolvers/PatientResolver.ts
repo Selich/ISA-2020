@@ -3,6 +3,7 @@ import { Mutation, Resolver, Query, Ctx, Arg, InputType, Field } from 'type-grap
 import argon2 from 'argon2'
 import { RegisterPatientDTO, UserDTO, UserResponse } from './types/dtos';
 import { MyContext } from '../types';
+import nodemailer from 'nodemailer'
 import { Address } from '../entities/Address';
 import User from '../entities/User';
 
@@ -10,74 +11,130 @@ import User from '../entities/User';
 @Resolver(Patient)
 export class PatientResolver {
 
+	
+  @Query(() => Patient, { nullable: true })
+  me(@Ctx() { req }: MyContext) {
+		return Patient.find({id: req.session.userId});
+  }
+
+
   @Query(() => [Patient], { nullable: true })
   async patients(
     @Arg("inputs") inputs: UserDTO,
   ) {
-    return await Patient.find({...inputs});
+    return await Patient.find({ ...inputs });
   }
 
   @Mutation(() => UserResponse)
   async register(
-    @Arg("inputs") inputs: RegisterPatientDTO,
+    @Arg("email") email: string,
+    @Arg("password") password: string,
+    @Arg("confirmPassword") confirmPassword: string,
     @Ctx() { req, mailer }: MyContext
   ) {
-    let { email, password, confirmPassword, address } = inputs
-    let { street, city, country } = address
-    let user = await Patient.findOne({email: email})
+    // let { street, city, country } = address
+    let user = await Patient.findOne({ email: email })
     if (!(password === confirmPassword)) { return { errors: [{ field: "confirmPassword", message: "Passwords need to match" }], } };
     if (!(user === undefined)) { return { errors: [{ field: "email", message: "Email already exists" }], } };
 
-    inputs.password = await argon2.hash(inputs.password);
-    inputs.role = 'patient'
+
+    if (user === undefined) {
+      let user = new Patient()
+      user.password = await argon2.hash(password);
+      user.email = email
+      user.role = 'patient'
 
 
-    user = await Patient.save(new Patient({ ...inputs }))
-    let temp = await Address.findOne({...address})
-    if(temp === undefined)
-      inputs.address = await Address.save(new Address({ street, city, country, user: user }))
-    else
-      inputs.address = temp
+      // let temp = await Address.findOne({ ...address })
+      // if (temp === undefined)
+      //   inputs.address = await Address.save(new Address({ street, city, country, user: user }))
+      // else
+      //   inputs.address = temp
 
-    user = await Patient.save(new Patient({ ...inputs, isEnables:false }))
-
-		// let info = await mailer.send({
-		// 	from: '"ISA-Service" <foo@someaddrs.com>',
+      user = await Patient.save(new Patient({ ...user, isEnabled: false }))
 
 
-		// })
+
+			let msg = '<h3> Hello '+ user.email.split('@')[0] +'<h3>' + '<a href="http://localhost:3000/verify/' + user.email + '">' +  'Confirm Account' + '</a>'
+			let to = user.email
+
+    //@ts-ignore
+    let info = await mailer.sendMail({
+      from: '"Barry Littel 👻" <barry85@ethereal.email>', // sender address
+      to: to,
+      subject: "Confirm your account ✔", // Subject line
+      text: "Confirm your account", // plain text body
+      html: msg
+    })
+
+			console.log("Message sent: " + info.messageId);
+			console.log(nodemailer.getTestMessageUrl(info))
+
+
+
+    }
+
+
+
+
+
+
     return { user }
   }
   @Mutation(() => UserResponse)
   async confirmRegistration(
-    @Arg("inputs") inputs: UserDTO,
+    @Arg("email") email: string,
     @Ctx() { req }: MyContext
-  ){
+  ) {
+    let user = await Patient.findOne({ email });
+    if (user !== undefined) {
+			user.isEnabled = true
+			user = await Patient.save(user)
 
-	}
-	
+			req.session.userId = user.id
+		}
+
+    return { user }
+
+
+  }
+
 
   @Mutation(() => UserResponse)
   async login(
     @Arg("inputs") inputs: UserDTO,
     @Ctx() { req }: MyContext
-  ){
+  ) {
     let { email, password } = inputs
 
-    const user = await Patient.findOne({ email });
+		const user = await Patient.findOne({ email: email });
+		if (user === undefined) {
+			return { errors: [{ field: "email", message: "email doesn't exist" }], };
+		}
 
+		if (user?.role === 'patient'){
+			const user = await Patient.findOne({ email });
+			if (!user?.isEnabled) {
+				return { errors: [{ field: "email", message: "email doesn't exist" }], };
+			}
 
-    if (user==undefined) {
-      return { errors: [{ field: "email", message: "email doesn't exist" }], };
-    }
-    const valid = argon2.verify(user.password, password);
+		}
+		const valid = argon2.verify(user.password, password);
 
-    if (!valid) {
-      return { errors: [{ field: "email", message: "pass doesn't exist" }], };
-    }
+		if (!valid) {
+			return { errors: [{ field: "email", message: "pass doesn't exist" }], };
+		}
+		console.log("-----------------")
+		console.log(user)
 
-    req.session.userId = user.id;
-    return { user }
+		/*
+		const token = jwt.sign({
+			email: user.email, password: user.email, role:user.role 
+		}, 'token_secret')
+		*/
+
+		req.session.userId = user.id;
+		return { user }
   }
 
   @Mutation(() => Boolean)

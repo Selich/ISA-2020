@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {
     SimpleGrid,Avatar,Text,Box,
     Slider, SliderTrack, SliderFilledTrack, SliderThumb, Select,
@@ -15,59 +15,79 @@ import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyPr
 import { Basket } from '../layouts/Basket'
 import { addItem } from '../../utils/cart'
 import { PharmacyBuyModal } from '../sections/modal/PharmacyBuyModal'
+import { useShopQuery } from '../../generated/graphql'
 
-const createUser = () => ({
-    id: faker.random.uuid(),
-    name: faker.company.companyName(),
-    type: faker.company.companyName(),
-    producer: faker.company.companyName(),
-    rating: faker.random.number(10),
-    isPrescriptionRequired: faker.random.boolean(),
-    points: faker.random.number(10),
-    form: faker.random.alphaNumeric(),
-    info: faker.lorem.paragraph()
-});
 
-const createUsers = (numUsers = 5) =>
-    new Array(numUsers).fill(undefined).map(createUser);
+const FilterComponent = ({ filterText, onFilter, onClear }) => {
+    let [{ data, fetching }] = useShopQuery();
+		let ret = null;
+		if (fetching){
+			ret = (<p> loading </p>)
+		} else {
+			if(!data.shop){
+				ret = (<p> no data </p>)
+			} else{
+				let types = [];
+				//@ts-ignore
+				data.shop.forEach(element => types.push(element.type));
+				data.shop.forEach(element => alert(element));
+				//@ts-ignore
+				let unique = [...new Set(types)];
+				if (unique.size == 0){
+					ret = (<p value="option1">test</p>)
+				} else {
+					ret = (
+					  <Select size="sm" placeholder="All">
+						{
+							//@ts-ignore
+							unique.forEach(item => {
+								return (
+									<option value="option1">{item}</option>
+								)
+							})
+						}
+						</Select>
 
-const fakeUsers = createUsers(2000);
+					)
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => (
-    <>
-        <HStack gap={3}>
-            <FormLabel>Name:</FormLabel>
-            <Input size="sm" id="search" type="text" placeholder="Search" aria-label="Search Input" value={filterText} onChange={onFilter} />
-            <FormLabel>Type:</FormLabel>
-            <Select size="sm" placeholder="Select option">
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
-            </Select>
-            <FormLabel>Rating:</FormLabel>
-            <FormLabel>1</FormLabel>
-            <Slider aria-label="slider-ex-1" defaultValue={30}>
-                <SliderTrack defaultValue={5}>
-                    <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb />
-            </Slider>
-            <FormLabel>5</FormLabel>
-            <Button type="button" onClick={onClear}>X</Button>
-        </HStack>
-    </>
-);
+				}
+
+			}
+
+
+		}
+    return (
+        <>
+            <HStack gap={3}>
+                <FormLabel>Name:</FormLabel>
+                <Input size="sm" id="search" type="text" placeholder="Search" aria-label="Search Input" value={filterText} onChange={onFilter} />
+                <FormLabel>Type:</FormLabel>
+								
+								{ret}
+                <FormLabel>Rating:</FormLabel>
+                <FormLabel>1</FormLabel>
+                <Slider aria-label="slider-ex-1" defaultValue={30}>
+                    <SliderTrack defaultValue={5}>
+                        <SliderFilledTrack />
+                    </SliderTrack>
+                    <SliderThumb />
+                </Slider>
+                <FormLabel>5</FormLabel>
+                <Button type="button" onClick={onClear}>X</Button>
+            </HStack>
+        </>
+    )
+};
 
 
 const openModal = (item, onOpen) => {
     onOpen()
 }
 
-const PharmaciesTable = (): JSX.Element => {
+const MedicinesTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    const filteredItems = fakeUsers.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
-    const selectedItemModal = useDisclosure()
+    const [item, setItem] = React.useState(null);
     const buyItemModal = useDisclosure()
     const columns = [
         { name: 'Name', selector: 'name', sortable: true, },
@@ -75,70 +95,73 @@ const PharmaciesTable = (): JSX.Element => {
         { name: 'Form', selector: 'form', sortable: true, },
         { name: 'Rating', selector: 'rating', sortable: true, },
         {
-            name: '',
-            button: true,
-            cell: () => <Button size="sm" onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>,
+        name: '',
+        button: true,
+        cell: row => <Button size="sm" onClick={(val) => {setItem(row); buyItemModal.onOpen()}} colorScheme='teal' >Buy</ Button>,
         }
     ];
+		useEffect(() => {
+			setItem(item)
 
-    const subHeaderComponentMemo = React.useMemo(() => {
-        const handleClear = () => {
-            if (filterText) {
-                setResetPaginationToggle(!resetPaginationToggle);
-                setFilterText('');
-            }
-        };
+		},[item])
 
-        return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
-    }, [filterText, resetPaginationToggle]);
-    return (
-        <>
-            {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
+    let [{ data, error, fetching }] = useShopQuery();
+		let body = null
+		if (error) alert(error)
+		if (fetching){
+				body = <p> loading </p>
+		} else {
+			if (!data.shop){
+				body = <p> no data </p>
+			} else {
+        body = (<>
             <DataTable
                 columns={columns}
-                data={filteredItems}
+                data={data.shop}
                 pagination
                 paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                 subHeader
                 expandableRows
-                subHeaderComponent={subHeaderComponentMemo}
                 persistTableHead
-                    expandableRowsComponent={<ExpandedComponent data={this} />}
+                expandableRowsComponent={<ExpandedComponent data={this} />}
             />
             <PharmacyBuyModal
         onOpen={buyItemModal.onOpen}
         isOpen={buyItemModal.isOpen}
         onClose={buyItemModal.onClose}
-            
+				item={item}
             />
-        </>
-    )
+        </>)
+			}
+		}
+    return body
 
 }
-export default PharmaciesTable;
+export default MedicinesTable;
 
 export const ExpandedComponent = ({ data }) => {
 
     return (
         <>
-            <SimpleGrid columns={2}>
+            <SimpleGrid columns={3}>
                 <Box m={6}>
-                    <Avatar margin={4} pd={3} />
-                    <Text>{data.name}</Text>
-                    <Text>{data.type}</Text>
-                    <Text>Form: {data.form}</Text>
-                    <Text>Rating: {data.rating}</Text>
+                    <FormLabel>Name: {data.name}</FormLabel>
+                    <FormLabel>Type: {data.type}</FormLabel>
+                    <FormLabel>Form: {data.form}</FormLabel>
+                    <FormLabel>Rating: {data.rating}</FormLabel>
                 </Box>
                 <Box m={6}>
-                    <Text>Prescription Required? {(data.isPrescriptionRequired) ? "T":"X"}</Text>
-                    <Text>Producer: {data.producer}</Text>
-                    <Text>Information:</Text>
-                    <Text>{data.info}</Text>
-                    <Text>Points Earned: {data.points}</Text>
-                    <Button size="sm" onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>
+                    <FormLabel>Prescription Required? {(data.isPrescriptionRequired) ? "Yes":"No"}</FormLabel>
+                    <FormLabel>Producer:</FormLabel>
+										<FormLabel>{data.producer}</FormLabel>
+                    <FormLabel>Information:</FormLabel>
+                    <FormLabel>{data.info}</FormLabel>
+                    <FormLabel>Points Earned: {data.points}</FormLabel>
                 </Box>
+								<Box m={6}>
+									<Button md={3} disabled={true}>Rate</Button>
+								</Box>
             </SimpleGrid>
-            <Button disabled={true}>Rate</Button>
         </>
     )
 

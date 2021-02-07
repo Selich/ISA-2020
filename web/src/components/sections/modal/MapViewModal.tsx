@@ -3,8 +3,15 @@ import React from "react";
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css'
-
-
+import {
+  GoogleMapProvider,
+  HeatMap,
+  InfoWindow,
+  MapBox,
+  Marker,
+  OverlayView,
+  Polygon,
+} from '@googlemap-react/core'
 
 
 export const MapViewModal: any = ({ data, onOpen, isOpen, onClose }) => {
@@ -24,16 +31,38 @@ export const MapViewModal: any = ({ data, onOpen, isOpen, onClose }) => {
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <Modal isOpen={isOpen} onClose={onClose} size="lg">
             <ModalOverlay />
-            <ModalContent maxW="56rem" maxH="106rem">
-                <ModalHeader><Text fontSize="sm">Map View: </Text> </ModalHeader>
+            <ModalContent maxW="36rem" maxH="36rem">
+                <ModalHeader><Text fontSize="sm">Map View: {data.name}</Text> </ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
-                    <Map data={data}/>
+                <ModalBody >
+			  <GoogleMapProvider >
+    <MapBox
+      apiKey="AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0"
+      opts={{
+        center: {lat: parseFloat(data.lat), lng: parseFloat(data.long)},
+        zoom: 18,
+      }}
+      style={{
+        height: '26rem',
+        width: '100%',
+      }}
+      useDrawing
+      useGeometry
+      usePlaces
+      useVisualization
+    />
+    <Marker
+      id="marker"
+      opts={{
+        position: {lat: parseFloat(data.lat), lng: parseFloat(data.long)},
+      }}
+    />
+  </GoogleMapProvider>
                 </ModalBody>
                 <ModalFooter >
-                    <Button>Confirm</Button>
+									<Button onClick={() => onClose()}>Exit</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

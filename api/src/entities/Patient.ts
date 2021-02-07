@@ -15,7 +15,8 @@ import User from "./User";
 @Entity()
 export default class Patient extends User{
 
-  @OneToMany(() => Appointment, item => item.patient)
+  @Field(() => [Appointment])
+	@OneToMany(() => Appointment, item => item.patient, {eager:true, cascade: true})
   appointments: Appointment[];
 
   @Field(() => [Medicine])

@@ -6,29 +6,19 @@ import {
     Box,
     Button,
     HStack,
-    Icon,
     Input,
     useDisclosure,
 } from "@chakra-ui/react"
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
+import { useRouter } from 'next/router'
 import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
 import { MapViewModal } from '../sections/modal/MapViewModal'
 import { RateModal } from '../sections/modal/RateModal'
 import { SubscribeModal } from '../sections/modal/SubscribeModal'
+import { usePharmaciesQuery } from '../../generated/graphql'
+import {lexicographicSortSchema} from 'graphql'
 
-const createUser = () => ({
-    id: faker.random.uuid(),
-    street: faker.address.streetAddress(),
-    city: faker.address.city(),
-    name: faker.company.companyName(),
-    rating: faker.random.number(10)
-});
-
-const createUsers = (numUsers = 5) =>
-    new Array(numUsers).fill(undefined).map(createUser);
-
-const fakeUsers = createUsers(2000);
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
     <>
@@ -41,12 +31,11 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 
 
-const PharmaciesTable = (): JSX.Element => {
+export default const PharmaciesTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-    const filteredItems = fakeUsers.filter(item => item.name && item.name.toLowerCase().includes(filterText.toLowerCase()));
-
-
+    let [{ data, error, fetching }] = usePharmaciesQuery();
+		const router = useRouter()
     const columns = [
         {
             name: 'Name',
@@ -54,42 +43,37 @@ const PharmaciesTable = (): JSX.Element => {
             sortable: true,
         },
         {
-            name: 'Rating',
-            selector: 'rating',
-            sortable: true,
+            name: '',
+            button: true,
+					cell: row => <Button onClick={() => router.push('/pharmacy/' + row.id) } size="sm" colorScheme="teal" color="white">Connect</Button>
         },
     ];
-
-    const subHeaderComponentMemo = React.useMemo(() => {
-        const handleClear = () => {
-            if (filterText) {
-                setResetPaginationToggle(!resetPaginationToggle);
-                setFilterText('');
-            }
-        };
-
-        return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
-    }, [filterText, resetPaginationToggle]);
-    return (
+  let body = null;
+	if(error) alert(error)
+	if(fetching){
+			body = ( <p> loading </p> )
+	} else if(!data.pharmacies){
+			body = ( <p> no pharmacies </p> )
+	} else {
+			body = (
         <>
-            {/* <Button onClick={modal.onOpen} colorScheme="teal">Create New Tier</Button> */}
             <DataTable
                 title="Pharmacy List"
                 columns={columns}
-                data={filteredItems}
+                data={data.pharmacies}
                 pagination
                 paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
                 subHeader
-                subHeaderComponent={subHeaderComponentMemo}
                 persistTableHead
                 expandableRows
                 expandableRowsComponent={<ExpandedComponent data={this} />}
             />
         </>
     )
-
+	}
+	return body
 }
-export const ExpandedComponent = ({ data }) => {
+const ExpandedComponent = ({ data }) => {
 
     const subscribeModal = useDisclosure()
     const rateModal = useDisclosure()
@@ -115,7 +99,6 @@ export const ExpandedComponent = ({ data }) => {
                     </HStack>
                 </Box>
             </SimpleGrid>
-            <Button disabled={true}>Rate</Button>
             <MapViewModal
                 data={data}
                 onOpen={mapModal.onOpen}

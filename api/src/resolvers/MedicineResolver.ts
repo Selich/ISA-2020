@@ -1,28 +1,24 @@
-// import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
-// import { MyContext } from '../types';
-// import { UserResponse, EmployeeInput, LoginInput } from './types/UserTypes';
-// import argon2 from 'argon2';
-// import { validateRegister } from '../utils/validators/validateRegister';
-// import { getRepository, IsNull } from 'typeorm';
-// import { Address } from '../entities/Address';
-// import { Inventory } from '../entities/Inventory';
-// import { Medicine } from '../entities/Medicine';
-// import { Pharmacy } from '../entities/Pharmacy';
-// import { Price } from '../entities/Price';
-// import { MedicineItem } from '../entities/MedicineItem';
-// import { InventoryDTO, MedicineDTO, MedicineItemDTO, MedicineListDTO } from './types/dtos';
-// import { MedicineList } from '../entities/MedicineList';
+import { Mutation, Resolver, Query, Ctx, Arg } from 'type-graphql';
+import { MyContext } from '../types';
+import argon2 from 'argon2';
+import { getRepository, IsNull } from 'typeorm';
+import { Address } from '../entities/Address';
+import { Inventory } from '../entities/Inventory';
+import { Medicine } from '../entities/Medicine';
+import { Pharmacy } from '../entities/Pharmacy';
+import { Price } from '../entities/Price';
+import { MedicineItem } from '../entities/MedicineItem';
+import { MedicineList } from '../entities/MedicineList';
 
-// @Resolver()
-// export class MedicineResolver {
+@Resolver()
+export class MedicineResolver {
 
-//   // @Query(() => Inventory, { nullable: true })
-//   // async medicinesInInventory(
-//   //   @Arg("inputs") inputs: InventoryDTO,
-//   //   @Ctx() { }: MyContext
-//   // ): Promise<Inventory>{
-//   //   return await Inventory.findOneOrFail({...inputs})
-//   // }
+    @Query(() => [Medicine], { nullable: true })
+    async shop(
+        @Ctx() { }: MyContext
+    ): Promise<Medicine[]>{
+        return await Medicine.find({})
+    }
 
 //   // @Query(() => [Inventory], { nullable: true })
 //   // async inventories(
@@ -67,4 +63,4 @@
 //   //   return await Medicine.save(new Medicine({...inputs}))
 //   // }
 
-// }
+}

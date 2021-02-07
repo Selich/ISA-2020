@@ -1,32 +1,47 @@
-// import { Appointment } from "../entities/Appointment";
-// import { AppointmentDefinition } from "../entities/AppointmentDefinition";
+import { Appointment } from "../entities/Appointment";
+import { AppointmentDefinition } from "../entities/AppointmentDefinition";
 // import Patient from "../entities/Patient";
 // import { Pharmacy } from "../entities/Pharmacy";
-// import { MyContext } from "../types";
-// import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
+import { IsNull } from 'typeorm'
+import { MyContext } from "../types";
+import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
 // import { UserConsulation, AppointmentDTO, PharmacyDTO, AdminExam } from "./types/dtos";
 
-// function addMinutes(date: Date, minutes: number) {
-//   return new Date(date.getTime() + minutes * 60000);
-// }
+function addMinutes(date: Date, minutes: number) {
+  return new Date(date.getTime() + minutes * 60000);
+}
 
-// @Resolver(Appointment)
-// export class AppointmentResolver {
+@Resolver(Appointment)
+export class AppointmentResolver {
 
-//   // @Query(() => [Appointment], { nullable: true })
-//   // async appointments(
-//   //   @Ctx() { req }: MyContext
-//   // ): Promise<Appointment[]> {
-//   //   return await Appointment.find({})
+    @Query(() => [Appointment], { nullable: true })
+    async appointments(
+        @Ctx() { req }: MyContext
+    ): Promise<Appointment[]> {
+        return await Appointment.find({})
+    }
 
-//   // }
-//   // @Query(() => Appointment, { nullable: true })
-//   // async appointment(
-//   //   @Arg("date") date: Date,
-//   //   @Ctx() { req }: MyContext
-//   // ) {
-//   // }
-//   // @Query(() => User, { nullable: true })
+    @Query(() => [Appointment], { nullable: true })
+    async freeExams(
+        @Arg("pharm") pharm: number,
+        @Ctx() { req }: MyContext
+    ): Promise<Appointment[]> {
+			return await Appointment.find({
+				type: 'derm',
+				patient: IsNull()
+			})
+    }
+
+    @Query(() => Appointment, { nullable: true })
+    async appointment(
+        @Arg("date") date: Date,
+        @Ctx() { req }: MyContext
+    ) {
+    }
+
+
+
+// @Query(() => User, { nullable: true })
 //   // async getPatientsByLoggedIn(
 //   //   @Ctx() { req }: MyContext
 //   // ) {
@@ -131,4 +146,4 @@
 
 //   //   return appointment
 //   // }
-// }
+}

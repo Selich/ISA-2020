@@ -11,21 +11,21 @@ import { Prescription } from "./Prescription";
 export class Appointment extends Model{
 
   @Field(() => Patient)
-  @ManyToOne(() => Patient, item => item.appointments,  { eager: true, cascade: true })
+  @ManyToOne(() => Patient, item => item.appointments)
   @JoinTable()
   patient: Patient;
 
-  @Field(() => Employee)
+	@Field(() => Employee, {nullable: true})
   @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: true })
   @JoinTable()
   employee: Employee;
 
-  @Field(() => Pharmacy)
-  @ManyToOne(() => Pharmacy, item => item.appointments,  {  cascade: true })
+	@Field(() => Pharmacy, {nullable: true})
+	@ManyToOne(() => Pharmacy, item => item.appointments,  {  eager: true, cascade: true })
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @Field(() => Prescription)
+  @Field(() => Prescription, {nullable: true})
   @OneToOne(() => Prescription, item => item.appointment ,{  cascade: true, nullable:true})
   @JoinColumn()
   prescription: Prescription;
@@ -34,32 +34,32 @@ export class Appointment extends Model{
   @Column({ nullable: true})
   type: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   score: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   price: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   discount: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   report: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   isVisited: boolean;
 
-  @Field(() => String)
-  @Column({ type: Date })
-  from: Date;
+	@Field(() => String, {nullable: true})
+	@Column({nullable: true })
+  begin: string;
 
-  @Field(() => String)
-  @Column({ type: Date })
-  until: Date;
+	@Field(() => String, {nullable: true})
+	@Column({nullable: true })
+  end: string;
 
 }

@@ -31,11 +31,11 @@ export class Pharmacy extends Model {
 
   @Field()
   @Column({ nullable: true})
-  long: number;
+  long: string;
 
   @Field()
   @Column({ nullable: true})
-  lat: number;
+  lat: string;
 
   @Field(() => Inventory)
   @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true, nullable: true})

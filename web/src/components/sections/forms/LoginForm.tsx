@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { FieldError, useLoginMutation } from '../../../generated/graphql';
 import { toErrorMap } from '../../../utils/errorMap';
 
+
 export default function LoginForm({ onClose }) {
   const [{ fetching: loginFetch }, login] = useLoginMutation();
   const router = useRouter();
@@ -29,11 +30,8 @@ export default function LoginForm({ onClose }) {
             setErrors(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.user) {
             let user = response.data.login.user;
-            // @ts-ignore
-            // router.push(`/${user.role}/${user.id}`);
-
+						localStorage.setItem('user', JSON.stringify(user))
             onClose();
-            router.reload();
           }
         }}
       >

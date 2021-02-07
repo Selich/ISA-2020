@@ -1,12 +1,5 @@
 fragment RegularUser on User {
   firstName
   lastName
-  address {
-      street,
-      city,
-      country,
-  }
-  telephone
-  gender
   email
 }

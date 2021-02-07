@@ -22,21 +22,25 @@ export class Medicine extends Model {
   @Column({ nullable: true})
   type: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   points: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   form: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   contents: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   producer: string;
+
+	@Field({nullable: true})
+  @Column({ nullable: true})
+  rating: number;
 
   // @Field(() => File)
   // @Column()
@@ -46,7 +50,7 @@ export class Medicine extends Model {
   @Column({ default: false })
   isPrescriptionRequired: boolean;
 
-  @Field(() => String)
+	@Field(() => String, {nullable: true})
   @Column({ nullable: true})
   info: string;
 

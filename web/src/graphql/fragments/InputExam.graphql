@@ -1,6 +1,6 @@
 fragment InputExam on Appointment {
-    from
-    until
+    begin
+    end
     discount
     employee {
         firstName

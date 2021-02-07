@@ -1,15 +1,29 @@
-// import { Pharmacy } from '../entities/Pharmacy';
-// import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
-// import { MyContext } from '../types';
-// import { PharmacyDTO } from './types/dtos';
+import { Pharmacy } from '../entities/Pharmacy';
+import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
+import { MyContext } from '../types';
+import { Medicine } from '../entities/Medicine'
 
-// @Resolver(Pharmacy)
-// export class PharmacyResolver{
+@Resolver(Pharmacy)
+export class PharmacyResolver{
 
-  // @Query(() => [Pharmacy], { nullable: true })
-  // async pharmacies() {
-  //   return await Pharmacy.find({})
-  // }
+  @Query(() => [Pharmacy], { nullable: true })
+  async pharmacies(
+		@Ctx() { req, res }: MyContext
+	) {
+		return await Pharmacy.find({})
+  }
+
+  @Query(() => [Pharmacy], { nullable: true })
+  async containsMedicine(
+    @Arg("id") id: String,
+		@Ctx() { req, res }: MyContext
+	) {
+		const pharmacies = await Pharmacy.find({})
+
+
+    return pharmacies
+
+  }
 
   // // #43
   // @Mutation(() => Pharmacy)
@@ -38,3 +52,4 @@
 // }
 
 //
+}

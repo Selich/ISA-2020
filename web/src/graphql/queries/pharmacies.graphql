@@ -1,0 +1,9 @@
+query Pharmacies {
+  pharmacies {
+      id,
+      name,
+      long,
+      lat
+  }
+}
+

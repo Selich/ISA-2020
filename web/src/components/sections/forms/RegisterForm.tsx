@@ -25,23 +25,24 @@ export default function RegisterLayout({ onClose }) {
           email: "",
           password: "",
           confirmPassword: "",
-          firstName: "",
-          lastName: "",
-          street: "",
-          city: "",
-          country: "",
-          telephone: "",
-          gender: "",
-          dateOfBirth: "",
-          address: {}
+          // firstName: "",
+          // lastName: "",
+          // street: "",
+          // city: "",
+          // country: "",
+          // telephone: "",
+          // gender: "",
+          // dateOfBirth: "",
+          // address: {}
         }}
         onSubmit={async (values, { setErrors }) => {
-          let { street, city, country } = values
-          values.address = { street, city, country }
+          // let { street, city, country } = values
+          // values.address = { street, city, country }
           const response = await register(values);
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           } else if (response.data?.register.user) {
+            console.log(response.data);
             router.push("/");
           }
         }}
@@ -58,6 +59,7 @@ export default function RegisterLayout({ onClose }) {
             <Box mt={4}>
               <FormInputPassword name="confirmPassword" placeholder="confirmPassword" label="Confirm Password" type="password" />
             </Box>
+					{/*
             <Grid templateColumns="repeat(2, 1ft)" gap={2}>
               <Box w="100%" mt={4}>
                 <FormInput name="firstName" placeholder="firstName" label="First Name" />
@@ -87,6 +89,7 @@ export default function RegisterLayout({ onClose }) {
             <Box mt={4}>
               <FormInput name="telephone" placeholder="telephone" label="Telephone" />
             </Box>
+					*/}
             <Button
               mt={4}
               type="submit"

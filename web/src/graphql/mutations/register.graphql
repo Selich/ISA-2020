@@ -1,13 +1,12 @@
-mutation Register($inputs: RegisterPatientDTO!) {
-  register(inputs: $inputs) {
+mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
+  register( email: $email, password: $password, confirmPassword: $confirmPassword ) {
     errors {
       field
       message
     }
     user {
       email
-      firstName
-      lastName
+
     }
   }
 }

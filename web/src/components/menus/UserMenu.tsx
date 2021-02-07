@@ -27,9 +27,9 @@ export const UserMenu: any = ({ user }) => {
           </NextLink>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
           <Center>
-            <Text color='grey' pd={1} fontSize='md' margin={2}>
+            <Text color='grey' pd={1} fontSize='lg' margin={2}>
           {(user.role === "patient") ?
-            user.email.split('@')[0] + '@' :
+            user.email.split('@')[0]:
             user.role
           }
             </Text>
@@ -39,11 +39,6 @@ export const UserMenu: any = ({ user }) => {
           <NextLink href="/user/appointments">
             <MenuItem minH="48px">
               <span>Appointments</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/user/consultations">
-            <MenuItem minH="48px">
-              <span>Consultations</span>
             </MenuItem>
           </NextLink>
           <NextLink href="/user/complaints">
