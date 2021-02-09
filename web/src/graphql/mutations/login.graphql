@@ -11,6 +11,8 @@ mutation Login($email: String!, $password: String!) {
       subscriptions{
         name
       }
+      penalty
+      score
     }
   }
 }

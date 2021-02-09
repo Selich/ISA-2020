@@ -1,4 +1,4 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
+import { VersionColumn,JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql';
 
 
@@ -9,6 +9,10 @@ export abstract class Model extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Field(() => ID)
+  @VersionColumn()
+  version!: number;
 
   @Field(() => String)
   @CreateDateColumn()

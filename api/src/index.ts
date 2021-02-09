@@ -44,14 +44,12 @@ const mailerOptions = {
 const main = async () => {
   const conn = await createConnection(dbConfig);
 
-  // conn.dropDatabase()
   conn.runMigrations()
 
 
   const app = express()
   const RedisStore = connectRedis(session)
 	const redis = new Redis('127.0.0.1:6379');
-
 
 
   let testAccount = await nodemailer.createTestAccount();

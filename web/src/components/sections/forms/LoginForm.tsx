@@ -34,8 +34,13 @@ export default function LoginForm({ onClose }) {
             let user = response.data.login.user;
 						const res = await employeeDetails({ email: user.email})
 						localStorage.setItem('user', JSON.stringify(user))
-						console.log(res.data.employeeDetails)
-						router.push('/admin/' + res.data.employeeDetails.pharmacy.id)
+						localStorage.setItem('cart', JSON.stringify({}))
+						if(user.role === 'patient')
+							router.push('/user')
+						if(user.role === 'admin')
+							router.push('/admin')
+						if(user.role === 'sysadmin')
+							router.push('/sysadmin')
             onClose();
           }
         }}

@@ -32,7 +32,6 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 
 export const PharmaciesTable = (): JSX.Element => {
-    const [filterText, setFilterText] = React.useState('');
     const [_, subscribe] = useSubscribeMutation();
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     let [{ data, error, fetching }] = usePharmaciesQuery();
@@ -72,12 +71,10 @@ export const PharmaciesTable = (): JSX.Element => {
 			body = (
         <>
             <DataTable
-                title="Pharmacy List"
                 columns={columns}
                 data={data.pharmacies}
                 pagination
                 paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                subHeader
                 persistTableHead
                 expandableRows
                 expandableRowsComponent={<ExpandedComponent data={this} />}

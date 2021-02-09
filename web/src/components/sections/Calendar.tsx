@@ -3,7 +3,7 @@ import { Calendar, Views, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 
-import { HStack, useDisclosure,Link,Box,Flex,Button } from '@chakra-ui/react'
+import { Text, HStack, useDisclosure,Link,Box,Flex,Button } from '@chakra-ui/react'
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
@@ -37,7 +37,7 @@ export const MyCalendar: any = () => {
 	const Event =({ event }) => {
   return (
     <span>
-      <strong>{event.title}</strong>
+      <Text fontSize={15}>{event.title}</Text>
       {event.desc && ':  ' + event.desc}
     </span>
   )
@@ -48,7 +48,7 @@ const EventAgenda = ({ event }) => {
     <span>
 			<HStack>
 		  <Button size="sm" onClick={appModal.onOpen}>Join</Button>
-      <em style={{ fontSize: 19 }}>{event.title}</em>
+      <em style={{ fontSize: 11 }}>{event.title}</em>
       <p>{event.desc}</p>
 		</HStack>
     </span>
@@ -59,19 +59,23 @@ const EventAgenda = ({ event }) => {
 			<>
       <Box
         mx="8"
-        p="5"
+				fontSize={14}
+        p="1"
         border="1px"
         rounded="2px"
         borderColor="gray.300"
         boxShadow="md"
+			  w="1000px"
+		
         bg="grey.200"
 				minH="550px"
+			  
         textAlign="center"
       >
         <DnDCalendar
+					fontSize={11}
           defaultDate={moment().toDate()}
           events={events}
-					defaultView={Views.AGENDA}
           localizer={localizer}
           onEventDrop={onEventDrop}
           onEventResize={onEventResize}

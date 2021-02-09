@@ -36,6 +36,11 @@ export const UserMenu: any = ({ user }) => {
           </Center>
           </NextLink>
           <hr/>
+          <NextLink href="/user">
+            <MenuItem minH="48px">
+              <span>Home</span>
+            </MenuItem>
+          </NextLink>
           <NextLink href="/user/profile">
             <MenuItem minH="48px">
               <span>Profile</span>
@@ -73,9 +78,6 @@ export const UserMenu: any = ({ user }) => {
           </NextLink>
           <MenuItem ref={btnRef} onClick={onOpen} minH="48px">
             <span>E-prescription (Modal)</span>
-          </MenuItem>
-          <MenuItem ref={btnRef} onClick={penaltiesModal.onOpen} minH="48px">
-            <span>Penalties</span>
           </MenuItem>
           <hr/>
           <MenuItem

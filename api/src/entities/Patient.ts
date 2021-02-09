@@ -47,11 +47,11 @@ export default class Patient extends User{
 	@ManyToOne(() => Tier, {eager:true, nullable:true})
   tier: Tier;
 
-  @Field()
+	@Field({nullable: true})
   @Column({nullable: true})
   score: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({nullable: true})
   penalty: number;
 

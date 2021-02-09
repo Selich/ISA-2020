@@ -188,11 +188,6 @@ export class PatientResolver {
       return { errors: [{ field: "email", message: "invalid login" }] };
     }
 
-    /*
-		const token = jwt.sign({
-			email: user.email, password: user.email, role:user.role 
-		}, 'token_secret')
-		*/
 
     req.session.userId = user.id;
     return { user };

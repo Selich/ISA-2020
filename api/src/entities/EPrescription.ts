@@ -21,10 +21,6 @@ export class EPrescription extends Model{
 
   @Field()
 	@Column({nullable: true})
-  isUsed: boolean;
-
-  @Field()
-	@Column({nullable: true})
   hashCode: string
 
   @Field()

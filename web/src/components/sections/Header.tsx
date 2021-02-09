@@ -33,7 +33,7 @@ export const Header: any = () => {
     else if(data.me.role === "admin")
       body = ( <PharmAdminMenu user={data.me}/>)
 		//@ts-ignore
-    else if(data.me.role === "sys-admin")
+    else if(data.me.role === "sysadmin")
       body = ( <SysAdminMenu user={data.me}/>)
   }
 

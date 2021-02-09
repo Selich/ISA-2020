@@ -522,7 +522,7 @@ export type LoginMutation = (
     { __typename?: 'UserResponse' }
     & { user?: Maybe<(
       { __typename?: 'Patient' }
-      & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role'>
+      & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role' | 'penalty' | 'score'>
       & { subscriptions?: Maybe<Array<(
         { __typename?: 'Pharmacy' }
         & Pick<Pharmacy, 'name'>
@@ -792,6 +792,8 @@ export const LoginDocument = gql`
       subscriptions {
         name
       }
+      penalty
+      score
     }
   }
 }
