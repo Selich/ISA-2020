@@ -1,7 +1,7 @@
 
 import { useDisclosure, ModalCloseButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalFooter, SimpleGrid, Text, Box, FormControl, FormLabel, Button, Flex, Select, Stack } from '@chakra-ui/react';
 import React from "react";
-import PharmaciesTable from '../../components/tables/PharmaciesTable'
+import {PharmaciesTable} from '../../tables/PharmaciesTable'
 import { useState } from "react";
 import { FormInput } from './../../../components/sections/FormInput';
 import { FormInputPassword } from './../../../components/sections/FormInputPassword';

@@ -8,6 +8,7 @@ import { addItem, editItem, removeItem } from '../utils/cart'
 
 
 
+
 function betterUpdateQuery<Result, Query>(
   cache: Cache,
   qi: QueryInput,
@@ -80,6 +81,7 @@ const client = createClient({
 import theme from '../theme'
 import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
 import Index from './index';
+import Denied from './denied'
 import { useEffect, useState } from 'react';
 
 
@@ -88,12 +90,19 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   let role = ""
+  let isEnabled = false
   let allowed = true;
-  if(data){ role = data.me.role }
-  if (router.pathname.startsWith("/patient") && role !== "patient") {
-    allowed = false;
-  }
-  const ComponentToRender = allowed ? Component : Index;
+	if(data){ 
+		localStorage.setItem('user', JSON.stringify(data.me))
+		role = data.me.role
+		role = data.me.isEnabled
+	}
+	if (router.pathname.startsWith("/user") && role !== "patient")   {
+		if(role === "patient" && isEnabled == false){
+			allowed = false;
+		}
+	}
+  const ComponentToRender = allowed ? Component : Denied;
   return (
     <AuthProvider session={pageProps.session}>
     <Provider value={client}>

@@ -14,11 +14,11 @@ export class Medicine extends Model {
   @Column({ unique: true })
   code!: string;
 
-  @Field(() => String)
+  @Field(() => String, {nullable: true})
   @Column({ nullable: true})
   name!: string;
 
-  @Field(() => String)
+	@Field(() => String, {nullable: true})
   @Column({ nullable: true})
   type: string;
 

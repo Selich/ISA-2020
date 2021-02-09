@@ -19,7 +19,7 @@ export default class Patient extends User{
 	@OneToMany(() => Appointment, item => item.patient, {eager:true, cascade: true})
   appointments: Appointment[];
 
-  @Field(() => [Medicine])
+	@Field(() => [Medicine], {nullable: true})
   @ManyToMany(() => Medicine, item => item.patientsAllergic)
   allergies: Medicine[];
 
@@ -42,8 +42,8 @@ export default class Patient extends User{
   @OneToMany(() => Complaint, item => item.patient)
   complaints: Complaint[];
 
-  @Field(() => Tier)
-  @ManyToOne(() => Tier)
+	@Field(() => Tier, {nullable: true})
+	@ManyToOne(() => Tier, {eager:true, nullable:true})
   tier: Tier;
 
   @Field()
@@ -54,7 +54,7 @@ export default class Patient extends User{
   @Column({nullable: true})
   penalty: number;
 
-  @Field()
+	@Field(() => Boolean)
   @Column({ default: false })
   isEnabled: boolean;
 

@@ -96,7 +96,7 @@ export type Patient = {
   reservations: Array<Reservation>;
   ratings: Array<Rating>;
   subscriptions: Array<Pharmacy>;
-  tier: Tier;
+  tier?: Maybe<Tier>;
   score: Scalars['Float'];
   penalty: Scalars['Float'];
   isEnabled: Scalars['Boolean'];
@@ -188,8 +188,8 @@ export type Medicine = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   code: Scalars['String'];
-  name: Scalars['String'];
-  type: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
   points?: Maybe<Scalars['Float']>;
   form?: Maybe<Scalars['String']>;
   contents?: Maybe<Scalars['String']>;
@@ -350,10 +350,17 @@ export type Mutation = {
   confirmRegistration: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updateProfile: UserResponse;
 };
 
 
 export type MutationRegisterArgs = {
+  country: Scalars['String'];
+  city: Scalars['String'];
+  street: Scalars['String'];
+  telephone: Scalars['String'];
+  lastName: Scalars['String'];
+  firstName: Scalars['String'];
   confirmPassword: Scalars['String'];
   password: Scalars['String'];
   email: Scalars['String'];
@@ -367,6 +374,18 @@ export type MutationConfirmRegistrationArgs = {
 
 export type MutationLoginArgs = {
   inputs: UserDto;
+};
+
+
+export type MutationUpdateProfileArgs = {
+  country: Scalars['String'];
+  city: Scalars['String'];
+  street: Scalars['String'];
+  telephone: Scalars['String'];
+  lastName: Scalars['String'];
+  firstName: Scalars['String'];
+  confirmPassword: Scalars['String'];
+  password: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -428,7 +447,13 @@ export type LoginMutation = (
     & { user?: Maybe<(
       { __typename?: 'Patient' }
       & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role'>
-      & { appointments: Array<(
+      & { allergies: Array<(
+        { __typename?: 'Medicine' }
+        & Pick<Medicine, 'name'>
+      )>, tier?: Maybe<(
+        { __typename?: 'Tier' }
+        & Pick<Tier, 'name' | 'discount'>
+      )>, appointments: Array<(
         { __typename?: 'Appointment' }
         & Pick<Appointment, 'begin' | 'end' | 'type' | 'isVisited' | 'price'>
         & { employee?: Maybe<(
@@ -455,6 +480,12 @@ export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
   confirmPassword: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+  telephone: Scalars['String'];
+  street: Scalars['String'];
+  city: Scalars['String'];
+  country: Scalars['String'];
 }>;
 
 
@@ -467,7 +498,21 @@ export type RegisterMutation = (
       & Pick<FieldError, 'field' | 'message'>
     )>>, user?: Maybe<(
       { __typename?: 'Patient' }
-      & Pick<Patient, 'email'>
+      & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role'>
+      & { tier?: Maybe<(
+        { __typename?: 'Tier' }
+        & Pick<Tier, 'name' | 'discount'>
+      )>, appointments: Array<(
+        { __typename?: 'Appointment' }
+        & Pick<Appointment, 'begin' | 'end' | 'type' | 'isVisited' | 'price'>
+        & { employee?: Maybe<(
+          { __typename?: 'Employee' }
+          & Pick<Employee, 'firstName' | 'lastName' | 'email' | 'averageRating'>
+        )>, pharmacy?: Maybe<(
+          { __typename?: 'Pharmacy' }
+          & Pick<Pharmacy, 'name'>
+        )> }
+      )> }
     )> }
   ) }
 );
@@ -576,6 +621,13 @@ export const LoginDocument = gql`
       firstName
       lastName
       role
+      allergies {
+        name
+      }
+      tier {
+        name
+        discount
+      }
       appointments {
         employee {
           firstName
@@ -610,14 +662,47 @@ export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
-    mutation Register($email: String!, $password: String!, $confirmPassword: String!) {
-  register(email: $email, password: $password, confirmPassword: $confirmPassword) {
+    mutation Register($email: String!, $password: String!, $confirmPassword: String!, $firstName: String!, $lastName: String!, $telephone: String!, $street: String!, $city: String!, $country: String!) {
+  register(
+    email: $email
+    password: $password
+    confirmPassword: $confirmPassword
+    firstName: $firstName
+    lastName: $lastName
+    telephone: $telephone
+    street: $street
+    city: $city
+    country: $country
+  ) {
     errors {
       field
       message
     }
     user {
       email
+      firstName
+      lastName
+      tier {
+        name
+        discount
+      }
+      role
+      appointments {
+        employee {
+          firstName
+          lastName
+          email
+          averageRating
+        }
+        begin
+        end
+        type
+        isVisited
+        price
+        pharmacy {
+          name
+        }
+      }
     }
   }
 }

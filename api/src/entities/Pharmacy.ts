@@ -10,6 +10,7 @@ import { Model } from "./Model";
 import  Patient  from "./Patient";
 import { Price } from "./Price";
 import { Rating } from "./Rating";
+import { Prescription } from "./Prescription";
 import { Reservation } from "./Reservation";
 
 @ObjectType()
@@ -54,8 +55,8 @@ export class Pharmacy extends Model {
   @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true , nullable: true})
   requests: MedicineRequest[];
 
-  @OneToMany(() => Reservation, item => item.patient, {nullable: true})
-  prescritions: Reservation[];
+  @OneToMany(() => Prescription, item => item.patient, {nullable: true})
+  prescritions: Prescription[];
 
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, item => item.pharmacy,{nullable: true})

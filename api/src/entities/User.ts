@@ -47,7 +47,7 @@ export default abstract class User extends Model {
   dateOfBirth: Date;
 
   @Field(() => Address)
-  @ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true })
+	@ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true, nullable:true })
   @JoinTable()
   address: Address;
 

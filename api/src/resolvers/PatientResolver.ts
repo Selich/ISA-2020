@@ -6,6 +6,7 @@ import { MyContext } from '../types';
 import nodemailer from 'nodemailer'
 import { Address } from '../entities/Address';
 import User from '../entities/User';
+import {Tier} from '../entities/Tier';
 
 
 @Resolver(Patient)
@@ -30,6 +31,12 @@ export class PatientResolver {
     @Arg("email") email: string,
     @Arg("password") password: string,
     @Arg("confirmPassword") confirmPassword: string,
+    @Arg("firstName") firstName: string,
+    @Arg("lastName") lastName: string,
+    @Arg("telephone") telephone: string,
+    @Arg("street") street: string,
+    @Arg("city") city: string,
+    @Arg("country") country: string,
     @Ctx() { req, mailer }: MyContext
   ) {
     // let { street, city, country } = address
@@ -38,20 +45,26 @@ export class PatientResolver {
     if (!(user === undefined)) { return { errors: [{ field: "email", message: "Email already exists" }], } };
 
 
+
     if (user === undefined) {
       let user = new Patient()
       user.password = await argon2.hash(password);
       user.email = email
+			user.firstName = firstName
+			user.lastName = lastName
+			user.telephone = telephone
       user.role = 'patient'
+	    user.tier = await Tier.findOneOrFail({ id: 1 })
 
+			let address = { street, city, country }
 
-      // let temp = await Address.findOne({ ...address })
-      // if (temp === undefined)
-      //   inputs.address = await Address.save(new Address({ street, city, country, user: user }))
-      // else
-      //   inputs.address = temp
+      let temp = await Address.findOne({ ...address })
+      if (temp === undefined)
+         user.address = await Address.save(new Address({ street, city, country, user: user }))
+      else
+         user.address = temp
 
-      user = await Patient.save(new Patient({ ...user, isEnabled: false }))
+      user = await Patient.save(new Patient({ ...user, isEnabled: true }))
 
 
 
@@ -108,9 +121,8 @@ export class PatientResolver {
     let { email, password } = inputs
 
 		const user = await Patient.findOne({ email: email });
-		if (user === undefined) {
-			return { errors: [{ field: "email", message: "email doesn't exist" }], };
-		}
+    if (user === undefined) { return { errors: [{ field: "email", message: "No user with that email" }], } };
+    if (user.isEnabled === false) { return { errors: [{ field: "email", message: "Email not verified" }], } };
 
 		if (user?.role === 'patient'){
 			const user = await Patient.findOne({ email });
@@ -152,22 +164,56 @@ export class PatientResolver {
       })
     );
   }
+  @Mutation(() => UserResponse)
+  async updateProfile(
+    @Arg("password") password: string,
+    @Arg("confirmPassword") confirmPassword: string,
+    @Arg("firstName") firstName: string,
+    @Arg("lastName") lastName: string,
+    @Arg("telephone") telephone: string,
+    @Arg("street") street: string,
+    @Arg("city") city: string,
+    @Arg("country") country: string,
+    @Ctx() { req, mailer }: MyContext
+  ) {
+    // let { street, city, country } = address
+    let user = await Patient.findOne({ email: email })
+    if (!(password === confirmPassword)) { return { errors: [{ field: "confirmPassword", message: "Passwords need to match" }], } };
+    if (!(user === undefined)) { return { errors: [{ field: "email", message: "Email already exists" }], } };
 
-  // //TODO: #42
-  // @Mutation(() => UserResponse)
-  // async updateProfile(
-  //   @Arg("inputs") inputs: LoginInput,
-  //   @Ctx() { req }: MyContext
-  // ): Promise<any> {
 
-  //   return
-  // }
-  // @Mutation(() => UserResponse)
-  // async changePass(
-  //   @Arg("inputs") inputs: LoginInput,
-  //   @Ctx() { req }: MyContext
-  // ): Promise<any> {
+    if (user === undefined) {
+      let user = new Patient()
+      user.password = await argon2.hash(password);
+      user.email = email
+      user.role = 'patient'
+			let address = { street, city, country }
 
-  //   return
-  // }
+
+      let temp = await Address.findOne({ ...address })
+      if (temp === undefined)
+        inputs.address = await Address.save(new Address({ street, city, country, user: user }))
+      else
+        inputs.address = temp
+
+      user = await Patient.save(new Patient({ ...user, isEnabled: false }))
+
+
+
+			let msg = '<h3> Hello '+ user.email.split('@')[0] +'<h3>' + '<a href="http://localhost:3000/verify/' + user.email + '">' +  'Confirm Account' + '</a>'
+			let to = user.email
+
+    //@ts-ignore
+    let info = await mailer.sendMail({
+      from: '"Barry Littel 👻" <barry85@ethereal.email>', // sender address
+      to: to,
+      subject: "Confirm your account ✔", // Subject line
+      text: "Confirm your account", // plain text body
+      html: msg
+    })
+
+			console.log("Message sent: " + info.messageId);
+			console.log(nodemailer.getTestMessageUrl(info))
+
+    }
 }

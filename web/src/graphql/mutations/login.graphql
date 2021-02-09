@@ -8,6 +8,13 @@ mutation Login($email: String!, $password: String!) {
       firstName
       lastName
       role
+      allergies{
+        name
+      }
+      tier{
+        name
+        discount
+      }
       appointments {
         employee {
           firstName

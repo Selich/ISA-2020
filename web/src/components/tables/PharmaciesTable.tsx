@@ -31,7 +31,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
 
 
 
-export default const PharmaciesTable = (): JSX.Element => {
+export const PharmaciesTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     let [{ data, error, fetching }] = usePharmaciesQuery();

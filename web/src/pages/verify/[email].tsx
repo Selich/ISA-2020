@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import swal from 'sweetalert'
 import {useConfirmRegistrationMutation} from "../../generated/graphql";
 
 
@@ -15,10 +16,16 @@ export default function Verify() {
 		//@ts-ignore
 		const response = confirmRegistration({email})
 		console.log(response)
+		swal({
+			title: "Confirmed Account",
+			text: "Your account has been activated!",
+			icon: "success",
+		});
+		router.push('/')
 
 	}, [email]);
   return (
-		<p>Email: {email}</p>
+		<></>
 
   );
 }

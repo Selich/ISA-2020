@@ -23,8 +23,13 @@ interface IFormInputs {
 
 
 export default function Denied() {
+	const router = useRouter();
   return (
-    <div>denied</div>
+		<>
+    <h1>404</h1>
+		<p> Return to homepage </p>
+		<Button onClick={() => router.push('/')}>Go back</Button>
+	</>
   );
 }
 

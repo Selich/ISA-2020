@@ -36,6 +36,11 @@ export const UserMenu: any = ({ user }) => {
           </Center>
           </NextLink>
           <hr/>
+          <NextLink href="/user/profile">
+            <MenuItem minH="48px">
+              <span>Profile</span>
+            </MenuItem>
+          </NextLink>
           <NextLink href="/user/appointments">
             <MenuItem minH="48px">
               <span>Appointments</span>
