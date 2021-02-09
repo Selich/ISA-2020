@@ -21,7 +21,7 @@ export class Appointment extends Model{
   employee: Employee;
 
 	@Field(() => Pharmacy, {nullable: true})
-	@ManyToOne(() => Pharmacy, item => item.appointments,  {  eager: true, cascade: true })
+	@ManyToOne(() => Pharmacy, item => item.appointments  )
   @JoinTable()
   pharmacy: Pharmacy;
 

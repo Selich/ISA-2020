@@ -1,0 +1,13 @@
+mutation EmployeeDetails($email: String!) {
+  employeeDetails(inputs: {
+    email: $email,
+  }){
+      email
+      firstName
+      lastName
+      role
+      pharmacy{
+        id
+      }
+    }
+}

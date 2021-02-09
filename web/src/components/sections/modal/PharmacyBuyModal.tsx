@@ -21,7 +21,7 @@ export const PharmacyBuyModal: any = ({ onOpen, isOpen, onClose, item }) => {
   ];
 	useEffect(() => {
 		if(item){
-			let list = containsMedicine('123')
+			let list = containsMedicine('2')
 			setList(list.data.containsMedicine)
 
 		}

@@ -1,9 +1,10 @@
 import { ObjectType, Field, InputType } from "type-graphql";
-import { Entity, OneToMany, Column } from "typeorm";
+import { ManyToOne, Entity, OneToMany, Column } from "typeorm";
 import { Appointment } from "./Appointment";
 import { Holiday } from "./Holiday";
 import { MedicineRequest } from "./MedicineRequest";
 import { Rating } from "./Rating";
+import { Pharmacy } from "./Pharmacy";
 import User from "./User";
 import { WorkingHours } from "./WorkingHours";
 
@@ -30,6 +31,9 @@ export class Employee extends User {
   @OneToMany(() => MedicineRequest, item => item.employee, {nullable: true})
   requests: MedicineRequest[];
 
+	@Field(() => Pharmacy, {nullable: true})
+	@ManyToOne(() => Pharmacy, {nullable:true})
+  pharmacy: Pharmacy;
 
   @Field()
   @Column({ default: 0, nullable: true} )

@@ -7,12 +7,13 @@ import { FormInputPassword } from './../../../components/sections/FormInputPassw
 import { Wrapper } from './../../../components/ui/Wrapper';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
-import { FieldError, useLoginMutation } from '../../../generated/graphql';
+import { useEmployeeDetailsMutation , FieldError, useLoginMutation } from '../../../generated/graphql';
 import { toErrorMap } from '../../../utils/errorMap';
 
 
 export default function LoginForm({ onClose }) {
   const [{ fetching: loginFetch }, login] = useLoginMutation();
+  const [_, employeeDetails] = useEmployeeDetailsMutation();
   const router = useRouter();
   return (
     <Wrapper variant="small">
@@ -22,15 +23,19 @@ export default function LoginForm({ onClose }) {
           const response = await login(values);
           console.log(response);
 
-          // @ts-ignore
           if (response.data?.login.errors) {
             // @ts-ignore
             console.log(response.data.login.errors);
             // @ts-ignore
             setErrors(toErrorMap(response.data.login.errors));
+
           } else if (response.data?.login.user) {
+
             let user = response.data.login.user;
+						const res = await employeeDetails({ email: user.email})
 						localStorage.setItem('user', JSON.stringify(user))
+						console.log(res.data.employeeDetails)
+						router.push('/admin/' + res.data.employeeDetails.pharmacy.id)
             onClose();
           }
         }}

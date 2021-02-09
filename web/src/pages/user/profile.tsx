@@ -9,6 +9,7 @@ import { useMeQuery } from "../../generated/graphql";
 import { ScheduleExamModal } from "../../components/sections/modal/ScheduleExamModal";
 import { EditProfileModal } from "../../components/sections/modal/EditProfileModal";
 import { AddAllergieModal } from "../../components/sections/modal/AddAllergieModal";
+import { SubListModal } from "../../components/sections/modal/SubListModal";
 import { FormInput } from '../../components/sections/FormInput'
 
 
@@ -16,6 +17,7 @@ import { FormInput } from '../../components/sections/FormInput'
 export default function Profile() {
   let [{ data, fetching }] = useMeQuery();
   const editModal = useDisclosure()
+  const subModal = useDisclosure()
   const addAllergie = useDisclosure()
 	let body = null
 	let user = null
@@ -47,8 +49,8 @@ export default function Profile() {
 						: (<Text fontSize={14}>No added address</Text>)
 					}
 					<hr/>
-          <Text fontSize={17}>Points: {(user.points) ? user.points : 0} </Text>
-				  <Text fontSize={17}>Tier: {user.tier.name} </Text>
+					<Text fontSize={17}>Points: {(user.points) ? user.points : 0} </Text>
+		<Text fontSize={17}>Tier: {(user.tier) ? user.tier.name : 'No Tier'} </Text>
 					
 				</>
 		)
@@ -76,6 +78,7 @@ export default function Profile() {
         <Box align="right">
 					<Box> <Button w={180} onClick={editModal.onOpen}>Edit Profile</Button> </Box>
 					<Box> <Button w={180} onClick={addAllergie.onOpen}>Add Allergie</Button> </Box>
+					<Box> <Button w={180} onClick={subModal.onOpen}>Subscriptions</Button> </Box>
         </Box>
 			</SimpleGrid>
       </Box>
@@ -88,6 +91,11 @@ export default function Profile() {
         onOpen={editModal.onOpen}
         isOpen={editModal.isOpen}
         onClose={editModal.onClose}
+      />
+      <SubListModal
+        onOpen={subModal.onOpen}
+        isOpen={subModal.isOpen}
+        onClose={subModal.onClose}
       />
     </>
   );

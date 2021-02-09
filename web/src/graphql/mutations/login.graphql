@@ -8,28 +8,8 @@ mutation Login($email: String!, $password: String!) {
       firstName
       lastName
       role
-      allergies{
+      subscriptions{
         name
-      }
-      tier{
-        name
-        discount
-      }
-      appointments {
-        employee {
-          firstName
-          lastName
-          email
-          averageRating
-        }
-        begin
-        end
-        type
-        isVisited
-        price
-        pharmacy {
-          name
-        }
       }
     }
   }

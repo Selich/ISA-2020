@@ -1,0 +1,32 @@
+mutation AddAllergie($allergies: String!) {
+  addAllergie( allergies: $allergies ) {
+      email
+      firstName
+      lastName
+      role
+      allergies{
+        name
+      }
+      tier{
+        name
+        discount
+      }
+      appointments {
+        employee {
+          firstName
+          lastName
+          email
+          averageRating
+        }
+        begin
+        end
+        type
+        isVisited
+        price
+        pharmacy {
+          name
+        }
+      }
+
+  }
+}

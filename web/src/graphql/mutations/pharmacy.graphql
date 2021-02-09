@@ -1,0 +1,12 @@
+mutation Pharmacy($id: String!) {
+  pharmacy(id: $id){
+      name
+      lat
+      long
+      address{
+        street
+        city
+        country
+      }
+  }
+}

@@ -15,7 +15,8 @@
 import { Employee } from "../entities/Employee";
 import { Holiday } from "../entities/Holiday";
 import { MyContext } from "src/types";
-import { Query, Ctx, Resolver } from "type-graphql";
+import { Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
+import { UserDTO } from "./types/dtos";
 
 @Resolver()
 export class EmployeeResolver {
@@ -29,6 +30,20 @@ export class EmployeeResolver {
       @Ctx() { req }: MyContext
   ) {
       return await Employee.find({})
+  }
+
+  @Mutation(() => Employee, { nullable: true })
+  async employeeDetails(
+			@Arg('inputs') inputs: UserDTO,
+      @Ctx() { req }: MyContext
+  ) {
+		let { email } = inputs
+		let user  = await Employee.findOneOrFail({email})
+		if(user === undefined){
+			return null
+		} 
+
+		return user
   }
 
   // @Query(() => OutputDermExam, { nullable: true })

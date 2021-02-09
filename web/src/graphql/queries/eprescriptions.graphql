@@ -1,0 +1,14 @@
+mutation Eprescriptions($email: String!) {
+  eprescriptions( email: $email)
+   {
+      id,
+      patient{
+        firstName
+        lastName
+      }
+      hashCode
+      dateOfGrant
+      status
+  }
+}
+

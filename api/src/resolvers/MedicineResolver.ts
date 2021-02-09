@@ -3,15 +3,21 @@ import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { getRepository, IsNull } from 'typeorm';
 import { Address } from '../entities/Address';
-import { Inventory } from '../entities/Inventory';
+import  Patient from '../entities/Patient';
 import { Medicine } from '../entities/Medicine';
-import { Pharmacy } from '../entities/Pharmacy';
-import { Price } from '../entities/Price';
-import { MedicineItem } from '../entities/MedicineItem';
-import { MedicineList } from '../entities/MedicineList';
+import { EPrescription } from '../entities/EPrescription';
 
 @Resolver()
 export class MedicineResolver {
+
+		@Mutation(() => [EPrescription], { nullable: true })
+		async eprescriptions(
+			@Arg("email") email: string,
+			@Ctx() { res }: MyContext
+		) {
+			let user = await Patient.findOneOrFail({email: email})
+			return await EPrescription.find({patient: user})
+		}
 
     @Query(() => [Medicine], { nullable: true })
     async shop(

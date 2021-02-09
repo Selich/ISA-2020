@@ -12,6 +12,7 @@ export class EPrescription extends Model{
   @PrimaryGeneratedColumn()
   id!: number;
 
+	@Field(() => Patient, {nullable: true})
   @ManyToOne(() => Patient)
   patient: Patient;
 
@@ -19,11 +20,19 @@ export class EPrescription extends Model{
   employee: Employee;
 
   @Field()
-  @Column()
+	@Column({nullable: true})
   isUsed: boolean;
 
   @Field()
-  @Column()
+	@Column({nullable: true})
   hashCode: string
+
+  @Field()
+	@Column({nullable: true})
+  dateOfGrant: string
+
+  @Field()
+	@Column({nullable: true})
+  status: string
 
 }

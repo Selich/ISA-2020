@@ -15,8 +15,8 @@ import User from "./User";
 @Entity()
 export default class Patient extends User{
 
-  @Field(() => [Appointment])
-	@OneToMany(() => Appointment, item => item.patient, {eager:true, cascade: true})
+  @Field(() => [Appointment], {nullable: true})
+	@OneToMany(() => Appointment, item => item.patient)
   appointments: Appointment[];
 
 	@Field(() => [Medicine], {nullable: true})
@@ -35,8 +35,9 @@ export default class Patient extends User{
   @OneToMany(() => Rating, item => item.patient)
   ratings: Rating[];
 
-  @Field(() => [Pharmacy])
-  @ManyToMany(() => Pharmacy, item => item.subscribers)
+	//TODO: Needs to get it
+	@Field(() => [Pharmacy], {nullable: true})
+	@ManyToMany(() => Pharmacy, item => item.subscribers)
   subscriptions: Pharmacy[];
 
   @OneToMany(() => Complaint, item => item.patient)

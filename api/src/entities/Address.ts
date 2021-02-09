@@ -15,15 +15,15 @@ export class Address extends Model{
   @OneToOne(() => Pharmacy)
   pharmacy: Pharmacy
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true })
   street: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true })
   city: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true })
   country: string;
 

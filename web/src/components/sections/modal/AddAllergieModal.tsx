@@ -1,8 +1,10 @@
 import { Select, Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import EditProfileForm from "../forms/EditProfileForm";
+import { useRouter } from 'next/router';
+
 import { CUIAutoComplete } from 'chakra-ui-autocomplete'
-import { useShopQuery } from '../../../generated/graphql'
+import { useAddAllergieMutation,useShopQuery } from '../../../generated/graphql'
 
 export interface Item {
   label: string;
@@ -22,7 +24,9 @@ const countries = [
 
 export const AddAllergieModal: any = ({ onOpen, isOpen, onClose }) => {
   const btnRef = React.useRef()
+  const router = useRouter();
   let [{ data, fetching }] = useShopQuery();
+  let [ _ , addAllergie] = useAddAllergieMutation();
 	const [value, setValue] = useState('')
 	const [pickerItems, setPickerItems] = React.useState([]);
 	const [storedData, setStoredData] = React.useState([])
@@ -40,42 +44,38 @@ export const AddAllergieModal: any = ({ onOpen, isOpen, onClose }) => {
   };
 
 	useEffect(() => {
-		let temp = data.shop.map(item => item.name)
-		let user = localStorage.getItem('user')
-		user = JSON.parse(user)
-		let userAllergies = null
-		if(user.allergies === null)
-			 userAllergies = []
-		else{
-			 setStoredData(user.allergies)
-			 userAllergies = user.allergies.map(item => item.name)
+		if (fetching){
+
+		} else {
+			let temp = data.shop.map(item => item.name)
+			let user = localStorage.getItem('user')
+			user = JSON.parse(user)
+			let userAllergies = null
+			if(user.allergies === null || user.allergies === undefined)
+				 userAllergies = []
+			else{
+				 setStoredData(user.allergies)
+				 userAllergies = user.allergies.map(item => item.name)
+			}
+
+			let ret = [] 
+			let ret2 = [] 
+			temp.forEach(item => ret.push({value: item, label: item}))
+			userAllergies.forEach(item => ret.push({value: item, label: item}))
+			setPickerItems(ret)
+			setSelectedItems(ret2)
+
+
 		}
-
-		let ret = [] 
-		let ret2 = [] 
-		temp.forEach(item => ret.push({value: item, label: item}))
-		userAllergies.forEach(item => ret.push({value: item, label: item}))
-		setPickerItems(ret)
-		setSelectedItems(ret2)
-
 
 
 	}, [])
 
-	const handleClick = () => {
-			const response = await login(values);
-			console.log(response);
+	async function handleClick(){
+			let allergies = JSON.stringify(selectedItems)
+			const response = await addAllergie({allergies});
+			router.push('/user/profile')
 
-			if (response.data?.login.errors) {
-				// @ts-ignore
-				console.log(response.data.login.errors);
-				// @ts-ignore
-				setErrors(toErrorMap(response.data.login.errors));
-			} else if (response.data?.login.user) {
-				let user = response.data.login.user;
-				localStorage.setItem('user', JSON.stringify(user))
-				onClose();
-			}
 
 	}
 

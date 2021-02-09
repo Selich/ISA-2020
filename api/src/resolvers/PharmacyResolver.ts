@@ -13,6 +13,16 @@ export class PharmacyResolver{
 		return await Pharmacy.find({})
   }
 
+  @Mutation(() => Pharmacy, { nullable: true })
+  async pharmacy(
+		@Arg('id') id: string,
+		@Ctx() { req, res }: MyContext
+	) {
+		const ret = await Pharmacy.findOneOrFail({id: parseInt(id)})
+		console.log(ret)
+		return ret
+  }
+
   @Query(() => [Pharmacy], { nullable: true })
   async containsMedicine(
     @Arg("id") id: String,

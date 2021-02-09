@@ -5,6 +5,7 @@ import { Appointment } from "./Appointment";
 import { AppointmentDefinition } from "./AppointmentDefinition";
 import { Complaint } from "./Complaint";
 import { Inventory } from "./Inventory";
+import { Employee } from "./Employee";
 import { MedicineRequest } from "./MedicineRequest";
 import { Model } from "./Model";
 import  Patient  from "./Patient";
@@ -21,7 +22,7 @@ export class Pharmacy extends Model {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => Address)
+	@Field(() => Address, {nullable:true})
   @OneToOne(() => Address, item => item.pharmacy, { eager: true, cascade: true, nullable: true })
   @JoinColumn()
   address: Address;
@@ -46,6 +47,10 @@ export class Pharmacy extends Model {
   @Field(() => [Price])
   @OneToMany(() => Price, item => item.pharmacy, { eager: true, nullable: true})
   prices: Price[];
+
+  @Field(() => [Employee])
+  @OneToMany(() => Employee, item => item.pharmacy, {nullable: true})
+  admins: Employee[];
 
   @Field(() => [AppointmentDefinition])
   @OneToMany(() => AppointmentDefinition, item => item.pharmacy, {nullable: true})
@@ -77,6 +82,10 @@ export class Pharmacy extends Model {
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.pharmacy,{nullable: true})
   ratings: Rating[];
+
+	@Field({nullable: true})
+  @Column({nullable: true})
+  averageRating: number;
 
 }
 
