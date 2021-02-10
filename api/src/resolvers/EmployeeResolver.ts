@@ -18,6 +18,15 @@ import { MyContext } from "src/types";
 import { Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
 import { UserDTO } from "./types/dtos";
 
+
+/*
+Resiti zakazivanje termina- Employee ne moze da se nadje na dva mesta istovremeno
+Prilikom zakazivanja termina
+1.PESIMISTICKI BLOKIRATI TABELU TERMINA
+2.Proveriti da li novi termin moze da se doda (da li ima preklapanja)
+3.Ako moze dodaj termin
+4.Otkljucaj tabelu termina
+*/
 @Resolver()
 export class EmployeeResolver {
 

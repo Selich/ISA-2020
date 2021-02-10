@@ -2,12 +2,12 @@ query Pharmacies {
   pharmacies {
       id,
       name,
-      long,
-      lat,
       address{
         street,
         city,
-        country
+        country,
+        long,
+        lat
       }
       averageRating
   }

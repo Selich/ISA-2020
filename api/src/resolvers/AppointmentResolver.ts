@@ -5,6 +5,7 @@ import { AppointmentDefinition } from "../entities/AppointmentDefinition";
 import { IsNull } from 'typeorm'
 import { MyContext } from "../types";
 import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
+import { Pharmacy } from "src/entities/Pharmacy";
 // import { UserConsulation, AppointmentDTO, PharmacyDTO, AdminExam } from "./types/dtos";
 
 function addMinutes(date: Date, minutes: number) {
@@ -39,6 +40,15 @@ export class AppointmentResolver {
     ) {
     }
 
+     @Query(() => [Appointment], { nullable: true })
+   async availableAppointments(
+      @Arg("pharmID") pharmID: number,
+      @Ctx() { req }: MyContext
+    ) {
+      let pharm= await Pharmacy.find({id:pharmID})
+    }
+
+    
 
 
 // @Query(() => User, { nullable: true })

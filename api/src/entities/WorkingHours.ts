@@ -2,6 +2,7 @@ import { Field, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Employee } from "./Employee";
 import { Model } from "./Model";
+import { Pharmacy } from "./Pharmacy";
 
 @ObjectType()
 @Entity()
@@ -13,8 +14,9 @@ export class WorkingHours extends Model{
   employee:  Employee;
 
   @Field()
-  @Column()
-  pharmacyID: number;
+  @ManyToOne(() => Employee, item => item.workingHours)
+  @JoinTable()
+  pharmacy: Pharmacy;
 
   @Field()
   @Column()

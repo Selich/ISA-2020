@@ -13,6 +13,7 @@ import { Price } from "./Price";
 import { Rating } from "./Rating";
 import { Prescription } from "./Prescription";
 import { Reservation } from "./Reservation";
+import { WorkingHours } from "./WorkingHours";
 
 @ObjectType()
 @Entity()
@@ -82,6 +83,10 @@ export class Pharmacy extends Model {
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.pharmacy,{nullable: true})
   ratings: Rating[];
+
+  @Field(() => [WorkingHours])
+  @OneToMany(() => WorkingHours, item => item.pharmacy,{nullable: true})
+  workingHours: WorkingHours[];
 
 	@Field({nullable: true})
   @Column({nullable: true})

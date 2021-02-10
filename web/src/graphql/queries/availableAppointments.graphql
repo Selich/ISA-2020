@@ -1,0 +1,11 @@
+query AvailableAppointments {
+  availableAppointments {
+    type,
+    score,
+    price,
+    discount,
+    begin,
+    end
+    }
+  }
+}
