@@ -32,6 +32,14 @@ export class PatientResolver {
   }
 
   @Mutation(() => Patient, { nullable: true })
+	async addTier(
+		@Arg("tier") tier: string,
+		@Ctx() { req  }: MyContext
+	) {
+		 
+  }
+  
+  @Mutation(() => Patient, { nullable: true })
 	async addAllergie(
 		@Arg("allergies") allergies: string,
 		@Ctx() { req  }: MyContext

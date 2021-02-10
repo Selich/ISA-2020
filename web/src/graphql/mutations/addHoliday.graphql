@@ -4,7 +4,7 @@ mutation AddHoliday($from: String!, $until: String!, $employee: String!) {
     until: $until,
     employee: $employee,
   }){
-    Holiday{
+    holiday{
       id,
       from,
       until,

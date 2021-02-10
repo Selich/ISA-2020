@@ -12,7 +12,7 @@ $patient: String!, $pharmacy: String!, $type: String!, $score: String!, $price: 
     discount: $discount,
     isVisited: $isVisited
   }){
-    Appointment{
+    appointment{
     id,
     begin,
     end,
