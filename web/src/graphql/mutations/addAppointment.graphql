@@ -1,0 +1,31 @@
+mutation AddAppointment($begin: String!, $end: String!, $employee: String!, 
+$patient: String!, $pharmacy: String!, $type: String!, $score: String!, $price: String!, $discount: String!, $isVisited: String){
+  addAppointment(inputs: {
+    begin: $begin,
+    end: $end,
+    employee: $employee,
+    patient: $patient,
+    pharmacy: $pharmacy,
+    type: $type,
+    score: $score,
+    price: $price,
+    discount: $discount,
+    isVisited: $isVisited
+  }){
+    Appointment{
+    id,
+    begin,
+    end,
+    employee,
+    patient,
+    pharmacy,
+    type,
+    score,
+    price,
+    discount,
+    isVisited,
+    report,
+    prescription
+    }
+  }
+}
