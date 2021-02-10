@@ -31,11 +31,11 @@ export class Pharmacy extends Model {
   @Column({ nullable: true})
   name: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   long: string;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   lat: string;
 

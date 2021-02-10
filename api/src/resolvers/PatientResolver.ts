@@ -31,6 +31,11 @@ export class PatientResolver {
     return await Patient.find({ ...inputs });
   }
 
+  @Query(() => [Tier], { nullable: true })
+	async tiers() {
+    return await Tier.find({});
+  }
+
   @Mutation(() => Patient, { nullable: true })
 	async addAllergie(
 		@Arg("allergies") allergies: string,

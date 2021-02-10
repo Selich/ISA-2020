@@ -8,20 +8,36 @@ import { usePharmacyMutation } from '../../generated/graphql';
 export default function PharmacyID() {
 	const router = useRouter()
   const [{ fetching }, pharmacy] = usePharmacyMutation();
-	const [ data, setData ] = useState({})
-	const { id } = router.query
 	let body = null
 	let user = null
-	useEffect(() =>  {
-		//@ts-ignore
-		if(fetching){
-
+	let data = {}
+	useEffect(() => {
+		const { id } = router.query
+    data = pharmacy({id: '' + id})
+		if (!data.pharmacy){
+			body = <p> loading </p>
 		} else {
-			pharmacy(id).then(ret => console.log(ret.data?.pharmacy))
+		console.log(data.pharmacy)
+		body = (	
+			<>
+			test
+          <Text></Text>
+          <Text fontSize={17}>{data.pharmacy.name}</Text>
+					 <Text fontSize={17} ></Text>
+
+          <Text fontSize={17}></Text>
+						  <Text fontSize={14}></Text>
+					<hr/>
+          <Text fontSize={17}></Text>
+				  <Text fontSize={17}></Text>
+					
+			</>)
+			
 
 		}
+	},[])
 
-	}, [])
+
   return (
     <>
       <Box
@@ -39,19 +55,7 @@ export default function PharmacyID() {
       >
       <SimpleGrid columns={2}>
 			<Box align="left">
-				<>
-          <Avatar  src="" size="2xl" margin={4} pd={3} />
-          <Text></Text>
-          <Text fontSize={17}>{data.name}</Text>
-					 <Text fontSize={17} ></Text>
-
-          <Text fontSize={17}></Text>
-						  <Text fontSize={14}></Text>
-					<hr/>
-          <Text fontSize={17}></Text>
-				  <Text fontSize={17}></Text>
-					
-				</>
+		{body}
         </Box>
 			</SimpleGrid>
       </Box>

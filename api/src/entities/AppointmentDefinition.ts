@@ -17,10 +17,6 @@ export class AppointmentDefinition extends Model{
 
   @Field()
   @Column({ nullable: true })
-  delta: number;
-
-  @Field()
-  @Column({ nullable: true })
   score: number;
 
   @Field()

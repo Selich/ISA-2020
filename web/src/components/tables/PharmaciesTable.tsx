@@ -35,29 +35,18 @@ export const PharmaciesTable = (): JSX.Element => {
     const [_, subscribe] = useSubscribeMutation();
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     let [{ data, error, fetching }] = usePharmaciesQuery();
+		const columns = [
+						{ name: 'Name', selector: 'name', sortable: true, },
+						{ name: 'City', selector: 'address.city', sortable: true, },
+						{ name: 'Rating', selector: 'averageRating', sortable: true, },
+						{ name: '', button: true, cell: row => 
+							<Button onClick={() => handleSubscribe(row) } size="sm" colorScheme="teal" color="white">Subscribe</Button>
+						},
+					{ name: '', button: true, cell: row => 
+					<Button size="sm" onClick={(val) => router.push('/admin/' + row.id)} colorScheme='teal' >Details</ Button>
+						},
+				];
 		const router = useRouter()
-    const columns = [
-        {
-            name: 'Name',
-            selector: 'name',
-            sortable: true,
-        },
-        {
-            name: 'City',
-            selector: 'address.city',
-            sortable: true,
-        },
-        {
-            name: 'Rating',
-            selector: 'averageRating',
-            sortable: true,
-        },
-        {
-            name: '',
-            button: true,
-					cell: row => <Button onClick={() => handleSubscribe(row) } size="sm" colorScheme="teal" color="white">Subscribe</Button>
-        },
-    ];
 	async function  handleSubscribe(row) {
 	   const res = await subscribe(row.id)
 	}
@@ -87,6 +76,7 @@ export const PharmaciesTable = (): JSX.Element => {
 const ExpandedComponent = ({ data }) => {
 
     const subscribeModal = useDisclosure()
+		const router = useRouter();
     const rateModal = useDisclosure()
     const mapModal = useDisclosure()
     return (

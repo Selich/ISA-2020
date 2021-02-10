@@ -21,24 +21,9 @@ export const SysAdminMenu: any = ({ user }) => {
           }
         </MenuButton>
         <MenuList>
-          <NextLink href="/admin/pharmacies">
+          <NextLink href="/sysadmin/">
             <MenuItem minH="48px">
-              <span>Pharmacies</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/admin/medicines">
-            <MenuItem minH="48px">
-              <span>Medicines</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/admin/employees">
-            <MenuItem minH="48px">
-              <span>Employees</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/admin/tiers">
-            <MenuItem minH="48px">
-              <span>Tiers</span>
+              <span>Home</span>
             </MenuItem>
           </NextLink>
 				</MenuList>

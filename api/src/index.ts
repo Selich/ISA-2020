@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import Redis from 'ioredis';
-
 import session from 'express-session';
 import QrScanner from 'qr-scanner'
 import connectRedis from 'connect-redis'
@@ -13,25 +12,15 @@ import { createConnection } from 'typeorm';
 import { PatientResolver } from './resolvers/PatientResolver';
 import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
-
 import dbConfig from './ormconfig'
 import nodemailer from 'nodemailer'
-import mg from 'nodemailer-mailgun-transport'
 import { AuthResolver } from './resolvers/AuthResolver';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
 import { Employee } from './entities/Employee';
+import { Tier } from './entities/Tier';
 import { EmployeeResolver } from './resolvers/EmployeeResolver';
-import { EPrescriptionResolver } from './resolvers/EPrescriptionResolver';
-import Patient from './entities/Patient';
-import { Prescription } from './entities/Prescription';
-import { Appointment } from './entities/Appointment';
-import { Pharmacy } from './entities/Pharmacy';
-import { Address } from './entities/Address';
 import { MedicineResolver } from './resolvers/MedicineResolver';
 import {PharmacyResolver} from './resolvers/PharmacyResolver';
-import jsQR from 'jsqr'
-import sizeOf from 'image-size'
-import jimp from 'jimp'
 
 
 const mailerOptions = {
@@ -46,6 +35,34 @@ const main = async () => {
 
   conn.runMigrations()
 
+	let sysadmin = new Employee() 
+	sysadmin.email = 'sysadmin@mail'
+	sysadmin.password = 'admin'
+	sysadmin.role = 'sysadmin'
+	await Employee.save(sysadmin)
+
+	/*
+	let regular = new Tier() 
+	regular.name = 'Regular'
+	regular.discount = 0
+	regular.scoreMin = 0
+	regular.scoreMax = 14
+	await Tier.save(regular)
+
+	let silver = new Tier() 
+	silver.name = 'Silver'
+	silver.discount = 20
+	silver.scoreMin = 15
+	silver.scoreMax = 29
+	await Tier.save(silver)
+
+	let gold = new Tier() 
+	gold.name = 'Gold'
+	gold.discount = 30
+	gold.scoreMin = 30
+	gold.scoreMax = 999
+	await Tier.save(gold)
+	*/
 
   const app = express()
   const RedisStore = connectRedis(session)

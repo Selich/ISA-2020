@@ -3,8 +3,45 @@ import { Pharmacy } from "../../entities/Pharmacy";
 import { InputType, Field, ObjectType, Float } from "type-graphql";
 import { FieldError } from "./ErrorTypes";
 import User from "../../entities/User";
+import {Employee} from "../../entities/Employee";
 import Patient from "../../entities/Patient";
 import { FieldsOnCorrectTypeRule } from "graphql";
+
+@InputType()
+export class AdminInput {
+  @Field()
+  email: string;
+  @Field()
+  password: string;
+  @Field()
+  firstName: string;
+  @Field()
+  lastName: string;
+  @Field()
+  telephone: string;
+  @Field()
+  street: string;
+  @Field()
+  city: string;
+  @Field()
+  country: string;
+  @Field()
+  pharmacyName: string;
+  @Field()
+  role: string;
+}
+
+@InputType()
+export class PharmacyDTO {
+  @Field()
+  name: string;
+  @Field()
+  street: string;
+  @Field()
+  city: string;
+  @Field()
+  country: string;
+}
 
 @InputType()
 export class TierDTO {
@@ -117,6 +154,18 @@ export class AddressDTO {
   country: string;
 
 }
+@ObjectType()
+export class EmployeeResponse {
+  @Field(() => String, { nullable: true })
+  token?: String;
+
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => Employee, { nullable: true })
+  user?: Employee;
+}
+
 @ObjectType()
 export class UserResponse {
   @Field(() => String, { nullable: true })

@@ -1,22 +1,11 @@
-// import { MyContext } from "../types";
-// import { Query, Ctx, Mutation, Resolver, Field, InputType, Arg, ObjectType } from "type-graphql";
-// import { Holiday } from "../entities/Holiday";
-// import { dateFormat } from '../constants'
-// import { Address } from "../entities/Address";
-// import { validateAdmin } from "../utils/validators/validateRegister";
-// import { UserResponse, EmployeeDTO } from "./types/UserTypes";
-// import argon2 from 'argon2'
-// import { WorkingHours } from "../entities/WorkingHours";
-// import { Appointment } from "../entities/Appointment";
-// import { Between } from "typeorm";
-// import { GraphQLList } from "graphql";
-// import { Employee } from "../entities/Employee";
-
 import { Employee } from "../entities/Employee";
+import { Address } from "../entities/Address";
 import { Holiday } from "../entities/Holiday";
+import { Pharmacy } from "../entities/Pharmacy";
 import { MyContext } from "src/types";
 import { Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
-import { UserDTO } from "./types/dtos";
+import { EmployeeResponse, UserResponse, UserDTO, AdminInput } from "./types/dtos";
+import argon2 from 'argon2'
 
 @Resolver()
 export class EmployeeResolver {
@@ -87,63 +76,43 @@ export class EmployeeResolver {
 
   // }
 
-  // @Mutation(() => UserResponse)
-  // async createEmployee(
-  //   @Arg("inputs") inputs: EmployeeInput,
-  //   @Ctx() { req }: MyContext
-  // ){
+  @Mutation(() => EmployeeResponse)
+   async addEmployee(
+     @Arg("inputs") inputs: AdminInput,
+     @Ctx() { req }: MyContext
+   ){
+		 let { email, password, firstName, lastName, telephone, street, city, country, pharmacyName, role } = inputs
+    let user = await Employee.findOne({ email: email });
+    let pharmacy = await Pharmacy.findOne({ name: pharmacyName });
+    if (!(user === undefined)) {
+      return { errors: [{ field: "email", message: "Email already exists" }] };
+    }
+    if (!(pharmacy === undefined)) {
+      return { errors: [{ field: "pharmacyName", message: "Pharmacy does not exist" }] };
+    }
+		 let employee = new Employee()
+		 employee.role = role
+		 employee.email = email
+		 employee.firstName = firstName
+		 employee.lastName = lastName
+		 const hashedPassword = await argon2.hash(inputs.firstName);
+		 employee.password = hashedPassword
+		 employee.telephone = telephone
+     let address = { street, city, country };
 
-  //   const errors = validateAdmin(req.session.userId);
-  //   return null
+     let temp = await Address.findOne({ ...address });
+     if (temp === undefined)
+       employee.address = await Address.save(
+         new Address({ street, city, country, employee: employee })
+       );
+     else employee.address = temp;
 
-  //   // const user = new User();
-  //   // const hashedPassword = await argon2.hash(inputs.firstName);
-  //   // user.email = inputs.email;
-  //   // user.password = hashedPassword
-  //   // user.role = inputs.role;
-  //   // user.firstName = inputs.firstName;
-  //   // user.lastName = inputs.lastName;
-  //   // const wh = new WorkingHours()
-  //   // const list: WorkingHours[] = []
-  //   // const newUser = await user.save()
-  //   // wh.employee = await Employee.findOneOrFail({ id: newUser.id })
-  //   // wh.pharmacyID = 1
-  //   // const l = list.concat(wh)
-
-  //   // newUser.workingHours = l
-  //   // return { user };
-  // }
-
-  // @Mutation(() => Holiday)
-  // async updateEmployee(
-  //   @Arg("input") input: EmployeeInput,
-  //   @Ctx() { req, res }: MyContext) {
-  //   const user = await User.findOne({ id: input.id })
-  //   const address = await Address.findOne(
-  //     {
-  //       where:
-  //       {
-  //         street: input.street,
-  //         city: input.city,
-  //         country: input.country,
-  //       }
-  //     }
-  //   )
-  //   if (!user) return
-  //   if (!address) {
-  //     user.address = new Address()
-  //   }
-  //   user.address.street = input.street
-  //   user.address.city = input.city
-  //   user.address.country = input.country
-  //   user.address.save()
-  //   user.email = input.email
-  //   user.password = input.password
-  //   user.firstName = input.firstName
-  //   user.lastName = input.lastName
-  //   user.gender = input.gender
-  //   user.telephone = input.telephone
-  //   user.dateOfBirth = new Date(input.dateOfBirth)
-  //   user.save()
-  // }
+		 //@ts-ignore
+		 let pharmy = await Pharmacy.save(pharmacy,{employee})
+     employee = await Employee.save(employee);
+		 console.log(employee)
+		 console.log(pharmy)
+		 return { employee }
+		 
+	 }
 }

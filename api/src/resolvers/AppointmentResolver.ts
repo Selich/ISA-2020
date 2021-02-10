@@ -21,6 +21,13 @@ export class AppointmentResolver {
         return await Appointment.find({})
     }
 
+    @Query(() => [AppointmentDefinition], { nullable: true })
+    async definitions(
+        @Ctx() { req }: MyContext
+    ): Promise<AppointmentDefinition[]> {
+        return await AppointmentDefinition.find({})
+    }
+
     @Query(() => [Appointment], { nullable: true })
     async freeExams(
         @Arg("pharm") pharm: number,
