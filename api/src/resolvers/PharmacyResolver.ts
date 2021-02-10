@@ -1,20 +1,13 @@
 import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
 import { MyContext } from '../types';
-import { MedicineDetails } from '../entities/MedicineDetails';
-import { Medicine } from '../entities/Medicine';
-import { MedicineDetailsInput } from './types/MedicineTypes';
+import { Medicine } from '../entities/Medicine'
+import { Address } from '../entities/Address'
+import { PharmacyDTO, RegisterPatientDTO, UserDTO, UserResponse } from "./types/dtos";
 
-@ObjectType()
-class FieldErrorMedicine {
-  @Field()
-  field: string;
-  @Field()
-  message: string;
-}
-@ObjectType()
-class MedicineResponse {
-  @Field(() => [FieldErrorMedicine], { nullable: true })
-  errors?: FieldErrorMedicine[];
+
+
+@Resolver(Pharmacy)
+export class PharmacyResolver{
 
   @Field(() => MedicineDetails, { nullable: true })
   details?: MedicineDetails;
@@ -35,14 +28,35 @@ export class MedicineResolver{
     @Ctx() { req }: MyContext
   ): Promise<MedicineResponse> {
 
-    const details = new MedicineDetails();
-    details.code = inputs.code
-    details.name = inputs.name
-    details.type = inputs.type
-    details.points = inputs.points
-    details.form = inputs.form
-    details.producer = inputs.producer
-    details.info = inputs.info
+  @Mutation(() => Pharmacy, { nullable: true })
+  async createPharmacy(
+		@Arg('inputs') inputs: PharmacyDTO,
+		@Ctx() { req, res }: MyContext
+	) {
+		let pharm = new Pharmacy()
+		let { name, street, city, country } = inputs
+		let address = { street, city, country }
+		pharm.name = inputs.name
+
+		let temp = await Address.findOne({ ...address });
+		if (temp === undefined)
+			pharm.address = await Address.save(
+				new Address({ street, city, country,  pharm: pharm })
+			);
+		else pharm.address = temp;
+
+		let newPharm = Pharmacy.save(pharm)
+
+		return { newPharm }
+
+  }
+
+  @Query(() => [Pharmacy], { nullable: true })
+  async containsMedicine(
+    @Arg("id") id: String,
+		@Ctx() { req, res }: MyContext
+	) {
+		const pharmacies = await Pharmacy.find({})
 
     await details.save()
 

@@ -1,0 +1,11 @@
+query Definitions {
+  definitions {
+      type,
+      score,
+      price,
+      pharmacy {
+        name
+      }
+  }
+}
+

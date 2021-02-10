@@ -1,0 +1,15 @@
+mutation createPharmacy(
+  $name: String!, 
+  $street: String!
+  $city: String!, 
+  $country: String!
+  ) {
+  createPharmacy(inputs: {
+    name: $name,
+    street: $street,
+    city: $city,
+    country: $country,
+  }){
+      name
+    }
+}

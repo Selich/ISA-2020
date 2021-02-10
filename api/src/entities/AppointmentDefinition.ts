@@ -15,12 +15,8 @@ export class AppointmentDefinition extends BaseEntity{
   type: string;
 
   @Field()
-  @Column()
-  score: string;
-
-  @Field()
-  @Column()
-  price: number;
+  @Column({ nullable: true })
+  score: number;
 
   @Field()
   @Column({ type: Date })

@@ -1,0 +1,9 @@
+query Tiers {
+  tiers {
+      name,
+      discount,
+      scoreMin,
+      scoreMax,
+  }
+}
+
