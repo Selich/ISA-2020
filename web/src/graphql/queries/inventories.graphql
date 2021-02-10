@@ -1,0 +1,6 @@
+query Inventories {
+  Inventories {
+    supplier,
+    pharmacy
+  }
+}

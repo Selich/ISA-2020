@@ -1,0 +1,10 @@
+query MedicineItems {
+  medicineItems {
+    id,
+    details,
+    quantity,
+    price,
+    dateOfPurchase,
+    instructions,
+  }
+}

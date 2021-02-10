@@ -1,0 +1,10 @@
+query AppointmentDefinitions {
+  appointmentDefinitions {
+    id,
+    type,
+    delta,
+    score,
+    price,
+    pharmacy
+  }
+}

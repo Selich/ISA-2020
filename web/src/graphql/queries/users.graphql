@@ -1,0 +1,19 @@
+query Users {
+  users {
+    email,
+    password,
+    role,
+    firstName,
+    lastName,
+    gender,
+    dateOfBirth,
+    telephone,
+    address{
+        street,
+        city,
+        country,
+        long,
+        lat
+      }
+  }
+}

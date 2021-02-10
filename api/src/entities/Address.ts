@@ -27,5 +27,12 @@ export class Address extends Model{
   @Column({ nullable: true })
   country: string;
 
+  @Field({nullable: true})
+  @Column({ nullable: true })
+  long: string;
 
+  @Field({nullable: true})
+  @Column({ nullable: true })
+  lat: string;
+  
 }

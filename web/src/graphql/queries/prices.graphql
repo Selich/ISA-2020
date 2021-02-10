@@ -1,0 +1,10 @@
+query Prices {
+  prices {
+    id,
+    pharmacy,
+    medicine,
+    price,
+    from,
+    until
+  }
+}

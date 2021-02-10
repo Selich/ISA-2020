@@ -1,0 +1,17 @@
+query Appointments {
+  appointments {
+    id,
+    patient,
+    employee,
+    pharmacy,
+    prescription,
+    type,
+    score,
+    price,
+    discount,
+    report,
+    isVisited,
+    begin,
+    end
+  }
+}

@@ -1,0 +1,11 @@
+query Prescriptions {
+  prescriptions {
+    patient,
+    employee,
+    appointment,
+    type,
+    isUsed,
+    deadline,
+    hashCode
+  }
+}

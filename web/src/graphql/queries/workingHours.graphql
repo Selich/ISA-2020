@@ -1,0 +1,15 @@
+query WorkingHours {
+  workingHours {
+      employee{
+          id,
+          firstName,
+          lastName
+      }
+      pharmacy{
+          id,
+          name
+      }
+      from,
+      until
+  }
+}

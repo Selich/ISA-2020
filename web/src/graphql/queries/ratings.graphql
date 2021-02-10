@@ -1,0 +1,9 @@
+query Ratings {
+  ratings {
+    id,
+    patient,
+    employee,
+    pharmacy,
+    complain
+  }
+}

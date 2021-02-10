@@ -1,0 +1,8 @@
+query Patients {
+  patients {
+    tier,
+    score,
+    penalty,
+    isEnabled
+  }
+}

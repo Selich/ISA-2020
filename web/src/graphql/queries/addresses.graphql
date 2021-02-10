@@ -1,0 +1,9 @@
+query Addresses {
+  addresses {
+    street,
+    city,
+    country,
+    long,
+    lat
+  }
+}

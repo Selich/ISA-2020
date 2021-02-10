@@ -1,0 +1,9 @@
+query Holidays {
+  holidays {
+    id,
+    from,
+    until,
+    isApproved,
+    employee
+  }
+}

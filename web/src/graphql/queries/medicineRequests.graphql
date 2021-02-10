@@ -1,0 +1,8 @@
+query MedicineRequests {
+  medicineRequests {
+    id,
+    medicine,
+    pharmacy,
+    employee
+  }
+}

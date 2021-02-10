@@ -1,0 +1,10 @@
+query Reservations {
+  reservations {
+    pharmacy,
+    patient,
+    deadline,
+    pickupDate,
+    isBought,
+    totalSum
+  }
+}

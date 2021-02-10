@@ -30,4 +30,8 @@ export class Price extends Model{
   @Column()
   from: Date;
 
+  @Field(() => String)
+  @Column()
+  until: Date;
+
 }

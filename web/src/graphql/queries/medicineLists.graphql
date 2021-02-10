@@ -1,0 +1,6 @@
+query MedicineLists {
+  medicineLists {
+    id,
+    medicines
+  }
+}

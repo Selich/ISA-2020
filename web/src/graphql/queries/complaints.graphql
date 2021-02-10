@@ -1,0 +1,7 @@
+query Complaints {
+  complaints {
+    patient,
+    pharmacy,
+    description
+  }
+}
