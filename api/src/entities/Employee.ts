@@ -5,6 +5,7 @@ import { Holiday } from "./Holiday";
 import { MedicineRequest } from "./MedicineRequest";
 import { Rating } from "./Rating";
 import { Pharmacy } from "./Pharmacy";
+import { Complaint } from "./Complaint";
 import User from "./User";
 import { WorkingHours } from "./WorkingHours";
 
@@ -19,6 +20,9 @@ export class Employee extends User {
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.employee, {nullable: true})
   ratings: Rating[];
+
+  @OneToMany(() => Complaint, item => item.employee)
+  complaints: Complaint[];
 
   @OneToMany(() => Appointment, item => item.employee, {nullable: true})
   schedule: Appointment[];

@@ -24,6 +24,7 @@ export type Query = {
   available?: Maybe<Array<Appointment>>;
   appointment?: Maybe<Appointment>;
   employees?: Maybe<Array<Employee>>;
+  holidays?: Maybe<Array<Holiday>>;
   shop?: Maybe<Array<Medicine>>;
   pharmacyMedicine?: Maybe<Array<Pharmacy>>;
   pharmacies?: Maybe<Array<Pharmacy>>;
@@ -97,6 +98,7 @@ export type Patient = {
   appointments?: Maybe<Array<Appointment>>;
   allergies?: Maybe<Array<Medicine>>;
   prescritions: Array<Prescription>;
+  ePrescriptions: Array<EPrescription>;
   reservations: Array<Reservation>;
   ratings: Array<Rating>;
   subscriptions?: Maybe<Array<Pharmacy>>;
@@ -153,10 +155,11 @@ export type Holiday = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  employee: Employee;
+  employee?: Maybe<Employee>;
   from: Scalars['String'];
   until: Scalars['String'];
   isApproved: Scalars['Boolean'];
+  comments: Scalars['String'];
 };
 
 export type Rating = {
@@ -165,7 +168,7 @@ export type Rating = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  complain: Scalars['String'];
+  rating?: Maybe<Scalars['Float']>;
 };
 
 export type WorkingHours = {
@@ -209,7 +212,7 @@ export type Inventory = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  medicines: Array<MedicineItem>;
+  medicines?: Maybe<Array<MedicineItem>>;
   supplier: Employee;
   pharmacy: Pharmacy;
 };
@@ -220,12 +223,12 @@ export type MedicineItem = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  details: Medicine;
+  details?: Maybe<Medicine>;
   list: MedicineList;
-  quantity: Scalars['Float'];
-  price: Scalars['Float'];
-  dateOfPurchase: Scalars['String'];
-  instructions: Scalars['String'];
+  quantity?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  dateOfPurchase?: Maybe<Scalars['String']>;
+  instructions?: Maybe<Scalars['String']>;
 };
 
 export type Medicine = {
@@ -242,8 +245,9 @@ export type Medicine = {
   contents?: Maybe<Scalars['String']>;
   producer?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
-  isPrescriptionRequired: Scalars['Boolean'];
+  isPrescriptionRequired?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
+  ratings: Array<Rating>;
   from: Scalars['String'];
   until: Scalars['String'];
 };
@@ -254,7 +258,7 @@ export type MedicineList = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  medicines: Array<MedicineItem>;
+  medicines?: Maybe<Array<MedicineItem>>;
 };
 
 export type Price = {
@@ -297,7 +301,7 @@ export type Reservation = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  medicines: Array<MedicineItem>;
+  medicines?: Maybe<Array<MedicineItem>>;
   pharmacy: Pharmacy;
   deadline: Scalars['String'];
   pickupDate: Scalars['String'];
@@ -311,9 +315,10 @@ export type Complaint = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  patient: Patient;
-  pharmacy: Pharmacy;
-  description: Scalars['String'];
+  patient?: Maybe<Patient>;
+  employee?: Maybe<Employee>;
+  pharmacy?: Maybe<Pharmacy>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type Prescription = {
@@ -322,7 +327,7 @@ export type Prescription = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  medicines: Array<MedicineItem>;
+  medicines?: Maybe<Array<MedicineItem>>;
   patient: Patient;
   employee: Employee;
   appointment: Appointment;
@@ -330,6 +335,19 @@ export type Prescription = {
   isUsed: Scalars['Boolean'];
   hashCode: Scalars['String'];
   deadline?: Maybe<Scalars['String']>;
+};
+
+export type EPrescription = {
+  __typename?: 'EPrescription';
+  id: Scalars['ID'];
+  version: Scalars['ID'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  patient?: Maybe<Patient>;
+  pharmacy?: Maybe<Pharmacy>;
+  hashCode: Scalars['String'];
+  dateOfGrant: Scalars['String'];
+  status: Scalars['String'];
 };
 
 export type Tier = {
@@ -346,6 +364,7 @@ export type Tier = {
 };
 
 export type PatientInput = {
+  id?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   confirmPassword?: Maybe<Scalars['String']>;
@@ -374,13 +393,15 @@ export type MedicineInput = {
   contents?: Maybe<Scalars['String']>;
   producer?: Maybe<Scalars['String']>;
   rating?: Maybe<Scalars['Float']>;
-  isPrescriptionRequired: Scalars['Boolean'];
+  isPrescriptionRequired?: Maybe<Scalars['Boolean']>;
   info?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   addAllergie?: Maybe<Patient>;
+  addRating?: Maybe<Rating>;
+  addComplaint?: Maybe<Complaint>;
   subscribe?: Maybe<Patient>;
   register: PatientResponse;
   confirmRegistration: PatientResponse;
@@ -390,8 +411,13 @@ export type Mutation = {
   createDefinition?: Maybe<AppointmentDefinition>;
   schedule?: Maybe<Appointment>;
   addFreeApp?: Maybe<Appointment>;
+  requestHoliday?: Maybe<Holiday>;
+  approveHoliday?: Maybe<Holiday>;
   addWorkingHours?: Maybe<Employee>;
   addEmployee: EmployeeResponse;
+  reserveMedicine?: Maybe<Array<Reservation>>;
+  cancelReservation?: Maybe<Array<Reservation>>;
+  pickupReservation?: Maybe<Array<Reservation>>;
   createMedicine?: Maybe<Medicine>;
   addMedicine?: Maybe<MedicineItem>;
   eprescriptions?: Maybe<Array<EPrescription>>;
@@ -406,8 +432,18 @@ export type MutationAddAllergieArgs = {
 };
 
 
+export type MutationAddRatingArgs = {
+  inputs: RatingInput;
+};
+
+
+export type MutationAddComplaintArgs = {
+  inputs: ComplaintInput;
+};
+
+
 export type MutationSubscribeArgs = {
-  id: Scalars['String'];
+  inputs: SubscriptionInput;
 };
 
 
@@ -465,6 +501,16 @@ export type MutationAddFreeAppArgs = {
 };
 
 
+export type MutationRequestHolidayArgs = {
+  inputs: HolidayInput;
+};
+
+
+export type MutationApproveHolidayArgs = {
+  inputs: HolidayInput;
+};
+
+
 export type MutationAddWorkingHoursArgs = {
   inputs: WorkingHoursInput;
 };
@@ -504,6 +550,54 @@ export type MutationRemovePharmacyArgs = {
   inputs: PharmacyInput;
 };
 
+export type RatingInput = {
+  patient?: Maybe<PatientInput>;
+  employee?: Maybe<EmployeeInput>;
+  pharmacy?: Maybe<PharmacyInput>;
+  medicine?: Maybe<MedicineInput>;
+  rating?: Maybe<Scalars['Float']>;
+};
+
+export type EmployeeInput = {
+  id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  confirmPassword?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressInput>;
+  telephone?: Maybe<Scalars['String']>;
+  pharmacy?: Maybe<Scalars['String']>;
+  averageRating?: Maybe<Scalars['String']>;
+  workingHours?: Maybe<Array<WorkingHoursInput>>;
+};
+
+export type WorkingHoursInput = {
+  until?: Maybe<Scalars['String']>;
+  from?: Maybe<Scalars['String']>;
+  pharmacy?: Maybe<PharmacyInput>;
+  employee?: Maybe<EmployeeInput>;
+};
+
+export type PharmacyInput = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressInput>;
+};
+
+export type ComplaintInput = {
+  patient?: Maybe<PatientInput>;
+  employee?: Maybe<EmployeeInput>;
+  pharmacy?: Maybe<PharmacyInput>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type SubscriptionInput = {
+  patient?: Maybe<PatientInput>;
+  pharmacy?: Maybe<PharmacyInput>;
+};
+
 export type PatientResponse = {
   __typename?: 'PatientResponse';
   token?: Maybe<Scalars['String']>;
@@ -539,31 +633,13 @@ export type AppointmentInput = {
   length?: Maybe<Scalars['Float']>;
 };
 
-export type EmployeeInput = {
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  confirmPassword?: Maybe<Scalars['String']>;
-  role?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  address?: Maybe<AddressInput>;
-  telephone?: Maybe<Scalars['String']>;
-  pharmacy?: Maybe<Scalars['String']>;
-  averageRating?: Maybe<Scalars['String']>;
-  workingHours?: Maybe<Array<WorkingHoursInput>>;
-};
-
-export type WorkingHoursInput = {
-  until?: Maybe<Scalars['String']>;
-  from?: Maybe<Scalars['String']>;
-  pharmacy?: Maybe<PharmacyInput>;
-  employee?: Maybe<EmployeeInput>;
-};
-
-export type PharmacyInput = {
+export type HolidayInput = {
   id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  address?: Maybe<AddressInput>;
+  employee?: Maybe<EmployeeInput>;
+  from?: Maybe<Scalars['String']>;
+  until?: Maybe<Scalars['String']>;
+  isApproved?: Maybe<Scalars['Boolean']>;
+  comments?: Maybe<Scalars['String']>;
 };
 
 export type EmployeeResponse = {
@@ -579,26 +655,14 @@ export type MedicineItemInput = {
   list: MedicineListInput;
   quantity: Scalars['Float'];
   price: Scalars['Float'];
-  dateOfPurchase: Scalars['String'];
-  instructions: Scalars['String'];
+  dateOfPurchase?: Maybe<Scalars['String']>;
+  instructions?: Maybe<Scalars['String']>;
 };
 
 export type MedicineListInput = {
   medicines?: Maybe<Array<MedicineItemInput>>;
-  id?: Maybe<AddressInput>;
+  id?: Maybe<Scalars['String']>;
   pharmacy?: Maybe<PharmacyInput>;
-};
-
-export type EPrescription = {
-  __typename?: 'EPrescription';
-  id: Scalars['ID'];
-  version: Scalars['ID'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  patient?: Maybe<Patient>;
-  hashCode: Scalars['String'];
-  dateOfGrant: Scalars['String'];
-  status: Scalars['String'];
 };
 
 export type InputExamFragment = (
@@ -780,7 +844,7 @@ export type ScheduleMutation = (
 );
 
 export type SubscribeMutationVariables = Exact<{
-  id: Scalars['String'];
+  inputs: SubscriptionInput;
 }>;
 
 
@@ -1090,8 +1154,8 @@ export function useScheduleMutation() {
   return Urql.useMutation<ScheduleMutation, ScheduleMutationVariables>(ScheduleDocument);
 };
 export const SubscribeDocument = gql`
-    mutation Subscribe($id: String!) {
-  subscribe(id: $id) {
+    mutation subscribe($inputs: SubscriptionInput!) {
+  subscribe(inputs: $inputs) {
     email
   }
 }

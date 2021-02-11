@@ -1,6 +1,5 @@
 import { InputType, Field, ObjectType, Float } from "type-graphql";
 import { FieldError } from "./ErrorTypes";
-import {Employee} from "../../entities/Employee";
 import User from "../../entities/User";
 import Patient from "../../entities/Patient";
 
@@ -78,6 +77,8 @@ export class MedicineListInput {
 
 @InputType()
 export class UserInput {
+  @Field({ nullable: true })
+  id?: string;
   @Field({ nullable: true })
   email?: string;
   @Field({ nullable: true })
@@ -194,4 +195,65 @@ export class WorkingHoursInput{
   pharmacy?: PharmacyInput;
   @Field({ nullable: true})
   employee?: EmployeeInput;
+}
+@InputType()
+export class HolidayInput {
+  @Field(() => String, {nullable: true})
+  id?: string;
+
+  @Field(() => EmployeeInput, {nullable: true})
+  employee?: EmployeeInput;
+
+  @Field(() => String, {nullable: true})
+  from?: string;
+
+  @Field(() => String, {nullable: true})
+  until?: string;
+
+  @Field({nullable: true})
+  isApproved?: boolean;
+
+  @Field({nullable: true})
+  comments?: string;
+}
+
+@InputType()
+export class RatingInput {
+	@Field(() => PatientInput, {nullable: true})
+  patient?: PatientInput;
+
+  @Field(() => EmployeeInput, {nullable: true})
+  employee?: EmployeeInput;
+
+  @Field(() => PharmacyInput, {nullable: true})
+  pharmacy?: PharmacyInput;
+
+  @Field(() => MedicineInput, {nullable: true})
+  medicine?: MedicineInput;
+
+  @Field(() => Float,{nullable: true})
+  rating?: number;
+}
+@InputType()
+export class SubscriptionInput {
+	@Field(() => PatientInput, {nullable: true})
+  patient?: PatientInput;
+
+  @Field(() => PharmacyInput, {nullable: true})
+  pharmacy?: PharmacyInput;
+}
+
+@InputType()
+export class ComplaintInput {
+	@Field(() => PatientInput, {nullable: true})
+  patient?: PatientInput;
+
+  @Field(() => EmployeeInput, {nullable: true})
+  employee?: EmployeeInput;
+
+  @Field(() => PharmacyInput, {nullable: true})
+  pharmacy?: PharmacyInput;
+
+  @Field({nullable: true})
+  description?: string;
 }

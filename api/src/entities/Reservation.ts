@@ -18,13 +18,13 @@ export class Reservation extends MedicineList{
   @JoinTable()
   patient: Patient;
 
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  deadline: Date;
+	@Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  deadline: string;
 
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  pickupDate: Date;
+	@Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  pickupDate: string;
 
   @Field()
   @Column({nullable: true })

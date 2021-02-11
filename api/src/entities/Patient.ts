@@ -1,9 +1,10 @@
-import { ObjectType, Field, InputType } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, Column } from "typeorm";
+import {  ObjectType, Field, InputType } from "type-graphql";
+import { JoinTable, Entity, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, Column } from "typeorm";
 import { Appointment } from "./Appointment";
 import { Complaint } from "./Complaint";
 import { Medicine } from "./Medicine";
 import { Pharmacy } from "./Pharmacy";
+import { EPrescription } from "./EPrescription";
 import { Prescription } from "./Prescription";
 import { Rating } from "./Rating";
 import { Reservation } from "./Reservation";
@@ -27,6 +28,10 @@ export default class Patient extends User{
   @OneToMany(() => Prescription, item => item.patient)
   prescritions: Prescription[];
 
+  @Field(() => [EPrescription])
+  @OneToMany(() => EPrescription, item => item.patient)
+  ePrescriptions: EPrescription[];
+
   @Field(() => [Reservation])
   @OneToMany(() => Reservation, item => item.patient)
   reservations: Reservation[];
@@ -37,7 +42,8 @@ export default class Patient extends User{
 
 	//TODO: Needs to get it
 	@Field(() => [Pharmacy], {nullable: true})
-	@ManyToMany(() => Pharmacy, item => item.subscribers)
+	@ManyToMany(() => Pharmacy, item => item.subscribers,{eager:true})
+	@JoinTable()
   subscriptions: Pharmacy[];
 
   @OneToMany(() => Complaint, item => item.patient)

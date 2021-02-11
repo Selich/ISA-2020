@@ -2,10 +2,11 @@ import { Employee } from "../entities/Employee";
 import { Address } from "../entities/Address";
 import { Holiday } from "../entities/Holiday";
 import { WorkingHours } from "../entities/WorkingHours";
+import { sendHolidayStatusUpdate } from "../utils/sendMail";
 import { Pharmacy } from "../entities/Pharmacy";
 import { MyContext } from "src/types";
 import { Field, Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
-import { EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
+import { HolidayInput, EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
 import argon2 from 'argon2'
 
 
@@ -19,6 +20,63 @@ export class EmployeeResolver {
       @Ctx() { req }: MyContext
   ) {
       return await Employee.find({})
+  }
+  @Query(() => [Holiday], { nullable: true })
+	async holidays(
+		@Ctx() { req  }: MyContext
+	) {
+		return await Holiday.find({})
+  }
+
+  @Mutation(() => Holiday, { nullable: true })
+	async requestHoliday(
+		@Arg("inputs") inputs: HolidayInput,
+		@Ctx() { req  }: MyContext
+	) {
+		let user = req.session.user
+		if(!inputs.employee) return null;
+		if(!user) user = await Employee.findOneOrFail({email: inputs.employee.email})
+		let holiday = new Holiday()
+		if(inputs.from)
+			holiday.from = inputs.from
+		if(inputs.until)
+			holiday.until = inputs.until
+		holiday.isApproved = false
+		holiday.employee = user
+		holiday.save()
+		return holiday
+  }
+
+  @Mutation(() => Holiday, { nullable: true })
+	async approveHoliday(
+		@Arg("inputs") inputs: HolidayInput,
+		@Ctx() { req, mailer  }: MyContext
+	) {
+		
+		let user = req.session.user
+		if(!user) {
+			let list = await Employee.find({role: 'sysadmin'})
+			user = list[0]
+		}
+		if(user.role !== 'sysadmin') return null
+
+		if(!inputs.id) return null
+		let id = parseInt(inputs.id)
+		let holiday = await Holiday.findOneOrFail({id})
+		if(!inputs.employee) return null
+		let employee = await Employee.findOneOrFail({email: inputs.employee.email})
+
+		let comment = ""
+		if(inputs.comments){
+			comment = inputs.comments
+		}
+		let isApproved = false
+		if(inputs.isApproved) isApproved = inputs.isApproved
+		sendHolidayStatusUpdate(employee,mailer,user,isApproved,comment)
+
+
+
+		return holiday
   }
 
   @Mutation(() => Employee, { nullable: true })

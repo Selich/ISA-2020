@@ -4,6 +4,7 @@ import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { AppointmentDefinition } from "./AppointmentDefinition";
 import { Complaint } from "./Complaint";
+import { EPrescription } from "./EPrescription";
 import { WorkingHours } from "./WorkingHours";
 import { Inventory } from "./Inventory";
 import { Employee } from "./Employee";
@@ -60,6 +61,9 @@ export class Pharmacy extends Model {
 
   @OneToMany(() => Prescription, item => item.patient, {nullable: true})
   prescritions: Prescription[];
+
+  @OneToMany(() => EPrescription, item => item.patient, {nullable: true})
+  ePrescriptions: EPrescription[];
 
   @OneToMany(() => WorkingHours, item => item.pharmacy, {nullable: true})
   workingHours: WorkingHours[];

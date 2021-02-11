@@ -1,5 +1,6 @@
-mutation Subscribe($id: String!) {
-  subscribe(id: $id){
-      email
-  }
-}
+mutation subscribe( $inputs: SubscriptionInput!) {
+  subscribe(inputs: $inputs
+  ) { 
+     email
+}}
+

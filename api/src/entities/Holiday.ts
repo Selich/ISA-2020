@@ -7,24 +7,25 @@ import { Model } from "./Model";
 @Entity()
 export class Holiday extends Model{
 
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => Employee)
+	@Field(() => Employee, { nullable:true })
   @ManyToOne(() => Employee, item => item.holidays)
   @JoinTable()
   employee: Employee;
 
   @Field(() => String)
-  @Column({ type: Date, nullable: true})
-  from: Date;
+  @Column({nullable: true})
+  from: string;
 
   @Field(() => String)
-  @Column({ type: Date,nullable: true})
-  until: Date;
+  @Column({nullable: true})
+  until: string;
 
   @Field()
   @Column({nullable: true})
   isApproved: boolean;
+
+  @Field()
+  @Column({nullable: true})
+  comments: string;
 
 }

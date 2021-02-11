@@ -8,11 +8,32 @@ import  Patient from '../entities/Patient';
 import { Medicine } from '../entities/Medicine';
 import { MedicineItem } from '../entities/MedicineItem';
 import { Pharmacy } from '../entities/Pharmacy';
+import { Reservation } from '../entities/Reservation';
 import { EPrescription } from '../entities/EPrescription';
 import { MedicineInput, MedicineItemInput } from "./types/dtos";
 
 @Resolver()
 export class MedicineResolver {
+	@Mutation(() => [Reservation], { nullable: true })
+		async reserveMedicine(
+
+				) {
+
+		}
+
+	@Mutation(() => [Reservation], { nullable: true })
+	async cancelReservation(
+
+			) {
+
+	}
+
+	@Mutation(() => [Reservation], { nullable: true })
+	async pickupReservation(
+
+			) {
+
+	}
 
 		@Mutation(() => Medicine, { nullable: true })
 		async createMedicine(

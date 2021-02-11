@@ -3,32 +3,29 @@ import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGenerate
 import { Model } from "./Model";
 import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
+import { Employee } from "./Employee";
 
 @ObjectType()
 @Entity()
 export class Complaint extends Model{
 
-  @Field(() => Patient)
-  @ManyToOne(() => Patient, item => item.complaints,  { eager: true, cascade: true })
+	@Field(() => Patient, {nullable:true})
+	@ManyToOne(() => Patient, item => item.complaints,  { eager: true, cascade: true, nullable: true })
   @JoinTable()
   patient: Patient;
 
-  @Field(() => Pharmacy)
-  @ManyToOne(() => Pharmacy, item => item.reservations,  { eager: true, cascade: true })
+	@Field(() => Employee, {nullable:true})
+	@ManyToOne(() => Employee, item => item.complaints,  { eager: true, cascade: true, nullable:true })
+  @JoinTable()
+  employee: Employee;
+
+	@Field(() => Pharmacy, {nullable:true})
+	@ManyToOne(() => Pharmacy, item => item.complaints,  { eager: true, cascade: true, nullable:true })
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @Field()
-  @Column()
+	@Field({ nullable: true })
+	@Column({ nullable: true })
   description: string;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

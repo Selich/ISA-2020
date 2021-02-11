@@ -2,6 +2,7 @@ import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedCol
 import { ObjectType, Field, ID } from 'type-graphql';
 import Patient from './Patient';
 import { Employee } from './Employee';
+import { Pharmacy } from './Pharmacy';
 import { Model } from './Model';
 
 @ObjectType()
@@ -16,8 +17,9 @@ export class EPrescription extends Model{
   @ManyToOne(() => Patient)
   patient: Patient;
 
-  @ManyToOne(() => Employee, { nullable: true })
-  employee: Employee;
+	@Field(() => Pharmacy, {nullable: true})
+  @ManyToOne(() => Pharmacy)
+  pharmacy: Pharmacy;
 
   @Field()
 	@Column({nullable: true})

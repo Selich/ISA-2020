@@ -4,6 +4,7 @@ import { MedicineItem } from './MedicineItem';
 import Patient from './Patient';
 import { MedicineRequest } from './MedicineRequest';
 import { Price } from './Price';
+import { Rating } from './Rating';
 import { Model } from './Model';
 
 @ObjectType()
@@ -62,6 +63,10 @@ export class Medicine extends Model {
 
   @OneToMany(() => Price, item => item.medicine, { nullable: true})
   prices: Price[];
+	o
+  @Field(() => [Rating])
+  @OneToMany(() => Rating, item => item.medicine,{nullable: true})
+  ratings: Rating[];
 
   @OneToMany(() => MedicineItem, item => item.details, { nullable: true})
   belongsTo: MedicineItem[];
