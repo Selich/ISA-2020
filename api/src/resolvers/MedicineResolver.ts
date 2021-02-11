@@ -3,12 +3,70 @@ import { MyContext } from '../types';
 import argon2 from 'argon2';
 import { getRepository, IsNull } from 'typeorm';
 import { Address } from '../entities/Address';
+import { Inventory } from '../entities/Inventory';
 import  Patient from '../entities/Patient';
 import { Medicine } from '../entities/Medicine';
+import { MedicineItem } from '../entities/MedicineItem';
+import { Pharmacy } from '../entities/Pharmacy';
 import { EPrescription } from '../entities/EPrescription';
+import { MedicineInput, MedicineItemInput } from "./types/dtos";
 
 @Resolver()
 export class MedicineResolver {
+
+		@Mutation(() => Medicine, { nullable: true })
+		async createMedicine(
+			@Arg("inputs") inputs: MedicineInput,
+			@Ctx() { res }: MyContext
+		) {
+
+			let medicine = await Medicine.findOne({code: inputs.code})
+
+			if(medicine) return null
+
+			medicine = new Medicine({ ...inputs })
+			medicine.save()
+			return medicine
+		}
+
+		@Mutation(() => MedicineItem, { nullable: true })
+		async addMedicine(
+			@Arg("inputs") inputs: MedicineItemInput,
+			@Ctx() { res }: MyContext
+		) {
+
+			if(!inputs.details) return null;
+			let medicine = await Medicine.findOneOrFail({code: inputs.details.code})
+			if(!medicine) return null
+
+			
+				//
+			let medicineItem = new MedicineItem()
+
+
+			if(inputs.quantity)
+				medicineItem.quantity = inputs.quantity
+			if(inputs.price)
+				medicineItem.price = inputs.price
+			medicineItem.details = medicine
+			if(!inputs.list.id) return null
+
+
+
+			let id = parseInt(inputs.list.id)
+			let inventory = await Inventory.findOneOrFail({ id })
+			console.log(inventory)
+			medicineItem.list = inventory 
+			medicineItem.save()
+			let medicines: MedicineItem[] = []
+			if(inventory.medicines) medicines = inventory.medicines
+			medicines.push(medicineItem)
+			inventory.medicines = medicines
+
+			inventory.save()
+
+			return medicineItem
+		}
 
 		@Mutation(() => [EPrescription], { nullable: true })
 		async eprescriptions(
@@ -26,47 +84,19 @@ export class MedicineResolver {
         return await Medicine.find({})
     }
 
-//   // @Query(() => [Inventory], { nullable: true })
-//   // async inventories(
-//   //   @Arg("inputs") inputs: MedicineDTO,
-//   //   @Ctx() { }: MyContext
-//   // ): Promise<Inventory[]>{
-//   //   let { name } = inputs
-//   //   const medicine = await Medicine.findOneOrFail({name: name})
-//   //   let arr = await MedicineItem.find({details: medicine})
-//   //   let larr = arr.map(item => item.list.id)
-//   //   return await Inventory.findByIds(larr, { supplier: IsNull()})
-//   // }
+    @Query(() => [Pharmacy], { nullable: true })
+    async pharmacyMedicine(
+        @Arg('inputs') inputs : MedicineInput
+    ): Promise<Pharmacy[]>{
+				let pharmacies = await Pharmacy.find({})
+			 console.log(pharmacies[0].inventory.medicines)
+				//@ts-ignore
+			  let list = pharmacies.filter(
+					pharmacy => ( pharmacy.inventory.medicines.filter(
+						item => item.details.code == inputs.code
+					) !== null) || pharmacy.inventory.medicines === undefined )
 
-//   // @Mutation(() => MedicineList, { nullable: true })
-//   // async addMedicines(
-//   //   @Arg("inputs") inputs: MedicineListDTO,
-//   //   @Ctx() { }: MyContext
-//   // ): Promise<any>{
-//   //   let { medicines, type, pharmacy , supplier } = inputs
-//   //   switch (type){
-//   //     case 'inventory':{
-//   //       const pharm = Pharmacy.findOneOrFail({name: pharmacy.name})
-//   //       const user = User.findOneOrFail({email: supplier.email})
-//   //       return await Inventory.save(new Inventory({medicines, pharmacy, supplier}))
-//   //     }
-//   //   }
-//   // }
-//   // @Query(() => [Medicine], { nullable: true })
-//   // async medicines(
-//   //   @Arg("inputs") inputs: MedicineDTO,
-//   //   @Ctx() { }: MyContext
-//   // ): Promise<Medicine[]>{
-
-//   //   return await Medicine.find({...inputs})
-//   // }
-//   // @Mutation(() => Medicine, { nullable: true })
-//   // async createMedicineDefinition(
-//   //   @Arg("inputs") inputs: MedicineDTO,
-//   //   @Ctx() { }: MyContext
-//   // ): Promise<Medicine>{
-
-//   //   return await Medicine.save(new Medicine({...inputs}))
-//   // }
-
+        return list
+			
+		}
 }

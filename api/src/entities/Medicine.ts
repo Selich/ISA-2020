@@ -12,15 +12,15 @@ export class Medicine extends Model {
 
   @Field(() => String)
   @Column({ unique: true })
-  code!: string;
+  code: string;
 
   @Field(() => String, {nullable: true})
   @Column({ nullable: true})
-  name!: string;
+  name: string;
 
 	@Field(() => String, {nullable: true})
   @Column({ nullable: true})
-  type: string;
+  kind: string;
 
 	@Field({nullable: true})
   @Column({ nullable: true})
@@ -46,8 +46,8 @@ export class Medicine extends Model {
   // @Column()
   // image: string;
 
-  @Field(() => Boolean)
-  @Column({ default: false })
+	@Field(() => Boolean, {nullable: true})
+	@Column({ default: false, nullable:true })
   isPrescriptionRequired: boolean;
 
 	@Field(() => String, {nullable: true})

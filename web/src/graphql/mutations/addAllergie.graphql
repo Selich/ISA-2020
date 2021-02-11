@@ -19,8 +19,8 @@ mutation AddAllergie($allergies: String!) {
           averageRating
         }
         begin
-        end
-        type
+        length
+        kind
         isVisited
         price
         pharmacy {

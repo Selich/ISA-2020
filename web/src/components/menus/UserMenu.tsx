@@ -84,7 +84,6 @@ export const UserMenu: any = ({ user }) => {
             mr={4}
             onClick={() => {
               logout();
-              router.push("/");
             }}
             isLoading={logoutFetching}
             variant="link"

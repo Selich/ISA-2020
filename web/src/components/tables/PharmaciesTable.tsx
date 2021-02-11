@@ -17,7 +17,7 @@ import { MapViewModal } from '../sections/modal/MapViewModal'
 import { RateModal } from '../sections/modal/RateModal'
 import { SubscribeModal } from '../sections/modal/SubscribeModal'
 import { useSubscribeMutation, usePharmaciesQuery } from '../../generated/graphql'
-import {lexicographicSortSchema} from 'graphql'
+import { lexicographicSortSchema } from 'graphql'
 
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
@@ -35,48 +35,50 @@ export const PharmaciesTable = (): JSX.Element => {
     const [_, subscribe] = useSubscribeMutation();
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     let [{ data, error, fetching }] = usePharmaciesQuery();
-		const columns = [
-						{ name: 'Name', selector: 'name', sortable: true, },
-						{ name: 'City', selector: 'address.city', sortable: true, },
-						{ name: 'Rating', selector: 'averageRating', sortable: true, },
-						{ name: '', button: true, cell: row => 
-							<Button onClick={() => handleSubscribe(row) } size="sm" colorScheme="teal" color="white">Subscribe</Button>
-						},
-					{ name: '', button: true, cell: row => 
-					<Button size="sm" onClick={(val) => router.push('/admin/' + row.id)} colorScheme='teal' >Details</ Button>
-						},
-				];
-		const router = useRouter()
-	async function  handleSubscribe(row) {
-	   const res = await subscribe(row.id)
-	}
-  let body = null;
-	if(error) alert(error)
-	if(fetching){
-			body = ( <p> loading </p> )
-	} else if(!data.pharmacies){
-			body = ( <p> no pharmacies </p> )
-	} else {
-			body = (
-        <>
-            <DataTable
-                columns={columns}
-                data={data.pharmacies}
-                pagination
-                paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                persistTableHead
-                expandableRows
-                expandableRowsComponent={<ExpandedComponent data={this} />}
-            />
-        </>
-    )
-	}
-	return body
+    const columns = [
+        { name: 'Name', selector: 'name', sortable: true, },
+        { name: 'City', selector: 'address.city', sortable: true, },
+        { name: 'Rating', selector: 'averageRating', sortable: true, },
+        {
+            name: '', button: true, cell: row =>
+                <Button onClick={() => handleSubscribe(row)} size="sm" colorScheme="teal" color="white">Subscribe</Button>
+        },
+        {
+            name: '', button: true, cell: row =>
+                <Button size="sm" onClick={(val) => router.push('/pharmacy/' + row.id)} colorScheme='teal' >Details</ Button>
+        },
+    ];
+    const router = useRouter()
+    async function handleSubscribe(row) {
+        const res = await subscribe(row.id)
+    }
+    let body = null;
+    if (error) alert(error)
+    if (fetching) {
+        body = (<p> loading </p>)
+    } else if (!data.pharmacies) {
+        body = (<p> no pharmacies </p>)
+    } else {
+        body = (
+            <>
+                <DataTable
+                    columns={columns}
+                    data={data.pharmacies}
+                    pagination
+                    paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+                    persistTableHead
+                    expandableRows
+                    expandableRowsComponent={<ExpandedComponent data={this} />}
+                />
+            </>
+        )
+    }
+    return body
 }
 const ExpandedComponent = ({ data }) => {
 
     const subscribeModal = useDisclosure()
-		const router = useRouter();
+    const router = useRouter();
     const rateModal = useDisclosure()
     const mapModal = useDisclosure()
     return (
@@ -89,7 +91,7 @@ const ExpandedComponent = ({ data }) => {
                     <Text>Rating: {data.rating}</Text>
                 </Box>
                 <Box m={6}>
-                    <Text>Prescription Required? {(data.isPrescriptionRequired) ? "T":"X"}</Text>
+                    <Text>Prescription Required? {(data.isPrescriptionRequired) ? "T" : "X"}</Text>
                     <Text>Producer: {data.producer}</Text>
                     <Text>Information:</Text>
                     <Text>{data.info}</Text>

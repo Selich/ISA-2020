@@ -3,8 +3,8 @@ import { EPrescription } from '../entities/EPrescription'
 import { MyContext } from "../types";
 import { Query, Ctx, Resolver, Mutation, Arg } from "type-graphql";
 import qrcode from 'qrcode'
+import { MedicineListInput } from "./types/dtos";
 import { Prescription } from "../entities/Prescription";
-import { MedicineListDTO } from "./types/dtos";
 import Patient from "../entities/Patient";
 
 @Resolver()
@@ -19,12 +19,12 @@ export class EPrescriptionResolver {
 
     @Mutation(() => Prescription, { nullable: true })
     async generateEPrescription(
-        @Arg("inputs") inputs: MedicineListDTO,
+        @Arg("inputs") inputs: MedicineListInput,
         @Ctx() { req, mailer }: MyContext
     ) {
         const patient = await Patient.findOneOrFail({ id: req.session.userId})
         const item = await Prescription.save(new Prescription(
-            { medicines: inputs.list, patient, employee: null, appointments: null, type:"eprescription", isUsed:false }
+            { medicines: inputs.medicines, patient, employee: null, appointments: null, type:"eprescription", isUsed:false }
         ))
 
         const token = qrcode.create(item.hashCode, {})

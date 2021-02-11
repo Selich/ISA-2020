@@ -32,7 +32,7 @@ export class Appointment extends Model{
 
   @Field()
   @Column({ nullable: true})
-  type: string;
+  kind: string;
 
 	@Field({nullable: true})
   @Column({ nullable: true})
@@ -58,8 +58,8 @@ export class Appointment extends Model{
 	@Column({nullable: true })
   begin: string;
 
-	@Field(() => String, {nullable: true})
+	@Field(() => Number, {nullable: true})
 	@Column({nullable: true })
-  end: string;
+  length: number;
 
 }

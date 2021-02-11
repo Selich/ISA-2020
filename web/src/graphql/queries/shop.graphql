@@ -2,7 +2,7 @@ query Shop {
   shop {
       code,
       name,
-      type,
+      kind,
       points,
       form,
       rating,

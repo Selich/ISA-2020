@@ -18,7 +18,7 @@ export class Price extends Model{
   pharmacy: Pharmacy;
 
   @Field(() => Medicine)
-  @ManyToOne(() => Medicine, item => item.prices,  { eager: true, cascade: true })
+  @ManyToOne(() => Medicine, item => item.prices )
   @JoinTable()
   medicine: Medicine;
 
@@ -28,6 +28,6 @@ export class Price extends Model{
 
   @Field(() => String)
   @Column()
-  from: Date;
+  from: string;
 
 }

@@ -4,6 +4,7 @@ import { Address } from "./Address";
 import { Appointment } from "./Appointment";
 import { AppointmentDefinition } from "./AppointmentDefinition";
 import { Complaint } from "./Complaint";
+import { WorkingHours } from "./WorkingHours";
 import { Inventory } from "./Inventory";
 import { Employee } from "./Employee";
 import { MedicineRequest } from "./MedicineRequest";
@@ -18,9 +19,6 @@ import { Reservation } from "./Reservation";
 @Entity()
 export class Pharmacy extends Model {
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
 
 	@Field(() => Address, {nullable:true})
   @OneToOne(() => Address, item => item.pharmacy, { eager: true, cascade: true, nullable: true })
@@ -40,12 +38,12 @@ export class Pharmacy extends Model {
   lat: string;
 
   @Field(() => Inventory)
-  @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true, nullable: true})
+	@OneToOne(() => Inventory, item => item.pharmacy, { cascade: true, nullable: true, eager:true})
   @JoinColumn()
   inventory: Inventory;
 
   @Field(() => [Price])
-  @OneToMany(() => Price, item => item.pharmacy, { eager: true, nullable: true})
+  @OneToMany(() => Price, item => item.pharmacy, {  nullable: true})
   prices: Price[];
 
   @Field(() => [Employee])
@@ -57,11 +55,14 @@ export class Pharmacy extends Model {
   definitions: AppointmentDefinition[];
 
   @Field(() => [MedicineRequest])
-  @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true , nullable: true})
+  @OneToMany(() => MedicineRequest, item => item.pharmacy, {  nullable: true})
   requests: MedicineRequest[];
 
   @OneToMany(() => Prescription, item => item.patient, {nullable: true})
   prescritions: Prescription[];
+
+  @OneToMany(() => WorkingHours, item => item.pharmacy, {nullable: true})
+  workingHours: WorkingHours[];
 
   @Field(() => [Appointment])
   @OneToMany(() => Appointment, item => item.pharmacy,{nullable: true})

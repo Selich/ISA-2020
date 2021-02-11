@@ -1,6 +1,7 @@
 import { Field, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Employee } from "./Employee";
+import { Pharmacy } from "./Pharmacy";
 import { Model } from "./Model";
 
 @ObjectType()
@@ -12,16 +13,17 @@ export class WorkingHours extends Model{
   @JoinTable()
   employee:  Employee;
 
-  @Field()
-  @Column()
-  pharmacyID: number;
+  @Field(() =>  Pharmacy)
+	@ManyToOne(() => Pharmacy, item => item.workingHours, {eager:true})
+  @JoinTable()
+  pharmacy:  Pharmacy;
 
-  @Field()
-  @Column()
+	@Field({nullable: true})
+	@Column({nullable: true})
   from: string;
 
-  @Field()
-  @Column()
+	@Field({nullable: true})
+	@Column({nullable:true})
   until: string;
 
 }

@@ -24,7 +24,7 @@ export class Employee extends User {
   schedule: Appointment[];
 
   @Field(() => [WorkingHours])
-  @OneToMany(() => WorkingHours, item => item.employee, {nullable: true})
+	@OneToMany(() => WorkingHours, item => item.employee, {nullable: true, eager: true, cascade:true})
   workingHours: WorkingHours[];
 
   @Field(() =>  [MedicineRequest])

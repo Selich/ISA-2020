@@ -6,14 +6,6 @@ import { Model } from "./Model";
 @Entity()
 export class Order extends Model {
 
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
 
 
 }

@@ -1,0 +1,13 @@
+query Available($id: String!) {
+  available(id: $id){
+      begin
+      length
+      employee {
+          firstName
+          lastName
+          email
+          averageRating
+      }
+  }
+
+}

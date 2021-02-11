@@ -17,7 +17,6 @@ import nodemailer from 'nodemailer'
 import { AuthResolver } from './resolvers/AuthResolver';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
 import { Employee } from './entities/Employee';
-import { Tier } from './entities/Tier';
 import { EmployeeResolver } from './resolvers/EmployeeResolver';
 import { MedicineResolver } from './resolvers/MedicineResolver';
 import {PharmacyResolver} from './resolvers/PharmacyResolver';
@@ -35,13 +34,25 @@ const main = async () => {
 
   conn.runMigrations()
 
+	/*
+
 	let sysadmin = new Employee() 
-	sysadmin.email = 'sysadmin@mail'
-	sysadmin.password = 'admin'
-	sysadmin.role = 'sysadmin'
+	sysadmin.email = 'uros@gmail.com'
+	sysadmin.password = 'pass'
+	sysadmin.role = 'patient'
 	await Employee.save(sysadmin)
 
-	/*
+	let derm = new Employee() 
+	derm.email = 'derm@gmail.com'
+	derm.password = 'pass'
+	derm.role = ''
+	await Employee.save(derm)
+
+	let pharm = new Employee() 
+	pharm.email = 'pharm@gmail.com'
+	pharm.password = 'pass'
+	pharm.role = 'pharm'
+	await Employee.save(pharm)
 	let regular = new Tier() 
 	regular.name = 'Regular'
 	regular.discount = 0

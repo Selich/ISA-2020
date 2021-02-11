@@ -12,29 +12,29 @@ export class MedicineItem extends Model{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => Medicine)
+	@Field(() => Medicine, { nullable:true })
   @ManyToOne(() => Medicine, item => item.belongsTo ,{ eager: true, cascade: true, nullable:true})
   @JoinTable()
   details: Medicine;
 
   @Field(() => MedicineList)
-  @ManyToOne(() => MedicineList, item => item.medicines ,{ eager: true, cascade: true, nullable:true})
+  @ManyToOne(() => MedicineList, item => item.medicines ,{ nullable:true})
   @JoinTable()
   list: MedicineList;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   quantity: number;
 
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   price: number;
 
-  @Field(() => String)
+	@Field(() => String, {nullable:true})
   @Column({ nullable: true})
   dateOfPurchase: Date;
 
-  @Field()
+	@Field({nullable: true})
 	@Column({ nullable: true })
   instructions: string;
 

@@ -54,6 +54,7 @@ export default function RegisterLayout({ onClose }) {
               text: "Confirm your account!",
               icon: "success",
             });
+						onClose()
 
           }
         }}

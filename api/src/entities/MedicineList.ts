@@ -11,8 +11,8 @@ export class MedicineList extends Model{
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => [MedicineItem])
-  @OneToMany(() => MedicineItem, medicine => medicine.list)
+	@Field(() => [MedicineItem], {nullable:true})
+	@OneToMany(() => MedicineItem, medicine => medicine.list, {eager: true, cascade:true})
   medicines: MedicineItem[];
 
 }

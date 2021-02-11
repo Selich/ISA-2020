@@ -12,8 +12,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
 
 export type Query = {
@@ -23,28 +21,33 @@ export type Query = {
   tiers?: Maybe<Array<Tier>>;
   appointments?: Maybe<Array<Appointment>>;
   definitions?: Maybe<Array<AppointmentDefinition>>;
-  freeExams?: Maybe<Array<Appointment>>;
+  available?: Maybe<Array<Appointment>>;
   appointment?: Maybe<Appointment>;
-  holiday?: Maybe<Holiday>;
   employees?: Maybe<Array<Employee>>;
   shop?: Maybe<Array<Medicine>>;
+  pharmacyMedicine?: Maybe<Array<Pharmacy>>;
   pharmacies?: Maybe<Array<Pharmacy>>;
   containsMedicine?: Maybe<Array<Pharmacy>>;
 };
 
 
 export type QueryPatientsArgs = {
-  inputs: UserDto;
+  inputs: PatientInput;
 };
 
 
-export type QueryFreeExamsArgs = {
-  pharm: Scalars['Float'];
+export type QueryAvailableArgs = {
+  id: Scalars['String'];
 };
 
 
 export type QueryAppointmentArgs = {
-  date: Scalars['DateTime'];
+  date: Scalars['String'];
+};
+
+
+export type QueryPharmacyMedicineArgs = {
+  inputs: MedicineInput;
 };
 
 
@@ -63,8 +66,6 @@ export type User = {
   role: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  gender: Scalars['String'];
-  dateOfBirth: Scalars['String'];
   address: Address;
   telephone: Scalars['String'];
 };
@@ -91,8 +92,6 @@ export type Patient = {
   role: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  gender: Scalars['String'];
-  dateOfBirth: Scalars['String'];
   address: Address;
   telephone: Scalars['String'];
   appointments?: Maybe<Array<Appointment>>;
@@ -117,14 +116,14 @@ export type Appointment = {
   employee?: Maybe<Employee>;
   pharmacy?: Maybe<Pharmacy>;
   prescription?: Maybe<Prescription>;
-  type: Scalars['String'];
+  kind: Scalars['String'];
   score?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   discount?: Maybe<Scalars['Float']>;
   report?: Maybe<Scalars['String']>;
   isVisited?: Maybe<Scalars['Boolean']>;
   begin?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['String']>;
+  length?: Maybe<Scalars['Float']>;
 };
 
 export type Employee = {
@@ -138,8 +137,6 @@ export type Employee = {
   role: Scalars['String'];
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  gender: Scalars['String'];
-  dateOfBirth: Scalars['String'];
   address: Address;
   telephone: Scalars['String'];
   holidays: Array<Holiday>;
@@ -178,39 +175,9 @@ export type WorkingHours = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   employee: Employee;
-  pharmacyID: Scalars['Float'];
-  from: Scalars['String'];
-  until: Scalars['String'];
-};
-
-export type MedicineRequest = {
-  __typename?: 'MedicineRequest';
-  id: Scalars['ID'];
-  medicine: Medicine;
   pharmacy: Pharmacy;
-  employee: Employee;
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-};
-
-export type Medicine = {
-  __typename?: 'Medicine';
-  id: Scalars['ID'];
-  version: Scalars['ID'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  code: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  points?: Maybe<Scalars['Float']>;
-  form?: Maybe<Scalars['String']>;
-  contents?: Maybe<Scalars['String']>;
-  producer?: Maybe<Scalars['String']>;
-  rating?: Maybe<Scalars['Float']>;
-  isPrescriptionRequired: Scalars['Boolean'];
-  info?: Maybe<Scalars['String']>;
-  from: Scalars['String'];
-  until: Scalars['String'];
+  from?: Maybe<Scalars['String']>;
+  until?: Maybe<Scalars['String']>;
 };
 
 export type Pharmacy = {
@@ -261,6 +228,26 @@ export type MedicineItem = {
   instructions: Scalars['String'];
 };
 
+export type Medicine = {
+  __typename?: 'Medicine';
+  id: Scalars['ID'];
+  version: Scalars['ID'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  code: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  kind?: Maybe<Scalars['String']>;
+  points?: Maybe<Scalars['Float']>;
+  form?: Maybe<Scalars['String']>;
+  contents?: Maybe<Scalars['String']>;
+  producer?: Maybe<Scalars['String']>;
+  rating?: Maybe<Scalars['Float']>;
+  isPrescriptionRequired: Scalars['Boolean'];
+  info?: Maybe<Scalars['String']>;
+  from: Scalars['String'];
+  until: Scalars['String'];
+};
+
 export type MedicineList = {
   __typename?: 'MedicineList';
   id: Scalars['ID'];
@@ -288,10 +275,20 @@ export type AppointmentDefinition = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  type: Scalars['String'];
+  kind: Scalars['String'];
   score: Scalars['Float'];
   price: Scalars['Float'];
   pharmacy: Pharmacy;
+};
+
+export type MedicineRequest = {
+  __typename?: 'MedicineRequest';
+  id: Scalars['ID'];
+  medicine: Medicine;
+  pharmacy: Pharmacy;
+  employee: Employee;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Reservation = {
@@ -348,39 +345,59 @@ export type Tier = {
   patients: Array<Patient>;
 };
 
-export type UserDto = {
+export type PatientInput = {
   email?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
+  confirmPassword?: Maybe<Scalars['String']>;
   role?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
-  gender?: Maybe<Scalars['String']>;
-  dateOfBirth?: Maybe<Scalars['String']>;
-  address?: Maybe<AddressDto>;
+  address?: Maybe<AddressInput>;
   telephone?: Maybe<Scalars['String']>;
+  tier?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['String']>;
+  penalty?: Maybe<Scalars['String']>;
 };
 
-export type AddressDto = {
+export type AddressInput = {
   street?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
 };
 
+export type MedicineInput = {
+  name?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
+  kind?: Maybe<Scalars['String']>;
+  points?: Maybe<Scalars['Float']>;
+  form?: Maybe<Scalars['String']>;
+  contents?: Maybe<Scalars['String']>;
+  producer?: Maybe<Scalars['String']>;
+  rating?: Maybe<Scalars['Float']>;
+  isPrescriptionRequired: Scalars['Boolean'];
+  info?: Maybe<Scalars['String']>;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
   addAllergie?: Maybe<Patient>;
   subscribe?: Maybe<Patient>;
-  register: UserResponse;
-  confirmRegistration: UserResponse;
+  register: PatientResponse;
+  confirmRegistration: PatientResponse;
   login: UserResponse;
-  updateProfile: UserResponse;
+  updateProfile: PatientResponse;
   logout: Scalars['Boolean'];
-  employeeDetails?: Maybe<Employee>;
+  createDefinition?: Maybe<AppointmentDefinition>;
+  schedule?: Maybe<Appointment>;
+  addFreeApp?: Maybe<Appointment>;
+  addWorkingHours?: Maybe<Employee>;
   addEmployee: EmployeeResponse;
+  createMedicine?: Maybe<Medicine>;
+  addMedicine?: Maybe<MedicineItem>;
   eprescriptions?: Maybe<Array<EPrescription>>;
   pharmacy?: Maybe<Pharmacy>;
   createPharmacy?: Maybe<Pharmacy>;
+  removePharmacy?: Maybe<Pharmacy>;
 };
 
 
@@ -413,7 +430,7 @@ export type MutationConfirmRegistrationArgs = {
 
 
 export type MutationLoginArgs = {
-  inputs: UserDto;
+  inputs: PatientInput;
 };
 
 
@@ -430,13 +447,41 @@ export type MutationUpdateProfileArgs = {
 };
 
 
-export type MutationEmployeeDetailsArgs = {
-  inputs: UserDto;
+export type MutationCreateDefinitionArgs = {
+  inputs: AppointmentInput;
+};
+
+
+export type MutationScheduleArgs = {
+  inputs: AppointmentInput;
+};
+
+
+export type MutationAddFreeAppArgs = {
+  employee: Scalars['String'];
+  discount: Scalars['Float'];
+  length: Scalars['Float'];
+  from: Scalars['String'];
+};
+
+
+export type MutationAddWorkingHoursArgs = {
+  inputs: WorkingHoursInput;
 };
 
 
 export type MutationAddEmployeeArgs = {
-  inputs: AdminInput;
+  inputs: EmployeeInput;
+};
+
+
+export type MutationCreateMedicineArgs = {
+  inputs: MedicineInput;
+};
+
+
+export type MutationAddMedicineArgs = {
+  inputs: MedicineItemInput;
 };
 
 
@@ -451,11 +496,16 @@ export type MutationPharmacyArgs = {
 
 
 export type MutationCreatePharmacyArgs = {
-  inputs: PharmacyDto;
+  inputs: PharmacyInput;
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
+
+export type MutationRemovePharmacyArgs = {
+  inputs: PharmacyInput;
+};
+
+export type PatientResponse = {
+  __typename?: 'PatientResponse';
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<Patient>;
@@ -467,24 +517,76 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  token?: Maybe<Scalars['String']>;
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<Patient>;
+  isEnabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type AppointmentInput = {
+  patient?: Maybe<PatientInput>;
+  employee?: Maybe<EmployeeInput>;
+  pharmacy?: Maybe<PharmacyInput>;
+  kind?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  discount?: Maybe<Scalars['Float']>;
+  report?: Maybe<Scalars['String']>;
+  isVisited?: Maybe<Scalars['String']>;
+  begin?: Maybe<Scalars['String']>;
+  length?: Maybe<Scalars['Float']>;
+};
+
+export type EmployeeInput = {
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  confirmPassword?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressInput>;
+  telephone?: Maybe<Scalars['String']>;
+  pharmacy?: Maybe<Scalars['String']>;
+  averageRating?: Maybe<Scalars['String']>;
+  workingHours?: Maybe<Array<WorkingHoursInput>>;
+};
+
+export type WorkingHoursInput = {
+  until?: Maybe<Scalars['String']>;
+  from?: Maybe<Scalars['String']>;
+  pharmacy?: Maybe<PharmacyInput>;
+  employee?: Maybe<EmployeeInput>;
+};
+
+export type PharmacyInput = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressInput>;
+};
+
 export type EmployeeResponse = {
   __typename?: 'EmployeeResponse';
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<Employee>;
+  user?: Maybe<User>;
 };
 
-export type AdminInput = {
-  email: Scalars['String'];
-  password: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  telephone: Scalars['String'];
-  street: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
-  pharmacyName: Scalars['String'];
-  role: Scalars['String'];
+export type MedicineItemInput = {
+  name?: Maybe<Scalars['String']>;
+  details?: Maybe<MedicineInput>;
+  list: MedicineListInput;
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  dateOfPurchase: Scalars['String'];
+  instructions: Scalars['String'];
+};
+
+export type MedicineListInput = {
+  medicines?: Maybe<Array<MedicineItemInput>>;
+  id?: Maybe<AddressInput>;
+  pharmacy?: Maybe<PharmacyInput>;
 };
 
 export type EPrescription = {
@@ -499,16 +601,9 @@ export type EPrescription = {
   status: Scalars['String'];
 };
 
-export type PharmacyDto = {
-  name: Scalars['String'];
-  street: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
-};
-
 export type InputExamFragment = (
   { __typename?: 'Appointment' }
-  & Pick<Appointment, 'begin' | 'end' | 'discount'>
+  & Pick<Appointment, 'begin' | 'length' | 'discount'>
   & { employee?: Maybe<(
     { __typename?: 'Employee' }
     & Pick<Employee, 'firstName' | 'lastName'>
@@ -538,7 +633,7 @@ export type AddAllergieMutation = (
       & Pick<Tier, 'name' | 'discount'>
     )>, appointments?: Maybe<Array<(
       { __typename?: 'Appointment' }
-      & Pick<Appointment, 'begin' | 'end' | 'type' | 'isVisited' | 'price'>
+      & Pick<Appointment, 'begin' | 'length' | 'kind' | 'isVisited' | 'price'>
       & { employee?: Maybe<(
         { __typename?: 'Employee' }
         & Pick<Employee, 'firstName' | 'lastName' | 'email' | 'averageRating'>
@@ -550,33 +645,24 @@ export type AddAllergieMutation = (
   )> }
 );
 
-export type AddEmployeeMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  telephone: Scalars['String'];
-  street: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
-  pharmacyName: Scalars['String'];
-  role: Scalars['String'];
+export type AddFreeAppMutationVariables = Exact<{
+  from: Scalars['String'];
+  length: Scalars['Float'];
+  employee: Scalars['String'];
+  discount: Scalars['Float'];
 }>;
 
 
-export type AddEmployeeMutation = (
+export type AddFreeAppMutation = (
   { __typename?: 'Mutation' }
-  & { addEmployee: (
-    { __typename?: 'EmployeeResponse' }
-    & { user?: Maybe<(
+  & { addFreeApp?: Maybe<(
+    { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
+    & { employee?: Maybe<(
       { __typename?: 'Employee' }
-      & Pick<Employee, 'email' | 'firstName' | 'lastName' | 'role'>
-      & { pharmacy?: Maybe<(
-        { __typename?: 'Pharmacy' }
-        & Pick<Pharmacy, 'name'>
-      )> }
+      & Pick<Employee, 'email' | 'firstName' | 'lastName'>
     )> }
-  ) }
+  )> }
 );
 
 export type ConfirmRegistrationMutationVariables = Exact<{
@@ -587,7 +673,7 @@ export type ConfirmRegistrationMutationVariables = Exact<{
 export type ConfirmRegistrationMutation = (
   { __typename?: 'Mutation' }
   & { confirmRegistration: (
-    { __typename?: 'UserResponse' }
+    { __typename?: 'PatientResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'field' | 'message'>
@@ -596,22 +682,6 @@ export type ConfirmRegistrationMutation = (
       & Pick<Patient, 'email'>
     )> }
   ) }
-);
-
-export type CreatePharmacyMutationVariables = Exact<{
-  name: Scalars['String'];
-  street: Scalars['String'];
-  city: Scalars['String'];
-  country: Scalars['String'];
-}>;
-
-
-export type CreatePharmacyMutation = (
-  { __typename?: 'Mutation' }
-  & { createPharmacy?: Maybe<(
-    { __typename?: 'Pharmacy' }
-    & Pick<Pharmacy, 'name'>
-  )> }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -624,6 +694,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'UserResponse' }
+    & Pick<UserResponse, 'token'>
     & { user?: Maybe<(
       { __typename?: 'Patient' }
       & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role' | 'penalty' | 'score'>
@@ -676,29 +747,36 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
-    { __typename?: 'UserResponse' }
+    { __typename?: 'PatientResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'field' | 'message'>
     )>>, user?: Maybe<(
       { __typename?: 'Patient' }
-      & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role'>
-      & { tier?: Maybe<(
-        { __typename?: 'Tier' }
-        & Pick<Tier, 'name' | 'discount'>
-      )>, appointments?: Maybe<Array<(
-        { __typename?: 'Appointment' }
-        & Pick<Appointment, 'begin' | 'end' | 'type' | 'isVisited' | 'price'>
-        & { employee?: Maybe<(
-          { __typename?: 'Employee' }
-          & Pick<Employee, 'firstName' | 'lastName' | 'email' | 'averageRating'>
-        )>, pharmacy?: Maybe<(
-          { __typename?: 'Pharmacy' }
-          & Pick<Pharmacy, 'name'>
-        )> }
-      )>> }
+      & Pick<Patient, 'email'>
     )> }
   ) }
+);
+
+export type ScheduleMutationVariables = Exact<{
+  patient: Scalars['String'];
+  employee: Scalars['String'];
+}>;
+
+
+export type ScheduleMutation = (
+  { __typename?: 'Mutation' }
+  & { schedule?: Maybe<(
+    { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
+    & { patient: (
+      { __typename?: 'Patient' }
+      & Pick<Patient, 'email'>
+    ), employee?: Maybe<(
+      { __typename?: 'Employee' }
+      & Pick<Employee, 'email'>
+    )> }
+  )> }
 );
 
 export type SubscribeMutationVariables = Exact<{
@@ -712,6 +790,23 @@ export type SubscribeMutation = (
     { __typename?: 'Patient' }
     & Pick<Patient, 'email'>
   )> }
+);
+
+export type AvailableQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type AvailableQuery = (
+  { __typename?: 'Query' }
+  & { available?: Maybe<Array<(
+    { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
+    & { employee?: Maybe<(
+      { __typename?: 'Employee' }
+      & Pick<Employee, 'firstName' | 'lastName' | 'email' | 'averageRating'>
+    )> }
+  )>> }
 );
 
 export type ContainsMedicineQueryVariables = Exact<{
@@ -731,38 +826,6 @@ export type ContainsMedicineQuery = (
   )>> }
 );
 
-export type DefinitionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DefinitionsQuery = (
-  { __typename?: 'Query' }
-  & { definitions?: Maybe<Array<(
-    { __typename?: 'AppointmentDefinition' }
-    & Pick<AppointmentDefinition, 'type' | 'score' | 'price'>
-    & { pharmacy: (
-      { __typename?: 'Pharmacy' }
-      & Pick<Pharmacy, 'name'>
-    ) }
-  )>> }
-);
-
-export type EmployeeDetailsMutationVariables = Exact<{
-  email: Scalars['String'];
-}>;
-
-
-export type EmployeeDetailsMutation = (
-  { __typename?: 'Mutation' }
-  & { employeeDetails?: Maybe<(
-    { __typename?: 'Employee' }
-    & Pick<Employee, 'email' | 'firstName' | 'lastName' | 'role'>
-    & { pharmacy?: Maybe<(
-      { __typename?: 'Pharmacy' }
-      & Pick<Pharmacy, 'id'>
-    )> }
-  )> }
-);
-
 export type EmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -770,7 +833,17 @@ export type EmployeesQuery = (
   { __typename?: 'Query' }
   & { employees?: Maybe<Array<(
     { __typename?: 'Employee' }
-    & Pick<Employee, 'email' | 'firstName' | 'lastName'>
+    & Pick<Employee, 'email' | 'firstName' | 'lastName' | 'averageRating'>
+    & { holidays: Array<(
+      { __typename?: 'Holiday' }
+      & Pick<Holiday, 'from' | 'until'>
+    )>, workingHours: Array<(
+      { __typename?: 'WorkingHours' }
+      & Pick<WorkingHours, 'from' | 'until'>
+    )>, pharmacy?: Maybe<(
+      { __typename?: 'Pharmacy' }
+      & Pick<Pharmacy, 'name'>
+    )> }
   )>> }
 );
 
@@ -798,7 +871,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'role' | 'email'>
+    & Pick<User, 'firstName' | 'lastName' | 'role' | 'email'>
   )> }
 );
 
@@ -824,25 +897,14 @@ export type ShopQuery = (
   { __typename?: 'Query' }
   & { shop?: Maybe<Array<(
     { __typename?: 'Medicine' }
-    & Pick<Medicine, 'code' | 'name' | 'type' | 'points' | 'form' | 'rating' | 'contents' | 'producer' | 'isPrescriptionRequired' | 'info'>
-  )>> }
-);
-
-export type TiersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TiersQuery = (
-  { __typename?: 'Query' }
-  & { tiers?: Maybe<Array<(
-    { __typename?: 'Tier' }
-    & Pick<Tier, 'name' | 'discount' | 'scoreMin' | 'scoreMax'>
+    & Pick<Medicine, 'code' | 'name' | 'kind' | 'points' | 'form' | 'rating' | 'contents' | 'producer' | 'isPrescriptionRequired' | 'info'>
   )>> }
 );
 
 export const InputExamFragmentDoc = gql`
     fragment InputExam on Appointment {
   begin
-  end
+  length
   discount
   employee {
     firstName
@@ -879,8 +941,8 @@ export const AddAllergieDocument = gql`
         averageRating
       }
       begin
-      end
-      type
+      length
+      kind
       isVisited
       price
       pharmacy {
@@ -894,26 +956,27 @@ export const AddAllergieDocument = gql`
 export function useAddAllergieMutation() {
   return Urql.useMutation<AddAllergieMutation, AddAllergieMutationVariables>(AddAllergieDocument);
 };
-export const AddEmployeeDocument = gql`
-    mutation AddEmployee($email: String!, $password: String!, $firstName: String!, $lastName: String!, $telephone: String!, $street: String!, $city: String!, $country: String!, $pharmacyName: String!, $role: String!) {
-  addEmployee(
-    inputs: {email: $email, password: $password, firstName: $firstName, lastName: $lastName, telephone: $telephone, street: $street, city: $city, country: $country, pharmacyName: $pharmacyName, role: $role}
+export const AddFreeAppDocument = gql`
+    mutation AddFreeApp($from: String!, $length: Float!, $employee: String!, $discount: Float!) {
+  addFreeApp(
+    from: $from
+    length: $length
+    employee: $employee
+    discount: $discount
   ) {
-    user {
+    begin
+    length
+    employee {
       email
       firstName
       lastName
-      role
-      pharmacy {
-        name
-      }
     }
   }
 }
     `;
 
-export function useAddEmployeeMutation() {
-  return Urql.useMutation<AddEmployeeMutation, AddEmployeeMutationVariables>(AddEmployeeDocument);
+export function useAddFreeAppMutation() {
+  return Urql.useMutation<AddFreeAppMutation, AddFreeAppMutationVariables>(AddFreeAppDocument);
 };
 export const ConfirmRegistrationDocument = gql`
     mutation ConfirmRegistration($email: String!) {
@@ -932,22 +995,10 @@ export const ConfirmRegistrationDocument = gql`
 export function useConfirmRegistrationMutation() {
   return Urql.useMutation<ConfirmRegistrationMutation, ConfirmRegistrationMutationVariables>(ConfirmRegistrationDocument);
 };
-export const CreatePharmacyDocument = gql`
-    mutation createPharmacy($name: String!, $street: String!, $city: String!, $country: String!) {
-  createPharmacy(
-    inputs: {name: $name, street: $street, city: $city, country: $country}
-  ) {
-    name
-  }
-}
-    `;
-
-export function useCreatePharmacyMutation() {
-  return Urql.useMutation<CreatePharmacyMutation, CreatePharmacyMutationVariables>(CreatePharmacyDocument);
-};
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(inputs: {email: $email, password: $password}) {
+    token
     user {
       email
       firstName
@@ -1012,29 +1063,6 @@ export const RegisterDocument = gql`
     }
     user {
       email
-      firstName
-      lastName
-      tier {
-        name
-        discount
-      }
-      role
-      appointments {
-        employee {
-          firstName
-          lastName
-          email
-          averageRating
-        }
-        begin
-        end
-        type
-        isVisited
-        price
-        pharmacy {
-          name
-        }
-      }
     }
   }
 }
@@ -1042,6 +1070,24 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const ScheduleDocument = gql`
+    mutation Schedule($patient: String!, $employee: String!) {
+  schedule(inputs: {patient: {email: $patient}, employee: {email: $employee}}) {
+    begin
+    length
+    patient {
+      email
+    }
+    employee {
+      email
+    }
+  }
+}
+    `;
+
+export function useScheduleMutation() {
+  return Urql.useMutation<ScheduleMutation, ScheduleMutationVariables>(ScheduleDocument);
 };
 export const SubscribeDocument = gql`
     mutation Subscribe($id: String!) {
@@ -1053,6 +1099,24 @@ export const SubscribeDocument = gql`
 
 export function useSubscribeMutation() {
   return Urql.useMutation<SubscribeMutation, SubscribeMutationVariables>(SubscribeDocument);
+};
+export const AvailableDocument = gql`
+    query Available($id: String!) {
+  available(id: $id) {
+    begin
+    length
+    employee {
+      firstName
+      lastName
+      email
+      averageRating
+    }
+  }
+}
+    `;
+
+export function useAvailableQuery(options: Omit<Urql.UseQueryArgs<AvailableQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AvailableQuery>({ query: AvailableDocument, ...options });
 };
 export const ContainsMedicineDocument = gql`
     query ContainsMedicine($id: String!) {
@@ -1072,45 +1136,24 @@ export const ContainsMedicineDocument = gql`
 export function useContainsMedicineQuery(options: Omit<Urql.UseQueryArgs<ContainsMedicineQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ContainsMedicineQuery>({ query: ContainsMedicineDocument, ...options });
 };
-export const DefinitionsDocument = gql`
-    query Definitions {
-  definitions {
-    type
-    score
-    price
-    pharmacy {
-      name
-    }
-  }
-}
-    `;
-
-export function useDefinitionsQuery(options: Omit<Urql.UseQueryArgs<DefinitionsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<DefinitionsQuery>({ query: DefinitionsDocument, ...options });
-};
-export const EmployeeDetailsDocument = gql`
-    mutation EmployeeDetails($email: String!) {
-  employeeDetails(inputs: {email: $email}) {
-    email
-    firstName
-    lastName
-    role
-    pharmacy {
-      id
-    }
-  }
-}
-    `;
-
-export function useEmployeeDetailsMutation() {
-  return Urql.useMutation<EmployeeDetailsMutation, EmployeeDetailsMutationVariables>(EmployeeDetailsDocument);
-};
 export const EmployeesDocument = gql`
     query Employees {
   employees {
     email
     firstName
     lastName
+    holidays {
+      from
+      until
+    }
+    workingHours {
+      from
+      until
+    }
+    pharmacy {
+      name
+    }
+    averageRating
   }
 }
     `;
@@ -1139,6 +1182,8 @@ export function useEprescriptionsMutation() {
 export const MeDocument = gql`
     query Me {
   me {
+    firstName
+    lastName
     role
     email
   }
@@ -1173,7 +1218,7 @@ export const ShopDocument = gql`
   shop {
     code
     name
-    type
+    kind
     points
     form
     rating
@@ -1187,18 +1232,4 @@ export const ShopDocument = gql`
 
 export function useShopQuery(options: Omit<Urql.UseQueryArgs<ShopQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<ShopQuery>({ query: ShopDocument, ...options });
-};
-export const TiersDocument = gql`
-    query Tiers {
-  tiers {
-    name
-    discount
-    scoreMin
-    scoreMax
-  }
-}
-    `;
-
-export function useTiersQuery(options: Omit<Urql.UseQueryArgs<TiersQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<TiersQuery>({ query: TiersDocument, ...options });
 };

@@ -1,0 +1,24 @@
+mutation Schedule( 
+  $patient: String! ,
+  $employee: String!, 
+) {
+  schedule( 
+  inputs: {
+    patient: {
+      email: $patient,
+    }
+    employee: {
+      email: $employee,
+    }
+  }
+  ) { 
+    begin
+    length
+    patient{
+      email
+    }
+    employee{
+      email
+    }
+  }
+}

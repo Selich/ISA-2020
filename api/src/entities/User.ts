@@ -38,14 +38,6 @@ export default abstract class User extends Model {
   @Column({ nullable: true })
   lastName: string;
 
-  @Field()
-  @Column({ nullable: true })
-  gender: string;
-
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  dateOfBirth: Date;
-
   @Field(() => Address)
 	@ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true, nullable:true })
   @JoinTable()

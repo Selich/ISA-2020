@@ -7,13 +7,12 @@ import { FormInputPassword } from './../../../components/sections/FormInputPassw
 import { Wrapper } from './../../../components/ui/Wrapper';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
-import { useEmployeeDetailsMutation , FieldError, useLoginMutation } from '../../../generated/graphql';
+import { FieldError, useLoginMutation } from '../../../generated/graphql';
 import { toErrorMap } from '../../../utils/errorMap';
 
 
 export default function LoginForm({ onClose }) {
   const [{ fetching: loginFetch }, login] = useLoginMutation();
-  const [_, employeeDetails] = useEmployeeDetailsMutation();
   const router = useRouter();
   return (
     <Wrapper variant="small">
@@ -21,22 +20,18 @@ export default function LoginForm({ onClose }) {
         initialValues={{ email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           const response = await login(values);
-          console.log(response);
 
           if (response.data?.login.errors) {
-            // @ts-ignore
-            console.log(response.data.login.errors);
-            // @ts-ignore
             setErrors(toErrorMap(response.data.login.errors));
 
           } else if (response.data?.login.user) {
 
             let user = response.data.login.user;
-						const res = await employeeDetails({ email: user.email})
-						localStorage.setItem('user', JSON.stringify(user))
+						let token = response.data.login.token;
 						localStorage.setItem('cart', JSON.stringify({}))
+						localStorage.setItem('token', token)
 						if(user.role === 'patient')
-							router.push('/user')
+								router.push('/user')
 						if(user.role === 'admin')
 							router.push('/admin')
 						if(user.role === 'sysadmin')

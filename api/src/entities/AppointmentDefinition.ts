@@ -13,7 +13,7 @@ export class AppointmentDefinition extends Model{
 
   @Field()
   @Column({ nullable: true })
-  type: string;
+  kind: string;
 
   @Field()
   @Column({ nullable: true })

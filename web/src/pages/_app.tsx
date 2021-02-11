@@ -4,9 +4,12 @@ import { Provider, createClient, dedupExchange, fetchExchange } from "urql";
 import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
 import { Provider as AuthProvider } from 'next-auth/client'
 import { useRouter } from "next/router";
+import theme from '../theme'
+import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
+import Index from './index';
+import Denied from './denied'
+import { useEffect, useState } from 'react';
 import { addItem, editItem, removeItem } from '../utils/cart'
-
-
 
 
 function betterUpdateQuery<Result, Query>(
@@ -52,25 +55,6 @@ const client = createClient({
               }
             );
           },
-          register: (_result, args, cache, info) => {
-            betterUpdateQuery<RegisterMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              _result,
-              (result, query) => {
-                if(!result.register)
-                  return null
-
-                if (result.register.errors) {
-                  return query;
-                } else {
-                  return {
-                    me: result.register.user,
-                  };
-                }
-              }
-            );
-          },
         },
       },
     }),
@@ -78,11 +62,6 @@ const client = createClient({
   ],
 });
 
-import theme from '../theme'
-import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
-import Index from './index';
-import Denied from './denied'
-import { useEffect, useState } from 'react';
 
 
 function MyApp({ Component, pageProps }) {
@@ -93,16 +72,10 @@ function MyApp({ Component, pageProps }) {
   let isEnabled = false
   let allowed = true;
 	if(data){ 
-		localStorage.setItem('user', JSON.stringify(data.me))
 		role = data.me.role
-		role = data.me.isEnabled
+		isEnabled = data.me.isEnabled
 	}
-	if (router.pathname.startsWith("/user") && role !== "patient")   {
-		if(role === "patient" && isEnabled == false){
-			allowed = false;
-		}
-	}
-  const ComponentToRender = allowed ? Component : Denied;
+  const ComponentToRender = allowed ? Component : Index;
   return (
     <AuthProvider session={pageProps.session}>
     <Provider value={client}>

@@ -1,6 +1,6 @@
 import { Field, InputType, ObjectType } from "type-graphql";
-import { Entity } from "typeorm/decorator/entity/Entity";
 import { OneToOne } from "typeorm/decorator/relations/OneToOne";
+import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinColumn } from 'typeorm'
 import { Employee } from "./Employee";
 import { MedicineList } from "./MedicineList";
 import { Pharmacy } from "./Pharmacy";

@@ -2,6 +2,19 @@ query Employees {
   employees {
     email,
     firstName,
-    lastName
+    lastName,
+    holidays {
+      from
+      until
+    }
+    workingHours{
+      from
+      until
+    }
+    pharmacy{
+      name
+    }
+    averageRating
+
   }
 }

@@ -3,8 +3,8 @@ import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-grap
 import { MyContext } from '../types';
 import { Medicine } from '../entities/Medicine'
 import { Address } from '../entities/Address'
-import { PharmacyDTO, RegisterPatientDTO, UserDTO, UserResponse } from "./types/dtos";
-
+import { Inventory } from '../entities/Inventory'
+import { PharmacyInput } from "./types/dtos"
 
 
 @Resolver(Pharmacy)
@@ -12,7 +12,6 @@ export class PharmacyResolver{
 
   @Query(() => [Pharmacy], { nullable: true })
   async pharmacies(
-		@Ctx() { req, res }: MyContext
 	) {
 		return await Pharmacy.find({})
   }
@@ -20,33 +19,43 @@ export class PharmacyResolver{
   @Mutation(() => Pharmacy, { nullable: true })
   async pharmacy(
 		@Arg('id') id: string,
-		@Ctx() { req, res }: MyContext
 	) {
-		const ret = await Pharmacy.findOneOrFail({id: parseInt(id)})
-		console.log(ret)
-		return ret
+		return await Pharmacy.findOneOrFail({id: parseInt(id)})
   }
 
   @Mutation(() => Pharmacy, { nullable: true })
   async createPharmacy(
-		@Arg('inputs') inputs: PharmacyDTO,
-		@Ctx() { req, res }: MyContext
+		@Arg('inputs') inputs: PharmacyInput,
 	) {
-		let pharm = new Pharmacy()
-		let { name, street, city, country } = inputs
-		let address = { street, city, country }
-		pharm.name = inputs.name
+		let pharm = new Pharmacy({...inputs})
 
-		let temp = await Address.findOne({ ...address });
+		let temp = await Address.findOne({ ...inputs.address });
 		if (temp === undefined)
 			pharm.address = await Address.save(
-				new Address({ street, city, country,  pharm: pharm })
+				new Address({...inputs.address})
 			);
 		else pharm.address = temp;
 
-		let newPharm = Pharmacy.save(pharm)
+		let inventory = new Inventory()
+		inventory.pharmacy = pharm
+		inventory.medicines = []
+		inventory.save()
 
-		return { newPharm }
+		pharm.inventory = inventory
+		
+		pharm.save()
+
+
+		return pharm 
+
+  }
+  @Mutation(() => Pharmacy, { nullable: true })
+  async removePharmacy(
+		@Arg('inputs') inputs: PharmacyInput,
+	) {
+		if(!inputs.id) return null
+		let id = parseInt(inputs.id)
+		return await Pharmacy.delete({id})
 
   }
 
