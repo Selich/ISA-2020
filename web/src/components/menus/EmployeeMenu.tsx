@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import NextLink from "next/link";
 import { Flex, Button, Heading, Menu, MenuButton, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr, MenuItem, MenuList } from "@chakra-ui/react";
 import { Basket } from "../layouts/Basket";
@@ -9,6 +9,7 @@ import { useLogoutMutation } from "../../generated/graphql";
 export const EmployeeMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
+
   const btnRef = React.useRef()
   return (
     <Flex align="center">
@@ -21,11 +22,20 @@ export const EmployeeMenu: any = ({ user }) => {
           }
         </MenuButton>
         <MenuList>
-          <NextLink href="/[id]/profile">
-            <MenuItem minH="48px">
-              <span>Profile</span>
-            </MenuItem>
-          </NextLink>
+					{user.role === 'derm' && 
+						<NextLink href="/derm/profile">
+							<MenuItem minH="48px">
+								<span>Profile</span>
+							</MenuItem>
+					</NextLink>
+					}
+					{user.role === 'pharm' && 
+						<NextLink href="/pharm/profile">
+							<MenuItem minH="48px">
+								<span>Profile</span>
+							</MenuItem>
+					</NextLink>
+					}
           <NextLink href="/:id/appointments">
             <MenuItem minH="48px">
               <span>Appointment</span>

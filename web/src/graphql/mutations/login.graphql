@@ -11,6 +11,7 @@ mutation Login($email: String!, $password: String!) {
       firstName
       lastName
       role
+      isEnabled
       subscriptions{
         name
       }

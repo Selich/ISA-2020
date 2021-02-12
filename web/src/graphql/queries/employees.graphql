@@ -1,5 +1,12 @@
-query Employees {
-  employees {
+query Employees 
+(
+  $inputs: EmployeeInput!
+) {
+  employees (
+    inputs: $inputs
+
+  ){
+    id
     email,
     firstName,
     lastName,
@@ -10,9 +17,6 @@ query Employees {
     workingHours{
       from
       until
-    }
-    pharmacy{
-      name
     }
     averageRating
 

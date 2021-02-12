@@ -10,38 +10,14 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
-export const MyCalendar: any = () => {
-  const modal = useDisclosure()
+export const MyCalendar: any = ({schedule}) => {
   const appModal = useDisclosure()
   const events = [
       {
         start: moment().toDate(),
-        end: moment().add(1, "days").toDate(),
+        end:	moment().add(1, "days").toDate(),
         title: "Dusan Urosevic: Tegoba duse",
-      },
-    ]
-
-  const onEventResize = (data) => {
-		//const { start, end } = data;
-
-		// this.setState((state) => {
-		//   state.events[0].start = start;
-		//   state.events[0].end = end;
-		//   return { events: [...state.events] };
-		//  });
-  };
-
-  const onEventDrop = (data) => {
-    console.log(data);
-  }
-	const Event =({ event }) => {
-  return (
-    <span>
-      <Text fontSize={15}>{event.title}</Text>
-      {event.desc && ':  ' + event.desc}
-    </span>
-  )
-}
+      }]
 
 const EventAgenda = ({ event }) => {
   return (
@@ -76,9 +52,6 @@ const EventAgenda = ({ event }) => {
 					fontSize={11}
           defaultDate={moment().toDate()}
           events={events}
-          localizer={localizer}
-          onEventDrop={onEventDrop}
-          onEventResize={onEventResize}
 		    	components={{
 						event: Event,
 						agenda: {

@@ -2,10 +2,10 @@ import React, {useState, useEffect} from "react";
 import NextLink from "next/link";
 import { HStack, Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import {  usePatientQuery } from '../../generated/graphql';
+import { usePatientQuery } from '../../generated/graphql';
 
 
-export default function Index() {
+export default function CreateAppointment() {
 
 
 	let token = localStorage.getItem('token')
@@ -15,7 +15,6 @@ export default function Index() {
 			token: token
 		}
 	});
-
 
 	let body = null
 	if(fetching) body = <p>test</p>
@@ -30,9 +29,7 @@ export default function Index() {
 					</HStack>	
           <Text fontSize={17} m={2}>Score: {data.patient.score}</Text>
       </Box>
-
 		)
-
 
 	return(
 		<>
@@ -55,11 +52,6 @@ export default function Index() {
 					<Box> 
 						<NextLink href="/user/consultation">
 						<Button w={180} >Consultation</Button> 
-						</NextLink>
-					</Box>
-					<Box> 
-						<NextLink href="/user/pharmacies">
-						<Button w={180} >Pharmacies</Button> 
 						</NextLink>
 					</Box>
 					<Box> 

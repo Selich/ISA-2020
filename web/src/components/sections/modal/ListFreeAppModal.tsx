@@ -18,45 +18,31 @@ import DataTable from "react-data-table-component";
 const handleSchedule = (row) => {};
 
 export const ListFreeAppModal: any = ({ onOpen, isOpen, onClose, pharmId }) => {
-  const [data, setData] = useState([]);
-  const [, available] = useAvailableQuery();
+	const [{fetching, data}] = useAvailableQuery({
+		variables:{
+			id: pharmId
+		}
+	});
   const columns = [
-    { name: "Timeslot", selector: "from", sortable: true },
-    { name: "Dermatologist", selector: "employee", sortable: false },
+    { name: "Begin", selector: "begin", sortable: true },
+    { name: "Dermatologist", selector: "employee.firstName", sortable: false },
     { name: "Price", selector: "price", sortable: true },
     { name: "Rating", selector: "employee.averageRating", sortable: true },
-    {
-      name: "",
-      button: true,
-      cell: (row) => (
-        <Button
-          onClick={() => handleSchedule(row)}
-          size="sm"
-          colorScheme="teal"
-        >
-          Subscribe
-        </Button>
-      ),
-    },
   ];
 	let body = null
-  useEffect(() => {
-		let temp = available({id: pharmId +''})
-		console.log(temp)
-
-  }, []);
-  if (!data) {
+	let rows = []
+  if (fetching) {
     body = <p> loading </p>;
-  } else {
+  } else if(data){
+		(!data) ? rows = [] : rows = data.available
     body = (
       <>
         <DataTable
           columns={columns}
-          data={data}
+          data={rows}
           pagination
           persistTableHead
           expandableRows
-          // expandableRowsComponent={<ExpandedComponent data={this} />}
         />
       </>
     );

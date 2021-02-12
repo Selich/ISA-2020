@@ -1,11 +1,10 @@
 import React from 'react'
 import { useDisclosure, Button, Box } from "@chakra-ui/react"
-import EmployeeTable from '../../components/tables/EmployeeTable'
+import {EmployeeTable} from '../../components/tables/EmployeeTable'
 import {AddDermModal} from '../../components/sections/modal/AddDermModal'
 
-const Derms = (): JSX.Element => {
+const Derms = ()=> {
 	  const addPharmModal = useDisclosure()
-	  const addAdminModal = useDisclosure()
 
     return (
         <>
@@ -14,9 +13,9 @@ const Derms = (): JSX.Element => {
                 <EmployeeTable/>
             </Box>
 						<AddDermModal
-								isOpen={addPharmModal.isOpen}
-								onOpen={addPharmModal.onOpen}
-								onClose={addPharmModal.onClose}
+							isOpen={addPharmModal.isOpen}
+							onOpen={addPharmModal.onOpen}
+							onClose={addPharmModal.onClose}
 						/>
         </>
     )

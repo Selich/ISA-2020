@@ -67,7 +67,4 @@ export default class Patient extends User {
   @Column({ nullable: true })
   penalty: number;
 
-  @Field(() => Boolean)
-  @Column({ default: false })
-  isEnabled: boolean;
 }

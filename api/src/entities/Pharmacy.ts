@@ -26,7 +26,7 @@ export class Pharmacy extends Model {
   @JoinColumn()
   address: Address;
 
-  @Field()
+	@Field({ nullable: true })
   @Column({ nullable: true})
   name: string;
 

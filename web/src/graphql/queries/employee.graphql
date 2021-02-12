@@ -1,0 +1,20 @@
+query Employee(
+  $token: String!
+) {
+  employee(
+    token: $token
+  ){
+    id
+    email
+    firstName
+    lastName
+    address{
+      street,
+      city,
+      country
+    }
+
+  }
+}
+
+

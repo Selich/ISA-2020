@@ -73,6 +73,7 @@ function MyApp({ Component, pageProps }) {
   let allowed = true;
 	if(data){ 
 		role = data.me.role
+		localStorage.setItem('role', JSON.stringify(role))
 		isEnabled = data.me.isEnabled
 	}
   const ComponentToRender = allowed ? Component : Index;

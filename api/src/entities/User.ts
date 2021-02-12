@@ -11,6 +11,9 @@ const roles = [
 @ObjectType()
 @Entity()
 export default abstract class User extends Model {
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isEnabled: boolean;
 
   @Field(() => String, { nullable: true })
   @Column({ nullable: true})

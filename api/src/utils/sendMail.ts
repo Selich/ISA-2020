@@ -3,11 +3,34 @@ import { Employee } from "../entities/Employee";
 import { Reservation } from "../entities/Reservation";
 import Patient from "../entities/Patient";
 
+export async function sendCreateTokenMail(
+  to: Employee,
+  mailer: any,
+	cd: string
+) {
+  let msg = "<h3> Hello " + to.firstName + " " + to.lastName + "<h3>";
+  let approved = "<p>You have been added as an employee</p>";
+
+  let code = "<p> Input the following token:" + cd + " </p>";
+  let html = msg + approved +  code ;
+
+  //@ts-ignore
+  let info = await mailer.sendMail({
+    from: '"Admin Admin" < admin@admin.com >',
+    to: to.email,
+    subject: "Reservation PickedUp",
+    text: "Reservation PickedUp",
+    html: html,
+  });
+
+  console.log("Message sent: " + info.messageId);
+  console.log(nodemailer.getTestMessageUrl(info));
+}
+
 export async function sendReservationPickupMail(
   to: Patient,
   mailer: any,
 	reservation: Reservation,
-	cd: string
 
 ) {
   let msg = "<h3> Hello " + to.firstName + " " + to.lastName + "<h3>";
@@ -23,10 +46,9 @@ export async function sendReservationPickupMail(
   list = list + "<td>" + reservation.medicineItem.currentPrice + "</td>";
   list = list + "<td>" + reservation.medicineItem.quantity + "</td>";
   let total = "<p> Total:" + reservation.totalSum + " </p>";
-  let code = "<p> Code:" + cd + " </p>";
 
 
-  let html = msg + approved + list + total ;
+  let html = msg + approved + list + total;
 
   //@ts-ignore
   let info = await mailer.sendMail({

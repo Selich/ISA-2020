@@ -56,6 +56,7 @@ export class MedicineResolver {
 				inv.save()
 				await MedicineItem.remove(item)
 			}
+			return inv
 
 			
 		}

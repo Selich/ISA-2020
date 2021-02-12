@@ -1,0 +1,10 @@
+mutation RemoveEmployee(
+  $id: String!, 
+  ) {
+  removeEmployee(
+    id: $id,
+  ){
+    email
+
+  }
+}

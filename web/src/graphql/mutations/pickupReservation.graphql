@@ -1,7 +1,7 @@
-mutation Employee(
+mutation PickupReservation(
   $token: String!
 ) {
-  employee(
+  pickupReservation(
     token: $token
   ){
     deadline

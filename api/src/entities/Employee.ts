@@ -13,7 +13,7 @@ import { WorkingHours } from "./WorkingHours";
 @Entity()
 export class Employee extends User {
 
-  @Field(() => [Holiday])
+	@Field(() => [Holiday], {nullable: true})
   @OneToMany(() => Holiday, item => item.employee, {nullable: true})
   holidays: Holiday[];
 
@@ -24,10 +24,10 @@ export class Employee extends User {
   @OneToMany(() => Complaint, item => item.employee)
   complaints: Complaint[];
 
-  @OneToMany(() => Appointment, item => item.employee, {nullable: true})
+	@OneToMany(() => Appointment, item => item.employee, {nullable: true})
   schedule: Appointment[];
 
-  @Field(() => [WorkingHours])
+	@Field(() => [WorkingHours], { nullable: true })
 	@OneToMany(() => WorkingHours, item => item.employee, {nullable: true, eager: true, cascade:true})
   workingHours: WorkingHours[];
 

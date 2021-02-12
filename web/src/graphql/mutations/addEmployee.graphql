@@ -1,0 +1,12 @@
+mutation AddEmployee(
+  $inputs: EmployeeInput!, 
+  ) {
+  addEmployee(
+    inputs: $inputs,
+  ){
+  user{
+    email
+
+  }
+  }
+}
