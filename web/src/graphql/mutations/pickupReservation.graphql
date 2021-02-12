@@ -1,0 +1,13 @@
+mutation PickupReservation(
+  $token: String!
+) {
+  pickupReservation(
+    token: $token
+  ){
+    deadline
+    isBought
+
+  }
+}
+
+

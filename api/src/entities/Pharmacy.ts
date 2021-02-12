@@ -1,27 +1,34 @@
-import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Address } from "./Address";
 import { Appointment } from "./Appointment";
+import { AppointmentDefinition } from "./AppointmentDefinition";
+import { Complaint } from "./Complaint";
+import { EPrescription } from "./EPrescription";
+import { WorkingHours } from "./WorkingHours";
+import { Inventory } from "./Inventory";
+import { Employee } from "./Employee";
 import { MedicineRequest } from "./MedicineRequest";
+import { Model } from "./Model";
+import  Patient  from "./Patient";
+import { Price } from "./Price";
 import { Rating } from "./Rating";
+import { Prescription } from "./Prescription";
 import { Reservation } from "./Reservation";
 
 @ObjectType()
 @Entity()
-export class Pharmacy extends BaseEntity{
+export class Pharmacy extends Model {
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
 
-  @Field(() => Address)
-  @OneToOne(() => Address, item => item.pharmacy,{ eager: true, cascade: true, nullable:true})
+	@Field(() => Address, {nullable:true})
+  @OneToOne(() => Address, item => item.pharmacy, { eager: true, cascade: true, nullable: true })
   @JoinColumn()
   address: Address;
 
-  @Field()
-  @Column()
-  long: number;
+	@Field({ nullable: true })
+  @Column({ nullable: true})
+  name: string;
 
 	@Field({nullable: true})
   @Column({ nullable: true})
@@ -32,12 +39,20 @@ export class Pharmacy extends BaseEntity{
   lat: string;
 
   @Field(() => Inventory)
+<<<<<<< HEAD
   @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true, nullable: true})
+=======
+	@OneToOne(() => Inventory, item => item.pharmacy, { cascade: true, nullable: true, eager:true})
+>>>>>>> dev
   @JoinColumn()
   inventory: Inventory;
 
   @Field(() => [Price])
+<<<<<<< HEAD
   @OneToMany(() => Price, item => item.pharmacy, { eager: true, nullable: true})
+=======
+  @OneToMany(() => Price, item => item.pharmacy, {  nullable: true})
+>>>>>>> dev
   prices: Price[];
 
   @Field(() => [Employee])
@@ -49,32 +64,41 @@ export class Pharmacy extends BaseEntity{
   definitions: AppointmentDefinition[];
 
   @Field(() => [MedicineRequest])
-  @OneToMany(() => MedicineRequest, item => item.pharmacy, { eager: true})
+  @OneToMany(() => MedicineRequest, item => item.pharmacy, {  nullable: true})
   requests: MedicineRequest[];
 
-  @OneToMany(() => Reservation, item => item.patient)
-  prescritions: Reservation[];
+  @OneToMany(() => Prescription, item => item.patient, {nullable: true})
+  prescritions: Prescription[];
+
+  @OneToMany(() => EPrescription, item => item.patient, {nullable: true})
+  ePrescriptions: EPrescription[];
+
+  @OneToMany(() => WorkingHours, item => item.pharmacy, {nullable: true})
+  workingHours: WorkingHours[];
 
   @Field(() => [Appointment])
-  @OneToMany(() => Appointment, item => item.pharmacy, {eager: true})
+  @OneToMany(() => Appointment, item => item.pharmacy,{nullable: true})
   appointments: Appointment[];
 
+  @Field(() => [Patient])
+  @ManyToMany(() => Patient, item => item.subscriptions,{nullable: true})
+  subscribers: Patient[];
+
   @Field(() => [Reservation])
-  @OneToMany(() => Reservation, item => item.pharmacy)
+  @OneToMany(() => Reservation, item => item.pharmacy,{nullable: true})
   reservations: Reservation[];
 
+  @Field(() => [Complaint])
+  @OneToMany(() => Complaint, item => item.pharmacy,{nullable: true})
+  complaints: Complaint[];
+
   @Field(() => [Rating])
-  @OneToMany(() => Rating, item => item.pharmacy)
+  @OneToMany(() => Rating, item => item.pharmacy,{nullable: true})
   ratings: Rating[];
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
+	@Field({nullable: true})
+  @Column({nullable: true})
+  averageRating: number;
 
 }
 

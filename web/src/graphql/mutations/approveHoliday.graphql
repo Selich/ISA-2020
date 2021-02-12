@@ -1,0 +1,10 @@
+mutation ApproveHoliday( 
+	$inputs: HolidayInput!
+) {
+  approveHoliday(inputs: $inputs
+  ) { 
+    employee{
+      email
+    }
+  	isApproved
+}}

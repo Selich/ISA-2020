@@ -1,38 +1,36 @@
 import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm'
 import { ObjectType, Field, ID } from 'type-graphql';
-import { PatientDetails } from './PatientDetails';
-import { User } from './User';
+import Patient from './Patient';
+import { Employee } from './Employee';
+import { Pharmacy } from './Pharmacy';
+import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class EPrescrition{
+export class EPrescription extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => PatientDetails)
-  patient: PatientDetails;
+	@Field(() => Patient, {nullable: true})
+  @ManyToOne(() => Patient)
+  patient: Patient;
 
-  @ManyToOne(() => User, { nullable: true })
-  employee: User;
-
-  @Field()
-  @Column()
-  isUsed: boolean;
+	@Field(() => Pharmacy, {nullable: true})
+  @ManyToOne(() => Pharmacy)
+  pharmacy: Pharmacy;
 
   @Field()
-  @Column()
+	@Column({nullable: true})
   hashCode: string
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
+  @Field()
+	@Column({nullable: true})
+  dateOfGrant: string
 
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
-
+  @Field()
+	@Column({nullable: true})
+  status: string
 
 }

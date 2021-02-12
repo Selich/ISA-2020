@@ -1,97 +1,53 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable } from 'typeorm'
+import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
 import { Address } from "./Address";
 import { ObjectType, Field, ID } from 'type-graphql';
-import { PatientDetails } from "./PatientDetails";
-import { Appointment } from "./Appointment";
-import { Rating } from './Rating';
-import { Holiday } from './Holiday';
-import { WorkingHours } from './WorkingHours';
-import { MedicineRequest } from './MedicineRequest';
+import { IsEmail, IsEnum, Length } from 'class-validator'
+import { Model } from './Model';
 
-// ! WORKS, DONT TOUCH
+const roles = [
+    'patient', 'derm', 'pharm', 'admin', 'sysadmin'
+]
+
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export default abstract class User extends Model {
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isEnabled: boolean;
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true})
+  @IsEmail()
   email: string;
 
-  @Field(() => String)
-  @Column()
+  @Field(() => String, { nullable: true })
+  @Column({ nullable: true})
   password: string;
 
   @Field()
-  @Column({ nullable: true })
+  @Column({
+    type: 'enum',
+    enum: roles,
+    nullable: true
+  })
+  @IsEnum(roles)
   role: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   firstName: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ nullable: true })
   lastName: string;
 
-  @Field(() => [Holiday])
-  @OneToMany(() => Holiday, item => item.employee, { eager: true})
-  holidays: Holiday[];
-
-  @OneToMany(() => Rating, item => item.doctor)
-  ratings: Rating[];
-
-  @OneToMany(() => Appointment, item => item.doctor)
-  schedule: Appointment[];
-
-  @Field(() => [WorkingHours])
-  @OneToMany(() => WorkingHours, item => item.doctorID, { eager: true})
-  workingHours: WorkingHours[];
-
-  @Field(() =>  [MedicineRequest])
-  @OneToMany(() => MedicineRequest, item => item.user)
-  requests: MedicineRequest[];
-
-  @Field(() => PatientDetails)
-  @OneToOne(() => PatientDetails, item => item.user ,{ eager: true, cascade: true, nullable:true})
-  @JoinColumn()
-  details: PatientDetails;
-
-  @Field()
-  @Column({ nullable: true })
-  gender: string;
-
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  dateOfBirth: Date;
-
   @Field(() => Address)
-  @ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true })
+	@ManyToOne(() => Address, item => item.users,  { eager: true, cascade: true, nullable:true })
   @JoinTable()
   address: Address;
 
   @Field()
   @Column({ nullable: true })
   telephone: string;
-
-  @Field()
-  @Column({ default: false })
-  isEnabled: boolean;
-
-  @Field()
-  @Column({ default: 0 })
-  averageRating: number;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

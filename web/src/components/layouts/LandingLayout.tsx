@@ -1,6 +1,6 @@
 import React from "react"
 import { Flex } from "@chakra-ui/react"
-import Header from "../sections/Header"
+import { Header } from "../sections/Header"
 
 export default function LandingLayout(props: any) {
   return (

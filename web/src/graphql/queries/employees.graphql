@@ -1,0 +1,24 @@
+query Employees 
+(
+  $inputs: EmployeeInput!
+) {
+  employees (
+    inputs: $inputs
+
+  ){
+    id
+    email,
+    firstName,
+    lastName,
+    holidays {
+      from
+      until
+    }
+    workingHours{
+      from
+      until
+    }
+    averageRating
+
+  }
+}

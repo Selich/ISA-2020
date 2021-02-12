@@ -1,25 +1,31 @@
-import { Field } from "type-graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { PatientDetails } from "./PatientDetails";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Model } from "./Model";
+import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
+import { Employee } from "./Employee";
 
+@ObjectType()
 @Entity()
-export class Complaint{
+export class Complaint extends Model{
 
-  @PrimaryGeneratedColumn()
-  id!: number;
+	@Field(() => Patient, {nullable:true})
+	@ManyToOne(() => Patient, item => item.complaints,  { eager: true, cascade: true, nullable: true })
+  @JoinTable()
+  patient: Patient;
 
-  @ManyToOne(() => PatientDetails)
-  patient!: PatientDetails;
+	@Field(() => Employee, {nullable:true})
+	@ManyToOne(() => Employee, item => item.complaints,  { eager: true, cascade: true, nullable:true })
+  @JoinTable()
+  employee: Employee;
 
-  @Column()
+	@Field(() => Pharmacy, {nullable:true})
+	@ManyToOne(() => Pharmacy, item => item.complaints,  { eager: true, cascade: true, nullable:true })
+  @JoinTable()
+  pharmacy: Pharmacy;
+
+	@Field({ nullable: true })
+	@Column({ nullable: true })
   description: string;
-
-  // @Field()
-  // doctor: User;
-
-  // @Entity()
-  // pharmacy: Pharmacy;
 
 }

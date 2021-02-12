@@ -1,4 +1,5 @@
 import React from "react";
+import DataTable from 'react-data-table-component'
 import { Image, Box, Link, Flex, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { GrBasket } from 'react-icons/gr'
@@ -7,6 +8,24 @@ interface NavBarProps { }
 
 export const Basket: any = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+    const columns = [
+        {
+            name: 'Name',
+            selector: 'name',
+            sortable: true,
+        },
+        {
+            name: 'Rating',
+            selector: 'rating',
+            sortable: true,
+        },
+        {
+            name: '',
+            button: true,
+            cell: () => <Button onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>,
+        }
+    ];
+
   const btnRef = React.useRef()
   const router = useRouter();
   let body = null;
@@ -29,39 +48,18 @@ export const Basket: any = (props) => {
               <DrawerHeader>Shopping Cart</DrawerHeader>
 
               <DrawerBody>
-                <Table variant="simple">
-                  <Thead>
-                    <Tr>
-                      <Th>Item</Th>
-                      <Th isNumeric>Quantity</Th>
-                      <Th></Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    <Tr>
-                      <Td>Aspirin</Td>
-                      <Td isNumeric>1</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Bensedin</Td>
-                      <Td isNumeric>3</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                    <Tr>
-                      <Td>Cancer</Td>
-                      <Td isNumeric>2</Td>
-                      <Td><Button colorScheme="red">X</Button></Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              </DrawerBody>
-
-              <DrawerFooter>
+              <DataTable
+                  columns={columns}
+                  subHeader
+                  persistTableHead
+              />
                 <Button variant="outline" mr={3} onClick={onClose}>
                   Cancel
                 </Button>
                 <Button color="teal">Buy</Button>
+              </DrawerBody>
+
+              <DrawerFooter>
               </DrawerFooter>
             </DrawerContent>
           </DrawerOverlay>

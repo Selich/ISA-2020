@@ -1,0 +1,30 @@
+mutation AddWorkingHours( 
+	$employee: String!,
+  $pharmacy: String!,
+  $from: String!,
+  $until: String!,
+) {
+  addWorkingHours( 
+  inputs: {
+    from: $from,
+    until: $until,
+    pharmacy: {
+      id: $pharmacy
+    },
+    employee: {
+      email: $employee
+    }
+  }
+  ) { 
+    email
+		workingHours{
+      from
+      until
+      pharmacy{
+        name
+      }
+    }
+    
+  }
+}
+

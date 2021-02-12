@@ -1,0 +1,18 @@
+query GetSchedule
+(
+  $token: String!
+) {
+  getSchedule(
+    token: $token
+  ){
+    begin
+    length
+    kind
+    patient{
+      firstName
+      lastName
+    }
+  }
+}
+
+

@@ -1,0 +1,12 @@
+mutation ConfirmRegistration($email: String!) {
+  confirmRegistration( email: $email ) {
+    errors {
+      field
+      message
+    }
+    user {
+      email
+
+    }
+  }
+}

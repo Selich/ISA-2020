@@ -1,1 +1,1 @@
-DELETE FROM public.patient_details
+DROP DATABASE isa

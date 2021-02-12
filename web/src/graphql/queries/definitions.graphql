@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 query Definitions {
   definitions {
       type,
@@ -9,3 +10,12 @@ query Definitions {
   }
 }
 
+=======
+query Definitions{
+  definitions{
+    kind
+    price
+    score
+  }
+}
+>>>>>>> dev

@@ -1,0 +1,16 @@
+query Shop {
+  shop {
+      code,
+      name,
+      kind,
+      points,
+      form,
+      rating,
+      contents,
+      producer,
+      isPrescriptionRequired,
+      info
+    
+  }
+}
+

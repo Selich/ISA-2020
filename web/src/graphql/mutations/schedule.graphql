@@ -1,0 +1,35 @@
+mutation Schedule( 
+  $patient: String!,
+  $employee: String!,
+  $pharmacy: String!,
+  $kind: String!,
+  $begin: String!,
+  $length: Float!
+) {
+  schedule( 
+  inputs: {
+    kind: $kind,
+    begin: $begin,
+    length: $length,
+    pharmacy: {
+      id: $pharmacy
+    }
+    patient: {
+      email: $patient,
+    }
+    employee: {
+      email: $employee,
+    }
+  }
+  ) { 
+    begin
+    length
+    price
+    patient{
+      email
+    }
+    pharmacy{
+      name
+    }
+  }
+}

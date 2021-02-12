@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 mutation createPharmacy(
   $name: String!, 
   $street: String!
@@ -13,3 +14,18 @@ mutation createPharmacy(
       name
     }
 }
+=======
+mutation CreatePharmacy( 
+	$inputs: PharmacyInput!
+) {
+  createPharmacy( 
+  inputs: $inputs
+  ) { 
+		name
+    
+  }
+}
+
+
+
+>>>>>>> dev

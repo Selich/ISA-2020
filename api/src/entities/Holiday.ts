@@ -1,32 +1,31 @@
-import { Field, ID, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PatientDetails } from "./PatientDetails";
-import { Pharmacy } from "./Pharmacy";
-import { User } from "./User";
+import { ObjectType, Field, InputType } from "type-graphql";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinTable, Column } from "typeorm";
+import { Employee } from "./Employee";
+import { Model } from "./Model";
 
 @ObjectType()
 @Entity()
-export class Holiday extends BaseEntity{
+export class Holiday extends Model{
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => User)
-  @ManyToOne(() => User, item => item.holidays)
+	@Field(() => Employee, { nullable:true })
+  @ManyToOne(() => Employee, item => item.holidays)
   @JoinTable()
-  employee: User;
+  employee: Employee;
 
-  @Column({ type: Date })
-  from: Date;
+  @Field(() => String)
+  @Column({nullable: true})
+  from: string;
 
-  @Column({ type: Date })
-  until: Date;
+  @Field(() => String)
+  @Column({nullable: true})
+  until: string;
 
-  @CreateDateColumn()
-  createdAt = new Date();
+  @Field()
+  @Column({nullable: true})
+  isApproved: boolean;
 
-  @UpdateDateColumn()
-  updatedAt = new Date();
+  @Field()
+  @Column({nullable: true})
+  comments: string;
 
 }

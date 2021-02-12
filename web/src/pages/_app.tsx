@@ -1,10 +1,15 @@
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react'
+import { Header } from '../components/sections/Header'
 import { Provider, createClient, dedupExchange, fetchExchange } from "urql";
 import { cacheExchange, Cache, QueryInput } from "@urql/exchange-graphcache";
 import { Provider as AuthProvider } from 'next-auth/client'
 import { useRouter } from "next/router";
-
-
+import theme from '../theme'
+import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
+import Index from './index';
+import Denied from './denied'
+import { useEffect, useState } from 'react';
+import { addItem, editItem, removeItem } from '../utils/cart'
 
 
 function betterUpdateQuery<Result, Query>(
@@ -50,22 +55,6 @@ const client = createClient({
               }
             );
           },
-          register: (_result, args, cache, info) => {
-            betterUpdateQuery<RegisterMutation, MeQuery>(
-              cache,
-              { query: MeDocument },
-              _result,
-              (result, query) => {
-                if (result.register.errors) {
-                  return query;
-                } else {
-                  return {
-                    me: result.register.user,
-                  };
-                }
-              }
-            );
-          },
         },
       },
     }),
@@ -73,20 +62,20 @@ const client = createClient({
   ],
 });
 
-import theme from '../theme'
-import { LogoutMutation, LoginMutation, RegisterMutation, MeDocument, MeQuery, useMeQuery } from '../generated/graphql';
-import Index from './index';
 
 
 function MyApp({ Component, pageProps }) {
   const [{ data, fetching }] = useMeQuery();
   const router = useRouter();
+
   let role = ""
+  let isEnabled = false
   let allowed = true;
-  if(data){ role = data.me.role }
-  if (router.pathname.startsWith("/patient") && role !== "patient") {
-    allowed = false;
-  }
+	if(data){ 
+		role = data.me.role
+		localStorage.setItem('role', JSON.stringify(role))
+		isEnabled = data.me.isEnabled
+	}
   const ComponentToRender = allowed ? Component : Index;
   return (
     <AuthProvider session={pageProps.session}>
@@ -97,6 +86,7 @@ function MyApp({ Component, pageProps }) {
           useSystemColorMode: true,
         }}
       >
+        <Header/>
         <ComponentToRender {...pageProps} />
       </ColorModeProvider>
     </ChakraProvider>

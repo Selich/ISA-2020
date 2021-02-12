@@ -1,62 +1,65 @@
-import { ObjectType, Field, ID } from "type-graphql";
+import { ObjectType, Field, ID, Float, InputType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { PatientDetails } from "./PatientDetails";
+import { Employee } from "./Employee";
+import { Model } from "./Model";
+import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { Prescrition } from "./Prescription";
-import { User } from "./User";
+import { Prescription } from "./Prescription";
 
 @ObjectType()
 @Entity()
-export class Appointment extends BaseEntity{
+export class Appointment extends Model{
 
-
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => PatientDetails)
-  @ManyToOne(() => PatientDetails, item => item.appointments,  { eager: true, cascade: true })
+  @Field(() => Patient)
+  @ManyToOne(() => Patient, item => item.appointments)
   @JoinTable()
-  patient: PatientDetails;
+  patient: Patient;
 
-  @Field(() => User)
-  @ManyToOne(() => User, item => item.schedule,  { eager: true, cascade: true })
+	@Field(() => Employee, {nullable: true})
+  @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: true })
   @JoinTable()
-  doctor: User;
+  employee: Employee;
 
-  @ManyToOne(() => Pharmacy)
+	@Field(() => Pharmacy, {nullable: true})
+	@ManyToOne(() => Pharmacy, item => item.appointments  )
+  @JoinTable()
   pharmacy: Pharmacy;
 
-  @Field(() => Prescrition)
-  @OneToOne(() => Prescrition, item => item.appointment ,{ eager: true, cascade: true, nullable:true})
+  @Field(() => Prescription, {nullable: true})
+  @OneToOne(() => Prescription, item => item.appointment ,{  cascade: true, nullable:true})
   @JoinColumn()
-  prescription: Prescrition;
+  prescription: Prescription;
 
-  @Column()
-  type: string;
+  @Field()
+  @Column({ nullable: true})
+  kind: string;
 
-  @Column()
+	@Field({nullable: true})
+  @Column({ nullable: true})
   score: number;
 
-  @Column()
+	@Field({nullable: true})
+  @Column({ nullable: true})
   price: number;
 
-  @Column()
+	@Field({nullable: true})
+  @Column({ nullable: true})
+  discount: number;
+
+	@Field({nullable: true})
+  @Column({ nullable: true})
   report: string;
 
-  @Column()
+	@Field({nullable: true})
+  @Column({ nullable: true})
   isVisited: boolean;
 
-  @Column({ type: Date })
-  from: Date;
+	@Field(() => String, {nullable: true})
+	@Column({nullable: true })
+  begin: string;
 
-  @Column({ type: Date })
-  until: Date;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
+	@Field(() => Number, {nullable: true})
+	@Column({nullable: true })
+  length: number;
 
 }

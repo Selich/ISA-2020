@@ -1,0 +1,21 @@
+mutation AddFreeApp(
+  $from: String!, 
+  $length: Float!,
+  $employee: String!,
+  $discount: Float!,
+  ) {
+  addFreeApp(
+    from: $from,
+    length: $length,
+    employee: $employee,
+    discount: $discount,
+  ){
+    begin
+    length
+    employee{
+      email
+      firstName
+      lastName
+    }
+  }
+}

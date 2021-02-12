@@ -1,37 +1,40 @@
-import { CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToOne } from 'typeorm'
-import { Int, ObjectType, Field, ID } from 'type-graphql';
-import { PatientDetails } from './PatientDetails';
+import { Column, Entity, Generated, ManyToOne, OneToOne } from 'typeorm'
+import { ObjectType, Field } from 'type-graphql';
+import  Patient  from "./Patient";
 import { MedicineList } from './MedicineList';
-import { User } from './User';
 import { Appointment } from './Appointment';
+import { Employee } from './Employee';
 
 @ObjectType()
 @Entity()
-export class Prescrition extends MedicineList{
+export class Prescription extends MedicineList{
 
-  @ManyToOne(() => PatientDetails)
-  patient: PatientDetails;
+  @Field(() => Patient)
+  @ManyToOne(() => Patient)
+  patient: Patient;
 
-  @ManyToOne(() => User)
-  employee: User;
+  @Field(() => Employee)
+  @ManyToOne(() => Employee)
+  employee: Employee;
 
+  @Field(() => Appointment)
   @OneToOne(() => Appointment, item => item.prescription)
   appointment: Appointment;
 
   @Field()
+  @Column()
+  type: string;
+
+  @Field()
+  @Column(() => Boolean)
   isUsed: boolean;
 
   @Field()
-  @Column()
+  @Generated("uuid")
+  hashCode: string;
+
+  @Field(() => String, {nullable: true, defaultValue: null})
+  @Column({nullable: true})
   deadline: Date;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
 
 }

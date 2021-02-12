@@ -1,0 +1,10 @@
+query PharmacyMedicine(
+  $inputs: MedicineInput!
+) {
+  pharmacyMedicine(
+    inputs: $inputs
+  ){
+    name
+  }
+}
+

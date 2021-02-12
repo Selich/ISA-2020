@@ -1,0 +1,9 @@
+mutation AddComplaint( 
+	$inputs: ComplaintInput!
+) {
+  addComplaint(inputs: $inputs
+  ) { 
+  	description
+  
+}}
+

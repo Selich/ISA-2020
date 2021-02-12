@@ -1,0 +1,19 @@
+mutation reserveMedicine( 
+	$inputs: ReservationInput!
+) {
+  reserveMedicine(inputs: $inputs) {
+    pharmacy{
+      name
+    }
+    patient{
+      email
+    }
+ 		isBought,
+    medicineItem{
+      quantity
+      details{
+        name
+      }
+    }
+  }
+}

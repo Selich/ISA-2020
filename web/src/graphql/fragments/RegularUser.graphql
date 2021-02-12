@@ -1,5 +1,5 @@
 fragment RegularUser on User {
-  id
+  firstName
+  lastName
   email
-  role
 }

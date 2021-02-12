@@ -1,0 +1,13 @@
+query ContainsMedicine($id: String!) {
+  containsMedicine( id: $id){
+      name,
+      address{
+        street,
+        city,
+        country
+      }
+      long,
+      lat
+  }
+
+}

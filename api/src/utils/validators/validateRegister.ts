@@ -1,33 +1,33 @@
-import { User } from "../../entities/User";
-import { RegisterInput } from "../../resolvers/types/UserTypes";
+// import { User } from "../../entities/User";
+// import { UserDTO } from "../../resolvers/types/UserTypes";
 
-export const validateRegister = (input: RegisterInput) => {
-  if (!input.email.includes("@")) {
-    return [
-      {
-        field: "email",
-        message: "invalid email",
-      },
-    ];
-  }
+// export const validateRegister = (input: UserDTO) => {
+//   if (!input.email.includes("@")) {
+//     return [
+//       {
+//         field: "email",
+//         message: "invalid email",
+//       },
+//     ];
+//   }
 
-  if (input.password !== input.confirmPassword) {
-    return [
-      {
-        field: "password",
-        message: "password not confirmed",
-      },
-    ];
-  }
-  return null;
-};
+//   if (input.password !== input.confirmPassword) {
+//     return [
+//       {
+//         field: "password",
+//         message: "password not confirmed",
+//       },
+//     ];
+//   }
+//   return [];
+// };
 
-export const validateAdmin = async (userId: any) => {
-  const admin = await User.findOne({ id: userId} )
-  if(!admin || admin.role !== 'sysadmin'){
-      return {
-        errors: [{ field: "email", message: "not an admin" }],
-      };
-  }
-  return null;
-};
+// export const validateAdmin = async (userId: any) => {
+//   const admin = await User.findOne({ id: userId} )
+//   if(!admin || admin.role !== 'sysadmin'){
+//       return {
+//         errors: [{ field: "email", message: "not an admin" }],
+//       };
+//   }
+//   return null;
+// };

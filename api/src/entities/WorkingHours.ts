@@ -1,37 +1,29 @@
-import { Field, ObjectType } from "type-graphql";
-import { Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { User } from "./User";
+import { Field, InputType, ObjectType } from "type-graphql";
+import { BaseEntity, Column, CreateDateColumn, Entity,JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Employee } from "./Employee";
+import { Pharmacy } from "./Pharmacy";
+import { Model } from "./Model";
 
 @ObjectType()
 @Entity()
-export class WorkingHours {
+export class WorkingHours extends Model{
 
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Field(() => User)
-  @ManyToOne(() => User, item => item.workingHours)
+  @Field(() =>  Employee)
+  @ManyToOne(() => Employee, item => item.workingHours)
   @JoinTable()
-  doctorID: User;
+  employee:  Employee;
 
-  @Field()
-  @Column()
-  pharmacyID: number;
+  @Field(() =>  Pharmacy)
+	@ManyToOne(() => Pharmacy, item => item.workingHours, {eager:true})
+  @JoinTable()
+  pharmacy:  Pharmacy;
 
-  @Field()
-  @Column()
-  from: Date;
+	@Field({nullable: true})
+	@Column({nullable: true})
+  from: string;
 
-  @Field()
-  @Column()
-  until: Date;
-
-  @CreateDateColumn()
-  createdAt = new Date();
-
-  @UpdateDateColumn()
-  updatedAt = new Date();
-
+	@Field({nullable: true})
+	@Column({nullable:true})
+  until: string;
 
 }

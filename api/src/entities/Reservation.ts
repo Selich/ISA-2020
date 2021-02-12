@@ -1,30 +1,44 @@
 import { MedicineList } from "./MedicineList";
 import { Entity } from "typeorm/decorator/entity/Entity";
-import { Field, ObjectType } from "type-graphql";
-import { PatientDetails } from "./PatientDetails";
+import { Field, InputType, ObjectType } from "type-graphql";
+import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { Column, JoinTable, ManyToOne } from "typeorm";
+import { MedicineItem } from "./MedicineItem";
+import { Model } from "./Model";
+import { OneToOne, JoinColumn, Column, JoinTable, ManyToOne } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class Reservation extends MedicineList{
+export class Reservation extends Model{
 
   @Field(() => Pharmacy)
   @ManyToOne(() => Pharmacy, item => item.reservations,  { eager: true, cascade: true })
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @ManyToOne(() => PatientDetails, item => item.reservations,  {  cascade: true })
+	@Field(() => Patient, { nullable: true })
+  @ManyToOne(() => Patient, item => item.reservations,  {})
   @JoinTable()
-  patient!: PatientDetails;
+  patient: Patient;
 
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  deadline: Date;
+	@Field(() => MedicineItem, {nullable:true})
+  @OneToOne(() => MedicineItem, item => item.reservation, { eager: true, cascade: true, nullable: true })
+  @JoinColumn()
+  medicineItem: MedicineItem;
 
-  @Field(() => String)
-  @Column({ type: 'date', nullable: true })
-  pickupDate: Date;
+	@Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  deadline: string;
 
+	@Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  pickupDate: string;
 
+  @Field()
+  @Column({nullable: true })
+  isBought: boolean;
+
+  @Field()
+  @Column({nullable: true })
+  totalSum: number;
 }

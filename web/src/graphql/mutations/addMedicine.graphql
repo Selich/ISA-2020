@@ -1,0 +1,11 @@
+mutation AddMedicine( 
+	$inputs: MedicineItemInput!
+) {
+  addMedicine( 
+  inputs: $inputs
+  ) { 
+   medicines {
+    quantity
+  } 
+  }
+}

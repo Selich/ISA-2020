@@ -1,0 +1,9 @@
+fragment InputExam on Appointment {
+    begin
+    length
+    discount
+    employee {
+        firstName
+        lastName
+    }
+}

@@ -1,4 +1,5 @@
 mutation AddEmployee(
+<<<<<<< HEAD
   $email: String!, 
   $password: String!
   $firstName: String!,
@@ -31,5 +32,16 @@ mutation AddEmployee(
         name
       }
     }
+=======
+  $inputs: EmployeeInput!, 
+  ) {
+  addEmployee(
+    inputs: $inputs,
+  ){
+  user{
+    email
+
+  }
+>>>>>>> dev
   }
 }

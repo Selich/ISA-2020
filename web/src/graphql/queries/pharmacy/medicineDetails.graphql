@@ -1,9 +1,0 @@
-query MedicinesDetails {
-  medicinesDetails {
-    id
-    quantity
-    price
-  }
-}
-
-

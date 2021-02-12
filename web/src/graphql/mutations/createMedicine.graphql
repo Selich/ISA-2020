@@ -1,0 +1,10 @@
+mutation CreateMedicine( 
+	$inputs: MedicineInput!
+) {
+  createMedicine( 
+  inputs: $inputs
+  ) { 
+		code
+  }
+}
+

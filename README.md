@@ -5,7 +5,30 @@
 potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i priložiti skriptu za popunu baze testnim podacima.
 
 
-### Potrebne biblioteke za dev
+## Frontend app, web -> AWS ElasticBean,
+## Backend app, api -> Digital Ocean, dokku
+
+### Run scripts
+Pozivanje:
+- api dev
+```bash
+./run_api.sh
+```
+- web frontend dev
+```bash
+./run_api.sh
+```
+- zajedno
+```bash
+./run_api.sh
+```
+Da bi generisao nove zahteve potrebno je generisati nove graphql upite
+
+```bash
+yarn gen
+```
+
+### Dependencies for dev
 1) Instalirati node.js
 2) Instalirati yarn
 [link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
@@ -19,33 +42,6 @@ potrebno je u README.md napisati tačno uputstvo za pokretanje projekta i prilo�
 cd <Naziv Projekta>
 yarn install
 ```
-
-5) Pozivanjem npm u root dir u projektu: prefix npm
-    "dev2": "nodemon dist/index.js",
-    "watch": "tsc -w",
-
-Potrebno je pokrenuti u zasebnom prozoru:
-1)
-```bash
-yarn watch
-```
-2)
-```bash
-yarn dev2
-```
-Da bi generisao nove zahteve potrebno je generisati nove graphql upite
-
-```bash
-yarn gen
-```
-To ce omoguciti da se pokrene server u dev-u.
-Da bi se pokrenuo frontend:
-```bash
-cd web
-yarn start
-
-
-
 
 ### Potrebno
 - [ ] Kesiranje

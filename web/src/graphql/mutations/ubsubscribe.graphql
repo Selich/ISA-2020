@@ -1,0 +1,12 @@
+mutation Unsubscribe( 
+	$inputs: SubscriptionInput!
+) {
+  unsubscribe(inputs: $inputs) {
+ 		email
+    subscriptions{
+      name
+    }
+  }
+}
+   
+

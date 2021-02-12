@@ -1,0 +1,20 @@
+query reservations( 
+	$token: String!
+) {
+  reservations(token: $token) {
+    pharmacy{
+      name
+    }
+    patient{
+      email
+    }
+ 		isBought,
+    medicineItem{
+      quantity
+      details{
+        name
+      }
+    }
+    deadline
+  }
+}
