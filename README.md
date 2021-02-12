@@ -71,10 +71,6 @@ yarn install
 - [ ] Async
 - [ ] Transactions ( upis u bazu ) ( 2 situacije )
 
-
-### Pitanja
-- Da li mogu farmaceuti i dermatolozi u istoj tabeli
-Activating the environment
 ### Frontend
 - React 
 - Redux
@@ -85,26 +81,3 @@ Activating the environment
 - Express.js
 - Redis
 - Azure
-### Slanje e-maila
-Za slanje emaila nije obezbeđen poseban servis. Možete koristiti sopstveni email nalog. Opciono, slanje notifikacija u vidu emaila možete da odradite korišćenjem message queue-a.
-
-Konkurentni pristup resursima u bazi
-Prilikom implementacije, potrebno je adekvatno rešiti sledeće konfliktne situacije: ● više istovremenih korisnika aplikacije ne može da rezerviše lek koji je u međuvremenu postao nedostupan,
-
-lock thread ● količina leka na stanju se mora ispravno ažurirati nakon rezervacije leka od strane pacijenta, otkazivanja rezervacije leka, izdavanja leka preko eRecepta, prihvatanja ponude za narudžbenicu itd,
-
-izmena se loguje ● jedan dermatolog ne može istovremeno da bude prisutan na više različitih pregleda,
-
-flag nije dostupan ● jedan farmaceut ne može istovremeno da bude prisutan na više različitih savetovanja,
-
-flag nije dostupan ● pregledi koji su unapred definisani ne smeju biti rezervisani od strane više različitih korisnika,
-
-flag rezervisan ● više istovremenih korisnika aplikacije ne može da zakaže savetovanje u istom terminu kod istog farmaceuta (termini se ne smeju ni preklapati),
-
-flag rezervisan ● prilikom izdavanja eRecepta se izdaju ili svi ili ni jedan lek i stanje leka u apoteci se ažurira,
-
-nema parcijalna izdavanja ● na jednu žalbu može da odgovori samo jedan administrator sistema.
-
-zalba -> handle ko odgovara
-
-Napomena: Smatra se da student nije uspešno ispunio ovaj zahtev ukoliko pored navedenih ograničenja ne pronađe i adekvatno ne reši bar još jednu konfliktnu situaciju za svoj deo funkcionalnosti propisanih specifikacijom.
