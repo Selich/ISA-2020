@@ -14,7 +14,7 @@ database: isa_super
 port: 5432
 ```
 
-Za formiranje i popunjavanje baze koristiti sledecu komandu u terminalu
+Za formiranje i popunjavanje tabela koristiti sledecu komandu u terminalu
 ```
 psql -U isa_super -d isa_super < dump.sql
 ```
