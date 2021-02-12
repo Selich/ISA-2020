@@ -14,10 +14,12 @@ database: isa_super
 port: 5432
 ```
 
-Za formiranje i popunjavanje tabela koristiti sledecu komandu u terminalu
+Za formiranje i popunjavanje tabela u bazi koristiti sledecu komandu u terminalu
 ```
 psql -U isa_super -d isa_super < dump.sql
 ```
+Prilikom akcija koje generisu e-mail, adresa na koju je mail poslat se pojavljuje u konzoli.
+Potrebno je kopirati tu adresu u address bar browsera.
 
 ## Frontend app, web -> AWS ElasticBean,
 ## Backend app, api -> Digital Ocean, dokku
