@@ -59,18 +59,6 @@ cd <Naziv Projekta>
 yarn install
 ```
 
-### Potrebno
-- [ ] Kesiranje
-- [ ] Message queue obradjivanje zahteva
-- [ ] Validation 
-- [ ] Auth
-- [ ] Mail confirm
-- [ ] Forgot password
-- [ ] Travis CI
-- [ ] Employee posle ulogovanja sa nekom sifrom koju je admin dodao u bazu, salje notifikaciju, employee menja sifru
-- [ ] Async
-- [ ] Transactions ( upis u bazu ) ( 2 situacije )
-
 ### Frontend
 - React 
 - Redux
