@@ -39,11 +39,23 @@ export class PatientResolver {
 
     return temp;
   }
+  @Query(() => Patient, { nullable: true })
+	async patient(
+		@Arg("token") token: string
+	) {
+
+		let temp = jwt.decode(token)
+    //@ts-ignore
+		let patient = await Patient.findOne({email: temp.email});
+		console.log(patient)
+		return patient
+  }
 
   @Query(() => [Patient], { nullable: true })
-  async patients(@Arg("inputs") inputs: PatientInput) {
+	async patients(
+	) {
     //@ts-ignore
-    return await Patient.find({ ...inputs });
+    return await Patient.find({});
   }
 
   @Query(() => [Tier], { nullable: true })
@@ -313,7 +325,7 @@ export class PatientResolver {
     user.role = "patient";
     user.score = 0;
     user.penalty = 0;
-    user.tier = await Tier.findOneOrFail({ id: 11 });
+    //user.tier = await Tier.findOneOrFail({ : 11 });
 
     let address = { street, city, country };
 
@@ -362,6 +374,7 @@ export class PatientResolver {
       //@ts-ignore
       user = temp;
     }
+    if (!user) return null;
 
     let valid = true;
 
@@ -375,7 +388,8 @@ export class PatientResolver {
       return { errors: [{ field: "email", message: "invalid login" }] };
     }
 
-    if (!user) return null;
+		console.log(user)
+
     let token = jwt.sign(
       {
         id: user.id,
@@ -387,7 +401,7 @@ export class PatientResolver {
 
     //@ts-ignore
     req.session.user = user;
-    return { token };
+    return { token, user };
   }
 
   @Mutation(() => PatientResponse)

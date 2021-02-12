@@ -1,0 +1,13 @@
+mutation Employee(
+  $token: String!
+) {
+  employee(
+    token: $token
+  ){
+    deadline
+    isBought
+
+  }
+}
+
+

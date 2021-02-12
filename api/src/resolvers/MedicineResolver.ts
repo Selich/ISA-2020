@@ -9,31 +9,12 @@ import { Medicine } from '../entities/Medicine';
 import { MedicineItem } from '../entities/MedicineItem';
 import { Pharmacy } from '../entities/Pharmacy';
 import { Reservation } from '../entities/Reservation';
+import { Price } from '../entities/Price';
 import { EPrescription } from '../entities/EPrescription';
 import { MedicineInput, MedicineItemInput } from "./types/dtos";
 
 @Resolver()
 export class MedicineResolver {
-	@Mutation(() => [Reservation], { nullable: true })
-		async reserveMedicine(
-
-				) {
-
-		}
-
-	@Mutation(() => [Reservation], { nullable: true })
-	async cancelReservation(
-
-			) {
-
-	}
-
-	@Mutation(() => [Reservation], { nullable: true })
-	async pickupReservation(
-
-			) {
-
-	}
 
 		@Mutation(() => Medicine, { nullable: true })
 		async createMedicine(
@@ -50,43 +31,85 @@ export class MedicineResolver {
 			return medicine
 		}
 
-		@Mutation(() => MedicineItem, { nullable: true })
+		@Mutation(() => Inventory, { nullable: true })
+		async removeMedicine(
+			@Arg("inputs") inputs: MedicineItemInput,
+			@Ctx() {  }: MyContext
+		) {
+
+			//@ts-ignore
+		  let id = parseInt(inputs.list.id)
+
+			let inv = await Inventory.findOneOrFail({id: id})
+			if(!inputs.details) return null
+
+			let list = inv.medicines.filter(item => 
+				//@ts-ignore
+				(item.details.code === inputs.details.code) &&
+				(item.reservation)
+			)
+			if(list.length == 0 || !list){
+				//@ts-ignore
+				let i = parseInt(inputs.id)
+				let item = await MedicineItem.findOneOrFail({id: i})
+				inv.medicines.splice(inv.medicines.indexOf(item))
+				inv.save()
+				await MedicineItem.remove(item)
+			}
+
+			
+		}
+		@Mutation(() => Inventory, { nullable: true })
 		async addMedicine(
 			@Arg("inputs") inputs: MedicineItemInput,
-			@Ctx() { res }: MyContext
+			@Ctx() {  }: MyContext
 		) {
 
 			if(!inputs.details) return null;
 			let medicine = await Medicine.findOneOrFail({code: inputs.details.code})
 			if(!medicine) return null
-
-			
-				//
-			let medicineItem = new MedicineItem()
-
-
-			if(inputs.quantity)
-				medicineItem.quantity = inputs.quantity
-			if(inputs.price)
-				medicineItem.price = inputs.price
-			medicineItem.details = medicine
 			if(!inputs.list.id) return null
-
-
-
 			let id = parseInt(inputs.list.id)
 			let inventory = await Inventory.findOneOrFail({ id })
-			console.log(inventory)
-			medicineItem.list = inventory 
-			medicineItem.save()
-			let medicines: MedicineItem[] = []
-			if(inventory.medicines) medicines = inventory.medicines
-			medicines.push(medicineItem)
-			inventory.medicines = medicines
+			//@ts-ignore
+			let res = inventory.medicines.filter(item => item.details.code === inputs.details.code)
+			if(!res){
+				let medicineItem = new MedicineItem()
+				medicineItem.prices = []
+				if(inputs.quantity)
+					medicineItem.quantity = inputs.quantity
+				if(inputs.currentPrice){
+					medicineItem.prices.push(new Price({
+						price: inputs.currentPrice,
+						medicineItem: medicineItem,
+						from: new Date()
+					}))
+					medicineItem.currentPrice = inputs.currentPrice
 
-			inventory.save()
+				}
+				medicineItem.details = medicine
+				console.log(inventory)
+				medicineItem.list = inventory
+				let item = medicineItem.save()
+				inventory.medicines.push(medicineItem)
+				inventory.save()
+				//@ts-ignore
+				let arr = []
+				if(!inventory.medicines) {
+					//@ts-ignore
+					inventory.medicines = arr
+				}
 
-			return medicineItem
+				return inventory
+
+			}
+				//@ts-ignore
+			let im = res[0]
+			if(inputs.quantity)
+				im.quantity += inputs.quantity
+			im.save()
+			return inventory
+
 		}
 
 		@Mutation(() => [EPrescription], { nullable: true })

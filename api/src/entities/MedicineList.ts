@@ -5,7 +5,7 @@ import { Model } from './Model';
 
 @ObjectType()
 @Entity()
-export class MedicineList extends Model{
+export abstract class MedicineList extends Model{
 
   @Field(() => ID)
   @PrimaryGeneratedColumn()

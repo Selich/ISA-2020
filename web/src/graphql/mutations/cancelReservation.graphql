@@ -1,0 +1,14 @@
+mutation CancelReservation( 
+	$inputs: ReservationInput!
+) {
+  cancelReservation(inputs: $inputs) {
+    id
+ 		isBought,
+    medicineItem{
+      details{
+        name
+      }
+    }
+  }
+}
+   

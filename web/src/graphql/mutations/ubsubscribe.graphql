@@ -1,10 +1,12 @@
-mutation Subscribe( 
+mutation Unsubscribe( 
 	$inputs: SubscriptionInput!
 ) {
-  subscribe(inputs: $inputs) {
+  unsubscribe(inputs: $inputs) {
  		email
     subscriptions{
       name
     }
   }
 }
+   
+

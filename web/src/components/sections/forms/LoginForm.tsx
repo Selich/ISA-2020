@@ -29,7 +29,7 @@ export default function LoginForm({ onClose }) {
             let user = response.data.login.user;
 						let token = response.data.login.token;
 						localStorage.setItem('cart', JSON.stringify({}))
-						localStorage.setItem('token', token)
+						localStorage.setItem('token', JSON.stringify(token))
 						if(user.role === 'patient')
 								router.push('/user')
 						if(user.role === 'admin')

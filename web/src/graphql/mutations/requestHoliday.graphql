@@ -1,0 +1,11 @@
+mutation RequestHoliday( 
+	$inputs: HolidayInput!
+) {
+  requestHoliday(inputs: $inputs
+  ) { 
+    employee{
+      email
+    }
+  	isApproved
+}}
+

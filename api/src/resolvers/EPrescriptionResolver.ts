@@ -3,7 +3,7 @@ import { EPrescription } from '../entities/EPrescription'
 import { MyContext } from "../types";
 import { Query, Ctx, Resolver, Mutation, Arg } from "type-graphql";
 import qrcode from 'qrcode'
-import { MedicineListInput } from "./types/dtos";
+import { InventoryInput } from "./types/dtos";
 import { Prescription } from "../entities/Prescription";
 import Patient from "../entities/Patient";
 
@@ -19,7 +19,7 @@ export class EPrescriptionResolver {
 
     @Mutation(() => Prescription, { nullable: true })
     async generateEPrescription(
-        @Arg("inputs") inputs: MedicineListInput,
+        @Arg("inputs") inputs: InventoryInput,
         @Ctx() { req, mailer }: MyContext
     ) {
         const patient = await Patient.findOneOrFail({ id: req.session.userId})

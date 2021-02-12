@@ -2,6 +2,7 @@ import { InputType, Field, ObjectType, Float } from "type-graphql";
 import { FieldError } from "./ErrorTypes";
 import User from "../../entities/User";
 import Patient from "../../entities/Patient";
+import {MedicineItem} from "../../entities/MedicineItem";
 
 @ObjectType()
 export class PatientResponse {
@@ -66,7 +67,7 @@ export class PharmacyInput {
 }
 
 @InputType()
-export class MedicineListInput {
+export class InventoryInput {
   @Field(() => [MedicineItemInput], { nullable: true })
   medicines?: MedicineItemInput[];
   @Field({ nullable: true })
@@ -118,6 +119,8 @@ export class EmployeeInput extends UserInput{
 @InputType()
 export class MedicineInput {
   @Field({ nullable: true })
+  id?: string;
+  @Field({ nullable: true })
   name?: string;
   @Field({ nullable: true })
   code?: string;
@@ -142,15 +145,17 @@ export class MedicineInput {
 @InputType()
 export class MedicineItemInput {
   @Field({ nullable: true })
+  id?: string;
+  @Field({ nullable: true })
   name?: string;
   @Field(() => MedicineInput, { nullable: true })
   details?: MedicineInput;
-  @Field(() => MedicineListInput)
-  list: MedicineListInput;
-	@Field()
+	@Field(() => InventoryInput, { nullable:true })
+  list: InventoryInput;
+	@Field({nullable:true})
   quantity?: number;
-  @Field()
-  price?: number;
+	@Field({nullable:true})
+  currentPrice?: number;
 	@Field(() => String, {nullable:true})
   dateOfPurchase?: string;
 	@Field(() => String, {nullable:true})
@@ -243,6 +248,24 @@ export class SubscriptionInput {
   pharmacy?: PharmacyInput;
 }
 
+
+
+@InputType()
+export class PriceInput {
+	@Field(() => MedicineItemInput, {nullable: true})
+  medicineItem?: MedicineItemInput;
+
+  @Field(() => PharmacyInput, {nullable: true})
+  pharmacy?: PharmacyInput;
+
+  @Field({nullable: true})
+  price?: number;
+
+  @Field({nullable: true})
+  from?: string;
+}
+
+
 @InputType()
 export class ComplaintInput {
 	@Field(() => PatientInput, {nullable: true})
@@ -256,4 +279,22 @@ export class ComplaintInput {
 
   @Field({nullable: true})
   description?: string;
+}
+
+@InputType()
+export class ReservationInput {
+	@Field(() => PharmacyInput, {nullable:true})
+  pharmacy?: PharmacyInput;
+	@Field(() => PatientInput, {nullable:true})
+  patient?: PatientInput;
+	@Field(() => MedicineItemInput, {nullable:true})
+  medicineItem: MedicineItemInput;
+	@Field(() => String, { nullable: true })
+  deadline?: string;
+	@Field(() => String, { nullable: true })
+  pickupDate?: string;
+	@Field({ nullable: true })
+  isBought?: boolean;
+	@Field(() => String, { nullable: true })
+  id?: string;
 }

@@ -1,0 +1,9 @@
+mutation AddRating( 
+	$inputs: RatingInput!
+) {
+  addRating(inputs: $inputs
+  ) { 
+  	rating
+  
+}}
+

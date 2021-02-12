@@ -1,9 +1,19 @@
 mutation Schedule( 
-  $patient: String! ,
-  $employee: String!, 
+  $patient: String!,
+  $employee: String!,
+  $pharmacy: String!,
+  $kind: String!,
+  $begin: String!,
+  $length: Float!
 ) {
   schedule( 
   inputs: {
+    kind: $kind,
+    begin: $begin,
+    length: $length,
+    pharmacy: {
+      id: $pharmacy
+    }
     patient: {
       email: $patient,
     }
@@ -14,11 +24,12 @@ mutation Schedule(
   ) { 
     begin
     length
+    price
     patient{
       email
     }
-    employee{
-      email
+    pharmacy{
+      name
     }
   }
 }

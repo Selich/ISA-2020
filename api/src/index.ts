@@ -10,14 +10,16 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { PatientResolver } from './resolvers/PatientResolver';
+import { Tier } from './entities/Tier';
+import { Employee } from './entities/Employee';
 import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
 import dbConfig from './ormconfig'
 import nodemailer from 'nodemailer'
 import { AuthResolver } from './resolvers/AuthResolver';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
-import { Employee } from './entities/Employee';
 import { EmployeeResolver } from './resolvers/EmployeeResolver';
+import { ReservationResolver } from './resolvers/ReservationResolver';
 import { MedicineResolver } from './resolvers/MedicineResolver';
 import {PharmacyResolver} from './resolvers/PharmacyResolver';
 
@@ -34,7 +36,7 @@ const main = async () => {
 
   conn.runMigrations()
 
-	/*
+		/*
 
 	let sysadmin = new Employee() 
 	sysadmin.email = 'uros@gmail.com'
@@ -73,7 +75,7 @@ const main = async () => {
 	gold.scoreMin = 30
 	gold.scoreMax = 999
 	await Tier.save(gold)
-	*/
+		 */
 
   const app = express()
   const RedisStore = connectRedis(session)
@@ -169,7 +171,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ PatientResolver, EmployeeResolver, MedicineResolver, AuthResolver, PharmacyResolver, AppointmentResolver],
+      resolvers: [ PatientResolver, EmployeeResolver, MedicineResolver, AuthResolver, PharmacyResolver, AppointmentResolver, ReservationResolver],
       validate: false
     }),
     context: ({ req, res }) => ({

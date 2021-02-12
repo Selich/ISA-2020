@@ -29,7 +29,12 @@ export class PharmacyResolver{
 	) {
 		let pharm = new Pharmacy({...inputs})
 
-		let temp = await Address.findOne({ ...inputs.address });
+		if(!inputs.address) return null
+		let temp = await Address.findOne({ 
+			street: inputs.address.street,
+			city: inputs.address.city,
+			country: inputs.address.country,
+		});
 		if (temp === undefined)
 			pharm.address = await Address.save(
 				new Address({...inputs.address})
@@ -37,16 +42,13 @@ export class PharmacyResolver{
 		else pharm.address = temp;
 
 		let inventory = new Inventory()
-		inventory.pharmacy = pharm
 		inventory.medicines = []
 		inventory.save()
 
 		pharm.inventory = inventory
 		
 		pharm.save()
-
-
-		return pharm 
+		return pharm
 
   }
   @Mutation(() => Pharmacy, { nullable: true })

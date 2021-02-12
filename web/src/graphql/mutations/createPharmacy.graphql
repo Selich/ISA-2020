@@ -1,0 +1,13 @@
+mutation CreatePharmacy( 
+	$inputs: PharmacyInput!
+) {
+  createPharmacy( 
+  inputs: $inputs
+  ) { 
+		name
+    
+  }
+}
+
+
+

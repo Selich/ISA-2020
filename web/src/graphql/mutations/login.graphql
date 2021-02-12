@@ -1,8 +1,10 @@
 mutation Login($email: String!, $password: String!) {
-  login(inputs: {
+  login(
+  inputs: {
     email: $email,
     password: $password,
-  }){
+  }
+  ){
     token
     user{
       email

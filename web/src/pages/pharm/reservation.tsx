@@ -2,16 +2,14 @@ import React, {useState, useEffect} from "react";
 import NextLink from "next/link";
 import { HStack, Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import {  usePatientQuery } from '../../generated/graphql';
+import {  usePickupReservationMutation } from '../../generated/graphql';
 
-import { MyCalendar } from '../../components/sections/Calendar' 
 
-export default function Index() {
-
+export default function Reservation() {
 
 	let token = localStorage.getItem('token')
 	token = JSON.parse(token)
-	const [{fetching,data}] = usePatientQuery({
+	const [{fetching,data}] = useEmployeeQuery({
 		variables: {
 			token: token
 		}
@@ -26,10 +24,7 @@ export default function Index() {
 					<hr/>
           <Text fontSize={18} m={2}>Your daily stats:</Text>
 					<HStack>
-						<Text fontSize={17} m={2}>Penalty: </Text>
-						<Text fontSize={19}> {data.patient.penalty}</Text>
 					</HStack>	
-          <Text fontSize={17} m={2}>Score: {data.patient.score}</Text>
       </Box>
 
 		)
@@ -54,32 +49,10 @@ export default function Index() {
 		{body}
         <Box align="right">
 					<Box> 
-						<NextLink href="/user/consultation">
-						<Button w={180} >Consultation</Button> 
+						<NextLink href="/user/prescription">
+							<Button w={180}>Prescription</Button> 
 						</NextLink>
 					</Box>
-					<Box> 
-						<NextLink href="/user/examinations">
-						<Button w={180} >Examinations</Button> 
-						</NextLink>
-					</Box>
-					<Box> <Button w={180} >Schedule</Button> </Box>
-					<Box> 
-						<NextLink href="/user/eprescriptions">
-						<Button w={180} >Eprescriptions</Button> 
-						</NextLink>
-					</Box>
-					<Box> 
-						<NextLink href="/user/reservations">
-						<Button w={180} >Reservations</Button> 
-						</NextLink>
-					</Box>
-					<Box> <Button w={180} >Reservations</Button> </Box>
-					<Box> <Button w={180} >Subscriptions</Button> </Box>
-					<Box> 
-						<Button w={180} >Report Issue</Button> 
-					</Box>
-					<Box> <Button w={180} >Get Medicine</Button> </Box>
 				</Box>
 			</SimpleGrid>
       </Box>

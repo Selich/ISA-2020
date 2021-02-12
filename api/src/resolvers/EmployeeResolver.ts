@@ -8,12 +8,22 @@ import { MyContext } from "src/types";
 import { Field, Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
 import { HolidayInput, EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
 import argon2 from 'argon2'
+import jwt from 'jsonwebtoken'
 
 
 
 @Resolver()
 export class EmployeeResolver {
 
+  @Query(() => Employee, { nullable: true })
+	async employee(
+		@Arg("token") token: string
+	) {
+
+		let temp = jwt.decode(token)
+    //@ts-ignore
+		return await Employee.findOne({email: temp.email});
+  }
 
   @Query(() => [Employee], { nullable: true })
   async employees(

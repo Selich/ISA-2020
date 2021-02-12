@@ -43,9 +43,6 @@ export class Medicine extends Model {
   @Column({ nullable: true})
   rating: number;
 
-  // @Field(() => File)
-  // @Column()
-  // image: string;
 
 	@Field(() => Boolean, {nullable: true})
 	@Column({ default: false, nullable:true })
@@ -61,9 +58,6 @@ export class Medicine extends Model {
   @OneToMany(() => MedicineRequest, item => item.medicine, {nullable: true})
   requests: MedicineRequest[];
 
-  @OneToMany(() => Price, item => item.medicine, { nullable: true})
-  prices: Price[];
-	o
   @Field(() => [Rating])
   @OneToMany(() => Rating, item => item.medicine,{nullable: true})
   ratings: Rating[];
@@ -74,13 +68,5 @@ export class Medicine extends Model {
   @ManyToMany(() => Medicine, item => item.alternatives, { lazy: true ,  nullable: true})
   @JoinColumn()
   alternatives: Medicine[];
-
-  @Field(() => String)
-  @Column({ type: Date,  nullable: true})
-  from: Date;
-
-  @Field(() => String)
-  @Column({ type: Date, nullable: true})
-  until: Date;
 
 }
