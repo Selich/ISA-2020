@@ -32,11 +32,11 @@ Pozivanje:
 ```
 - web frontend dev
 ```bash
-./run_api.sh
+./run_web.sh
 ```
 - zajedno
 ```bash
-./run_api.sh
+./run_all.sh
 ```
 Da bi generisao nove zahteve potrebno je generisati nove graphql upite
 
