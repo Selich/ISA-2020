@@ -39,20 +39,12 @@ export class Pharmacy extends Model {
   lat: string;
 
   @Field(() => Inventory)
-<<<<<<< HEAD
   @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true, nullable: true})
-=======
-	@OneToOne(() => Inventory, item => item.pharmacy, { cascade: true, nullable: true, eager:true})
->>>>>>> dev
   @JoinColumn()
   inventory: Inventory;
 
   @Field(() => [Price])
-<<<<<<< HEAD
   @OneToMany(() => Price, item => item.pharmacy, { eager: true, nullable: true})
-=======
-  @OneToMany(() => Price, item => item.pharmacy, {  nullable: true})
->>>>>>> dev
   prices: Price[];
 
   @Field(() => [Employee])

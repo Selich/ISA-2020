@@ -1,0 +1,283 @@
+Info 0    [00:36:48.061] Starting TS Server
+Info 1    [00:36:48.061] Version: 4.1.5
+Info 2    [00:36:48.061] Arguments: /usr/bin/node /home/selic/.emacs.d/.cache/lsp/npm/typescript/bin/tsserver --logFile /home/selic/Projects/uni/ISANodejs/.log/tsserver.log --logVerbosity info --cancellationPipeName /tmp/61ea82a39d4b37f2000af88b73aeda2a/tscancellation*
+Info 3    [00:36:48.061] Platform: linux NodeVersion: 14 CaseSensitive: true
+Info 4    [00:36:48.062] ServerMode: undefined syntaxOnly: false hasUnknownServerMode: undefined
+Info 5    [00:36:48.097] Search path: /home/selic/Projects/uni/ISANodejs/api/src
+Info 6    [00:36:48.099] For info: /home/selic/Projects/uni/ISANodejs/api/src/index.ts :: Config file name: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 7    [00:36:48.100] Opened configuration file /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 8    [00:36:48.168] Config: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json : {
+ "rootNames": [
+  "/home/selic/Projects/uni/ISANodejs/api/src/constants.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/env.d.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/index.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/ormconfig.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/ormtestconfig.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/redistconfig.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/types.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Address.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Appointment.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/AppointmentDefinition.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Complaint.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/EPrescription.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Employee.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Holiday.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Inventory.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Medicine.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/MedicineItem.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/MedicineList.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/MedicineRequest.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Model.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Order.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Patient.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Pharmacy.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Prescription.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Price.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Rating.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Reservation.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/Tier.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/User.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/entities/WorkingHours.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/AppointmentDefinitionResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/AppointmentResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/AuthResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/CalendarResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/EPrescriptionResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/EmployeeResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/HolidayResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/MedicineRequestResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/MedicineResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/PatientResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/PharmacyResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/PrescriptionResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/PriceResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/ReservationResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/TierResolver.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/AddressTypes.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/AppointmentTypes.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/ErrorTypes.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/MedicineTypes.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/UserTypes.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/resolvers/types/dtos.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/createTestEntities.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/createUser.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/createUserLoader.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/mockData.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/sendMail.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/validators/validateAddress.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/validators/validateLogin.ts",
+  "/home/selic/Projects/uni/ISANodejs/api/src/utils/validators/validateRegister.ts"
+ ],
+ "options": {
+  "target": 2,
+  "module": 1,
+  "types": [
+   "jest"
+  ],
+  "lib": [
+   "lib.dom.d.ts",
+   "lib.es2015.d.ts",
+   "lib.es2017.d.ts",
+   "lib.es2018.asynciterable.d.ts"
+  ],
+  "sourceMap": true,
+  "outDir": "/home/selic/Projects/uni/ISANodejs/api/dist",
+  "moduleResolution": 2,
+  "skipLibCheck": true,
+  "removeComments": true,
+  "noImplicitAny": true,
+  "strictNullChecks": true,
+  "strictFunctionTypes": true,
+  "noImplicitThis": true,
+  "noUnusedLocals": false,
+  "noUnusedParameters": false,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true,
+  "resolveJsonModule": true,
+  "baseUrl": "/home/selic/Projects/uni/ISANodejs/api",
+  "configFilePath": "/home/selic/Projects/uni/ISANodejs/api/tsconfig.json"
+ }
+}
+Info 9    [00:36:48.237] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 10   [00:36:58.079] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 1 structureChanged: true Elapsed: 9841.180593967438ms
+Info 11   [00:36:58.079] Project '/home/selic/Projects/uni/ISANodejs/api/tsconfig.json' (Configured)
+Info 12   [00:36:58.079] 	Files (973)
+
+Info 13   [00:36:58.079] -----------------------------------------------
+Info 14   [00:36:58.387] Before ensureProjectForOpenFiles:
+Info 15   [00:36:58.387] After ensureProjectForOpenFiles:
+Info 16   [00:36:58.388] got projects updated in background, updating diagnostics for /home/selic/Projects/uni/ISANodejs/api/src/index.ts
+Info 17   [00:37:27.992] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 18   [00:37:28.149] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 2 structureChanged: false Elapsed: 156.22038900852203ms
+Info 19   [00:37:28.149] Different program with same set of files:: structureIsReused:: 2
+Info 20   [00:37:28.150] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 21   [00:37:28.240] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 3 structureChanged: false Elapsed: 89.81506603956223ms
+Info 22   [00:37:28.240] Different program with same set of files:: structureIsReused:: 2
+Info 23   [00:37:28.244] getCompletionData: Get current token: 0.05693095922470093
+Info 24   [00:37:28.244] getCompletionData: Is inside comment: 0.1607009768486023
+Info 25   [00:37:28.245] getCompletionData: Get previous token 1: 0.10626798868179321
+Info 26   [00:37:28.245] getCompletionData: Get previous token 2: 0.1358250379562378
+Info 27   [00:37:28.246] getCompletionsAtPosition: isCompletionListBlocker: 0.6066629886627197
+Info 28   [00:37:28.264] getSymbolsFromOtherSourceFileExports: Recomputing list
+Info 29   [00:37:30.815] forEachExternalModuleToImportFrom: filtered out 44 modules by package.json contents
+Info 30   [00:37:30.925] getSymbolsFromOtherSourceFileExports: 2660.578822016716
+Info 31   [00:37:30.937] getCompletionData: Semantic work: 2690.736117005348
+Info 32   [00:37:30.995] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 58.06021702289581
+Info 33   [00:37:31.011] getCompletionData: Get current token: 0.02321404218673706
+Info 34   [00:37:31.011] getCompletionData: Is inside comment: 0.04988300800323486
+Info 35   [00:37:31.011] getCompletionData: Get previous token 1: 0.03831297159194946
+Info 36   [00:37:31.011] getCompletionData: Get previous token 2: 0.03993099927902222
+Info 37   [00:37:31.018] getCompletionsAtPosition: isCompletionListBlocker: 0.021718978881835938
+Info 38   [00:37:31.026] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 39   [00:37:31.039] getCompletionData: Semantic work: 20.785535037517548
+Info 40   [00:37:31.083] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 43.083694994449615
+Info 41   [00:37:31.108] getCompletionData: Get current token: 0.023209989070892334
+Info 42   [00:37:31.108] getCompletionData: Is inside comment: 0.04169398546218872
+Info 43   [00:37:31.108] getCompletionData: Get previous token 1: 0.04854100942611694
+Info 44   [00:37:31.108] getCompletionData: Get previous token 2: 0.03519695997238159
+Info 45   [00:37:31.108] getCompletionsAtPosition: isCompletionListBlocker: 0.029201030731201172
+Info 46   [00:37:31.117] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 47   [00:37:31.122] getCompletionData: Semantic work: 13.821947991847992
+Info 48   [00:37:31.164] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 40.87760400772095
+Info 49   [00:37:31.183] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 50   [00:37:31.337] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 4 structureChanged: false Elapsed: 153.50290203094482ms
+Info 51   [00:37:31.337] Different program with same set of files:: structureIsReused:: 2
+Info 52   [00:37:31.338] getCompletionData: Get current token: 0.03399801254272461
+Info 53   [00:37:31.338] getCompletionData: Is inside comment: 0.1000480055809021
+Info 54   [00:37:31.338] getCompletionData: Get previous token 1: 0.08642101287841797
+Info 55   [00:37:31.339] getCompletionData: Get previous token 2: 0.22587800025939941
+Info 56   [00:37:31.339] getCompletionsAtPosition: isCompletionListBlocker: 0.07798200845718384
+Info 57   [00:37:31.381] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 58   [00:37:31.457] getCompletionData: Semantic work: 112.38376897573471
+Info 59   [00:37:31.514] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 51.25968497991562
+Info 60   [00:37:31.558] getCompletionData: Get current token: 0.0637350082397461
+Info 61   [00:37:31.558] getCompletionData: Is inside comment: 0.1557900309562683
+Info 62   [00:37:31.558] getCompletionData: Get previous token 1: 0.12785595655441284
+Info 63   [00:37:31.559] getCompletionData: Get previous token 2: 0.1985899806022644
+Info 64   [00:37:31.561] getCompletionsAtPosition: isCompletionListBlocker: 0.034268975257873535
+Info 65   [00:37:31.582] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 66   [00:37:31.590] getCompletionData: Semantic work: 27.52713704109192
+Info 67   [00:37:31.638] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 48.47524297237396
+Info 68   [00:37:31.654] getCompletionData: Get current token: 0.01992499828338623
+Info 69   [00:37:31.654] getCompletionData: Is inside comment: 0.047679007053375244
+Info 70   [00:37:31.654] getCompletionData: Get previous token 1: 0.02604001760482788
+Info 71   [00:37:31.654] getCompletionData: Get previous token 2: 0.025524020195007324
+Info 72   [00:37:31.654] getCompletionsAtPosition: isCompletionListBlocker: 0.017180979251861572
+Info 73   [00:37:31.678] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 74   [00:37:31.683] getCompletionData: Semantic work: 28.771963953971863
+Info 75   [00:37:31.715] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 31.988549053668976
+Info 76   [00:37:31.731] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 77   [00:37:31.897] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 5 structureChanged: false Elapsed: 165.05530101060867ms
+Info 78   [00:37:31.897] Different program with same set of files:: structureIsReused:: 2
+Info 79   [00:37:31.899] getCompletionData: Get current token: 0.07412397861480713
+Info 80   [00:37:31.900] getCompletionData: Is inside comment: 0.2032269835472107
+Info 81   [00:37:31.900] getCompletionData: Get previous token 1: 0.14711898565292358
+Info 82   [00:37:31.900] getCompletionData: Get previous token 2: 0.16224199533462524
+Info 83   [00:37:31.900] getCompletionsAtPosition: isCompletionListBlocker: 0.019369006156921387
+Info 84   [00:37:31.918] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 85   [00:37:31.989] getCompletionData: Semantic work: 88.9823340177536
+Info 86   [00:37:32.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 7.293955981731415
+Info 87   [00:37:32.015] getCompletionData: Get current token: 0.029479026794433594
+Info 88   [00:37:32.015] getCompletionData: Is inside comment: 0.060028016567230225
+Info 89   [00:37:32.015] getCompletionData: Get previous token 1: 0.034238994121551514
+Info 90   [00:37:32.015] getCompletionData: Get previous token 2: 0.033190011978149414
+Info 91   [00:37:32.015] getCompletionsAtPosition: isCompletionListBlocker: 0.020734965801239014
+Info 92   [00:37:32.034] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 93   [00:37:32.037] getCompletionData: Semantic work: 21.576223015785217
+Info 94   [00:37:32.052] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 15.010061979293823
+Info 95   [00:37:32.069] getCompletionData: Get current token: 0.07135498523712158
+Info 96   [00:37:32.070] getCompletionData: Is inside comment: 0.11020100116729736
+Info 97   [00:37:32.070] getCompletionData: Get previous token 1: 0.09767895936965942
+Info 98   [00:37:32.070] getCompletionData: Get previous token 2: 0.062260985374450684
+Info 99   [00:37:32.070] getCompletionsAtPosition: isCompletionListBlocker: 0.04323399066925049
+Info 100  [00:37:32.080] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 101  [00:37:32.085] getCompletionData: Semantic work: 14.190654039382935
+Info 102  [00:37:32.112] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 27.158475041389465
+Info 103  [00:37:32.137] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 104  [00:37:32.333] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 6 structureChanged: false Elapsed: 195.5371710062027ms
+Info 105  [00:37:32.333] Different program with same set of files:: structureIsReused:: 2
+Info 106  [00:37:32.335] getCompletionData: Get current token: 0.10232299566268921
+Info 107  [00:37:32.335] getCompletionData: Is inside comment: 0.2567729949951172
+Info 108  [00:37:32.336] getCompletionData: Get previous token 1: 0.12504899501800537
+Info 109  [00:37:32.336] getCompletionData: Get previous token 2: 0.23974400758743286
+Info 110  [00:37:32.336] getCompletionsAtPosition: isCompletionListBlocker: 0.023549020290374756
+Info 111  [00:37:32.344] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 112  [00:37:32.375] getCompletionData: Semantic work: 38.2454400062561
+Info 113  [00:37:32.384] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 8.29498702287674
+Info 114  [00:37:32.392] getCompletionData: Get current token: 0.04927504062652588
+Info 115  [00:37:32.393] getCompletionData: Is inside comment: 0.12534302473068237
+Info 116  [00:37:32.393] getCompletionData: Get previous token 1: 0.34038496017456055
+Info 117  [00:37:32.394] getCompletionData: Get previous token 2: 0.0553320050239563
+Info 118  [00:37:32.394] getCompletionsAtPosition: isCompletionListBlocker: 0.020837008953094482
+Info 119  [00:37:32.398] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 120  [00:37:32.401] getCompletionData: Semantic work: 6.890327990055084
+Info 121  [00:37:32.419] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 17.89743798971176
+Info 122  [00:37:32.427] getCompletionData: Get current token: 0.02518695592880249
+Info 123  [00:37:32.428] getCompletionData: Is inside comment: 0.06077098846435547
+Info 124  [00:37:32.428] getCompletionData: Get previous token 1: 0.03461599349975586
+Info 125  [00:37:32.428] getCompletionData: Get previous token 2: 0.03948003053665161
+Info 126  [00:37:32.428] getCompletionsAtPosition: isCompletionListBlocker: 0.053173959255218506
+Info 127  [00:37:32.433] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 128  [00:37:32.435] getCompletionData: Semantic work: 6.7727659940719604
+Info 129  [00:37:32.442] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 7.177184998989105
+Info 130  [00:37:32.450] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 131  [00:37:32.656] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 7 structureChanged: false Elapsed: 205.73655098676682ms
+Info 132  [00:37:32.656] Different program with same set of files:: structureIsReused:: 2
+Info 133  [00:37:32.656] getCompletionData: Get current token: 0.020455002784729004
+Info 134  [00:37:32.657] getCompletionData: Is inside comment: 0.03366899490356445
+Info 135  [00:37:32.657] getCompletionData: Get previous token 1: 0.023739993572235107
+Info 136  [00:37:32.657] getCompletionData: Get previous token 2: 0.03940403461456299
+Info 137  [00:37:32.657] getCompletionsAtPosition: isCompletionListBlocker: 0.026517033576965332
+Info 138  [00:37:32.672] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 139  [00:37:32.693] getCompletionData: Semantic work: 36.356446981430054
+Info 140  [00:37:32.700] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 6.327571988105774
+Info 141  [00:37:32.707] getCompletionData: Get current token: 0.03969496488571167
+Info 142  [00:37:32.707] getCompletionData: Is inside comment: 0.03955000638961792
+Info 143  [00:37:32.707] getCompletionData: Get previous token 1: 0.018794000148773193
+Info 144  [00:37:32.707] getCompletionData: Get previous token 2: 0.01880800724029541
+Info 145  [00:37:32.707] getCompletionsAtPosition: isCompletionListBlocker: 0.014131009578704834
+Info 146  [00:37:32.714] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 147  [00:37:32.717] getCompletionData: Semantic work: 9.907467007637024
+Info 148  [00:37:32.723] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 5.6076420545578
+Info 149  [00:37:32.728] getCompletionData: Get current token: 0.012823998928070068
+Info 150  [00:37:32.728] getCompletionData: Is inside comment: 0.026912033557891846
+Info 151  [00:37:32.728] getCompletionData: Get previous token 1: 0.01675999164581299
+Info 152  [00:37:32.728] getCompletionData: Get previous token 2: 0.01900196075439453
+Info 153  [00:37:32.728] getCompletionsAtPosition: isCompletionListBlocker: 0.01603597402572632
+Info 154  [00:37:32.731] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 155  [00:37:32.732] getCompletionData: Semantic work: 4.499119997024536
+Info 156  [00:37:32.735] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 2.8237879872322083
+Info 157  [00:37:32.739] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 158  [00:37:32.779] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 8 structureChanged: false Elapsed: 40.405189037323ms
+Info 159  [00:37:32.779] Different program with same set of files:: structureIsReused:: 2
+Info 160  [00:37:32.780] getCompletionData: Get current token: 0.02278602123260498
+Info 161  [00:37:32.780] getCompletionData: Is inside comment: 0.047396957874298096
+Info 162  [00:37:32.780] getCompletionData: Get previous token 1: 0.03052002191543579
+Info 163  [00:37:32.780] getCompletionData: Get previous token 2: 0.06086701154708862
+Info 164  [00:37:32.780] getCompletionsAtPosition: isCompletionListBlocker: 0.020076990127563477
+Info 165  [00:37:32.786] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 166  [00:37:32.802] getCompletionData: Semantic work: 22.50177001953125
+Info 167  [00:37:32.822] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 19.13928997516632
+Info 168  [00:37:32.833] getCompletionData: Get current token: 0.013915956020355225
+Info 169  [00:37:32.833] getCompletionData: Is inside comment: 0.024859964847564697
+Info 170  [00:37:32.833] getCompletionData: Get previous token 1: 0.017836034297943115
+Info 171  [00:37:32.833] getCompletionData: Get previous token 2: 0.016220033168792725
+Info 172  [00:37:32.833] getCompletionsAtPosition: isCompletionListBlocker: 0.012488007545471191
+Info 173  [00:37:32.836] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 174  [00:37:32.838] getCompletionData: Semantic work: 4.691543996334076
+Info 175  [00:37:32.903] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 63.71741300821304
+Info 176  [00:37:32.939] getCompletionData: Get current token: 0.019986987113952637
+Info 177  [00:37:32.939] getCompletionData: Is inside comment: 0.040319979190826416
+Info 178  [00:37:32.939] getCompletionData: Get previous token 1: 0.02858603000640869
+Info 179  [00:37:32.939] getCompletionData: Get previous token 2: 0.025011003017425537
+Info 180  [00:37:32.939] getCompletionsAtPosition: isCompletionListBlocker: 0.014088988304138184
+Info 181  [00:37:32.950] getSymbolsFromOtherSourceFileExports: Using cached list
+Info 182  [00:37:32.952] getCompletionData: Semantic work: 13.111512005329132
+Info 183  [00:37:32.971] getCompletionsAtPosition: getCompletionEntriesFromSymbols: 19.25281798839569
+Info 184  [00:37:33.003] Starting updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json
+Info 185  [00:37:33.052] Finishing updateGraphWorker: Project: /home/selic/Projects/uni/ISANodejs/api/tsconfig.json Version: 9 structureChanged: false Elapsed: 48.60086500644684ms
+Info 186  [00:37:33.052] Different program with same set of files:: structureIsReused:: 2

@@ -10,28 +10,18 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { PatientResolver } from './resolvers/PatientResolver';
-<<<<<<< HEAD
-=======
 import { Tier } from './entities/Tier';
 import { Employee } from './entities/Employee';
->>>>>>> dev
 import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
 import dbConfig from './ormconfig'
 import nodemailer from 'nodemailer'
 import { AuthResolver } from './resolvers/AuthResolver';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
-<<<<<<< HEAD
-import { Employee } from './entities/Employee';
-import { Tier } from './entities/Tier';
-import { EmployeeResolver } from './resolvers/EmployeeResolver';
-import { MedicineResolver } from './resolvers/MedicineResolver';
-import {PharmacyResolver} from './resolvers/PharmacyResolver';
-=======
 import { EmployeeResolver } from './resolvers/EmployeeResolver';
 import { ReservationResolver } from './resolvers/ReservationResolver';
 import { MedicineResolver } from './resolvers/MedicineResolver';
-import {PharmacyResolver} from './resolvers/PharmacyResolver';
+import { PharmacyResolver } from './resolvers/PharmacyResolver';
 
 
 const mailerOptions = {
@@ -40,7 +30,6 @@ const mailerOptions = {
 		secure: false,
 }
 
->>>>>>> dev
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -63,8 +52,7 @@ const main = async () => {
 
 	let pharm = new Employee() 
 	pharm.email = 'pharm@gmail.com'
-	pharm.password = 'pass'
-	pharm.role = 'pharm'
+	phare = 'pharm'
 	await Employee.save(pharm)
 	let regular = new Tier() 
 	regular.name = 'Regular'
@@ -87,35 +75,6 @@ const main = async () => {
 	gold.scoreMax = 999
 	await Tier.save(gold)
 		 */
-
-	let sysadmin = new Employee() 
-	sysadmin.email = 'sysadmin@mail'
-	sysadmin.password = 'admin'
-	sysadmin.role = 'sysadmin'
-	await Employee.save(sysadmin)
-
-	/*
-	let regular = new Tier() 
-	regular.name = 'Regular'
-	regular.discount = 0
-	regular.scoreMin = 0
-	regular.scoreMax = 14
-	await Tier.save(regular)
-
-	let silver = new Tier() 
-	silver.name = 'Silver'
-	silver.discount = 20
-	silver.scoreMin = 15
-	silver.scoreMax = 29
-	await Tier.save(silver)
-
-	let gold = new Tier() 
-	gold.name = 'Gold'
-	gold.discount = 30
-	gold.scoreMin = 30
-	gold.scoreMax = 999
-	await Tier.save(gold)
-	*/
 
   const app = express()
   const RedisStore = connectRedis(session)
@@ -160,7 +119,6 @@ const main = async () => {
 				console.log('file uploaded: ' + img.name)
 
 				//@ts-ignore
-				//
 				QrScanner.scanImage('./uploads/' + img.name)
 					.then(ress => 
 							res.send({
@@ -170,21 +128,6 @@ const main = async () => {
 					)
 				.catch(e => console.log(e))
 
-
-				//@ts-ignore
-				//@ts-ignore
-				/*
-				const code = jsQR(img, dimensions.width, dimensions.height)
-				if(!code) {
-					res.send({
-						status: false,
-						//@ts-ignore
-						message: 'cannot parse the code'
-					})
-					return
-
-				}
-				*/
 
 			}
 		} catch (e) {

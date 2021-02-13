@@ -18,13 +18,10 @@ export class AppointmentDefinition extends Model{
   @Field()
   @Column({ nullable: true })
   score: number;
-<<<<<<< HEAD
-=======
 
   @Field()
   @Column({ nullable: true })
   price: number;
->>>>>>> dev
 
   @Field(() => Pharmacy)
   @ManyToOne(() => Pharmacy, item => item.requests,  { cascade: true, nullable: true})

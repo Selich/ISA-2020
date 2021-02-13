@@ -1,40 +1,3 @@
-import Patient from "../entities/Patient";
-<<<<<<< HEAD
-import {
-  Mutation,
-  Resolver,
-  Query,
-  Ctx,
-  Arg,
-  InputType,
-  Field,
-} from "type-graphql";
-import argon2 from "argon2";
-import { MedicineDTO, RegisterPatientDTO, UserDTO, UserResponse } from "./types/dtos";
-import { MyContext } from "../types";
-import nodemailer from "nodemailer";
-import { Address } from "../entities/Address";
-import { Medicine } from "../entities/Medicine";
-import { Pharmacy } from "../entities/Pharmacy";
-import { Employee } from "../entities/Employee";
-import User from "../entities/User";
-import { Tier } from "../entities/Tier";
-
-@Resolver(Patient)
-export class PatientResolver {
-  @Query(() => Patient, { nullable: true })
-  me(@Ctx() { req }: MyContext) {
-    return Patient.find({ id: req.session.userId });
-  }
-
-  @Query(() => [Patient], { nullable: true })
-  async patients(@Arg("inputs") inputs: UserDTO) {
-    return await Patient.find({ ...inputs });
-  }
-
-  @Query(() => [Tier], { nullable: true })
-	async tiers() {
-=======
 import { Mutation, Resolver, Query, Ctx, Arg } from "type-graphql";
 import argon2 from "argon2";
 import {
@@ -54,6 +17,7 @@ import { Medicine } from "../entities/Medicine";
 import { Complaint } from "../entities/Complaint";
 import { Employee } from "../entities/Employee";
 import User from "../entities/User";
+import Patient from "../entities/Patient";
 import { Tier } from "../entities/Tier";
 import { sendVerificationMail } from "../utils/sendMail";
 import bcrypt from "bcrypt";
@@ -96,30 +60,10 @@ export class PatientResolver {
 
   @Query(() => [Tier], { nullable: true })
   async tiers() {
->>>>>>> dev
     return await Tier.find({});
   }
 
   @Mutation(() => Patient, { nullable: true })
-<<<<<<< HEAD
-	async addAllergie(
-		@Arg("allergies") allergies: string,
-		@Ctx() { req  }: MyContext
-	) {
-		let temp = JSON.parse(allergies)
-		let medicines = []
-		for (const item in temp) {
-			//@ts-ignore
-			let med = await Medicine.findOne({name: item.value})
-			if(med)
-				medicines.push(med)
-		}
-		let user = await Patient.findOneOrFail({id: req.session.userId})
-		console.log(user)
-		user.allergies = medicines
-    user = await Patient.save(user);
-		return user 
-=======
   async addAllergie(
     @Arg("allergies") allergies: string,
     @Ctx() { req }: MyContext
@@ -137,7 +81,9 @@ export class PatientResolver {
     user = await Patient.save(user);
     return user;
   }
-	//#3.41
+
+
+//#3.41
   @Mutation(() => Rating, { nullable: true })
   async addRating(
     @Arg("inputs") inputs: RatingInput,
@@ -152,6 +98,7 @@ export class PatientResolver {
 				user = await Patient.findOneOrFail({id: userId})
 
     if (inputs.employee) {
+
       let employee = await Employee.findOneOrFail({
         email: inputs.employee.email,
       });
@@ -316,30 +263,11 @@ export class PatientResolver {
 
 		return user
 
->>>>>>> dev
   }
 
   @Mutation(() => Patient, { nullable: true })
 	async subscribe(
-<<<<<<< HEAD
-		@Arg("id") id: string,
-		@Ctx() { res }: MyContext
-	) {
-		console.log('ehh')
-		/*
-		let pharmId = parseInt(id)
-		let user = await Patient.findOneOrFail({id: res.session.userId})
-		user.subscriptions.push(await Pharmacy.findOneOrFail({id: pharmId}))
-    user = await Patient.save(user);
-		return user 
-		*/
-
-
-  }
-
-  @Mutation(() => UserResponse)
-=======
-		@Arg("inputs") inputs: SubscriptionInput, 
+		@Arg("inputs") inputs: SubscriptionInput,
 		@Ctx() { req }: MyContext) {
 		let user = req.session.user
 		if(!user) {
@@ -364,7 +292,6 @@ export class PatientResolver {
   }
 
   @Mutation(() => PatientResponse)
->>>>>>> dev
   async register(
     @Arg("email") email: string,
     @Arg("password") password: string,
@@ -375,18 +302,11 @@ export class PatientResolver {
     @Arg("street") street: string,
     @Arg("city") city: string,
     @Arg("country") country: string,
-<<<<<<< HEAD
     @Ctx() { req, mailer }: MyContext
   ) {
-    // let { street, city, country } = address
     let user = await Patient.findOne({ email: email });
-=======
-    @Ctx() { mailer }: MyContext
-  ) {
-    let user = await Patient.findOne({ email: email });
-    console.log(user);
+    let address = { street, city, country };
 
->>>>>>> dev
     if (!(password === confirmPassword)) {
       return {
         errors: [
@@ -394,63 +314,10 @@ export class PatientResolver {
         ],
       };
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> dev
     if (!(user === undefined)) {
       return { errors: [{ field: "email", message: "Email already exists" }] };
     }
 
-<<<<<<< HEAD
-    if (user === undefined) {
-      let user = new Patient();
-      user.password = await argon2.hash(password);
-      user.email = email;
-      user.firstName = firstName;
-      user.lastName = lastName;
-      user.telephone = telephone;
-      user.role = "patient";
-      user.tier = await Tier.findOneOrFail({ id: 1 });
-
-      let address = { street, city, country };
-
-      let temp = await Address.findOne({ ...address });
-      if (temp === undefined)
-        user.address = await Address.save(
-          new Address({ street, city, country, user: user })
-        );
-      else user.address = temp;
-
-      user = await Patient.save(new Patient({ ...user, isEnabled: true }));
-
-      let msg =
-        "<h3> Hello " +
-        user.email.split("@")[0] +
-        "<h3>" +
-        '<a href="http://localhost:3000/verify/' +
-        user.email +
-        '">' +
-        "Confirm Account" +
-        "</a>";
-      let to = user.email;
-
-      //@ts-ignore
-      let info = await mailer.sendMail({
-        from: '"Barry Littel 👻" <barry85@ethereal.email>', // sender address
-        to: to,
-        subject: "Confirm your account ✔", // Subject line
-        text: "Confirm your account", // plain text body
-        html: msg,
-      });
-
-      console.log("Message sent: " + info.messageId);
-      console.log(nodemailer.getTestMessageUrl(info));
-    }
-    return { user };
-  }
-  @Mutation(() => UserResponse)
-=======
     user = new Patient();
     user.password = await argon2.hash(password);
     user.email = email;
@@ -461,8 +328,6 @@ export class PatientResolver {
     user.score = 0;
     user.penalty = 0;
     //user.tier = await Tier.findOneOrFail({ : 11 });
-
-    let address = { street, city, country };
 
     let temp = await Address.findOne({ ...address });
     if (temp === undefined)
@@ -479,7 +344,6 @@ export class PatientResolver {
     return { user };
   }
   @Mutation(() => PatientResponse)
->>>>>>> dev
   async confirmRegistration(
     @Arg("email") email: string,
     @Ctx() { req }: MyContext
@@ -496,34 +360,6 @@ export class PatientResolver {
   }
 
   @Mutation(() => UserResponse)
-<<<<<<< HEAD
-  async login(@Arg("inputs") inputs: UserDTO, @Ctx() { req }: MyContext) {
-    let { email, password } = inputs;
-
-    let user = await Patient.findOne({ email: email });
-		if (user === undefined){
-
-			//@ts-ignore
-			let temp = await Employee.findOne({ email: email });
-			//@ts-ignore
-			user = temp
-		}
-
-
-    if (user === undefined) {
-      return {
-        errors: [{ field: "email", message: "No user with that email" }],
-      };
-    }
-
-		let valid = true
-
-		if(password !== 'password'){
-			//@ts-ignore
-			valid = argon2.verify(user.password, password);
-
-		}
-=======
   async login(@Arg("inputs") inputs: PatientInput, @Ctx() { req }: MyContext) {
     let { email, password } = inputs;
 
@@ -546,23 +382,6 @@ export class PatientResolver {
     //@ts-ignore
     //			valid = argon2.verify(user.password, password);
 
-    //		}
->>>>>>> dev
-
-    if (!valid) {
-      return { errors: [{ field: "email", message: "invalid login" }] };
-    }
-
-<<<<<<< HEAD
-
-    req.session.userId = user.id;
-    return { user };
-  }
-
-  @Mutation(() => UserResponse)
-=======
-		console.log(user)
-
     let token = jwt.sign(
       {
         id: user.id,
@@ -576,88 +395,6 @@ export class PatientResolver {
     req.session.user = user;
     return { token, user };
   }
-
-  @Mutation(() => PatientResponse)
->>>>>>> dev
-  async updateProfile(
-    @Arg("email") email: string,
-    @Arg("password") password: string,
-    @Arg("confirmPassword") confirmPassword: string,
-    @Arg("firstName") firstName: string,
-    @Arg("lastName") lastName: string,
-    @Arg("telephone") telephone: string,
-    @Arg("street") street: string,
-    @Arg("city") city: string,
-    @Arg("country") country: string,
-    @Ctx() { req, mailer }: MyContext
-  ) {
-    // let { street, city, country } = address
-    let user = await Patient.findOne({ email: email });
-    if (!(password === confirmPassword)) {
-      return {
-        errors: [
-          { field: "confirmPassword", message: "Passwords need to match" },
-        ],
-      };
-    }
-    if (!(user === undefined)) {
-      return { errors: [{ field: "email", message: "Email already exists" }] };
-    } else {
-<<<<<<< HEAD
-
-      let user = new Patient();
-      user.password = await argon2.hash(password);
-=======
-      let user = new Patient();
-      user.password = await argon2.hash(password);
-      user.firstName = firstName;
-      user.lastName = lastName;
-      user.telephone = telephone;
->>>>>>> dev
-      user.email = email;
-      user.role = "patient";
-      let address = { street, city, country };
-
-      let temp = await Address.findOne({ ...address });
-      if (temp === undefined)
-        user.address = await Address.save(
-          new Address({ street, city, country, user: user })
-        );
-      else user.address = temp;
-
-      user = await Patient.save(new Patient({ ...user, isEnabled: false }));
-
-      let msg =
-        "<h3> Hello " +
-        user.email.split("@")[0] +
-        "<h3>" +
-        '<a href="http://localhost:3000/verify/' +
-        user.email +
-        '">' +
-        "Confirm Account" +
-        "</a>";
-      let to = user.email;
-
-      //@ts-ignore
-      let info = await mailer.sendMail({
-        from: '"Barry Littel 👻" <barry85@ethereal.email>', // sender address
-        to: to,
-        subject: "Confirm your account ✔", // Subject line
-        text: "Confirm your account", // plain text body
-        html: msg,
-      });
-
-      console.log("Message sent: " + info.messageId);
-      console.log(nodemailer.getTestMessageUrl(info));
-<<<<<<< HEAD
-			return { user }
-	
-  }}
-=======
-      return { user };
-    }
-  }
->>>>>>> dev
 
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {

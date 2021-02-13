@@ -69,7 +69,9 @@ export class MedicineResolver {
 			if(!inputs.details) return null;
 			let medicine = await Medicine.findOneOrFail({code: inputs.details.code})
 			if(!medicine) return null
+			//@ts-ignore
 			if(!inputs.list.id) return null
+			//@ts-ignore
 			let id = parseInt(inputs.list.id)
 			let inventory = await Inventory.findOneOrFail({ id })
 			//@ts-ignore
