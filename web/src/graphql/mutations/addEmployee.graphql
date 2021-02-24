@@ -1,38 +1,4 @@
 mutation AddEmployee(
-<<<<<<< HEAD
-  $email: String!, 
-  $password: String!
-  $firstName: String!,
-  $lastName: String!,
-  $telephone: String!,
-  $street: String!,
-  $city: String!,
-  $country: String!,
-  $pharmacyName: String!
-  $role: String!
-) {
-  addEmployee(inputs: {
-    email: $email,
-    password: $password,
-    firstName: $firstName,
-    lastName: $lastName,
-    telephone: $telephone,
-    street: $street,
-    city: $city,
-    country: $country,
-    pharmacyName: $pharmacyName,
-    role: $role,
-  }){
-    user{
-      email
-      firstName
-      lastName
-      role
-      pharmacy{
-        name
-      }
-    }
-=======
   $inputs: EmployeeInput!, 
   ) {
   addEmployee(
@@ -42,6 +8,5 @@ mutation AddEmployee(
     email
 
   }
->>>>>>> dev
   }
 }

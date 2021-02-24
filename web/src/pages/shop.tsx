@@ -4,16 +4,16 @@ import { Header } from '../components/sections/Header';
 import MedicinesTable from '../components/tables/MedicinesTable';
 
 
-const EPrescriptions = (): JSX.Element => {
+const Shop = (): JSX.Element => {
 
     return (
         <>
             <Box m={10} mx={20}>
-                <MedicinesTable/>
+                <MedicinesTable user={user}/>
             </Box>
         </>
     )
 
 }
 
-export default EPrescriptions;
+export default Shop;

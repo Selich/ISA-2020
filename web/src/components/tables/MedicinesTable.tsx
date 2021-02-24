@@ -84,7 +84,7 @@ const openModal = (item, onOpen) => {
     onOpen()
 }
 
-const MedicinesTable = (): JSX.Element => {
+const MedicinesTable = ({user}): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
     const [item, setItem] = React.useState(null);

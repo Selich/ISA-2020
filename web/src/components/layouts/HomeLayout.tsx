@@ -88,6 +88,5 @@ HomeLayout.defaultProps = {
   title: "Apoteke Melem",
   subtitle:
     "Lako u jednom kliku mozete pristupiti nasim servisima",
-  ctaText: "Registruj me",
-  ctaLink: "/register",
+  ctaText: "Registruj me"
 }

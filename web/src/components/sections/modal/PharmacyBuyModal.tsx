@@ -32,7 +32,7 @@ export const PharmacyBuyModal: any = ({ onOpen, isOpen, onClose, item }) => {
 		body = <p> loading </p>
 	} else {
 		if (!data){
-			body = <p> loading </p>
+			body = <Text> No pharmacies found </Text>
 
 		} else {
 

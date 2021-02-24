@@ -118,19 +118,6 @@ export class AppointmentResolver {
 
 			if(begin <= fromDate || end >= untilDate) return null
 
-			/*
-			let res = employee.schedule.filter(item => 
-				!(new Date(item.begin) >= begin || 
-					new Date(item.begin).setMinutes(new Date(item.begin).getMinutes() + item.length) <= end
-				)) 
-
-
-			let res = patient.appointments.filter(item => 
-				!(new Date(item.begin) >= begin || new Date(item.end) <= end
-			))
-			*/
-
-
 			let app = new Appointment()
 			app.employee = employee
 			if(!inputs.discount)  inputs.discount = 0;

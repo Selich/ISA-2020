@@ -10,8 +10,6 @@ import { buildSchema } from 'type-graphql';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import { PatientResolver } from './resolvers/PatientResolver';
-import { Tier } from './entities/Tier';
-import { Employee } from './entities/Employee';
 import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
 import dbConfig from './ormconfig'
@@ -29,7 +27,6 @@ const mailerOptions = {
 		port: 587,
 		secure: false,
 }
-
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -93,12 +90,8 @@ const main = async () => {
     }
   })
 
-	app.use(fileUpload({
-		createParentPath: true
-	}))
-
-  app.use( cors({ origin: 'http://localhost:3000' , credentials: true }))
-
+	app.use(fileUpload({ createParentPath: true }))
+  app.use(cors({ origin: 'http://localhost:3000' , credentials: true })) 
 	app.use(express.json())
 	app.use(express.urlencoded({ extended: true }))
 	app.use(morgan("dev"))
