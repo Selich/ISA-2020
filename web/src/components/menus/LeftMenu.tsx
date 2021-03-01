@@ -2,7 +2,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { Link, Button, Box } from '@chakra-ui/react';
 
-export const LeftMenu: any = () => {
+const LeftMenu: any = () => {
   return (
     <>
       <NextLink href="/">
@@ -23,3 +23,5 @@ export const LeftMenu: any = () => {
     </>
   );
 };
+
+export default LeftMenu;

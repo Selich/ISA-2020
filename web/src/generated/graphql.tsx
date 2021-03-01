@@ -662,7 +662,8 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<Patient>;
+  role?: Maybe<Scalars['String']>;
+  isEnabled?: Maybe<Scalars['Boolean']>;
 };
 
 export type AppointmentInput = {
@@ -920,10 +921,7 @@ export type ConfirmPasswordMutation = (
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'field' | 'message'>
-    )>>, user?: Maybe<(
-      { __typename?: 'Patient' }
-      & Pick<Patient, 'email' | 'role'>
-    )> }
+    )>> }
   ) }
 );
 
@@ -997,15 +995,11 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'UserResponse' }
-    & Pick<UserResponse, 'token'>
-    & { user?: Maybe<(
-      { __typename?: 'Patient' }
-      & Pick<Patient, 'email' | 'firstName' | 'lastName' | 'role' | 'isEnabled' | 'penalty' | 'score'>
-      & { subscriptions?: Maybe<Array<(
-        { __typename?: 'Pharmacy' }
-        & Pick<Pharmacy, 'name'>
-      )>> }
-    )> }
+    & Pick<UserResponse, 'token' | 'role' | 'isEnabled'>
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>> }
   ) }
 );
 
@@ -1613,10 +1607,6 @@ export const ConfirmPasswordDocument = gql`
       field
       message
     }
-    user {
-      email
-      role
-    }
   }
 }
     `;
@@ -1680,17 +1670,11 @@ export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(inputs: {email: $email, password: $password}) {
     token
-    user {
-      email
-      firstName
-      lastName
-      role
-      isEnabled
-      subscriptions {
-        name
-      }
-      penalty
-      score
+    role
+    isEnabled
+    errors {
+      field
+      message
     }
   }
 }

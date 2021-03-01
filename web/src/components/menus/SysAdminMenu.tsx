@@ -8,7 +8,7 @@ import { useLogoutMutation } from "../../generated/graphql";
 import { useRouter } from "next/router";
 
 
-export const SysAdminMenu: any = ({ user }) => {
+const SysAdminMenu: any = ({ user }) => {
   const createEmployee = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const btnRef = React.useRef()
@@ -45,3 +45,5 @@ export const SysAdminMenu: any = ({ user }) => {
     </Flex>
   );
 };
+
+export default SysAdminMenu

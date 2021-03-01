@@ -1,30 +1,25 @@
-import { Mutation, Resolver, Query, Ctx, Arg } from "type-graphql";
 import argon2 from "argon2";
-import {
-  UserResponse,
-	RatingInput,
-	SubscriptionInput,
-  PatientResponse,
-  PatientInput,
-  ComplaintInput,
-} from "./types/dtos";
-import { MyContext } from "../types";
-import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Address } from "../entities/Address";
-import { Rating } from "../entities/Rating";
-import { Pharmacy } from "../entities/Pharmacy";
-import { Medicine } from "../entities/Medicine";
 import { Complaint } from "../entities/Complaint";
 import { Employee } from "../entities/Employee";
-import User from "../entities/User";
+import { Medicine } from "../entities/Medicine";
 import Patient from "../entities/Patient";
+import { Pharmacy } from "../entities/Pharmacy";
+import { Rating } from "../entities/Rating";
 import { Tier } from "../entities/Tier";
+import User from "../entities/User";
+import { MyContext } from "../types";
 import { sendVerificationMail } from "../utils/sendMail";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import {
+  ComplaintInput, PatientInput, PatientResponse, RatingInput,
+  SubscriptionInput, UserResponse
+} from "./types/dtos";
 
 @Resolver(Patient)
 export class PatientResolver {
+
   @Query(() => User, { nullable: true })
   me(@Arg("token") token: string, @Ctx() { req }: MyContext) {
     let decode = jwt.decode(token);
@@ -40,20 +35,20 @@ export class PatientResolver {
     return temp;
   }
   @Query(() => Patient, { nullable: true })
-	async patient(
-		@Arg("token") token: string
-	) {
+  async patient(
+    @Arg("token") token: string
+  ) {
 
-		let temp = jwt.decode(token)
+    let temp = jwt.decode(token)
     //@ts-ignore
-		let patient = await Patient.findOne({email: temp.email});
-		console.log(patient)
-		return patient
+    let patient = await Patient.findOne({ email: temp.email });
+    console.log(patient)
+    return patient
   }
 
   @Query(() => [Patient], { nullable: true })
-	async patients(
-	) {
+  async patients(
+  ) {
     //@ts-ignore
     return await Patient.find({});
   }
@@ -83,19 +78,19 @@ export class PatientResolver {
   }
 
 
-//#3.41
+  //#3.41
   @Mutation(() => Rating, { nullable: true })
   async addRating(
     @Arg("inputs") inputs: RatingInput,
     @Ctx() { req, res }: MyContext
   ) {
     let user: Patient = req.session.user;
-		let userId = 0
-		if(inputs.patient) 
-			//@ts-ignore
-			userId = parseInt(inputs.patient.id)
-		if(!user) 
-				user = await Patient.findOneOrFail({id: userId})
+    let userId = 0
+    if (inputs.patient)
+      //@ts-ignore
+      userId = parseInt(inputs.patient.id)
+    if (!user)
+      user = await Patient.findOneOrFail({ id: userId })
 
     if (inputs.employee) {
 
@@ -104,7 +99,7 @@ export class PatientResolver {
       });
       if (employee.role === "derm") {
         // ukoliko je bio kod dermatologa
-				if(!user.appointments) return null
+        if (!user.appointments) return null
         let res = user.appointments.find((item) => item.employee === employee);
         if (!res) return null;
       } else if (employee.role === "pharm") {
@@ -113,83 +108,83 @@ export class PatientResolver {
       }
       let temp = new Rating();
       temp.employee = employee;
-			temp.patient = user
-			if(inputs.rating) temp.rating = inputs.rating
+      temp.patient = user
+      if (inputs.rating) temp.rating = inputs.rating
 
       temp.save();
-			let ratings = await Rating.find({employee: employee})
-			//@ts-ignore
-			let avg = ratings.reduce((a, b) => a.rating + b.rating ) / ratings.length
+      let ratings = await Rating.find({ employee: employee })
+      //@ts-ignore
+      let avg = ratings.reduce((a, b) => a.rating + b.rating) / ratings.length
 
-			employee.averageRating = avg
-			employee.save()
+      employee.averageRating = avg
+      employee.save()
 
-			return temp
+      return temp
 
     } else if (inputs.pharmacy) {
       // ukoliko je jednom rezervisao lek i preuzeo lek
       // ukoliko je dobio eRecept
       //@ts-ignore
-			let pharmacy = await Pharmacy.findOneOrFail({id: inputs.pharmacy.id})
-			if(!user.reservations) return null
-			if(!user.ePrescriptions) return null
-			let res = user.reservations.find((item) => 
-				(item.pharmacy.id == pharmacy.id) && (item.isBought));
+      let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
+      if (!user.reservations) return null
+      if (!user.ePrescriptions) return null
+      let res = user.reservations.find((item) =>
+        (item.pharmacy.id == pharmacy.id) && (item.isBought));
       if (!res) return null;
-			let etemp = user.ePrescriptions.find((item) => item.pharmacy.id == pharmacy.id);
+      let etemp = user.ePrescriptions.find((item) => item.pharmacy.id == pharmacy.id);
       if (!etemp) return null;
-			let temp1 = user.appointments.find((item) => item.pharmacy.id == pharmacy.id);
+      let temp1 = user.appointments.find((item) => item.pharmacy.id == pharmacy.id);
       if (!temp1) return null;
       let temp = new Rating();
       temp.pharmacy = pharmacy;
-			temp.patient = user
-			if(inputs.rating) temp.rating = inputs.rating
+      temp.patient = user
+      if (inputs.rating) temp.rating = inputs.rating
 
       temp.save();
-			let ratings = await Rating.find({pharmacy: pharmacy})
-			//@ts-ignore
-			let avg = ratings.reduce((a, b) => a.rating + b.rating ) / ratings.length
+      let ratings = await Rating.find({ pharmacy: pharmacy })
+      //@ts-ignore
+      let avg = ratings.reduce((a, b) => a.rating + b.rating) / ratings.length
 
-			pharmacy.averageRating = avg
-			pharmacy.save()
+      pharmacy.averageRating = avg
+      pharmacy.save()
 
-			return temp
+      return temp
 
     } else if (inputs.medicine) {
 
-			let medicine = await Medicine.findOneOrFail({code: inputs.medicine.code})
+      let medicine = await Medicine.findOneOrFail({ code: inputs.medicine.code })
       let temp = new Rating();
       temp.medicine = medicine;
-			temp.patient = user
-			if(inputs.rating) temp.rating = inputs.rating
+      temp.patient = user
+      if (inputs.rating) temp.rating = inputs.rating
 
       temp.save();
-			let ratings = await Rating.find({medicine: medicine})
-			//@ts-ignore
-			let avg = ratings.reduce((a, b) => a.rating + b.rating ) / ratings.length
+      let ratings = await Rating.find({ medicine: medicine })
+      //@ts-ignore
+      let avg = ratings.reduce((a, b) => a.rating + b.rating) / ratings.length
 
-			medicine.rating = avg
-			medicine.save()
+      medicine.rating = avg
+      medicine.save()
 
-			return temp
+      return temp
 
 
-		}
-		return null
+    }
+    return null
   }
-	// 3.40
+  // 3.40
   @Mutation(() => Complaint, { nullable: true })
   async addComplaint(
     @Arg("inputs") inputs: ComplaintInput,
     @Ctx() { req, res }: MyContext
   ) {
     let user: Patient = req.session.user;
-		let userId = 0
-		if(inputs.patient) 
-			//@ts-ignore
-			userId = parseInt(inputs.patient.id)
-		if(!user) 
-				user = await Patient.findOneOrFail({id: userId})
+    let userId = 0
+    if (inputs.patient)
+      //@ts-ignore
+      userId = parseInt(inputs.patient.id)
+    if (!user)
+      user = await Patient.findOneOrFail({ id: userId })
 
     if (inputs.employee) {
       let employee = await Employee.findOneOrFail({
@@ -197,7 +192,7 @@ export class PatientResolver {
       });
       if (employee.role === "derm") {
         // ukoliko je bio kod dermatologa
-				if(!user.appointments) return null
+        if (!user.appointments) return null
         let res = user.appointments.find((item) => item.employee === employee);
         if (!res) return null;
       } else if (employee.role === "pharm") {
@@ -206,88 +201,88 @@ export class PatientResolver {
       }
       let complaint = new Complaint();
       complaint.employee = employee;
-			complaint.patient = user
+      complaint.patient = user
       if (inputs.description) complaint.description = inputs.description;
 
 
       complaint.save();
-			return complaint
+      return complaint
 
     } else if (inputs.pharmacy) {
       // ukoliko je jednom rezervisao lek i preuzeo lek
       // ukoliko je dobio eRecept
       //@ts-ignore
-			let pharmacy = await Pharmacy.findOneOrFail({id: inputs.pharmacy.id})
-			if(!user.reservations) return null
-			if(!user.ePrescriptions) return null
-			let res = user.reservations.find((item) => 
-				(item.pharmacy.id == pharmacy.id) && (item.isBought));
+      let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
+      if (!user.reservations) return null
+      if (!user.ePrescriptions) return null
+      let res = user.reservations.find((item) =>
+        (item.pharmacy.id == pharmacy.id) && (item.isBought));
       if (!res) return null;
-			let temp = user.ePrescriptions.find((item) => item.pharmacy.id == pharmacy.id);
+      let temp = user.ePrescriptions.find((item) => item.pharmacy.id == pharmacy.id);
       if (!temp) return null;
-			let temp1 = user.appointments.find((item) => item.pharmacy.id == pharmacy.id);
+      let temp1 = user.appointments.find((item) => item.pharmacy.id == pharmacy.id);
       if (!temp1) return null;
       let complaint = new Complaint();
       complaint.pharmacy = pharmacy;
-			complaint.patient = user
+      complaint.patient = user
       if (inputs.description) complaint.description = inputs.description;
       complaint.save();
 
-			return complaint
+      return complaint
     }
 
-		return null
+    return null
   }
   @Mutation(() => Patient, { nullable: true })
-	async unsubscribe(
-		@Arg("inputs") inputs: SubscriptionInput, 
-		@Ctx() { req }: MyContext) {
-		let user = req.session.user
-		if(!user) {
-			if(inputs.patient)
-				user = await Patient.findOneOrFail({email: inputs.patient.email})
-		}
-		if(!inputs.pharmacy?.id) return null
+  async unsubscribe(
+    @Arg("inputs") inputs: SubscriptionInput,
+    @Ctx() { req }: MyContext) {
+    let user = req.session.user
+    if (!user) {
+      if (inputs.patient)
+        user = await Patient.findOneOrFail({ email: inputs.patient.email })
+    }
+    if (!inputs.pharmacy?.id) return null
 
-		let id = parseInt(inputs.pharmacy.id)
-		let pharmacy = await Pharmacy.findOneOrFail({id})
+    let id = parseInt(inputs.pharmacy.id)
+    let pharmacy = await Pharmacy.findOneOrFail({ id })
 
-		if(!pharmacy.subscribers) pharmacy.subscribers = []
+    if (!pharmacy.subscribers) pharmacy.subscribers = []
 
-		//@ts-ignore
-		user.subscriptions = user.subscriptions.filter(item  => item.id !== pharmacy.id)
-		user.save()
-		pharmacy.subscribers = pharmacy.subscribers.filter(item  => item.id !== user.id)
-		pharmacy.save()
+    //@ts-ignore
+    user.subscriptions = user.subscriptions.filter(item => item.id !== pharmacy.id)
+    user.save()
+    pharmacy.subscribers = pharmacy.subscribers.filter(item => item.id !== user.id)
+    pharmacy.save()
 
 
-		return user
+    return user
 
   }
 
   @Mutation(() => Patient, { nullable: true })
-	async subscribe(
-		@Arg("inputs") inputs: SubscriptionInput,
-		@Ctx() { req }: MyContext) {
-		let user = req.session.user
-		if(!user) {
-			if(inputs.patient)
-				user = await Patient.findOneOrFail({email: inputs.patient.email})
-		}
-		if(!inputs.pharmacy?.id) return null
+  async subscribe(
+    @Arg("inputs") inputs: SubscriptionInput,
+    @Ctx() { req }: MyContext) {
+    let user = req.session.user
+    if (!user) {
+      if (inputs.patient)
+        user = await Patient.findOneOrFail({ email: inputs.patient.email })
+    }
+    if (!inputs.pharmacy?.id) return null
 
-		let id = parseInt(inputs.pharmacy.id)
-		let pharmacy = await Pharmacy.findOneOrFail({id})
+    let id = parseInt(inputs.pharmacy.id)
+    let pharmacy = await Pharmacy.findOneOrFail({ id })
 
-		if(!pharmacy.subscribers) pharmacy.subscribers = []
+    if (!pharmacy.subscribers) pharmacy.subscribers = []
 
-		user.subscriptions.push(pharmacy)
-		user.save()
-		pharmacy.subscribers.push(user)
-		pharmacy.save()
+    user.subscriptions.push(pharmacy)
+    user.save()
+    pharmacy.subscribers.push(user)
+    pharmacy.save()
 
 
-		return user
+    return user
 
   }
 
@@ -393,7 +388,9 @@ export class PatientResolver {
 
     //@ts-ignore
     req.session.user = user;
-    return { token, user };
+    let role = user.role
+    let isEnabled = user.isEnabled
+    return { token, role, isEnabled };
   }
 
   @Mutation(() => Boolean)

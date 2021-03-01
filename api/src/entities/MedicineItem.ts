@@ -20,10 +20,10 @@ export class MedicineItem extends Model{
   @JoinTable()
   details: Medicine;
 
-  @Field(() => Inventory)
-  @ManyToOne(() => Inventory, item => item.medicines ,{ nullable:true})
+  @Field(() => MedicineList)
+  @ManyToOne(() => MedicineList, item => item.medicines ,{ nullable:true})
   @JoinTable()
-  list: Inventory;
+  list: MedicineList;
 
   @Field(() => Reservation)
 	@OneToOne(() => Reservation, {nullable:true})

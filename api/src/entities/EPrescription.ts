@@ -5,13 +5,13 @@ import { Employee } from './Employee';
 import { Pharmacy } from './Pharmacy';
 import { Model } from './Model';
 
+const status = [
+    'patient', 'derm', 'pharm', 'admin', 'sysadmin'
+]
+
 @ObjectType()
 @Entity()
 export class EPrescription extends Model{
-
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
 
 	@Field(() => Patient, {nullable: true})
   @ManyToOne(() => Patient)

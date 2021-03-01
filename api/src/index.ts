@@ -120,6 +120,7 @@ const main = async () => {
 							})
 					)
 				.catch(e => console.log(e))
+				// .decrypt list of medicine ids
 
 
 			}
