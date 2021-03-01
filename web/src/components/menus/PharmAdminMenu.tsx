@@ -6,7 +6,7 @@ import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
 import { useLogoutMutation } from "../../generated/graphql";
 
 
-export const PharmAdminMenu: any = ({ user }) => {
+const PharmAdminMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const btnRef = React.useRef()
@@ -76,3 +76,4 @@ export const PharmAdminMenu: any = ({ user }) => {
     </Flex>
   );
 };
+export default PharmAdminMenu

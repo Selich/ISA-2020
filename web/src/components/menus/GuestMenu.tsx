@@ -6,7 +6,7 @@ import { LoginModal } from "../sections/modal/LoginModal";
 import { RegisterModal } from "../sections/modal/RegisterModal";
 
 
-export const GuestMenu: any = () => {
+const GuestMenu: any = () => {
   const loginModal = useDisclosure()
   const registerModal = useDisclosure()
   const btnRef = React.useRef()
@@ -34,3 +34,4 @@ export const GuestMenu: any = () => {
     </>
   );
 };
+export default GuestMenu;

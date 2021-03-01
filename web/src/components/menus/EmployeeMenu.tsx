@@ -5,8 +5,7 @@ import { Basket } from "../layouts/Basket";
 import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
 import { useLogoutMutation } from "../../generated/graphql";
 
-
-export const EmployeeMenu: any = ({ user }) => {
+const EmployeeMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
@@ -86,3 +85,5 @@ export const EmployeeMenu: any = ({ user }) => {
     </Flex>
   );
 };
+
+export default EmployeeMenu;

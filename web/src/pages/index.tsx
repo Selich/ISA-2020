@@ -1,19 +1,10 @@
-import { Header } from '../components/sections/Header'
 import React from 'react'
 import HomeLayout from '../components/layouts/HomeLayout';
 
 
-const Index = ({
-  title,
-  subtitle,
-  image,
-  ctaLink,
-  ctaText,
-  ...rest
-}): JSX.Element => {
+const Index = (): JSX.Element => {
   return (
     <>
-    {/* @ts-ignore */}
       <HomeLayout/>
     </>
   )

@@ -12,6 +12,7 @@ import { Reservation } from '../entities/Reservation';
 import { Price } from '../entities/Price';
 import { EPrescription } from '../entities/EPrescription';
 import { MedicineInput, MedicineItemInput } from "./types/dtos";
+import { Prescription } from 'src/entities/Prescription';
 
 @Resolver()
 export class MedicineResolver {
@@ -129,6 +130,31 @@ export class MedicineResolver {
         @Ctx() { }: MyContext
     ): Promise<Medicine[]>{
         return await Medicine.find({})
+    }
+
+    @Query(() => [Medicine], { nullable: true })
+    async getReport(
+        @Arg('inputs') inputs : MedicineItemInput,
+        @Ctx() { req,res }: MyContext
+    ): Promise<MedicineItem[]>{
+
+		let user = req.session.user
+
+		let name  = inputs.details
+		let id = parseInt(inputs.list.id)
+		let date = inputs.dateOfPurchase
+		let list = []
+		let items = []
+
+		// sve rezervacije gde je apoteka ta i ta
+		let pharm = await Pharmacy.findOneOrFail({id: user.pharmacy.id})
+		// sve lekove
+		let breserv = pharm.reservations.filter(item => item.isBought)
+		// sve recepte gde je apoteka ta i ta
+		let bprescription = pharm.prescritions.filter(item => item.isUsed)
+		// sve lekove
+
+
     }
 
     @Query(() => [Pharmacy], { nullable: true })

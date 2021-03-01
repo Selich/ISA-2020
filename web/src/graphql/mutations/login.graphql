@@ -6,17 +6,12 @@ mutation Login($email: String!, $password: String!) {
   }
   ){
     token
-    user{
-      email
-      firstName
-      lastName
-      role
-      isEnabled
-      subscriptions{
-        name
-      }
-      penalty
-      score
+    role
+    isEnabled
+    errors{
+      field
+      message
+
     }
   }
 }

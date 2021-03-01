@@ -28,8 +28,11 @@ export class UserResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  @Field(() => Patient, { nullable: true })
-  user?: Patient;
+  @Field(() => String, { nullable: true })
+  role?: String;
+
+  @Field(() => Boolean, { nullable: true })
+  isEnabled?: Boolean;
 }
 
 @ObjectType()

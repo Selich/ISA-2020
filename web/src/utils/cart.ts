@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 
+export const initCart = () => {
+    localStorage.setItem("cart", JSON.stringify({}));
+    return true
+}
+
 export const addItem = (item) => {
     let [cart, setCart] = useState([])
 

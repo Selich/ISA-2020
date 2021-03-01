@@ -7,7 +7,7 @@ import { useLogoutMutation } from "../../generated/graphql";
 import { useRouter } from "next/router";
 
 
-export const UserMenu: any = ({ user }) => {
+const UserMenu: any = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const penaltiesModal = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -106,3 +106,5 @@ export const UserMenu: any = ({ user }) => {
     </Flex>
   );
 };
+
+export default UserMenu;

@@ -7,10 +7,6 @@ import { Model } from './Model';
 @Entity()
 export abstract class MedicineList extends Model{
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
-
 	@Field(() => [MedicineItem], {nullable:true})
 	@OneToMany(() => MedicineItem, medicine => medicine.list, {eager: true, cascade:true})
   medicines: MedicineItem[];
