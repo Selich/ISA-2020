@@ -1,12 +1,8 @@
-import { Medicine } from "../../entities/Medicine";
-import { Pharmacy } from "../../entities/Pharmacy";
-import { InputType, Field, ObjectType, Float } from "type-graphql";
-import { FieldError } from "./ErrorTypes";
-import User from "../../entities/User";
+import { Field, Float, InputType, ObjectType } from "type-graphql";
+import { Employee } from "../../entities/Employee";
 import Patient from "../../entities/Patient";
-import {Employee} from "../../entities/Employee";
-import { FieldsOnCorrectTypeRule } from "graphql";
-import {MedicineItem} from "../../entities/MedicineItem";
+import User from "../../entities/User";
+import { FieldError } from "./ErrorTypes";
 
 @ObjectType()
 export class EmployeeResponse {
@@ -28,11 +24,9 @@ export class UserResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  @Field(() => String, { nullable: true })
-  role?: String;
+  @Field(() => User, { nullable: true })
+  user?: User;
 
-  @Field(() => Boolean, { nullable: true })
-  isEnabled?: Boolean;
 }
 
 @ObjectType()

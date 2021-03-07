@@ -6,7 +6,7 @@ import { LoginModal } from "../sections/modal/LoginModal";
 import { RegisterModal } from "../sections/modal/RegisterModal";
 
 
-const GuestMenu: any = () => {
+const GuestMenu: any = ({setUser}) => {
   const loginModal = useDisclosure()
   const registerModal = useDisclosure()
   const btnRef = React.useRef()
@@ -14,6 +14,7 @@ const GuestMenu: any = () => {
   return (
     <>
       <Flex align="center">
+        {/* @ts-ignore */}
         <Button onClick={loginModal.onOpen} as={Link} mr={4}>
           Login
         </Button>
@@ -22,6 +23,7 @@ const GuestMenu: any = () => {
         </Button>
       </Flex>
       <LoginModal
+        setUser={setUser}
         onOpen={loginModal.onOpen}
         isOpen={loginModal.isOpen}
         onClose={loginModal.onClose}

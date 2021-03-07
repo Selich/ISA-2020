@@ -14,7 +14,7 @@ import fileUpload from 'express-fileupload'
 import morgan from 'morgan'
 import dbConfig from './ormconfig'
 import nodemailer from 'nodemailer'
-import { AuthResolver } from './resolvers/AuthResolver';
+import { AuthResolver } from './resolvers/auth';
 import { AppointmentResolver } from './resolvers/AppointmentResolver';
 import { EmployeeResolver } from './resolvers/EmployeeResolver';
 import { ReservationResolver } from './resolvers/ReservationResolver';

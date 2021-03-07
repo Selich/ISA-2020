@@ -1,13 +1,23 @@
-import React from "react";
+import { Avatar, Button, Center, Drawer, DrawerOverlay, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { Text, Flex, Button, Heading, Menu, MenuButton, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr, MenuItem, MenuList, Center } from "@chakra-ui/react";
-import { Basket } from "../layouts/Basket";
-import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
-import { useLogoutMutation } from "../../generated/graphql";
 import { useRouter } from "next/router";
+import React from "react";
+import { useLogoutMutation } from "../../generated/graphql";
+import { Basket } from "../layouts/Basket";
+import Cookies from 'js-cookie'
+import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
+import { usePatientQuery } from "../../generated/graphql";
 
 
-const UserMenu: any = ({ user }) => {
+const UserMenu: any = ({ user, setUser }) => {
+  let token = Cookies.get('token')
+	let [{fetching, data}] = usePatientQuery({variables:{
+		token: token
+	}})
+  if(data){
+    if(!user) user = data.patient
+
+  }
   const { isOpen, onOpen, onClose } = useDisclosure()
   const penaltiesModal = useDisclosure()
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
@@ -17,25 +27,26 @@ const UserMenu: any = ({ user }) => {
     <Flex align="center">
       <Basket />
       <Menu>
+        {/* @ts-ignore */}
         <MenuButton as={Button} rightIcon={<Avatar name={user.email.split('@')[0]} src="" size="sm" pd={2} />} >
         </MenuButton>
         <MenuList>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
-          <Center>
-          <Avatar name={user.email.split('@')[0]} src="" size="lg" margin={3} pd={3} />
-          </Center>
+            <Center>
+              <Avatar name={user.email.split('@')[0]} src="" size="lg" margin={3} pd={3} />
+            </Center>
           </NextLink>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
-          <Center>
-            <Text color='grey' pd={1} fontSize='lg' margin={2}>
-          {(user.role === "patient") ?
-            user.email.split('@')[0]:
-            user.role
-          }
-            </Text>
-          </Center>
+            <Center>
+              <Text color='grey' pd={1} fontSize='lg' margin={2}>
+                {(user.role === "patient") ?
+                  user.email.split('@')[0] :
+                  user.role
+                }
+              </Text>
+            </Center>
           </NextLink>
-          <hr/>
+          <hr />
           <NextLink href="/user">
             <MenuItem minH="48px">
               <span>Home</span>
@@ -79,11 +90,13 @@ const UserMenu: any = ({ user }) => {
           <MenuItem ref={btnRef} onClick={onOpen} minH="48px">
             <span>E-prescription (Modal)</span>
           </MenuItem>
-          <hr/>
+          <hr />
           <MenuItem
             mr={4}
             onClick={() => {
               logout();
+              setUser(null)
+              router.push('/')
             }}
             isLoading={logoutFetching}
             variant="link"

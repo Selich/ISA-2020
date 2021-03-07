@@ -6,8 +6,13 @@ mutation Login($email: String!, $password: String!) {
   }
   ){
     token
-    role
-    isEnabled
+    user{
+      email
+      firstName
+      lastName
+      role
+      isEnabled
+    }
     errors{
       field
       message

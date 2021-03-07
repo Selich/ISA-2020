@@ -8,11 +8,11 @@ import User from "./User";
 @Entity()
 export class Address extends Model{
 
-  @OneToMany(() => User, user => user.address )
+  @OneToMany(() => User, user => user.address, {nullable:true} )
   users: User[]
 
   // @Field(() => Pharmacy)
-  @OneToOne(() => Pharmacy)
+  @OneToOne(() => Pharmacy, {nullable: true})
   pharmacy: Pharmacy
 
 	@Field({nullable: true})

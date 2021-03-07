@@ -1,7 +1,5 @@
-import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { Address } from "../entities/Address";
 import { Complaint } from "../entities/Complaint";
 import { Employee } from "../entities/Employee";
 import { Medicine } from "../entities/Medicine";
@@ -11,34 +9,17 @@ import { Rating } from "../entities/Rating";
 import { Tier } from "../entities/Tier";
 import User from "../entities/User";
 import { MyContext } from "../types";
-import { sendVerificationMail } from "../utils/sendMail";
 import {
-  ComplaintInput, PatientInput, PatientResponse, RatingInput,
-  SubscriptionInput, UserResponse
+  ComplaintInput, RatingInput,
+  SubscriptionInput
 } from "./types/dtos";
 
 @Resolver(Patient)
 export class PatientResolver {
 
-  @Query(() => User, { nullable: true })
-  me(@Arg("token") token: string, @Ctx() { req }: MyContext) {
-    let decode = jwt.decode(token);
-    console.log(decode);
-    let temp = Patient.findOne({ id: req.session.id });
-    if (!temp) {
-      let temp2 = Employee.findOne({ id: req.session.id });
-      if (!temp2) return null;
-      //@ts-ignore
-      temp = temp2;
-    }
-
-    return temp;
-  }
   @Query(() => Patient, { nullable: true })
-  async patient(
-    @Arg("token") token: string
-  ) {
-
+  async patient( @Arg("token") token: string) {
+    console.log(token)
     let temp = jwt.decode(token)
     //@ts-ignore
     let patient = await Patient.findOne({ email: temp.email });
@@ -286,126 +267,4 @@ export class PatientResolver {
 
   }
 
-  @Mutation(() => PatientResponse)
-  async register(
-    @Arg("email") email: string,
-    @Arg("password") password: string,
-    @Arg("confirmPassword") confirmPassword: string,
-    @Arg("firstName") firstName: string,
-    @Arg("lastName") lastName: string,
-    @Arg("telephone") telephone: string,
-    @Arg("street") street: string,
-    @Arg("city") city: string,
-    @Arg("country") country: string,
-    @Ctx() { req, mailer }: MyContext
-  ) {
-    let user = await Patient.findOne({ email: email });
-    let address = { street, city, country };
-
-    if (!(password === confirmPassword)) {
-      return {
-        errors: [
-          { field: "confirmPassword", message: "Passwords need to match" },
-        ],
-      };
-    }
-    if (!(user === undefined)) {
-      return { errors: [{ field: "email", message: "Email already exists" }] };
-    }
-
-    user = new Patient();
-    user.password = await argon2.hash(password);
-    user.email = email;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.telephone = telephone;
-    user.role = "patient";
-    user.score = 0;
-    user.penalty = 0;
-    //user.tier = await Tier.findOneOrFail({ : 11 });
-
-    let temp = await Address.findOne({ ...address });
-    if (temp === undefined)
-      user.address = await Address.save(
-        new Address({ street, city, country, user: user })
-      );
-    else user.address = temp;
-
-    user.isEnabled = true;
-    user.save();
-
-    sendVerificationMail(user.email, mailer);
-
-    return { user };
-  }
-  @Mutation(() => PatientResponse)
-  async confirmRegistration(
-    @Arg("email") email: string,
-    @Ctx() { req }: MyContext
-  ) {
-    let user = await Patient.findOne({ email });
-    if (user !== undefined) {
-      user.isEnabled = true;
-      user = await Patient.save(user);
-
-      req.session.userId = user.id;
-    }
-
-    return { user };
-  }
-
-  @Mutation(() => UserResponse)
-  async login(@Arg("inputs") inputs: PatientInput, @Ctx() { req }: MyContext) {
-    let { email, password } = inputs;
-
-    let user = await Patient.findOne({ email: email });
-    if (user === undefined) {
-      let temp = await Employee.findOne({ email: email });
-      if (temp === undefined) {
-        return {
-          errors: [{ field: "email", message: "No user with that email" }],
-        };
-      }
-      //@ts-ignore
-      user = temp;
-    }
-    if (!user) return null;
-
-    let valid = true;
-
-    //		if(password !== 'password'){
-    //@ts-ignore
-    //			valid = argon2.verify(user.password, password);
-
-    let token = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      "secret",
-      { expiresIn: "20m" }
-    );
-
-    //@ts-ignore
-    req.session.user = user;
-    let role = user.role
-    let isEnabled = user.isEnabled
-    return { token, role, isEnabled };
-  }
-
-  @Mutation(() => Boolean)
-  logout(@Ctx() { req, res }: MyContext) {
-    return new Promise((resolve) =>
-      req.session.destroy((err: any) => {
-        res.clearCookie("qid");
-        if (err) {
-          console.log(err);
-          resolve(false);
-          return;
-        }
-
-        resolve(true);
-      })
-    );
-  }
 }

@@ -1,25 +1,6 @@
-mutation Register(
-  $email: String!, 
-  $password: String!, 
-  $confirmPassword: String!,
-  $firstName: String!,
-  $lastName: String!,
-  $telephone: String!,
-  $street: String!,
-  $city: String!,
-  $country: String!
-  ) {
-  register( 
-    email: $email, 
-    password: $password, 
-    confirmPassword: $confirmPassword,
-    firstName: $firstName,
-    lastName: $lastName,
-    telephone: $telephone,
-    street: $street,
-    city: $city,
-    country: $country,
-    ) {
+mutation Register( $inputs: UserInput! ) {
+  register( inputs: $inputs) {
+    token
     errors {
       field
       message

@@ -1,7 +1,0 @@
-query GetReport ( 
-    $inputs: MedicineInput!
-){
-  getReport( inputs: $inputs) {
-
-  }
-}

@@ -1,32 +1,17 @@
-import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react";
 import LoginForm from "../forms/LoginForm";
-import { FaFacebook } from 'react-icons/fa'
 
-
-export const LoginModal: any = ({ onOpen, isOpen, onClose }) => {
-  const btnRef = React.useRef()
+export const LoginModal: any = ({ isOpen, onClose, setUser }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader><Text fontSize="3xl"> Login User: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <LoginForm onClose={onClose}/>
+          <LoginForm onClose={onClose} setUser={setUser}/>
         </ModalBody>
-        <ModalFooter >
-          <Text color="gray.500" isTruncated>
-          Or login using:
-          </Text>
-          <HStack>
-            <Button size="sm" m={7} colorScheme="facebook" leftIcon={<FaFacebook />}>
-              Facebook
-            </Button>
-          </HStack>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );
-
 };

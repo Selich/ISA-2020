@@ -1,16 +1,11 @@
 import React from "react";
-import {
-  Box,
-  Button
-} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-
 import { FormInput } from "./../../../components/sections/FormInput";
 import { FormInputPassword } from "./../../../components/sections/FormInputPassword";
 import { Wrapper } from "./../../../components/ui/Wrapper";
 import { toErrorMap } from "../../../utils/errorMap";
-
 import { useLoginMutation } from "../../../generated/graphql";
 import { initCart } from '../../../utils/cart'
 
@@ -21,8 +16,7 @@ const roles = {
   'all': ['patient','pharm', 'derm', 'admin', 'sysadmin'],
 }
 
-export default function LoginForm({ onClose }) {
-
+export default function LoginForm({ onClose, setUser }) {
   const [{ fetching: loginFetch }, login] = useLoginMutation();
   const router = useRouter();
   return (
@@ -35,15 +29,15 @@ export default function LoginForm({ onClose }) {
           if (response.data?.login.errors) {
             setErrors(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.token) {
-            let { token, role, isEnabled } = response.data.login
+            let { token, user } = response.data.login
             console.log(response.data.login);
-            
             Cookies.set('token', token)
+            setUser(user)
             initCart()
-            if (roles.employees.includes(role) && !isEnabled)
+            if (roles.employees.includes(user.role) && !user.isEnabled)
                 router.push("/fstlogin");
-            else if(roles.all.includes(role))
-                router.push('/' + role);
+            else if(roles.all.includes(user.role))
+                router.push('/' + user.role);
             onClose()
           }
         }}

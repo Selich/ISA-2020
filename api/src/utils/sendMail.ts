@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import { Employee } from "../entities/Employee";
 import { Reservation } from "../entities/Reservation";
 import Patient from "../entities/Patient";
+import User from "../entities/User";
 
 export async function sendCreateTokenMail(
   to: Employee,
@@ -129,28 +130,21 @@ export async function sendHolidayStatusUpdate(
   console.log(nodemailer.getTestMessageUrl(info));
 }
 
-export async function sendVerificationMail(to: string, mailer: any) {
-  let msg =
-    "<h3> Hello " +
-    to.split("@")[0] +
-    "<h3>" +
-    '<a href="http://localhost:3000/verify/' +
-    to +
-    '">' +
-    "Confirm Account" +
-    "</a>";
+export async function sendVerificationMail(to: Patient, mailer: any) {
+  let hello = "<h3> Hello " + to.firstName + " " + to.lastName + "</h3>"
+  let msg = '<a href="http://localhost:3000/verify/' + to.email + '">' + "Confirm Account" + "</a>";
 
-  //@ts-ignore
   let info = await mailer.sendMail({
-    from: '"Barry Littel 👻" <barry85@ethereal.email>', // sender address
-    to: to,
-    subject: "Confirm your account ✔", // Subject line
-    text: "Confirm your account", // plain text body
-    html: msg,
+    from: '"Admin Admin" <barry85@ethereal.email>',
+    to: to.email,
+    subject: "Confirm your account ✔",
+    text: "Confirm your account",
+    html: hello + msg,
   });
 
   console.log("Message sent: " + info.messageId);
   console.log(nodemailer.getTestMessageUrl(info));
+  return nodemailer.getTestMessageUrl(info)
 }
 
 export async function sendEmail(to: string, html: string) {

@@ -23,36 +23,35 @@ import User from "./User";
 @Entity()
 export default class Patient extends User {
   @Field(() => [Appointment], { nullable: true })
-  @OneToMany(() => Appointment, (item) => item.patient)
+  @OneToMany(() => Appointment, (item) => item.patient, {nullable: true})
   appointments: Appointment[];
 
   @Field(() => [Medicine], { nullable: true })
-  @ManyToMany(() => Medicine, (item) => item.patientsAllergic)
+  @ManyToMany(() => Medicine, (item) => item.patientsAllergic,  {nullable: true})
   allergies: Medicine[];
 
   @Field(() => [Prescription])
-  @OneToMany(() => Prescription, (item) => item.patient)
+  @OneToMany(() => Prescription, (item) => item.patient,  {nullable: true})
   prescritions: Prescription[];
 
   @Field(() => [EPrescription])
-  @OneToMany(() => EPrescription, (item) => item.patient)
+  @OneToMany(() => EPrescription, (item) => item.patient,  {nullable: true})
   ePrescriptions: EPrescription[];
 
   @Field(() => [Reservation])
-	@OneToMany(() => Reservation, (item) => item.patient, {eager: true, cascade:true})
+	@OneToMany(() => Reservation, (item) => item.patient, {eager: true, cascade:true,  nullable: true})
   reservations: Reservation[];
 
   @Field(() => [Rating])
-  @OneToMany(() => Rating, (item) => item.patient)
+  @OneToMany(() => Rating, (item) => item.patient, {nullable:true})
   ratings: Rating[];
 
-  //TODO: Needs to get it
   @Field(() => [Pharmacy], { nullable: true })
-  @ManyToMany(() => Pharmacy, (item) => item.subscribers, { eager: true })
+  @ManyToMany(() => Pharmacy, (item) => item.subscribers, { eager: true, nullable:true })
   @JoinTable()
   subscriptions: Pharmacy[];
 
-  @OneToMany(() => Complaint, (item) => item.patient)
+  @OneToMany(() => Complaint, (item) => item.patient, {nullable:true})
   complaints: Complaint[];
 
   @Field(() => Tier, { nullable: true })
@@ -60,11 +59,11 @@ export default class Patient extends User {
   tier: Tier;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 0 })
   score: number;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, default:0 })
   penalty: number;
 
 }
