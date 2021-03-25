@@ -15,7 +15,9 @@ query Patient(
     address{
       street,
       city,
-      country
+      country,
+      long,
+      lat
     }
 
   }

@@ -1,39 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { Box, Button, SimpleGrid } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import { FormInputPassword } from "./../components/sections/FormInputPassword";
-import { FormInput } from "./../components/sections/FormInput";
-import { Wrapper } from "./../components/ui/Wrapper";
-import { toErrorMap } from '../utils/errorMap';
 import { useConfirmPasswordMutation } from "../generated/graphql";
-import { Formik, Form } from "formik";
-import NextLink from "next/link";
-import { Box, Button, Text, SimpleGrid } from "@chakra-ui/react";
-
-import { MyCalendar } from "../components/sections/Calendar";
+import { toErrorMap } from '../utils/errorMap';
+import { FormInput } from "./../components/sections/FormInput";
+import { FormInputPassword } from "./../components/sections/FormInputPassword";
+import { Wrapper } from "./../components/ui/Wrapper";
+import { Paper } from "../components/ui/Paper";
 
 export default function FstLogin() {
-  const [data, setData] = useState({});
   const [, confirmPassword] = useConfirmPasswordMutation();
   const router = useRouter();
 
-  useEffect(() => {
-
-  }, []);
   return (
     <>
-      <Box
-        m="4"
-        p="8"
-        border="1px"
-        rounded="2px"
-        borderColor="gray.300"
-        boxShadow="md"
-        bg="grey.200"
-        color="#2d383c"
-        fontSize="2rem"
-        textAlign="center"
-        h="1200px"
-      >
+      <Paper>
         <SimpleGrid columns={3} spacing={0} maxH="600px">
           <Box align="left"> </Box>
           <Box align="center">
@@ -73,7 +55,7 @@ export default function FstLogin() {
           </Box>
           <Box align="right"> </Box>
         </SimpleGrid>
-      </Box>
+      </Paper>
     </>
   );
 }

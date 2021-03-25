@@ -28,61 +28,57 @@ const UserMenu: any = ({ user, setUser }) => {
       <Basket />
       <Menu>
         {/* @ts-ignore */}
-        <MenuButton as={Button} rightIcon={<Avatar name={user.email.split('@')[0]} src="" size="sm" pd={2} />} >
+				<MenuButton as={Button} rightIcon={<Avatar src="https://bit.ly/dan-abramov" size="sm" pd={2} />} >
         </MenuButton>
         <MenuList>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
             <Center>
-              <Avatar name={user.email.split('@')[0]} src="" size="lg" margin={3} pd={3} />
+              <Avatar name={user.email.split('@')[0]} src="https://bit.ly/dan-abramov"  size="lg" margin={3} pd={3} />
             </Center>
           </NextLink>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
             <Center>
               <Text color='grey' pd={1} fontSize='lg' margin={2}>
                 {(user.role === "patient") ?
-                  user.email.split('@')[0] :
+                  user.firstName :
                   user.role
                 }
               </Text>
             </Center>
           </NextLink>
           <hr />
-          <NextLink href="/user">
+          <NextLink href={`/${user.role}`}>
             <MenuItem minH="48px">
               <span>Home</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/profile">
+					<NextLink href={`/${user.role}/profile`}>
             <MenuItem minH="48px">
               <span>Profile</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/appointments">
+					<hr/>
+					<NextLink href={`/${user.role}/appointments`}>
             <MenuItem minH="48px">
               <span>Appointments</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/complaints">
+					<NextLink href={`/${user.role}/complaints`}>
             <MenuItem minH="48px">
               <span>Complaints</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/history">
-            <MenuItem minH="48px">
-              <span>History</span>
-            </MenuItem>
-          </NextLink>
-          <NextLink href="/user/reservations">
+					<NextLink href={`/${user.role}/reservations`}>
             <MenuItem minH="48px">
               <span>Reservations</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/subscriptions">
+					<NextLink href={`/${user.role}/subscriptions`}>
             <MenuItem minH="48px">
               <span>Subscriptions</span>
             </MenuItem>
           </NextLink>
-          <NextLink href="/user/eprescriptions">
+					<NextLink href={`/${user.role}/eprescriptions`}>
             <MenuItem minH="48px">
               <span>E-prescriptions</span>
             </MenuItem>
@@ -103,6 +99,7 @@ const UserMenu: any = ({ user, setUser }) => {
             minH="48px">
             <span>Logout</span>
           </MenuItem>
+
         </MenuList>
         <Drawer
           size="md"

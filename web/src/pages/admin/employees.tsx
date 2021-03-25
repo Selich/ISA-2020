@@ -1,16 +1,10 @@
+import { Avatar, Box, Button, HStack, Input, Link, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
-import { Header } from '../../components/sections/Header';
-import { SimpleGrid, Text, Avatar, Box, Button, HStack, Input, Link, useDisclosure } from '@chakra-ui/react';
-import ReservationsTable from '../../components/tables/ReservationsTable';
-import faker from 'faker';
 import DataTable from 'react-data-table-component';
-import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines';
-import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal';
-import CreateEmployee from './create-employee';
-import { CreateEmployeeModal } from '../../components/sections/modal/CreateEmployeeModal';
 import { CreateAdminModal } from '../../components/sections/modal/CreateAdminModal';
-
+import { CreateEmployeeModal } from '../../components/sections/modal/CreateEmployeeModal';
 import { useEmployeesQuery } from "../../generated/graphql";
+
 
 const createUser = () => ({});
 
@@ -72,10 +66,10 @@ const Employees = (): JSX.Element => {
         <Button onClick={createEmployeeModal.onOpen} size="sm" mx={3} colorScheme="teal">
           Create New Employee
         </Button>
-        <Button onClick={createAdminModal.onOpen} as={Link} size="sm" mx={3} colorScheme="teal">
+        {/* <Button onClick={createAdminModal.onOpen} as={Link} size="sm" mx={3} colorScheme="teal">
           Create New Admin
-        </Button>
-        <DataTable
+        </Button> */}
+        {/* <DataTable
           title="Employee List"
           columns={columns}
           data={(fetching && !data) ? [] : data.employees}
@@ -86,7 +80,7 @@ const Employees = (): JSX.Element => {
 					expandableRowsComponent={<ExpandedComponent data={this} />}
           subHeaderComponent={subHeaderComponentMemo}
           persistTableHead
-        />
+        /> */}
       </Box>
       <CreateEmployeeModal onOpen={createEmployeeModal.onOpen} isOpen={createEmployeeModal.isOpen} onClose={createEmployeeModal.onClose} />
       <CreateAdminModal onOpen={createAdminModal.onOpen} isOpen={createAdminModal.isOpen} onClose={createAdminModal.onClose} />

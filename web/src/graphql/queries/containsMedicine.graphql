@@ -6,8 +6,6 @@ query ContainsMedicine($id: String!) {
         city,
         country
       }
-      long,
-      lat
   }
 
 }

@@ -1,12 +1,5 @@
-import { Formik, Form } from "formik";
-import { FieldError, useAddFreeAppMutation} from "../../../generated/graphql";
-import { FormInput } from "../../sections/FormInput";
-import { Wrapper } from "../../ui/Wrapper";
 import {
-	SimpleGrid,
-	Box,
-  Text,
-  Button,
+  Box, Button,
   HStack,
   Modal,
   ModalBody,
@@ -14,9 +7,13 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
+  ModalOverlay, SimpleGrid, Text
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import React from "react";
+import { FieldError, useAddFreeAppMutation } from "../../../generated/graphql";
+import { FormInput } from "../../sections/FormInput";
+import { Wrapper } from "../../ui/Wrapper";
 
 const toErrorMap = (errors: FieldError[]) => {
   const errorMap: Record<string, string> = {};
@@ -47,12 +44,12 @@ export const AddFreeAppModal: any = ({ onOpen, isOpen, onClose }) => {
               }}
               onSubmit={async (values, { setErrors }) => {
                 const response = await addFreeApp(values);
-                if (response.data?.addFreeApp.errors) {
-                  setErrors(toErrorMap(response.data.addFreeApp.errors));
-                  console.log(response.data);
-                } else {
-                  console.log(response.data);
-                }
+                // if (response.data?.addFreeApp.errors) {
+                //   setErrors(toErrorMap(response.data.addFreeApp.errors));
+                //   console.log(response.data);
+                // } else {
+                //   console.log(response.data);
+                // }
               }}
             >
               {({ isSubmitting }) => (

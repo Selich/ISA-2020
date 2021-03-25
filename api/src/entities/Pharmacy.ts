@@ -30,14 +30,6 @@ export class Pharmacy extends Model {
   @Column({ nullable: true})
   name: string;
 
-	@Field({nullable: true})
-  @Column({ nullable: true})
-  long: string;
-
-	@Field({nullable: true})
-  @Column({ nullable: true})
-  lat: string;
-
   @Field(() => Inventory)
   @OneToOne(() => Inventory, item => item.pharmacy, { eager: true, cascade: true, nullable: true})
   @JoinColumn()

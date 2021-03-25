@@ -1,26 +1,14 @@
 import {
-  List,
-  ListItem,
-  ListIcon,
-  Box,
-  Text,
-  Button,
-  HStack,
-  Modal,
-  SimpleGrid,
-  ModalBody,
+  Box, Button, Modal, ModalBody,
   ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Center,
+  ModalContent, ModalHeader,
+  ModalOverlay, SimpleGrid, Text
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import React from "react";
-import { Formik, Form } from "formik";
+import { useCreatePharmacyMutation } from '../../../generated/graphql';
 import { FormInput } from "../../sections/FormInput";
 import { Wrapper } from "../../ui/Wrapper";
-import { useCreatePharmacyMutation } from '../../../generated/graphql';
 
 export const AddPharmacyModal: any = ({ onOpen, isOpen, onClose }) => {
   const btnRef = React.useRef();
@@ -43,14 +31,14 @@ export const AddPharmacyModal: any = ({ onOpen, isOpen, onClose }) => {
                 city: "",
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await createPharmacy(values);
-                if (response.data?.createPharmacy.errors) {
-                  setErrors(toErrorMap(response.data.createPharmacy.errors));
+                // const response = await createPharmacy(values);
+                // if (response.data?.createPharmacy.errors) {
+                //   setErrors(toErrorMap(response.data.createPharmacy.errors));
 
-                  console.log(response.data);
-                } else {
-									onClose()
-                }
+                //   console.log(response.data);
+                // } else {
+								// 	onClose()
+                // }
               }}
             >
               {({ isSubmitting }) => (

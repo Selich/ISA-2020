@@ -5,6 +5,8 @@ import { EditProfileModal } from "../../components/sections/modal/EditProfileMod
 import { AddAllergieModal } from "../../components/sections/modal/AddAllergieModal";
 import { SubListModal } from "../../components/sections/modal/SubListModal";
 import { FormInput } from '../../components/sections/FormInput'
+import { Form } from "formik";
+import { FormInputPassword } from "../../components/sections/FormInputPassword";
 
 
 

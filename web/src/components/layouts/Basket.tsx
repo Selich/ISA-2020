@@ -18,11 +18,10 @@ export const Basket: any = (props) => {
       selector: 'rating',
       sortable: true,
     },
-    {
-      name: '',
-      button: true,
-      cell: () => <Button onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>,
-    }
+    // { name: '',
+    //   button: true,
+    //   cell: () => <Button onClick={(val) => buyItemModal.onOpen()} colorScheme='teal' >Buy</ Button>,
+    // }
   ];
 
   const btnRef = React.useRef()
@@ -47,11 +46,6 @@ export const Basket: any = (props) => {
             <DrawerHeader>Shopping Cart</DrawerHeader>
 
             <DrawerBody>
-              <DataTable
-                columns={columns}
-                subHeader
-                persistTableHead
-              />
               <Button variant="outline" mr={3} onClick={onClose}>
                 Cancel
                 </Button>

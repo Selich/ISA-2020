@@ -1,12 +1,9 @@
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { Address } from '../entities/Address';
+import { Inventory } from '../entities/Inventory';
 import { Pharmacy } from '../entities/Pharmacy';
-import { Inventory } from '../entities/Inventory'
-import { PharmacyInput } from "./types/dtos"
-import { Resolver, Query, Ctx, Arg, Mutation, Field, ObjectType} from 'type-graphql';
 import { MyContext } from '../types';
-import { Medicine } from '../entities/Medicine'
-import { Address } from '../entities/Address'
-
-
+import { PharmacyInput } from "./types/dtos";
 @Resolver(Pharmacy)
 export class PharmacyResolver{
 

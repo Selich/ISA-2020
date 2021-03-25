@@ -1,26 +1,20 @@
 import {
-  Text,
-	Select,
-  HStack,
-  Modal,
+  Box, Button, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Center,
+  ModalOverlay, Select, SimpleGrid, Text
 } from "@chakra-ui/react";
-import { SimpleGrid, Box, Button } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { FieldError, useRegisterMutation } from "../../../generated/graphql";
+import swal from "sweetalert";
+import { FieldError, useAddEmployeeMutation, usePharmaciesQuery } from "../../../generated/graphql";
 import { FormInput } from "../../sections/FormInput";
 import { FormInputPassword } from "../../sections/FormInputPassword";
-import swal from "sweetalert";
 import { Wrapper } from "../../ui/Wrapper";
-import { usePharmaciesQuery, useAddEmployeeMutation } from '../../../generated/graphql';
 
 export const AddAdminModal: any = ({ onOpen, isOpen, onClose }) => {
   const btnRef = React.useRef();
@@ -74,21 +68,21 @@ export const AddAdminModal: any = ({ onOpen, isOpen, onClose }) => {
 								role: "admin",
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await addEmployee(values);
-								console.log(response)
-                if (response.data?.addEmployee.errors) {
-                  setErrors(toErrorMap(response.data.addEmployee.errors));
+                // const response = await addEmployee(values);
+								// console.log(response)
+                // if (response.data?.addEmployee.errors) {
+                //   setErrors(toErrorMap(response.data.addEmployee.errors));
 
-                  console.log(response.data);
-                } else {
-                  swal({
-                    title: "Admin created!",
-                    text: "Confirmation mail sent",
-                    icon: "success",
-                  });
+                //   console.log(response.data);
+                // } else {
+                //   swal({
+                //     title: "Admin created!",
+                //     text: "Confirmation mail sent",
+                //     icon: "success",
+                //   });
 									onClose()
                 }
-              }}
+              }
             >
               {({ isSubmitting }) => (
                 <Form>

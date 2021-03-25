@@ -7,12 +7,8 @@ import Patient from "../entities/Patient";
 import { Pharmacy } from "../entities/Pharmacy";
 import { Rating } from "../entities/Rating";
 import { Tier } from "../entities/Tier";
-import User from "../entities/User";
 import { MyContext } from "../types";
-import {
-  ComplaintInput, RatingInput,
-  SubscriptionInput
-} from "./types/dtos";
+import { ComplaintInput, RatingInput, SubscriptionInput } from "./types/dtos";
 
 @Resolver(Patient)
 export class PatientResolver {

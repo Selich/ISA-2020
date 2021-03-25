@@ -7,16 +7,6 @@ import { useMeQuery } from "../../../generated/graphql";
 
 export default function ProfileForm({onClose}) {
   let [{ data, fetching }] = useMeQuery();
-	data = {
-		me: {
-			email: "selich.work@gmail.com",
-			address: {
-				street: "Poenkareova",
-				city: "Novi Sad",
-				country: "Serbia",
-			}
-		}
-	}
   return (
     <>
       <Box
@@ -38,9 +28,9 @@ export default function ProfileForm({onClose}) {
           <Text>{data.me.firstName} {data.me.lastName}</Text>
           <Text fontSize={17}>Address:</Text>
           <Text fontSize={14}>
-            {data.me.address.street + " "
+            {/* {data.me.address.street + " "
             + data.me.address.city + " "
-            + data.me.address.country}
+            + data.me.address.country} */}
           </Text>
         </Box>
 		</SimpleGrid>

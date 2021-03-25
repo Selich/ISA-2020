@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
-import NextLink from "next/link";
 import {
   Box,
-  Button,
-  Text,
-  SimpleGrid,
-	useDisclosure
+  Button, SimpleGrid, Text, useDisclosure
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { MyCalendar } from "../../components/sections/Calendar";
-import { AddFreeAppModal} from '../../components/sections/modal/AddFreeAppModal'
+import NextLink from "next/link";
+import React, { useEffect, useState } from "react";
+import { AddFreeAppModal } from '../../components/sections/modal/AddFreeAppModal';
 import { useMeQuery } from '../../generated/graphql';
 
 export default function Index() {
@@ -41,9 +36,9 @@ export default function Index() {
             <Text fontSize={28}>Dashboard</Text>
             <Text fontSize={12}>Admin Pharm</Text>
             <hr />
-						{user &&
+						{/* {user &&
             (<Text fontSize={12}>{user.pharmacy.name}</Text>)
-						}
+						} */}
           </Box>
           <Box align="right"></Box>
           <Box align="right">

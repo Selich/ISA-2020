@@ -1,7 +1,6 @@
 import { StarIcon } from "@chakra-ui/icons"
-import { Image, Box, Badge, Button, Icon, Modal, ModalContent, ModalHeader, ModalOverlay, useDisclosure, ModalBody, Table, TableCaption, Tbody, Td, Th, Thead, Tr, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from "@chakra-ui/react"
+import { Badge, Box, Button, Icon, Image, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Table, Tbody, Td, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react"
 import React from "react"
-import LoginForm from "../sections/LoginForm"
 
 export default function Card(item): any {
   const { isOpen, onOpen, onClose } = useDisclosure()

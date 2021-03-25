@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, OneToMany, OneToOne, Column } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 import { Model } from "./Model";
-import { ObjectType, Field, InputType } from "type-graphql";
 import { Pharmacy } from "./Pharmacy";
 import User from "./User";
 
@@ -14,6 +14,14 @@ export class Address extends Model{
   // @Field(() => Pharmacy)
   @OneToOne(() => Pharmacy, {nullable: true})
   pharmacy: Pharmacy
+
+	@Field({nullable: true})
+  @Column({ nullable: true })
+  lat: string;
+
+	@Field({nullable: true})
+  @Column({ nullable: true })
+  long: string;
 
 	@Field({nullable: true})
   @Column({ nullable: true })

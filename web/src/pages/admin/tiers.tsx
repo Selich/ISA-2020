@@ -1,8 +1,6 @@
-import { Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import { Table, Thead, Tbody, Tr, Th, Td, TableCaption } from "@chakra-ui/react"
-import React from "react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Header } from "../../components/sections/Header";
+import React from "react";
 import DataTable from "react-data-table-component";
 import { TierModal } from "../../components/sections/modal/TierModal";
 
@@ -26,7 +24,7 @@ const columns = [
 	{name: "Pharmacy", selector:"pharmacy"},
 	{name: "Type", selector:"type"},
 	{name: "Price", selector:"price", sortable:true},
-	{cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
+	{name: '', cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
 ]
 
 

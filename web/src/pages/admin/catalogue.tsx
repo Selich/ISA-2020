@@ -1,9 +1,8 @@
-import { Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import React from "react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Header } from "../../components/sections/Header";
-import { PriceModal } from "../../components/sections/PriceModal";
-import DataTable from 'react-data-table-component'
+import React from "react";
+import DataTable from 'react-data-table-component';
+// import { PriceModal } from "../../components/sections/PriceModal";
 
 
 
@@ -31,17 +30,17 @@ export default function Catalogue() {
     <>
 		<Box m={10} mx={20}>
 		<Button onClick={modal.onOpen} colorScheme="teal">Create New Price</Button>
-	  <DataTable
+	  {/* <DataTable
       data={data}
-      columns={columns}
+      // columns={columns}
       selectableRows
-    />
+    /> */}
 		</Box>
-      <PriceModal
+      {/* <PriceModal
         onOpen={modal.onOpen}
         isOpen={modal.isOpen}
         onClose={modal.onClose}
-      />
+      /> */}
     </>
   );
 }

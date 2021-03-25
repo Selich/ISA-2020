@@ -1,4 +1,5 @@
 import argon2 from "argon2";
+import axios from 'axios'
 import jwt from "jsonwebtoken";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Address } from "../entities/Address";
@@ -94,8 +95,20 @@ export class AuthResolver {
         if(inputs.address){
             let { street, city, country } = inputs.address
             address = await Address.findOne({ street, city, country });
-            if (!address)
-                user.address = await Address.save( new Address({ street, city, country, user: temp }));
+            if (!address){
+                let url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+ 
+                street?.replace(' ', '+') + 
+                '+' + city?.replace(' ', '+') + 
+                '+' + country?.replace(' ', '+')
+                +'&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
+                let res = await axios.get(url)
+                console.log(url)
+                console.log(res.data)
+                let lat = res.data.results[0].geometry.location.lat
+                let long = res.data.results[0].geometry.location.lng
+
+                user.address = await Address.save( new Address({ street, city, country,  lat, long, user: temp, }));
+            }
             else 
                 user.address = address
         }

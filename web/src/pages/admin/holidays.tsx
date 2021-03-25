@@ -1,9 +1,8 @@
-import { Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import React from "react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { Header } from "../../components/sections/Header";
-import { PriceModal } from "../../components/sections/PriceModal";
-import DataTable from 'react-data-table-component'
+import React from "react";
+import DataTable from 'react-data-table-component';
+// import { PriceModal } from "../../components/sections/PriceModal";
 
 
 
@@ -19,7 +18,7 @@ const columns = [
 	{name: "Pharmacy", selector:"pharmacy"},
 	{name: "Type", selector:"type"},
 	{name: "Price", selector:"price", sortable:true},
-	{cell: row => <div><Button size="sm" colorScheme='teal'>Confirm</Button></div> },
+	{name: '', cell: row => <div><Button size="sm" colorScheme='teal'>Confirm</Button></div> },
 ]
 
 export default function Holidays() {
@@ -37,11 +36,11 @@ export default function Holidays() {
       selectableRows
     />
 		</Box>
-      <PriceModal
+      {/* <PriceModal
         onOpen={modal.onOpen}
         isOpen={modal.isOpen}
         onClose={modal.onClose}
-      />
+      /> */}
     </>
   );
 }

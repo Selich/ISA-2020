@@ -42,17 +42,18 @@ export const AddAllergieModal: any = ({ onOpen, isOpen, onClose }) => {
 			let user = localStorage.getItem('user')
 			user = JSON.parse(user)
 			let userAllergies = null
-			if(user.allergies === null || user.allergies === undefined)
-				 userAllergies = []
-			else{
-				 setStoredData(user.allergies)
-				 userAllergies = user.allergies.map(item => item.name)
-			}
+			// if(user.allergies === null || user.allergies === undefined)
+			// 	 userAllergies = []
+			// else{
+			// 	 setStoredData(user.allergies)
+			// 	 userAllergies = user.allergies.map(item => item.name)
+			// }
 
 			let ret = [] 
 			let ret2 = [] 
 			temp.forEach(item => ret.push({value: item, label: item}))
-			userAllergies.forEach(item => ret.push({value: item, label: item}))
+      if(userAllergies)
+			  userAllergies.forEach(item => ret.push({value: item, label: item}))
 			setPickerItems(ret)
 			setSelectedItems(ret2)
 
@@ -65,8 +66,7 @@ export const AddAllergieModal: any = ({ onOpen, isOpen, onClose }) => {
 	async function handleClick(){
 			let allergies = JSON.stringify(selectedItems)
 			const response = await addAllergie({allergies});
-			router.push('/user/profile')
-
+      onClose()
 
 	}
 

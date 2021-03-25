@@ -124,6 +124,8 @@ export type Address = {
   version: Scalars['ID'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  lat?: Maybe<Scalars['String']>;
+  long?: Maybe<Scalars['String']>;
   street?: Maybe<Scalars['String']>;
   city?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
@@ -213,8 +215,6 @@ export type Pharmacy = {
   updatedAt: Scalars['String'];
   address?: Maybe<Address>;
   name?: Maybe<Scalars['String']>;
-  long?: Maybe<Scalars['String']>;
-  lat?: Maybe<Scalars['String']>;
   inventory: Inventory;
   prices: Array<Price>;
   admins: Array<Employee>;
@@ -1046,7 +1046,7 @@ export type PharmacyMutation = (
   { __typename?: 'Mutation' }
   & { pharmacy?: Maybe<(
     { __typename?: 'Pharmacy' }
-    & Pick<Pharmacy, 'name' | 'lat' | 'long'>
+    & Pick<Pharmacy, 'name'>
     & { address?: Maybe<(
       { __typename?: 'Address' }
       & Pick<Address, 'street' | 'city' | 'country'>
@@ -1240,7 +1240,7 @@ export type ContainsMedicineQuery = (
   { __typename?: 'Query' }
   & { containsMedicine?: Maybe<Array<(
     { __typename?: 'Pharmacy' }
-    & Pick<Pharmacy, 'name' | 'long' | 'lat'>
+    & Pick<Pharmacy, 'name'>
     & { address?: Maybe<(
       { __typename?: 'Address' }
       & Pick<Address, 'street' | 'city' | 'country'>
@@ -1341,7 +1341,7 @@ export type PatientQuery = (
       & Pick<Tier, 'name'>
     )>, address: (
       { __typename?: 'Address' }
-      & Pick<Address, 'street' | 'city' | 'country'>
+      & Pick<Address, 'street' | 'city' | 'country' | 'long' | 'lat'>
     ) }
   )> }
 );
@@ -1353,10 +1353,10 @@ export type PharmaciesQuery = (
   { __typename?: 'Query' }
   & { pharmacies?: Maybe<Array<(
     { __typename?: 'Pharmacy' }
-    & Pick<Pharmacy, 'id' | 'name' | 'long' | 'lat' | 'averageRating'>
+    & Pick<Pharmacy, 'id' | 'name' | 'averageRating'>
     & { address?: Maybe<(
       { __typename?: 'Address' }
-      & Pick<Address, 'street' | 'city' | 'country'>
+      & Pick<Address, 'street' | 'city' | 'country' | 'long' | 'lat'>
     )> }
   )>> }
 );
@@ -1722,8 +1722,6 @@ export const PharmacyDocument = gql`
     mutation Pharmacy($id: String!) {
   pharmacy(id: $id) {
     name
-    lat
-    long
     address {
       street
       city
@@ -1901,8 +1899,6 @@ export const ContainsMedicineDocument = gql`
       city
       country
     }
-    long
-    lat
   }
 }
     `;
@@ -2012,6 +2008,8 @@ export const PatientDocument = gql`
       street
       city
       country
+      long
+      lat
     }
   }
 }
@@ -2025,12 +2023,12 @@ export const PharmaciesDocument = gql`
   pharmacies {
     id
     name
-    long
-    lat
     address {
       street
       city
       country
+      long
+      lat
     }
     averageRating
   }
