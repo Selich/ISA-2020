@@ -37,7 +37,6 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => {
 
         }
 
-
     }
     return (
         <>
@@ -97,7 +96,13 @@ const MedicinesTable = (): JSX.Element => {
         if (!data.shop) {
             body = <p> no data </p>
         } else {
-            body = (<>
+					body = (
+						<>
+            <Grid columns={2}>
+                <Box m={10}>
+                    <FormLabel>Rating: {data.rating}</FormLabel>
+                </Box>
+                <Box m={10}>
                 <DataTable
                     columns={columns}
                     data={data.shop}
@@ -108,6 +113,8 @@ const MedicinesTable = (): JSX.Element => {
                     persistTableHead
                     expandableRowsComponent={<ExpandedComponent data={this} />}
                 />
+                </Box>
+							</Grid>
                 <PharmacyBuyModal
                     onOpen={buyItemModal.onOpen}
                     isOpen={buyItemModal.isOpen}
