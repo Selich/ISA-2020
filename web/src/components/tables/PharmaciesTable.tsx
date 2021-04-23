@@ -1,6 +1,5 @@
 import { usePatientQuery } from "../../generated/graphql";
 import {
-  Avatar,
   Box,
   Image,
   Button,
