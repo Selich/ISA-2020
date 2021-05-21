@@ -1,17 +1,18 @@
 import { Appointment } from "../entities/Appointment";
 import { AppointmentDefinition } from "../entities/AppointmentDefinition";
-// import Patient from "../entities/Patient";
-// import { Pharmacy } from "../entities/Pharmacy";
+import jwt from "jsonwebtoken";
 import { IsNull } from 'typeorm'
 import moment from 'moment'
 import { MyContext } from "../types";
 import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
 import { GraphQLDateTime } from 'graphql-iso-date'
+import { sendAppointmentMail } from "../utils/sendMail";
 import { Pharmacy } from "../entities/Pharmacy";
 import { Employee } from "../entities/Employee";
 import { WorkingHours } from "../entities/WorkingHours";
+import User from '../entities/User';
 import Patient from "../entities/Patient";
-import { AppointmentInput } from "./types/dtos";
+import { UserInput, AppointmentInput } from "./types/dtos";
 
 
 function addMinutes(date: Date, minutes: number) {
@@ -31,10 +32,51 @@ function convertToDate(arr:  WorkingHours | Appointment[]): Date[]{
 export class AppointmentResolver {
 
     @Query(() => [Appointment], { nullable: true })
+    async appointmentsByUser(
+				@Arg("token") token: string,
+				@Arg("from")	from: string,
+				@Arg("until") until: string,
+    ): Promise<any> {
+				if(!token) return null
+				let temp = jwt.decode(token)
+				if(!temp) return null
+			//@ts-ignore
+				let user = await User.findOne({ email: temp.email });
+				if(!user) return null
+				let appointments = null
+				if(user.role === 'patient')
+					appointments = await Appointment.find({ patient: user })
+
+				// add for employee
+				
+				let dateFrom = Date.parse(from)
+			//@ts-ignore
+				let dateUntil = null
+				if (until) dateUntil = new Date(until)
+				console.log(dateFrom)
+//
+				appointments = appointments?.filter(item => Date.parse(item.begin) >= dateFrom)
+				return appointments
+
+				
+    }
+
+    @Query(() => [Appointment], { nullable: true })
     async appointments(
         @Ctx() { req }: MyContext
     ): Promise<Appointment[]> {
         return await Appointment.find({})
+    }
+
+    @Query(() => [Appointment], { nullable: true })
+    async freeAppointments(
+        @Arg("pharmacyId") pharmacyId: string,
+    ): Promise<Appointment[]> {
+				let id = parseInt(pharmacyId)
+			let pharmacy = await Pharmacy.findOneOrFail({id:id})
+			console.log(pharmacy)
+			let app =  await Appointment.find({ pharmacy: pharmacy, patient: IsNull() })
+			return app
     }
 
     @Query(() => [AppointmentDefinition], { nullable: true })
@@ -86,19 +128,55 @@ export class AppointmentResolver {
     }
 
     @Mutation(() => Appointment, { nullable: true })
+    async unschedule(
+        @Arg("inputs") inputs: AppointmentInput,
+    ) {
+
+			console.log(inputs)
+			if(!inputs.id) return null
+			let id = parseInt(inputs.id)
+			let appointment = await Appointment.findOneOrFail({id: id })
+			//@ts-ignore
+			appointment.patient = null
+
+			appointment.save()
+
+
+
+			return appointment
+		}
+
+    @Mutation(() => Appointment, { nullable: true })
     async schedule(
         @Arg("inputs") inputs: AppointmentInput,
-        @Ctx() { req }: MyContext
+        @Ctx() { mailer }: MyContext
     ) {
+
 			
-		
+			if(!inputs.id) return null
+			if(!inputs.pharmacy) return null
+			if(!inputs.pharmacy.id) return null
+
+			let id = parseInt(inputs.id)
+			let pharmId = parseInt(inputs.pharmacy.id)
+			let appointment = await Appointment.findOneOrFail({id: id })
 			let patient = await Patient.findOneOrFail({email: inputs.patient?.email})
 			let employee = await Employee.findOneOrFail({email: inputs.employee?.email})
-			//@ts-ignore
-			let pharmId = parseInt(inputs.pharmacy?.id)
 			let pharmacy = await Pharmacy.findOneOrFail({id: pharmId})
-			let definitions = await AppointmentDefinition.findOneOrFail({ kind: inputs.kind })
+			appointment.patient = patient
+			appointment.employee = employee
+			appointment.pharmacy = pharmacy
+			appointment.save()
+			sendAppointmentMail(patient, appointment, mailer).then(
+				res => console.log(res)
+			)
+			//@ts-ignore
+			//let definitions = await AppointmentDefinition.findOneOrFail({ kind: inputs.kind })
 
+			return appointment
+
+
+			/**
 			//Check if free
 			let employeeWH = employee.workingHours.filter(item => item.pharmacy.id === pharmacy.id)[0]
 
@@ -131,6 +209,7 @@ export class AppointmentResolver {
 
 			app.save()
 			return app
+			**/
 
     }
 

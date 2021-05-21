@@ -36,8 +36,6 @@ export default function LoginForm({ onClose, setUser }) {
             initCart()
             if (roles.employees.includes(user.role) && !user.isEnabled)
                 router.push("/fstlogin");
-            else if(roles.all.includes(user.role))
-                router.push('/' + user.role);
             onClose()
           }
         }}

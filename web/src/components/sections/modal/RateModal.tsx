@@ -1,9 +1,6 @@
 import { VStack, Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import ReactStars from "react-rating-stars-component";
 import React from "react";
-import TierForm from "../forms/TierForm";
-import { FaFacebook } from 'react-icons/fa'
-
 
 export const RateModal: any = ({ onOpen, isOpen, onClose, data }) => {
     const btnRef = React.useRef()

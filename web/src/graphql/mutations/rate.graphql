@@ -1,0 +1,8 @@
+mutation Rate(
+  $inputs: RatingInput!
+
+) {
+  rate( inputs: $inputs){
+      createdAt
+  }
+}

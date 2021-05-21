@@ -1,0 +1,5 @@
+mutation AddReservation( $inputs: ReservationInput! ) {
+  reserveMedicine( inputs: $inputs) {
+      id
+  }
+}

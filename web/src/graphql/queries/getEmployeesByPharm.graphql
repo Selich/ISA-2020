@@ -1,0 +1,23 @@
+query GetEmployeesByPharm 
+(
+  $inputs: EmployeeInput!
+) {
+  getEmployeesByPharm (
+    inputs: $inputs
+  ){
+    id
+    email,
+    firstName,
+    lastName,
+    holidays {
+      from
+      until
+    }
+    workingHours{
+      from
+      until
+    }
+    averageRating
+
+  }
+}

@@ -1,4 +1,4 @@
-import { Column, Entity, Generated, ManyToOne, OneToOne } from 'typeorm'
+import { ChildEntity, Column, Entity, Generated, ManyToOne, OneToOne } from 'typeorm'
 import { ObjectType, Field } from 'type-graphql';
 import  Patient  from "./Patient";
 import { MedicineList } from './MedicineList';
@@ -6,7 +6,7 @@ import { Appointment } from './Appointment';
 import { Employee } from './Employee';
 
 @ObjectType()
-@Entity()
+@ChildEntity()
 export class Prescription extends MedicineList{
 
   @Field(() => Patient)

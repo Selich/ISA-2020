@@ -10,13 +10,13 @@ import { Prescription } from "./Prescription";
 @Entity()
 export class Appointment extends Model{
 
-  @Field(() => Patient)
-  @ManyToOne(() => Patient, item => item.appointments)
+	@Field(() => Patient, {nullable:true})
+	@ManyToOne(() => Patient, item => item.appointments, {eager:true, cascade: false, nullable:true})
   @JoinTable()
   patient: Patient;
 
 	@Field(() => Employee, {nullable: true})
-  @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: true })
+  @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: false })
   @JoinTable()
   employee: Employee;
 

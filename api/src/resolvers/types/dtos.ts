@@ -92,6 +92,8 @@ export class UserInput {
   address?: AddressInput;
   @Field({ nullable: true})
   telephone?: string;
+  @Field({ nullable: true})
+  isEnabled?: boolean;
 }
 
 @InputType()
@@ -162,6 +164,8 @@ export class MedicineItemInput {
 
 @InputType()
 export class AppointmentInput {
+  @Field({ nullable: true })
+  id?: string;
   @Field({ nullable: true })
   patient?: PatientInput;
   @Field({ nullable: true })
@@ -280,18 +284,16 @@ export class ComplaintInput {
 
 @InputType()
 export class ReservationInput {
-	@Field(() => PharmacyInput, {nullable:true})
-  pharmacy?: PharmacyInput;
-	@Field(() => PatientInput, {nullable:true})
-  patient?: PatientInput;
-	@Field(() => MedicineItemInput, {nullable:true})
-  medicineItem: MedicineItemInput;
+	@Field(() => String, {nullable:true})
+  pharmacyId?: string;
+	@Field(() => String, {nullable:true})
+  patientId?: string;
+	@Field(() => String, {nullable:true})
+  medicineId?: string;
 	@Field(() => String, { nullable: true })
   deadline?: string;
+	@Field(() => Number, { nullable: true })
+  quantity?: number;
 	@Field(() => String, { nullable: true })
-  pickupDate?: string;
-	@Field({ nullable: true })
-  isBought?: boolean;
-	@Field(() => String, { nullable: true })
-  id?: string;
+  token?: string;
 }

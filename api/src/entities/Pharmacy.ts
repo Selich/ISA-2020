@@ -57,7 +57,7 @@ export class Pharmacy extends Model {
   @OneToMany(() => EPrescription, item => item.patient, {nullable: true})
   ePrescriptions: EPrescription[];
 
-  @OneToMany(() => WorkingHours, item => item.pharmacy, {nullable: true})
+	@OneToMany(() => WorkingHours, item => item.pharmacy, {nullable: true, eager:false})
   workingHours: WorkingHours[];
 
   @Field(() => [Appointment])

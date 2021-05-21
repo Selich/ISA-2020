@@ -1,79 +1,79 @@
-import { Box, Button, HStack, SimpleGrid, Text } from "@chakra-ui/react";
-import NextLink from "next/link";
-import React from "react";
-import { Bar } from 'react-chartjs-2'
+import React, { useState, useEffect } from "react";
+import {
+  Tabs,
+  TabList,
+  Tab,
+  TabPanels,
+  TabPanel,
+  Box,
+  Button,
+  SimpleGrid,
+  Text,
+  HStack,
+} from "@chakra-ui/react";
+import { useEmployeeQuery } from "../../generated/graphql";
+import { PatientDetails } from "../../components/layouts/patient/PatientDetails";
+import { PatientProfile } from "../../components/layouts/patient/PatientProfile";
+import { getUserDetails } from "../../utils/getUserDetails";
+import { PharmaciesTable } from  '../../components/tables/PharmaciesTable'
+import { HistoryTableDerm } from  '../../components/tables/HistoryTableDerm'
+import { HistoryTablePharm } from  '../../components/tables/HistoryTablePharm'
+import { EPrescriptionsTable } from  '../../components/tables/EPrescriptionsTable'
+import { ReservationsTable } from "../../components/tables/ReservationsTable";
+import { SubscriptionTable } from "../../components/tables/SubscriptionTable";
 
+const TabMenu = () => (
+            <TabList>
+              <Tab>Examinations</Tab>
+              <Tab>Consultation</Tab>
+              <Tab>Pharmacies</Tab>
+              <Tab>E-Prescriptions</Tab>
+              <Tab>Reservations</Tab>
+              <Tab>Subscriptions</Tab>
+              <Tab>Profile</Tab>
+            </TabList>
+)
+
+const View = ({ data }) => (
+  <>
+    <Box m="4" p="8" fontSize="2rem">
+        <Box align="center">
+          <PatientDetails data={data} />
+					<hr/>
+          <Tabs isFitted variant="soft-rounded" colorScheme="green">
+						<TabMenu/>
+            <TabPanels>
+              <TabPanel>
+								<Button>
+									Schedule New Examination +
+								</Button>
+								<HistoryTableDerm/>
+              </TabPanel>
+              <TabPanel>
+								<HistoryTablePharm/>
+              </TabPanel>
+              <TabPanel>
+								<PharmaciesTable user={data}/>
+              </TabPanel>
+              <TabPanel>
+								<EPrescriptionsTable/>
+              </TabPanel>
+              <TabPanel>
+								<ReservationsTable/>
+              </TabPanel>
+              <TabPanel>
+								<SubscriptionTable data={data}/>
+              </TabPanel>
+              <TabPanel>
+								<PatientProfile/>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+				</Box>
+    </Box>
+  </>
+);
 
 export default function Index() {
-
-	return (
-		<>
-			<Box
-				m="4"
-				p="8"
-				border="1px"
-				rounded="2px"
-				borderColor="gray.300"
-				boxShadow="md"
-				bg="grey.200"
-				color="#2d383c"
-				fontSize="2rem"
-				textAlign="center"
-				h="1200px"
-			>
-				<SimpleGrid columns={2} spacing={0} maxH="600px">
-					<Box align="left" >
-						<Bar
-							data={data}
-							width={100}
-							height={50}
-						></Bar>
-						{/* 
-							pregledi: ( bar )
-								mesec,quart, godina
-							potroseni lekovi ( bar )
-								mesec,quart, godina
-						 */}
-						{/* <Text fontSize={28}>Welcome!</Text>
-						<hr />
-						<Text fontSize={18} m={2}>Your daily stats:</Text>
-						<HStack>
-							<Text fontSize={17} m={2}>Penalty: </Text>
-							<Text fontSize={19}> {data.patient.penalty}</Text>
-						</HStack>
-						<Text fontSize={17} m={2}>Score: {data.patient.score}</Text> */}
-					</Box>
-					<Box align="right">
-						<Box>
-							<NextLink href="/user/consultation">
-								<Button w={180} >Consultation</Button>
-							</NextLink>
-						</Box>
-						<Box>
-							<NextLink href="/user/examinations">
-								<Button w={180} >Examinations</Button>
-							</NextLink>
-						</Box>
-						<Box> <Button w={180} >Schedule</Button> </Box>
-						<Box>
-							<NextLink href="/user/eprescriptions">
-								<Button w={180} >Eprescriptions</Button>
-							</NextLink>
-						</Box>
-						<Box>
-							<NextLink href="/user/reservations">
-								<Button w={180} >Reservations</Button>
-							</NextLink>
-						</Box>
-						<Box> <Button w={180} >Reservations</Button> </Box>
-						<Box> <Button w={180} >Subscriptions</Button> </Box>
-						<Box>
-							<Button w={180} >Report Issue</Button>
-						</Box>
-						<Box> <Button w={180} >Get Medicine</Button> </Box>
-					</Box>
-				</SimpleGrid>
-			</Box>
-		</>
-	)
+  return getUserDetails(<View data />, useEmployeeQuery);
 }

@@ -14,7 +14,9 @@ import { ComplaintInput, RatingInput, SubscriptionInput } from "./types/dtos";
 export class PatientResolver {
 
   @Query(() => Patient, { nullable: true })
-  async patient( @Arg("token") token: string) {
+	async patient( 
+		@Arg("token") token: string
+	) {
     console.log(token)
     let temp = jwt.decode(token)
     //@ts-ignore
@@ -262,5 +264,49 @@ export class PatientResolver {
     return user
 
   }
+
+  @Mutation(() => Rating, { nullable: true })
+  async rate(
+    @Arg("inputs") inputs: RatingInput,
+		@Ctx() { req }: MyContext) 
+	{
+		if(!inputs) return null
+		if(!inputs.rating) return null
+		let patient = null
+    if (inputs.patient){
+        patient = await Patient.findOneOrFail({ email: inputs.patient.email })
+    }
+		if(!patient) return null
+
+		let rating = new Rating()
+		rating.patient = patient
+		rating.rating = inputs.rating
+
+		if(inputs.employee){
+			let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
+			rating.employee = employee
+
+
+			let average = employee.schedule
+			let avg = 0
+			average.forEach(item => avg += item.score )
+			avg = avg / average.length
+
+
+			console.log(avg)
+
+			employee.averageRating = avg
+			employee.save()
+
+			rating.save()
+
+		}
+
+
+
+    return rating
+
+  }
+
 
 }

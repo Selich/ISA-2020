@@ -1,4 +1,4 @@
-import { JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
+import { TableInheritance, JoinColumn, ManyToOne, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, OneToOne, OneToMany, JoinTable, BeforeInsert } from 'typeorm'
 import { Address } from "./Address";
 import { ObjectType, Field, ID } from 'type-graphql';
 import { IsEmail, IsEnum, Length } from 'class-validator'
@@ -10,6 +10,7 @@ const roles = [
 
 @ObjectType()
 @Entity()
+@TableInheritance({ column: { type: "varchar", name: "type" } })
 export default class User extends Model {
   @Field(() => Boolean)
   @Column({ default: false })

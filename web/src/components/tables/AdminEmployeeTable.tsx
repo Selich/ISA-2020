@@ -25,11 +25,11 @@ import {
 import DataTable from "react-data-table-component";
 import swal from "sweetalert";
 
-export const EmployeeTable = ({kind}): JSX.Element => {
+export const AdminEmployeeTable = (): JSX.Element => {
   const [{ fetching, data }] = useEmployeesQuery({
     variables: {
       inputs: {
-        role: (kind) ? kind : "any",
+        role: "any",
       },
     },
   });
@@ -44,13 +44,32 @@ export const EmployeeTable = ({kind}): JSX.Element => {
       name: "",
       button: true,
       cell: row => (
-        <Button size="sm" onClick={() => handleSelect(row)} colorScheme="red">
+        <Button size="sm" onClick={() => remove(row)} colorScheme="red">
           Remove
         </Button>
       ),
     },
   ];
-  const handleSelect = async (row) => {
+  const remove = (row) => {
+    handleRemove(row, removeEmployee);
+  };
+  const handleRemove = async (row, removeEmployee) => {
+    swal({
+      title: "Are you sure?",
+      text: "Do you want to delete user " + row.firstName + " " + row.lastName,
+      icon: "warning",
+      //@ts-ignore
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+				let inputs = row
+        removeEmployee(row.id);
+        swal("User removed", {
+          icon: "success",
+        });
+      }
+    });
   };
 
   let body = null;

@@ -30,28 +30,17 @@ const openModal = (item, onOpen) => {
     onOpen()
 }
 
-const EPrescriptionsTable = (): JSX.Element => {
+export const EPrescriptionsTable = (): JSX.Element => {
     const [filterText, setFilterText] = React.useState('');
-		const [_, eprescriptions] = useEprescriptionsMutation();
 		const [data, setData] = useState([])
     const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
-	useEffect(() =>{
-		let user = localStorage.getItem('user')
-		user = JSON.parse(user)
-		console.log(user)
-		//@ts-ignore
-		let email = user.email
-		console.log(email)
 
-		eprescriptions({email: email}).then(
-			res => setData(res.data.eprescriptions)
-		).catch( err => alert(err) )
+		useEffect(() =>{
 
-	},[])
+		},[])
     return (
         <>
                 <DataTable
-                    title="EPrescriptions"
                     columns={columns}
                     data={data}
                     pagination
@@ -61,4 +50,3 @@ const EPrescriptionsTable = (): JSX.Element => {
     )
 
 }
-export default EPrescriptionsTable;

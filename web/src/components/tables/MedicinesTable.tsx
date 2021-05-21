@@ -13,10 +13,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-// import { FaCancel } from 'react-icons'
 import DataTable from "react-data-table-component";
 import { useShopQuery } from "../../generated/graphql";
 import { PharmacyBuyModal } from "../sections/modal/PharmacyBuyModal";
+import { usePatientQuery } from "../../generated/graphql";
+import Cookies from "js-cookie";
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => {
   let [{ data, fetching }] = useShopQuery();
@@ -33,16 +34,6 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => {
       data.shop.forEach((element) => alert(element));
       //@ts-ignore
       let unique = [...new Set(types)];
-      // if (unique.size == 0){
-      // 	ret = (<p value="option1">test</p>)
-      // } else {
-      // 	ret = (
-      // 	  <Select size="sm" placeholder="All">
-      // 		</Select>
-
-      // 	)
-
-      // }
     }
   }
   return (
@@ -81,6 +72,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => {
 const MedicinesTable = (): JSX.Element => {
   const [resetPaginationToggle, _] = React.useState(false);
   const [item, setItem] = React.useState(null);
+  const token = Cookies.get("token");
   const buyItemModal = useDisclosure();
   const columns = [
     { name: "Name", selector: "name", sortable: true },
@@ -93,7 +85,7 @@ const MedicinesTable = (): JSX.Element => {
       cell: (row) => (
         <Button
           size="sm"
-          onClick={(val) => {
+          onClick={() => {
             setItem(row);
             buyItemModal.onOpen();
           }}
@@ -104,10 +96,8 @@ const MedicinesTable = (): JSX.Element => {
       ),
     },
   ];
-  useEffect(() => {
-    setItem(item);
-  }, [item]);
 
+  let [patientData] = usePatientQuery({ variables: { token: token, }, });
   let [{ data, error, fetching }] = useShopQuery();
   let body = null;
   if (error) alert(error);
@@ -129,11 +119,12 @@ const MedicinesTable = (): JSX.Element => {
                 subHeader
                 expandableRows
                 persistTableHead
-                expandableRowsComponent={<ExpandedComponent data={this} />}
+                expandableRowsComponent={<ExpandedComponent data={this} patient={patientData}/>}
               />
             </Box>
           </Grid>
           <PharmacyBuyModal
+						patient={token}
             onOpen={buyItemModal.onOpen}
             isOpen={buyItemModal.isOpen}
             onClose={buyItemModal.onClose}
@@ -147,7 +138,7 @@ const MedicinesTable = (): JSX.Element => {
 };
 export default MedicinesTable;
 
-export const ExpandedComponent = ({ data }) => {
+export const ExpandedComponent = ({ data, patient }) => {
   return (
     <>
       <SimpleGrid columns={3}>

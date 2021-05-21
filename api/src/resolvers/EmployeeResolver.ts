@@ -45,6 +45,29 @@ export class EmployeeResolver {
     //@ts-ignore
 		return await Employee.findOne({email: temp.email});
   }
+  @Query(() => [Employee], { nullable: true })
+  async dermsByPharm(
+       @Arg('token') token: string,
+  ) {
+		let temp = jwt.decode(token)
+    //@ts-ignore
+		let employee =  await Employee.findOne({email: temp.email});
+		let pharm = await Pharmacy.findOneOrFail({id: employee?.pharmacy.id})
+
+  }
+
+  @Query(() => [Employee], { nullable: true })
+  async getEmployeesByPharm(
+       @Arg('inputs') inputs: EmployeeInput,
+  ) {
+		console.log(inputs)
+		if(!inputs.pharmacy) return null
+		let id = parseInt(inputs.pharmacy)
+		let pharm = await Pharmacy.findOneOrFail({id: id})
+		let emp =  await Employee.find({pharmacy: pharm, role: 'derm'})
+		return emp
+  }
+
 
   @Query(() => [Employee], { nullable: true })
   async employees(

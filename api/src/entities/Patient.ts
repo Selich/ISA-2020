@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToMany,
+	ChildEntity,
   ManyToOne,
   Column,
 } from "typeorm";
@@ -20,7 +21,7 @@ import { Tier } from "./Tier";
 import User from "./User";
 
 @ObjectType()
-@Entity()
+@ChildEntity()
 export default class Patient extends User {
   @Field(() => [Appointment], { nullable: true })
   @OneToMany(() => Appointment, (item) => item.patient, {nullable: true})
@@ -39,7 +40,7 @@ export default class Patient extends User {
   ePrescriptions: EPrescription[];
 
   @Field(() => [Reservation])
-	@OneToMany(() => Reservation, (item) => item.patient, {eager: true, cascade:true,  nullable: true})
+	@OneToMany(() => Reservation, (item) => item.patient, {eager: false, cascade:true,  nullable: true})
   reservations: Reservation[];
 
   @Field(() => [Rating])

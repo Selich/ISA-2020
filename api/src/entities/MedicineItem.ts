@@ -38,9 +38,6 @@ export class MedicineItem extends Model{
   @Column({ nullable: true})
   currentPrice: number;
 
-	@Field(() => [Price], {nullable: true})
-	@OneToMany(() => Price, item => item.medicineItem, { nullable: true, eager:true, cascade:true})
-  prices: Price[];
 
 	@Field(() => String, {nullable:true})
   @Column({ nullable: true})

@@ -38,37 +38,44 @@ export class ReservationResolver {
     @Arg("inputs") inputs: ReservationInput,
     @Ctx() { req, mailer }: MyContext
   ) {
-    let user = req.session.user;
-    if (!user)
+		if(!inputs.token) return null
+		let temp = jwt.decode(inputs.token)
+    //@ts-ignore
+		let user = await Patient.findOne({email: temp.email})
+		if(!user) return null
+
+    //let user = req.session.user;
+    //if (!user)
 			//@ts-ignore
-      user = await Patient.findOneOrFail({ email: inputs.patient.email });
-		console.log(user)
+     // user = await Patient.findOneOrFail({ email: inputs.patient.email });
+		//console.log(user)
 
-
-    if (!inputs.medicineItem.id) return null;
+    if (!inputs.medicineId) return null;
+    if (!inputs.pharmacyId) return null;
     //@ts-ignore
-    let medicineId = parseInt(inputs.medicineItem.id);
+    let medicineId = parseInt(inputs.medicineId);
+    let pharmacyId = parseInt(inputs.pharmacyId);
     //@ts-ignore
-    let id = parseInt(inputs.pharmacy.id);
-		let medItem = await MedicineItem.findOneOrFail({id: medicineId})
-		console.log(medItem)
+    let id = parseInt(inputs.pharmacyId);
+		let medicine = await Medicine.findOneOrFail({id: medicineId})
+		let medItem = await MedicineItem.findOneOrFail({details: medicine})
+		let pharmacy = await Pharmacy.findOneOrFail({ id: pharmacyId });
 
     let reservation = new Reservation();
     let medicineItem = new MedicineItem();
+
     medicineItem.currentPrice = medItem.currentPrice;
     medicineItem.details = medItem.details;
-		if(inputs.medicineItem.quantity)
-    medicineItem.quantity = inputs.medicineItem.quantity;
+
+		if(inputs.quantity)
+    medicineItem.quantity = inputs.quantity;
     medicineItem.reservation = reservation;
     medicineItem.save();
-
-    if(!inputs.medicineItem) return null;
 
     medItem.quantity = medItem.quantity - medicineItem.quantity;
     medItem.version = medItem.version + 1;
     medItem.save();
 
-    reservation.pharmacy = await Pharmacy.findOneOrFail({ id });
     reservation.medicineItem = medicineItem;
     reservation.patient = user;
     if (inputs.deadline) reservation.deadline = inputs.deadline;
@@ -79,7 +86,7 @@ export class ReservationResolver {
 		user.reservations.push(reservation)
 		user.save()
 
-		let code = 'random_code'
+		let code = pharmacyId + medicineId + '' 
     sendReservationMail(user, mailer, reservation, code);
 
     return reservation;

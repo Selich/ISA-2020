@@ -74,11 +74,11 @@ export class MedicineResolver {
 		let res = inventory.medicines.filter(item => item.details.code === inputs.details.code)
 		if (!res) {
 			let medicineItem = new MedicineItem()
-			medicineItem.prices = []
+			medicineItem.details.prices = []
 			if (inputs.quantity)
 				medicineItem.quantity = inputs.quantity
 			if (inputs.currentPrice) {
-				medicineItem.prices.push(new Price({
+				medicineItem.details.prices.push(new Price({
 					price: inputs.currentPrice,
 					medicineItem: medicineItem,
 					from: new Date()

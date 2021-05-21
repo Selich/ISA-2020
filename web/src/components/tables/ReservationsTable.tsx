@@ -27,7 +27,7 @@ const columns = [
 ]
 
 
-export default function ReservationsTable() {
+export function ReservationsTable() {
   return (
 	  <DataTable
       data={data}

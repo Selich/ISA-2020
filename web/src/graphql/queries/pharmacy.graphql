@@ -1,6 +1,7 @@
-mutation Pharmacy($id: String!) {
+query Pharmacy($id: String!) {
   pharmacy(id: $id){
       name
+      averageRating
       address{
         street
         city

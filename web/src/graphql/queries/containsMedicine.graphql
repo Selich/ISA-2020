@@ -1,11 +1,12 @@
 query ContainsMedicine($id: String!) {
-  containsMedicine( id: $id){
-      name,
-      address{
-        street,
-        city,
-        country
-      }
+  containsMedicine(id: $id) {
+    pharmacy {
+      id
+      name
+    }
+    medicineItem{
+      currentPrice
+    }
+    
   }
-
 }

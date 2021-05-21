@@ -14,7 +14,7 @@ export class WorkingHours extends Model{
   employee:  Employee;
 
   @Field(() =>  Pharmacy)
-	@ManyToOne(() => Pharmacy, item => item.workingHours, {eager:true})
+	@ManyToOne(() => Pharmacy, item => item.workingHours, {eager:false})
   @JoinTable()
   pharmacy:  Pharmacy;
 

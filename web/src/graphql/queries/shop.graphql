@@ -1,5 +1,6 @@
 query Shop {
   shop {
+      id,
       code,
       name,
       kind,

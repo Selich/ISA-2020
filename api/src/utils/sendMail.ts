@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import { Employee } from "../entities/Employee";
 import { Reservation } from "../entities/Reservation";
 import Patient from "../entities/Patient";
-import User from "../entities/User";
+import {Appointment} from "../entities/Appointment";
 
 export async function sendCreateTokenMail(
   to: Employee,
@@ -129,6 +129,27 @@ export async function sendHolidayStatusUpdate(
   console.log("Message sent: " + info.messageId);
   console.log(nodemailer.getTestMessageUrl(info));
 }
+export async function sendAppointmentMail(to: Patient, appointment: Appointment, mailer: any) {
+  let hello = "<h3> Hello " + to.firstName + " " + to.lastName + "</h3>"
+	let msg = '<p>Scheduled appointment with doctor: ' + appointment.employee.firstName 
+		+ ' ' + appointment.employee.lastName
+		+ ' ' + '\'' + appointment.employee.email + '\'' 
+		+ 'at: '
+		+ appointment.begin + '.<p>';
+
+  let info = await mailer.sendMail({
+    from: '"Admin Admin" <barry85@ethereal.email>',
+    to: to.email,
+    subject: "Scheduled appointment ✔",
+    text: "Scheduled Appointment",
+    html: hello + msg,
+  });
+
+  console.log("Message sent: " + info.messageId);
+  console.log(nodemailer.getTestMessageUrl(info));
+  return nodemailer.getTestMessageUrl(info)
+}
+
 
 export async function sendVerificationMail(to: Patient, mailer: any) {
   let hello = "<h3> Hello " + to.firstName + " " + to.lastName + "</h3>"

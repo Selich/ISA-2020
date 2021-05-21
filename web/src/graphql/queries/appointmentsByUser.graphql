@@ -1,0 +1,30 @@
+query AppointmentsByUser(
+  $token: String!
+  $from: String!
+  $until: String!
+){
+  appointmentsByUser(
+    token: $token,
+    from: $from,
+    until: $until
+  ){
+    id
+    employee{
+      firstName
+      lastName
+      role
+      email
+      averageRating
+    }
+    patient{
+      firstName
+      lastName
+    }
+    begin
+    price
+    length
+    isVisited
+
+  
+  }
+}

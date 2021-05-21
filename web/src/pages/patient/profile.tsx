@@ -17,7 +17,6 @@ import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { MdHome } from "react-icons/md";
 import { FormInput } from "../../components/sections/FormInput";
-import { AddAllergieModal } from "../../components/sections/modal/AddAllergieModal";
 import { EditProfileModal } from "../../components/sections/modal/EditProfileModal";
 import { SubListModal } from "../../components/sections/modal/SubListModal";
 import { usePatientQuery } from "../../generated/graphql";
@@ -36,7 +35,6 @@ export default function Profile() {
   }
 
   const subModal = useDisclosure();
-  const addAllergie = useDisclosure();
   let user = null;
   let body = null;
 
@@ -167,9 +165,6 @@ export default function Profile() {
               )}
             <Box>
               {" "}
-              <Button w={180} onClick={addAllergie.onOpen}>
-                Add Allergie
-              </Button>{" "}
             </Box>
             <Box>
               {" "}
@@ -181,11 +176,6 @@ export default function Profile() {
         </SimpleGrid>
       </Box>
 
-      <AddAllergieModal
-        onOpen={addAllergie.onOpen}
-        isOpen={addAllergie.isOpen}
-        onClose={addAllergie.onClose}
-      />
       <SubListModal
         onOpen={subModal.onOpen}
         isOpen={subModal.isOpen}

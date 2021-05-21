@@ -1,0 +1,20 @@
+query FreeAppointments(
+  $pharmacyId:String!
+) {
+	freeAppointments(pharmacyId: $pharmacyId){
+    id
+    employee{
+      firstName
+      email
+      lastName
+      averageRating
+    }
+    pharmacy{
+      name
+      
+    }
+    price
+    begin
+
+  }
+}

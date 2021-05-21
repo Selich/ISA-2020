@@ -1,7 +1,7 @@
-mutation Schedule( 
+mutation Unschedule( 
   $inputs: AppointmentInput!,
 ) {
-  schedule( 
+  unschedule( 
   inputs: $inputs
   ) { 
     begin

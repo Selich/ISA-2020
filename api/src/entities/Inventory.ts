@@ -1,12 +1,12 @@
 import { Field, InputType, ObjectType } from "type-graphql";
 import { OneToOne } from "typeorm/decorator/relations/OneToOne";
-import { BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinColumn } from 'typeorm'
+import { ChildEntity, BaseEntity, CreateDateColumn, UpdateDateColumn, Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, JoinColumn } from 'typeorm'
 import { Employee } from "./Employee";
 import { MedicineList } from "./MedicineList";
 import { Pharmacy } from "./Pharmacy";
 
 @ObjectType()
-@Entity()
+@ChildEntity()
 export class Inventory extends MedicineList{
 
   @Field(() => Employee)
