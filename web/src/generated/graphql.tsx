@@ -21,7 +21,6 @@ export type Query = {
   tiers?: Maybe<Array<Tier>>;
   me?: Maybe<User>;
   appointmentsByUser?: Maybe<Array<Appointment>>;
-  appointments?: Maybe<Array<Appointment>>;
   freeAppointments?: Maybe<Array<Appointment>>;
   definitions?: Maybe<Array<AppointmentDefinition>>;
   available?: Maybe<Array<Appointment>>;
@@ -55,8 +54,7 @@ export type QueryMeArgs = {
 
 
 export type QueryAppointmentsByUserArgs = {
-  until: Scalars['String'];
-  from: Scalars['String'];
+  inputs: AppointmentInput;
   token: Scalars['String'];
 };
 
@@ -440,6 +438,43 @@ export type User = {
   telephone: Scalars['String'];
 };
 
+export type AppointmentInput = {
+  id?: Maybe<Scalars['String']>;
+  patient?: Maybe<PatientInput>;
+  employee?: Maybe<EmployeeInput>;
+  pharmacy?: Maybe<PharmacyInput>;
+  kind?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']>;
+  discount?: Maybe<Scalars['Float']>;
+  report?: Maybe<Scalars['String']>;
+  isVisited?: Maybe<Scalars['String']>;
+  begin?: Maybe<Scalars['String']>;
+  length?: Maybe<Scalars['Float']>;
+};
+
+export type PatientInput = {
+  id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  confirmPassword?: Maybe<Scalars['String']>;
+  role?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressInput>;
+  telephone?: Maybe<Scalars['String']>;
+  isEnabled?: Maybe<Scalars['Boolean']>;
+  tier?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['String']>;
+  penalty?: Maybe<Scalars['String']>;
+};
+
+export type AddressInput = {
+  street?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+};
+
 export type EmployeeInput = {
   id?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -454,12 +489,6 @@ export type EmployeeInput = {
   pharmacy?: Maybe<Scalars['String']>;
   averageRating?: Maybe<Scalars['String']>;
   workingHours?: Maybe<Array<WorkingHoursInput>>;
-};
-
-export type AddressInput = {
-  street?: Maybe<Scalars['String']>;
-  city?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
 };
 
 export type WorkingHoursInput = {
@@ -616,6 +645,7 @@ export type MutationUnscheduleArgs = {
 
 export type MutationScheduleArgs = {
   inputs: AppointmentInput;
+  token: Scalars['String'];
 };
 
 
@@ -711,22 +741,6 @@ export type RatingInput = {
   rating?: Maybe<Scalars['Float']>;
 };
 
-export type PatientInput = {
-  id?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  confirmPassword?: Maybe<Scalars['String']>;
-  role?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  address?: Maybe<AddressInput>;
-  telephone?: Maybe<Scalars['String']>;
-  isEnabled?: Maybe<Scalars['Boolean']>;
-  tier?: Maybe<Scalars['String']>;
-  score?: Maybe<Scalars['String']>;
-  penalty?: Maybe<Scalars['String']>;
-};
-
 export type ComplaintInput = {
   patient?: Maybe<PatientInput>;
   employee?: Maybe<EmployeeInput>;
@@ -757,21 +771,6 @@ export type PatientResponse = {
   token?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<Patient>;
-};
-
-export type AppointmentInput = {
-  id?: Maybe<Scalars['String']>;
-  patient?: Maybe<PatientInput>;
-  employee?: Maybe<EmployeeInput>;
-  pharmacy?: Maybe<PharmacyInput>;
-  kind?: Maybe<Scalars['String']>;
-  score?: Maybe<Scalars['Float']>;
-  price?: Maybe<Scalars['Float']>;
-  discount?: Maybe<Scalars['Float']>;
-  report?: Maybe<Scalars['String']>;
-  isVisited?: Maybe<Scalars['String']>;
-  begin?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['Float']>;
 };
 
 export type HolidayInput = {
@@ -1207,6 +1206,7 @@ export type ReserveMedicineMutation = (
 );
 
 export type ScheduleMutationVariables = Exact<{
+  token: Scalars['String'];
   inputs: AppointmentInput;
 }>;
 
@@ -1280,25 +1280,9 @@ export type UnscheduleMutation = (
   )> }
 );
 
-export type AppointmentsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type AppointmentsQuery = (
-  { __typename?: 'Query' }
-  & { appointments?: Maybe<Array<(
-    { __typename?: 'Appointment' }
-    & Pick<Appointment, 'begin' | 'length'>
-    & { patient?: Maybe<(
-      { __typename?: 'Patient' }
-      & Pick<Patient, 'firstName' | 'lastName'>
-    )> }
-  )>> }
-);
-
 export type AppointmentsByUserQueryVariables = Exact<{
   token: Scalars['String'];
-  from: Scalars['String'];
-  until: Scalars['String'];
+  inputs: AppointmentInput;
 }>;
 
 
@@ -1984,8 +1968,8 @@ export function useReserveMedicineMutation() {
   return Urql.useMutation<ReserveMedicineMutation, ReserveMedicineMutationVariables>(ReserveMedicineDocument);
 };
 export const ScheduleDocument = gql`
-    mutation Schedule($inputs: AppointmentInput!) {
-  schedule(inputs: $inputs) {
+    mutation Schedule($token: String!, $inputs: AppointmentInput!) {
+  schedule(token: $token, inputs: $inputs) {
     begin
     length
     price
@@ -2049,25 +2033,9 @@ export const UnscheduleDocument = gql`
 export function useUnscheduleMutation() {
   return Urql.useMutation<UnscheduleMutation, UnscheduleMutationVariables>(UnscheduleDocument);
 };
-export const AppointmentsDocument = gql`
-    query Appointments {
-  appointments {
-    begin
-    patient {
-      firstName
-      lastName
-    }
-    length
-  }
-}
-    `;
-
-export function useAppointmentsQuery(options: Omit<Urql.UseQueryArgs<AppointmentsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<AppointmentsQuery>({ query: AppointmentsDocument, ...options });
-};
 export const AppointmentsByUserDocument = gql`
-    query AppointmentsByUser($token: String!, $from: String!, $until: String!) {
-  appointmentsByUser(token: $token, from: $from, until: $until) {
+    query AppointmentsByUser($token: String!, $inputs: AppointmentInput!) {
+  appointmentsByUser(token: $token, inputs: $inputs) {
     id
     employee {
       firstName

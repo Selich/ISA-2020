@@ -8,8 +8,8 @@ import {
 } from "@chakra-ui/react"
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
-import { ProfileModal } from '../../components/sections/modal/ProfileModal'
-import { Header } from '../../components/sections/Header'
+import { ProfileModal } from '../../../components/sections/modal/ProfileModal'
+import { Header } from '../../../components/sections/Header'
 
 const createUser = () => ({
     id: faker.random.uuid(),

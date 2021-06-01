@@ -39,23 +39,26 @@ export class AuthResolver {
         @Arg("inputs") inputs: UserInput, 
         @Ctx() { req }: MyContext) 
     {
-        let patient = null
-        let employee = null
-        let user = null
-        patient = await Patient.findOne({ email: inputs.email });
-        employee = await Employee.findOne({ email: inputs.email });
-        user = (!patient) ? employee : patient
-
+        let user = await User.findOne({ email: inputs.email });
         if (!user)
-            return { errors: [{ field: "email", message: "Invalid" }] };
+            return { 
+                errors: [
+                { field: "email", message: "Invalid credentials" },
+                { field: "password", message: "Invalid credentials" },
+        ] 
+    };
 
         user.isEnabled = true
         if (!user.isEnabled)
-            return { errors: [{ field: "email", message: "User not activated" }] };
+            return { errors: [{ field: "email", message: "User not activated. Please check your email." }] };
 
 
         if(inputs.password && !argon2.verify(user.password, inputs.password))
-            return { errors: [{ field: "password", message: "Invalid" }] };
+            return { 
+                errors: [
+                { field: "email", message: "Invalid credentials" },
+                { field: "password", message: "Invalid credentials" },
+            ] }
 
         let token = jwt.sign(
             { id: user.id, email: user.email, },

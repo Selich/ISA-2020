@@ -16,9 +16,10 @@ import { useScheduleMutation } from "../../generated/graphql";
 
 
 export function FreeExamsTable({user, pharmacyId}) {
-  let [{ fetching, data }] = useFreeAppointmentsQuery({ variables: { pharmacyId: '20', }, });
+  let [{ fetching, data }] = useFreeAppointmentsQuery({ variables: { pharmacyId: pharmacyId, }, });
   const [_, schedule] = useScheduleMutation();
   let body = null;
+
 
 	useEffect(() => {  }, [user])
   if (fetching) body = <p> Loading </p>;

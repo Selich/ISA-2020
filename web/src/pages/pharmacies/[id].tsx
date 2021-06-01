@@ -1,44 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {
-  Box,
-  Link,
-  Flex,
-  Button,
-  Text,
-  Heading,
-  SimpleGrid,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Avatar,
-  Icon,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  Input,
-  Stack,
-  Table,
-  TableCaption,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { usePharmacyQuery } from "../../generated/graphql";
+import { Box, Text, SimpleGrid, useDisclosure } from "@chakra-ui/react";
+import { usePharmacyQuery, useScheduleMutation } from "../../generated/graphql";
 import { ListFreeAppModal } from "../../components/sections/modal/ListFreeAppModal";
 import { FreeExamsTable } from "../../components/tables/FreeExamsTable";
+import { AppointmentsTable } from "../../components/tables/AppointmentsTable";
+import Cookies from "js-cookie";
 
-export default function PharmacyID({user}) {
+const Schedule = (row) => {
+  const [, schedule] = useScheduleMutation();
+  let token = Cookies.get("token");
+  let inputs = row;
+  delete inputs.employee.__typename;
+  delete inputs.__typename;
+
+  schedule({ token: token, inputs: inputs }).then((res) => console.log(res));
+};
+export default function PharmacyID({ user }) {
   const modal = useDisclosure();
-
   const router = useRouter();
   const { id } = router.query;
   const [{ fetching, data }] = usePharmacyQuery({
@@ -50,9 +29,7 @@ export default function PharmacyID({user}) {
   let body = null;
   if (fetching) {
     body = <p> Fetching </p>;
-  } else if (!data) {
-    body = <p> loading </p>;
-  } else {
+  } else if (data) {
     body = (
       <>
         <SimpleGrid columns={2}>
@@ -64,8 +41,12 @@ export default function PharmacyID({user}) {
             <Text fontSize={19}>{data.pharmacy.address.country} </Text>
           </Box>
           <Box align="right">
-						Free Exams
-            <FreeExamsTable user={user} pharmacyId={id + ''}/>
+            <AppointmentsTable
+              kind={"schedule"}
+              variables={{ pharmacy: { id: id }, patient: null }}
+              handler={[Schedule]}
+              buttonName={"Schedule"}
+            />
           </Box>
         </SimpleGrid>
       </>
@@ -73,28 +54,8 @@ export default function PharmacyID({user}) {
   }
 
   return (
-    <>
-      <Box
-        m="4"
-        p="8"
-        border="1px"
-        rounded="2px"
-        borderColor="gray.300"
-        boxShadow="md"
-        bg="grey.200"
-        color="#2d383c"
-        fontSize="2rem"
-        textAlign="center"
-        h="400px"
-      >
-        {body}
-      </Box>
-      <ListFreeAppModal
-        isOpen={modal.isOpen}
-        onOpen={modal.onOpen}
-        onClose={modal.onClose}
-        data={id}
-      ></ListFreeAppModal>
-    </>
+    <Box m="4" p="8" fontSize="2rem">
+      {body}
+    </Box>
   );
 }

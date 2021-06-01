@@ -2,9 +2,9 @@ import React, {useState, useEffect} from "react";
 import NextLink from "next/link";
 import { HStack, Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import {  useGetScheduleQuery, useEmployeeQuery } from '../../generated/graphql';
+import {  useGetScheduleQuery, useEmployeeQuery } from '../../../generated/graphql';
 
-import { MyCalendar } from '../../components/sections/Calendar' 
+import { MyCalendar } from '../../../components/sections/Calendar' 
 
 export default function Index() {
 	let [employees, setEmployees] = useState({})

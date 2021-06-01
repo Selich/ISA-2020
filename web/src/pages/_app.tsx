@@ -9,6 +9,9 @@ import Cookies from "js-cookie";
 import Index from "./index";
 import { usePatientQuery } from "../generated/graphql";
 
+import '../datepicker.css'
+
+
 const client = createClient({
   url: "http://localhost:4000/graphql",
 });
@@ -69,6 +72,7 @@ function MyApp({ Component, pageProps }) {
   const ComponentToRender = allowed ? Component : Index;
   return (
     <AuthProvider session={pageProps.session}>
+      <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/react-datepicker/2.14.1/react-datepicker.min.css" />
       <Provider value={client}>
         <ChakraProvider resetCSS theme={theme}>
           <Header setUser={setUser} user={user} />

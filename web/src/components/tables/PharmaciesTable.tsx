@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { usePatientQuery } from "../../generated/graphql";
-import { useRouter } from "next/router";
 import {
-  Box,
-  Image,
-  Button,
-  HStack,
-  SimpleGrid,
-	Select,
-	Input,
-  Text,
-  useDisclosure,
+  Box, Button,
+  HStack, Image, Input, SimpleGrid, Text,
+  useDisclosure
 } from "@chakra-ui/react";
-import DataTable from "react-data-table-component";
-import { usePharmaciesQuery } from "../../generated/graphql";
 import Cookies from "js-cookie";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import DataTable from "react-data-table-component";
+import { usePatientQuery, usePharmaciesQuery } from "../../generated/graphql";
+import { calcDistance } from "../../utils/distance";
 import { MapViewModal } from "../sections/modal/MapViewModal";
 import { RateModal } from "../sections/modal/RateModal";
 import { SubscribeModal } from "../sections/modal/SubscribeModal";
-import { calcDistance } from "../../utils/distance";
 
 const FilterComponent = ({ filterText, onFilter, onClear }) => (
   <>
@@ -26,7 +19,7 @@ const FilterComponent = ({ filterText, onFilter, onClear }) => (
   </>
 );
 
-export const PharmaciesTable = ({ user }): JSX.Element => {
+export const PharmaciesTable = ({ onOpen, kind, user, setSelectedPharmacy }): JSX.Element => {
   const token = Cookies.get("token");
   const router = useRouter();
   const [filterText, setFilterText] = useState("");
@@ -65,7 +58,18 @@ export const PharmaciesTable = ({ user }): JSX.Element => {
     { name: "City", selector: "address.city", sortable: true },
     { name: "Rating", selector: "averageRating", sortable: true },
     { name: "Distance (in meters)", selector: "distance", sortable: true },
-    { name: "", button: true, cell: (row) => <a onClick={(e) => handleClick(e, row.id)}>Details</a>, },
+		{ name: "", button: true, 
+			cell: (row) => 
+			(kind === 'schedule') 
+			? ( <Button onClick={() => {
+
+				setSelectedPharmacy(row)
+				onOpen()
+			}
+			}
+				> Select </Button>) 
+			: ( <a onClick={(e) => handleClick(e, row.id)}> Details </a>) 
+		},
   ];
 
 	let filteredItems = []
@@ -133,12 +137,6 @@ const ExpandedComponent = ({ data, user }) => {
               data.address.city +
               "," +
               data.address.country}
-          </Text>
-          <Text fontSize="1em" p={2}>
-            Coord: <br />
-            long: {data.address.long}
-            <br />
-            lat: {data.address.lat}
           </Text>
           <Text fontSize="1em" p={2}>
             Rating: {data.rating}

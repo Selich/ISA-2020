@@ -1,143 +1,53 @@
-import {
-  Box,
-  Button,
-  FormLabel,
-  Grid,
-  HStack,
-  Input,
-  SimpleGrid,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
-  useDisclosure,
-} from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import DataTable from "react-data-table-component";
+import React, {useState} from "react";
 import { useShopQuery } from "../../generated/graphql";
+import { useDisclosure, } from "@chakra-ui/react";
 import { PharmacyBuyModal } from "../sections/modal/PharmacyBuyModal";
-import { usePatientQuery } from "../../generated/graphql";
+import { ModalComponent } from "../sections/modal/PharmacyBuyModal";
+import { TableComponent } from './TableComponent'
 import Cookies from "js-cookie";
 
-const FilterComponent = ({ filterText, onFilter, onClear }) => {
-  let [{ data, fetching }] = useShopQuery();
-  let ret = null;
-  if (fetching) {
-    ret = <p> loading </p>;
-  } else {
-    if (!data.shop) {
-      ret = <p> no data </p>;
-    } else {
-      let types = [];
-      //@ts-ignore
-      data.shop.forEach((element) => types.push(element.type));
-      data.shop.forEach((element) => alert(element));
-      //@ts-ignore
-      let unique = [...new Set(types)];
-    }
-  }
-  return (
-    <>
-      <HStack gap={3}>
-        <FormLabel>Name:</FormLabel>
-        <Input
-          size="sm"
-          id="search"
-          type="text"
-          placeholder="Search"
-          aria-label="Search Input"
-          value={filterText}
-          onChange={onFilter}
-        />
-        <FormLabel>Type:</FormLabel>
-
-        {ret}
-        <FormLabel>Rating:</FormLabel>
-        <FormLabel>1</FormLabel>
-        <Slider aria-label="slider-ex-1" defaultValue={30}>
-          <SliderTrack defaultValue={5}>
-            <SliderFilledTrack />
-          </SliderTrack>
-          <SliderThumb />
-        </Slider>
-        <FormLabel>5</FormLabel>
-        <Button type="button" onClick={onClear}>
-          X
-        </Button>
-      </HStack>
-    </>
-  );
-};
-
-const MedicinesTable = (): JSX.Element => {
-  const [resetPaginationToggle, _] = React.useState(false);
-  const [item, setItem] = React.useState(null);
+export const MedicinesTable = (): JSX.Element => {
   const token = Cookies.get("token");
+	const [medicine,setMedicine] = useState()
+	const [pharmacy,setPharmacy] = useState()
+	const [date,setDate] = useState()
+
   const buyItemModal = useDisclosure();
-  const columns = [
+
+	const handleSubmit = () => {
+
+	}
+
+  let columns = [
     { name: "Name", selector: "name", sortable: true },
     { name: "Type", selector: "type", sortable: true },
     { name: "Form", selector: "form", sortable: true },
     { name: "Rating", selector: "rating", sortable: true },
-    {
-      name: "",
-      button: true,
-      cell: (row) => (
-        <Button
-          size="sm"
-          onClick={() => {
-            setItem(row);
-            buyItemModal.onOpen();
-          }}
-          colorScheme="teal"
-        >
-          Buy
-        </Button>
-      ),
-    },
-  ];
+	]
+ 
+	let variables = { token: token }
 
-  let [patientData] = usePatientQuery({ variables: { token: token, }, });
-  let [{ data, error, fetching }] = useShopQuery();
-  let body = null;
-  if (error) alert(error);
-  if (fetching) {
-    body = <p> loading </p>;
-  } else {
-    if (!data.shop) {
-      body = <p> no data </p>;
-    } else {
-      body = (
-        <>
-          <Grid columns={2}>
-            <Box m={10}>
-              <DataTable
-                columns={columns}
-                data={data.shop}
-                pagination
-                paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-                subHeader
-                expandableRows
-                persistTableHead
-                expandableRowsComponent={<ExpandedComponent data={this} patient={patientData}/>}
-              />
-            </Box>
-          </Grid>
-          <PharmacyBuyModal
-						patient={token}
-            onOpen={buyItemModal.onOpen}
-            isOpen={buyItemModal.isOpen}
-            onClose={buyItemModal.onClose}
-            item={item}
-          />
-        </>
-      );
-    }
-  }
-  return body;
+	return	(
+	<>
+		<TableComponent 
+			query={useShopQuery}
+			handler={setMedicine}
+			modal={buyItemModal}
+			columns={columns}
+			buttonName={'Buy'}
+		/>
+		<ModalComponent
+			handler={setPharmacy}
+			disclosure={buyItemModal}
+			title={'Pharmacy'}
+		>
+		</ModalComponent>
+	</>
+
+	)
 };
-export default MedicinesTable;
 
+/**
 export const ExpandedComponent = ({ data, patient }) => {
   return (
     <>
@@ -167,3 +77,4 @@ export const ExpandedComponent = ({ data, patient }) => {
     </>
   );
 };
+ **/

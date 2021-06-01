@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Link, Flex, Button, Text, Heading, SimpleGrid, Menu, MenuButton, MenuItem, MenuList, Avatar, Icon, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Input, useDisclosure, Stack, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { useMeQuery } from "../../generated/graphql";
-import { EditProfileModal } from "../../components/sections/modal/EditProfileModal";
-import { AddAllergieModal } from "../../components/sections/modal/AddAllergieModal";
-import { SubListModal } from "../../components/sections/modal/SubListModal";
-import { FormInput } from '../../components/sections/FormInput'
+import { useMeQuery } from "../../../generated/graphql";
+import { EditProfileModal } from "../../../components/sections/modal/EditProfileModal";
+import { AddAllergieModal } from "../../../components/sections/modal/AddAllergieModal";
+import { SubListModal } from "../../../components/sections/modal/SubListModal";
+import { FormInput } from '../../../components/sections/FormInput'
 import { Form } from "formik";
-import { FormInputPassword } from "../../components/sections/FormInputPassword";
+import { FormInputPassword } from "../../../components/sections/FormInputPassword";
 
 
 

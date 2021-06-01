@@ -34,38 +34,35 @@ export class AppointmentResolver {
     @Query(() => [Appointment], { nullable: true })
     async appointmentsByUser(
 				@Arg("token") token: string,
-				@Arg("from")	from: string,
-				@Arg("until") until: string,
+				@Arg("inputs") inputs: AppointmentInput,
     ): Promise<any> {
-				if(!token) return null
-				let temp = jwt.decode(token)
+
+				const temp = jwt.decode(token)
 				if(!temp) return null
-			//@ts-ignore
+
+				//@ts-ignore
 				let user = await User.findOne({ email: temp.email });
-				if(!user) return null
+
+
 				let appointments = null
-				if(user.role === 'patient')
-					appointments = await Appointment.find({ patient: user })
+				if(inputs.isVisited !== null){
+					appointments = await Appointment.find({where: { 
+						patient: user, 
+						isVisited: inputs.isVisited
+					}})
+				} else {
+					appointments = await Appointment.find({where: { 
+						patient: IsNull(), 
+					}})
+				}
 
-				// add for employee
-				
-				let dateFrom = Date.parse(from)
-			//@ts-ignore
-				let dateUntil = null
-				if (until) dateUntil = new Date(until)
-				console.log(dateFrom)
-//
-				appointments = appointments?.filter(item => Date.parse(item.begin) >= dateFrom)
 				return appointments
-
-				
-    }
-
-    @Query(() => [Appointment], { nullable: true })
-    async appointments(
-        @Ctx() { req }: MyContext
-    ): Promise<Appointment[]> {
-        return await Appointment.find({})
+			/**
+				if(inputs.begin){
+					let dateFrom = Date.parse(inputs.begin)
+					appointments = appointments?.filter(item => Date.parse(item.begin) >= dateFrom)
+				}
+			**/
     }
 
     @Query(() => [Appointment], { nullable: true })
@@ -148,24 +145,21 @@ export class AppointmentResolver {
 
     @Mutation(() => Appointment, { nullable: true })
     async schedule(
+        @Arg("token") token: string,
         @Arg("inputs") inputs: AppointmentInput,
         @Ctx() { mailer }: MyContext
     ) {
 
+			const temp = jwt.decode(token)
+			if(!temp) return null
 			
 			if(!inputs.id) return null
-			if(!inputs.pharmacy) return null
-			if(!inputs.pharmacy.id) return null
 
 			let id = parseInt(inputs.id)
-			let pharmId = parseInt(inputs.pharmacy.id)
 			let appointment = await Appointment.findOneOrFail({id: id })
-			let patient = await Patient.findOneOrFail({email: inputs.patient?.email})
-			let employee = await Employee.findOneOrFail({email: inputs.employee?.email})
-			let pharmacy = await Pharmacy.findOneOrFail({id: pharmId})
+			//@ts-ignore
+			let patient = await Patient.findOneOrFail({email: temp?.email})
 			appointment.patient = patient
-			appointment.employee = employee
-			appointment.pharmacy = pharmacy
 			appointment.save()
 			sendAppointmentMail(patient, appointment, mailer).then(
 				res => console.log(res)

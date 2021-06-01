@@ -1,7 +1,7 @@
 import React from 'react'
-import { Header } from '../../components/sections/Header'
+import { Header } from '../../../components/sections/Header'
 import { Box, Button, useDisclosure, } from "@chakra-ui/react"
-import PharmaciesTable from '../../components/tables/PharmaciesTable'
+import PharmaciesTable from '../../../components/tables/PharmaciesTable'
 
 
 

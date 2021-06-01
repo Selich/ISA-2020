@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
-import MedicinesTable from "../../components/tables/MedicinesTable";
+import MedicinesTable from "../../../components/tables/MedicinesTable";
 
 const EPrescriptions = (): JSX.Element => {
   return (

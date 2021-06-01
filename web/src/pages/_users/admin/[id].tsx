@@ -1,7 +1,7 @@
 
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { usePharmacyMutation } from '../../generated/graphql';
+import { usePharmacyMutation } from '../../../generated/graphql';
 
 
 export default function PharmacyID() {

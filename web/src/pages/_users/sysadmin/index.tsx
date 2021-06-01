@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import { MyCalendar } from "../../components/sections/Calendar";
+import { MyCalendar } from "../../../components/sections/Calendar";
 
 export default function Index() {
   const [data, setData] = useState({});

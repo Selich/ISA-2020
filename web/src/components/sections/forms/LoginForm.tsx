@@ -33,7 +33,6 @@ export default function LoginForm({ onClose, setUser }) {
             console.log(response.data.login);
             Cookies.set('token', token)
             setUser(user)
-            initCart()
             if (roles.employees.includes(user.role) && !user.isEnabled)
                 router.push("/fstlogin");
             onClose()

@@ -1,57 +1,46 @@
-import { Avatar, Text, Center, HStack, SimpleGrid, Select, FormLabel, Switch, Input, Box, Link, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
+import { Text, SimpleGrid, Box, Button, Avatar } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import Cookies from "js-cookie";
+import { useAppointmentsByUserQuery } from "../../generated/graphql";
+import { useRateMutation } from "../../generated/graphql";
+import { useScheduleMutation } from "../../generated/graphql";
+import { useUnscheduleMutation } from "../../generated/graphql";
+import { TableComponent } from "./TableComponent";
 
-
-const columns = [
-    { name: "Pharmacy", selector: "pharmacy.name" },
-    { name: "Doctor", selector: "employee.lastName" },
-    { name: "Type", selector: "type" },
-    { name: "Date", selector: "begin", sortable: true },
-    { name: "Price", selector: "price", sortable: true },
-]
-
-
-export default function AppointmentTable() {
-	  const [data, setData] = useState()
-		useEffect(() => {
-			let temp = localStorage.getItem('user')
-			setData(JSON.parse(temp).appointments)
-
-
-
-		}, [])
-
-    return (
-        <>
-            <Box>
-                <DataTable
-                    data={data}
-                    expandableRows
-                    expandableRowsComponent={<ExpandedComponent data={this} />}
-                    columns={columns}
-                />
-            </Box>
-        </>
-    );
+interface TableProps {
+  filter?: boolean;
+  query?: any;
+  variables?: any;
+  buttonName?: string;
+  handler?: any;
+  columns?: any;
+  modal?: any;
+  expandedComponent?: any;
+  kind?: any;
+  pharmacy?: any;
 }
 
-export const ExpandedComponent = ({ data }) => {
 
-    return (
-        <>
-            <SimpleGrid columns={2}>
-                <Box m={6}>
-                    <Avatar margin={4} pd={3} />
-                    <Text>{data.employee.firstName} {data.employee.lastName}</Text>
-                    <Text>Email: {data.employee.email}</Text>
-                    <Text>Rating: {data.employee.averageRating}</Text>
-                    <Text>Date: {data.begin}</Text>
-                </Box>
-            </SimpleGrid>
-            <Button disabled={true}>Rate</Button>
-            <Button disabled={true}>Report</Button>
-        </>
-    )
 
-}
+export const AppointmentsTable = (props: TableProps) => {
+  let token = Cookies.get("token");
+	const columns = [
+		{ name: "Price", selector: "price", sortable: true },
+		{ name: "Date", selector: "begin", sortable: true },
+		{ name: "Rating", selector: "employee.averageRating", sortable: true },
+		{ name: "Doctor", selector: "employee.lastName", sortable: true },
+	];
+
+  return (
+		<>
+    <TableComponent
+      query={useAppointmentsByUserQuery}
+      handler={props.handler}
+      variables={{token:token, inputs: props.variables}}
+      columns={columns}
+      buttonName={props.buttonName}
+    />
+</>
+  );
+};

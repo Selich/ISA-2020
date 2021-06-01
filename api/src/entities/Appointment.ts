@@ -51,7 +51,7 @@ export class Appointment extends Model{
   report: string;
 
 	@Field({nullable: true})
-  @Column({ nullable: true})
+	@Column({ nullable: true, default: false})
   isVisited: boolean;
 
 	@Field(() => String, {nullable: true})

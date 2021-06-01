@@ -183,7 +183,7 @@ export class AppointmentInput {
   @Field({ nullable: true})
   report?: string;
   @Field({ nullable: true})
-  isVisited?: string;
+  isVisited?: Boolean;
   @Field({ nullable: true})
   begin?: string;
   @Field({ nullable: true})

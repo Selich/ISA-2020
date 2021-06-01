@@ -1,7 +1,9 @@
 mutation Schedule( 
+  $token: String!,
   $inputs: AppointmentInput!,
 ) {
   schedule( 
+  token: $token,
   inputs: $inputs
   ) { 
     begin

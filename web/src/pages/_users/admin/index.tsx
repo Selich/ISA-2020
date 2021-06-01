@@ -19,19 +19,19 @@ import {
   Text,
   HStack,
 } from "@chakra-ui/react";
-import { safeLoading, MyNumberInput, MyDateInput } from "../../utils/utils";
-import { useEmployeeQuery } from "../../generated/graphql";
-import { useGetEmployeesByPharmQuery } from "../../generated/graphql";
-import { PatientProfile } from "../../components/layouts/patient/PatientProfile";
-import { PharmacyProfile } from "../../components/layouts/PharmacyProfile";
-import { PharmaciesTable } from "../../components/tables/PharmaciesTable";
-import { FreeExamsTable } from "../../components/tables/FreeExamsTable";
-import { FreeDermTable } from "../../components/tables/FreeDermTable";
-import MedicinesTable from "../../components/tables/MedicinesTable";
-import { HistoryTableDerm } from "../../components/tables/HistoryTableDerm";
-import { EPrescriptionsTable } from "../../components/tables/EPrescriptionsTable";
-import { ReservationsTable } from "../../components/tables/ReservationsTable";
-import { SubscriptionTable } from "../../components/tables/SubscriptionTable";
+import { safeLoading, MyNumberInput, MyDateInput } from "../../../utils/utils";
+import { useEmployeeQuery } from "../../../generated/graphql";
+import { useGetEmployeesByPharmQuery } from "../../../generated/graphql";
+import { PatientProfile } from "../../../components/layouts/patient/PatientProfile";
+import { PharmacyProfile } from "../../../components/layouts/PharmacyProfile";
+import { PharmaciesTable } from "../../../components/tables/PharmaciesTable";
+import { FreeExamsTable } from "../../../components/tables/FreeExamsTable";
+import { FreeDermTable } from "../../../components/tables/FreeDermTable";
+import MedicinesTable from "../../../components/tables/MedicinesTable";
+import { HistoryTableDerm } from "../../../components/tables/HistoryTableDerm";
+import { EPrescriptionsTable } from "../../../components/tables/EPrescriptionsTable";
+import { ReservationsTable } from "../../../components/tables/ReservationsTable";
+import { SubscriptionTable } from "../../../components/tables/SubscriptionTable";
 
 const TabMenu = () => (
   <TabList>
