@@ -199,57 +199,57 @@ import { Prescription } from "./Prescription";
 @Entity()
 export class Appointment extends Model{
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Patient)</span>
-  @ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Patient,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.appointments,</span>  { eager: true, cascade: true })
+	@Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Patient,</span> {nullable:true})
+	@ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Patient,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.appointments,</span> {eager:true, cascade: false, nullable:true})
   @JoinTable()
   patient: Patient;
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Employee)</span>
-  @ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Employee,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.schedule,</span>  { eager: true, cascade: true })
+	@Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Employee,</span> {nullable: true})
+  @ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Employee,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.schedule,</span>  { eager: true, cascade: false })
   @JoinTable()
   employee: Employee;
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Pharmacy)</span>
-  @ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Pharmacy,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.appointments,</span>  {  cascade: true })
+	@Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Pharmacy,</span> {nullable: true})
+	@ManyToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Pharmacy,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.appointments </span> )
   @JoinTable()
   pharmacy: Pharmacy;
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Prescription)</span>
+  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Prescription,</span> {nullable: true})
   @OneToOne(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Prescription,</span> <span class="fstat-no" title="function not covered" >item </span>=&gt; <span class="cstat-no" title="statement not covered" >item.appointment </span>,{  cascade: true, nullable:true})
   @JoinColumn()
   prescription: Prescription;
 &nbsp;
   @Field()
   @Column({ nullable: true})
-  type: string;
+  kind: string;
 &nbsp;
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   score: number;
 &nbsp;
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   price: number;
 &nbsp;
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   discount: number;
 &nbsp;
-  @Field()
+	@Field({nullable: true})
   @Column({ nullable: true})
   report: string;
 &nbsp;
-  @Field()
-  @Column({ nullable: true})
+	@Field({nullable: true})
+	@Column({ nullable: true, default: false})
   isVisited: boolean;
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >String)</span>
-  @Column({ type: Date })
-  from: Date;
+	@Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >String,</span> {nullable: true})
+	@Column({nullable: true })
+  begin: string;
 &nbsp;
-  @Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >String)</span>
-  @Column({ type: Date })
-  until: Date;
+	@Field(<span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >Number,</span> {nullable: true})
+	@Column({nullable: true })
+  length: number;
 &nbsp;
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -259,7 +259,7 @@ export class Appointment extends Model{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jan 07 2021 09:33:15 GMT+0100 (Central European Standard Time)
+                at Wed Jun 02 2021 19:37:18 GMT+0200 (Central European Summer Time)
             </div>
         </div>
         <script src="../prettify.js"></script>
