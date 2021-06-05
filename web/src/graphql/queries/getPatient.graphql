@@ -1,0 +1,17 @@
+query GetPatient(
+  $inputs: PatientInput!
+) {
+  getPatient(
+    inputs: $inputs
+  ){
+   id
+   begin 
+   length
+   patient{
+     id
+   }
+
+  }
+}
+
+

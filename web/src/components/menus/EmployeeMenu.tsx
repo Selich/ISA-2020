@@ -22,6 +22,20 @@ const EmployeeMenu: any = ({ user }) => {
         </MenuButton>
         <MenuList>
 					{user.role === 'derm' && 
+						<NextLink href="/derm">
+							<MenuItem minH="48px">
+								<span>Home</span>
+							</MenuItem>
+					</NextLink>
+					}
+					{user.role === 'pharm' && 
+						<NextLink href="/pharm">
+							<MenuItem minH="48px">
+								<span>Home</span>
+							</MenuItem>
+					</NextLink>
+					}
+					{user.role === 'derm' && 
 						<NextLink href="/derm/profile">
 							<MenuItem minH="48px">
 								<span>Profile</span>

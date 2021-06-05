@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header } from '../../../components/sections/Header'
+import { Header } from '../../components/sections/Header'
 import {
     Box,
     Button,
@@ -7,11 +7,11 @@ import {
     Input,
     useDisclosure,
 } from "@chakra-ui/react"
-import ReservationsTable from '../../../components/tables/ReservationsTable'
+import ReservationsTable from '../../components/tables/ReservationsTable'
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
-import { ConfirmMedicinesModal } from '../../../components/sections/modal/ConfirmMedicines'
-import { PharmacyProfileModal } from '../../../components/sections/modal/PharmacyProfileModal'
+import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines'
+import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
 
 const createUser = () => ({
     id: faker.random.uuid(),

@@ -1,5 +1,5 @@
-query Pharmacy($id: String!) {
-  pharmacy(id: $id){
+query Pharmacy($inputs: PharmacyInput!) {
+  pharmacy(inputs: $inputs){
       name
       averageRating
       address{

@@ -1,7 +1,8 @@
 mutation CancelReservation( 
-	$inputs: ReservationInput!
+	$inputs: ReservationInput!,
+	$token: String!
 ) {
-  cancelReservation(inputs: $inputs) {
+  cancelReservation(inputs: $inputs, token: $token) {
     id
  		isBought,
     medicineItem{

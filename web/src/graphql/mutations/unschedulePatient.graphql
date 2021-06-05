@@ -1,0 +1,19 @@
+mutation UnschedulePatient( 
+  $inputs: AppointmentInput!,
+  $token: String!,
+) {
+  unschedulePatient( 
+  inputs: $inputs
+  token: $token
+  ) { 
+    begin
+    length
+    price
+    patient{
+      email
+    }
+    pharmacy{
+      name
+    }
+  }
+}

@@ -11,34 +11,38 @@ import { OneToOne, JoinColumn, Column, JoinTable, ManyToOne } from "typeorm";
 @Entity()
 export class Reservation extends Model{
 
-  @Field(() => Pharmacy)
-  @ManyToOne(() => Pharmacy, item => item.reservations,  { eager: true, cascade: true })
+  @Field(() => Pharmacy, {nullable:true})
+  @ManyToOne(() => Pharmacy, item => item.reservations,  { eager: true,  nullable:true })
   @JoinTable()
   pharmacy: Pharmacy;
 
 	@Field(() => Patient, { nullable: true })
-  @ManyToOne(() => Patient, item => item.reservations,  {})
+  @ManyToOne(() => Patient, item => item.reservations, {nullable:true} )
   @JoinTable()
   patient: Patient;
 
 	@Field(() => MedicineItem, {nullable:true})
-  @OneToOne(() => MedicineItem, item => item.reservation, { eager: true, cascade: true, nullable: true })
+  @OneToOne(() => MedicineItem, item => item.reservation, { eager: true,  nullable: true })
   @JoinColumn()
   medicineItem: MedicineItem;
 
 	@Field(() => String, { nullable: true })
-  @Column({ nullable: true })
+  @Column({type:'date',nullable:true})
   deadline: string;
 
 	@Field(() => String, { nullable: true })
   @Column({ nullable: true })
   pickupDate: string;
 
-  @Field()
+	@Field({nullable: true})
+  @Column({ nullable: true})
+  originalId: number;
+
+  @Field({nullable: true})
   @Column({nullable: true })
   isBought: boolean;
 
-  @Field()
+  @Field({nullable: true})
   @Column({nullable: true })
   totalSum: number;
 }

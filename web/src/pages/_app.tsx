@@ -10,6 +10,10 @@ import Index from "./index";
 import { usePatientQuery } from "../generated/graphql";
 
 import '../datepicker.css'
+import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
+
+
+
 
 
 const client = createClient({
@@ -25,49 +29,8 @@ const roles = {
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   let [user, setUser] = useState(null);
-  let token = Cookies.get("token");
-	useEffect(() => { 
-    token = Cookies.get("token");
+  let allowed = true
 
-
-	}, [token])
-
-	if(token){
-		const fetchUser = () => {
-			let [{ fetching, data }] = usePatientQuery({
-				variables: {
-					token: token,
-				},
-			});
-			if(data) setUser(data.patient);
-			localStorage.setItem('user', user)
-		}
-		fetchUser()
-	}
-
-  let allowed = false;
-
-  if (
-    allowedRoutes.includes(router.pathname) ||
-    router.pathname.startsWith("/pharmacies")
-  ) {
-    allowed = true;
-  }
-  useEffect(() => {
-    if (token) {
-    }
-  }, [token]);
-
-  if (user) {
-    if (
-      roles.all.includes(user.role) &&
-      router.pathname.startsWith("/patient")
-    ) {
-      allowed = true;
-    }
-    allowed = true;
-  }
-  allowed = true;
 
   const ComponentToRender = allowed ? Component : Index;
   return (

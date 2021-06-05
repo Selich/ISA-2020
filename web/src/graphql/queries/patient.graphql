@@ -19,6 +19,9 @@ query Patient(
       long,
       lat
     }
+    reservations{
+      id
+    }
 
   }
 }

@@ -1,9 +1,9 @@
 import React from 'react'
 import { useDisclosure, Button, Box } from "@chakra-ui/react"
-import PharmaciesTable from '../../../components/tables/PharmaciesTable'
+import PharmaciesTable from '../../components/tables/PharmaciesTable'
 <<<<<<< HEAD
-import {AddPharmacyModal} from '../../../components/sections/modal/AddPharmacyModal'
-import {AddAdminModal} from '../../../components/sections/modal/AddAdminModal'
+import {AddPharmacyModal} from '../../components/sections/modal/AddPharmacyModal'
+import {AddAdminModal} from '../../components/sections/modal/AddAdminModal'
 
 =======
 import {AddAdminModal} from '../../components/sections/modal/AddAdminModal'

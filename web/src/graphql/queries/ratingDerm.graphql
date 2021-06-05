@@ -1,0 +1,13 @@
+query RatingDerm(
+  $token: String!
+) {
+  ratingDerm(
+    token: $token
+  ){
+    email
+    firstName
+    lastName
+    averageRating
+  }
+}
+

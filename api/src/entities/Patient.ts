@@ -28,11 +28,16 @@ export default class Patient extends User {
   appointments: Appointment[];
 
   @Field(() => [Medicine], { nullable: true })
-  @ManyToMany(() => Medicine, (item) => item.patientsAllergic,  {nullable: true})
+  @ManyToMany(() => Medicine, (item) => item.patientsAllergic,  {nullable: true, eager:true})
+  @JoinTable({
+    name: "patient_alergies",
+    joinColumns: [{ name: "patientId" }],
+    inverseJoinColumns: [{ name: "medicineId" }]
+  })
   allergies: Medicine[];
 
   @Field(() => [Prescription])
-  @OneToMany(() => Prescription, (item) => item.patient,  {nullable: true})
+  @OneToMany(() => Prescription, (item) => item.patient,  {nullable: true, eager:true})
   prescritions: Prescription[];
 
   @Field(() => [EPrescription])
@@ -40,7 +45,7 @@ export default class Patient extends User {
   ePrescriptions: EPrescription[];
 
   @Field(() => [Reservation])
-	@OneToMany(() => Reservation, (item) => item.patient, {eager: false, cascade:true,  nullable: true})
+	@OneToMany(() => Reservation, (item) => item.patient, {eager: true, cascade:true,  nullable: true})
   reservations: Reservation[];
 
   @Field(() => [Rating])

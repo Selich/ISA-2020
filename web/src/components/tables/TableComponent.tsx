@@ -27,7 +27,8 @@ export const TableComponent = (props: TableProps) => {
         item(row);
       };
 
-      props.columns.push({
+      props.columns.push(
+        {
         name: "",
         button: true,
         cell: (row: any) => (
@@ -35,7 +36,8 @@ export const TableComponent = (props: TableProps) => {
             {item.name}
           </Button>
         ),
-      });
+      }
+      );
     });
   let body = null;
   if (fetching) body = <p>loading...</p>;

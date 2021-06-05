@@ -1,11 +1,13 @@
 mutation RequestHoliday( 
 	$inputs: HolidayInput!
+	$token: String!
 ) {
-  requestHoliday(inputs: $inputs
-  ) { 
+  requestHoliday(inputs: $inputs, token: $token) { 
     employee{
       email
     }
   	isApproved
+    from
+    until 
 }}
 

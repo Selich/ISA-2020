@@ -21,7 +21,7 @@ export class Appointment extends Model{
   employee: Employee;
 
 	@Field(() => Pharmacy, {nullable: true})
-	@ManyToOne(() => Pharmacy, item => item.appointments  )
+	@ManyToOne(() => Pharmacy, item => item.appointments ,{eager:true})
   @JoinTable()
   pharmacy: Pharmacy;
 
@@ -54,9 +54,9 @@ export class Appointment extends Model{
 	@Column({ nullable: true, default: false})
   isVisited: boolean;
 
-	@Field(() => String, {nullable: true})
+	@Field(() => Date, {nullable: true})
 	@Column({nullable: true })
-  begin: string;
+  begin: Date;
 
 	@Field(() => Number, {nullable: true})
 	@Column({nullable: true })

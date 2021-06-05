@@ -52,6 +52,7 @@ export class Medicine extends Model {
   @Column({ nullable: true})
   info: string;
 
+  @Field(() => [Patient], { nullable: true })
   @ManyToMany(() => Patient, item => item.allergies, { nullable: true})
   patientsAllergic: Patient[];
 
@@ -70,7 +71,7 @@ export class Medicine extends Model {
   alternatives: Medicine[];
 
 	@Field(() => [Price], {nullable: true})
-	@OneToMany(() => Price, item => item.medicine, { nullable: true, eager:true, cascade:true})
+	@OneToMany(() => Price, item => item.medicine, { nullable: true, cascade:true})
   prices: Price[];
 
 }

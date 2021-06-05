@@ -17,9 +17,20 @@ import bcrypt from 'bcrypt'
 @Resolver()
 export class EmployeeResolver {
 
-  @Query(() => Holiday, { nullable: true })
-  async holiday(@Ctx() { req }: MyContext) {
-      return await Holiday.find({})
+  @Query(() => [Holiday], { nullable: true })
+  async holiday(
+		@Arg('token') token: string,
+		@Ctx() { req }: MyContext
+		) {
+
+		if(!token) return await Holiday.find({})
+
+		let temp = jwt.decode(token)
+		// @ts-ignore
+		let user = await Employee.findOneOrFail({email: temp.email})
+		let holidays = await Holiday.find({pharmacyId: user.pharmacy.id})
+		return holidays
+			
   }
 
   @Query(() => [Appointment], { nullable: true })
@@ -87,12 +98,17 @@ export class EmployeeResolver {
   @Mutation(() => Holiday, { nullable: true })
 	async requestHoliday(
 		@Arg("inputs") inputs: HolidayInput,
+		@Arg("token") token: string,
 		@Ctx() { req  }: MyContext
 	) {
-		let user = req.session.user
-		if(!inputs.employee) return null;
-		if(!user) user = await Employee.findOneOrFail({email: inputs.employee.email})
+		let temp = jwt.decode(token)
+		if(!temp) return null 
+
+		// @ts-ignore
+		let user = await Employee.findOneOrFail({email: temp.email})
+
 		let holiday = new Holiday()
+		console.log(inputs)
 		if(inputs.from)
 			holiday.from = inputs.from
 		if(inputs.until)
@@ -104,33 +120,52 @@ export class EmployeeResolver {
   }
 
   @Mutation(() => Holiday, { nullable: true })
-	async approveHoliday(
+	async denyHoliday(
 		@Arg("inputs") inputs: HolidayInput,
+		@Arg("token") token: string,
 		@Ctx() { req, mailer  }: MyContext
 	) {
 		
-		let user = req.session.user
-		if(!user) {
-			let list = await Employee.find({role: 'sysadmin'})
-			user = list[0]
-		}
-		if(user.role !== 'sysadmin') return null
+		if(!inputs) return null
 
-		if(!inputs.id) return null
-		let id = parseInt(inputs.id)
-		let holiday = await Holiday.findOneOrFail({id})
+		let holiday = await Holiday.findOneOrFail({id: inputs.id})
 		if(!inputs.employee) return null
 		let employee = await Employee.findOneOrFail({email: inputs.employee.email})
 
-		let comment = ""
-		if(inputs.comments){
-			comment = inputs.comments
-		}
-		let isApproved = false
-		if(inputs.isApproved) isApproved = inputs.isApproved
-		sendHolidayStatusUpdate(employee,mailer,user,isApproved,comment)
+		let comment = 'Approved'
+		if(inputs.comments){ comment = inputs.comments }
+
+		holiday.isApproved = false
 
 
+		sendHolidayStatusUpdate(employee,mailer,employee,holiday.isApproved,comment)
+
+		holiday.remove()
+
+		return holiday
+  }
+
+  @Mutation(() => Holiday, { nullable: true })
+	async approveHoliday(
+		@Arg("inputs") inputs: HolidayInput,
+		@Arg("token") token: string,
+		@Ctx() { req, mailer  }: MyContext
+	) {
+		
+		if(!inputs) return null
+
+		let holiday = await Holiday.findOneOrFail({id: inputs.id})
+		if(!inputs.employee) return null
+		let employee = await Employee.findOneOrFail({email: inputs.employee.email})
+
+		let comment = 'Approved'
+		if(inputs.comments){ comment = inputs.comments }
+
+		holiday.isApproved = true
+
+		holiday.save()
+
+		sendHolidayStatusUpdate(employee,mailer,employee,holiday.isApproved,comment)
 
 		return holiday
   }

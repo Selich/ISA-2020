@@ -1,0 +1,31 @@
+query AppointmentsPatient(
+  $token: String!
+  $inputs: AppointmentInput!
+  $type: String!
+){
+  appointmentsPatient(
+    token: $token,
+    inputs: $inputs,
+    type: $type,
+  ){
+    id
+    kind
+    employee{
+      firstName
+      lastName
+      role
+      email
+      averageRating
+    }
+    patient{
+      firstName
+      lastName
+    }
+    begin
+    price
+    length
+    isVisited
+
+  
+  }
+}

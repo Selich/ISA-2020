@@ -1,0 +1,15 @@
+mutation DenyHoliday( 
+	$inputs: HolidayInput!
+	$token: String!
+) {
+  denyHoliday(
+    inputs: $inputs
+    token: $token
+  ) { 
+    from
+    until
+    employee{
+      firstName
+      lastName
+    }
+}}

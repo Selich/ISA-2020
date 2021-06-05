@@ -8727,6 +8727,11 @@
   "resolved" "https://registry.npmjs.org/quick-lru/-/quick-lru-5.1.1.tgz"
   "version" "5.1.1"
 
+"ramda@^0.27.1":
+  "integrity" "sha512-PgIdVpn5y5Yns8vqb8FzBUEYn98V3xcPgawAkkgj0YJ0qDsnHCiNmZYfOGMgOvoB0eWFLpYbhxUR3mxfDIMvpw=="
+  "resolved" "https://registry.npmjs.org/ramda/-/ramda-0.27.1.tgz"
+  "version" "0.27.1"
+
 "random-bytes@~1.0.0":
   "integrity" "sha1-T2ih3Arli9P7lYSMMDJNt11kNgs="
   "resolved" "https://registry.npmjs.org/random-bytes/-/random-bytes-1.0.0.tgz"

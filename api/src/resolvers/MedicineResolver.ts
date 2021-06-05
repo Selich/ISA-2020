@@ -121,6 +121,13 @@ export class MedicineResolver {
 	}
 
 	@Query(() => [Medicine], { nullable: true })
+	async medicines(
+		@Ctx() { }: MyContext
+	): Promise<Medicine[]> {
+		return await Medicine.find({})
+	}
+
+	@Query(() => [Medicine], { nullable: true })
 	async shop(
 		@Ctx() { }: MyContext
 	): Promise<Medicine[]> {

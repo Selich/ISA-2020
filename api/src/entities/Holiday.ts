@@ -8,24 +8,28 @@ import { Model } from "./Model";
 export class Holiday extends Model{
 
 	@Field(() => Employee, { nullable:true })
-  @ManyToOne(() => Employee, item => item.holidays)
+  @ManyToOne(() => Employee, item => item.holidays, {eager:true})
   @JoinTable()
   employee: Employee;
 
   @Field(() => String)
-  @Column({nullable: true})
+  @Column({type:'date',nullable:true})
   from: string;
 
   @Field(() => String)
-  @Column({nullable: true})
+  @Column({type:'date',nullable:true})
   until: string;
 
   @Field()
   @Column({nullable: true})
   isApproved: boolean;
 
-  @Field()
+  @Field({nullable: true})
   @Column({nullable: true})
   comments: string;
+
+  @Field({nullable: true})
+  @Column({nullable: true})
+  pharmacyId: number;
 
 }

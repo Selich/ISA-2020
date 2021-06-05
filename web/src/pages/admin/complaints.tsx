@@ -1,16 +1,13 @@
 import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
-import DataTable from "react-data-table-component";
-import { TierModal } from "../../../components/sections/modal/TierModal";
-
+import DataTable, { IDataTableColumn } from "react-data-table-component";
+import { ComplaintModal } from "../../components/sections/modal/ComplaintModal";
 
 interface IFormInputs {
   email: string
   password: string
 }
-
-
 
 const data = [
 	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
@@ -20,11 +17,11 @@ const data = [
 	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
 	{type: "Dherm", pharmacy: "Pharmacy1", price:200},
 ]
-const columns = [
+const columns: IDataTableColumn<any>[] = [
 	{name: "Pharmacy", selector:"pharmacy"},
 	{name: "Type", selector:"type"},
 	{name: "Price", selector:"price", sortable:true},
-	{name: '', cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
+	// {cell: row => <div><Button size="sm" colorScheme='teal'>Update</Button></div> },
 ]
 
 
@@ -42,7 +39,7 @@ export default function Catalogue() {
       selectableRows
     />
 		</Box>
-      <TierModal
+      <ComplaintModal
         onOpen={modal.onOpen}
         isOpen={modal.isOpen}
         onClose={modal.onClose}

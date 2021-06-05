@@ -1,18 +1,10 @@
-import React from "react";
 import {
-  Text,
-  Box,
-  Button,
-  HStack,
-  SimpleGrid,
-  useDisclosure,
+  Box, useDisclosure
 } from "@chakra-ui/react";
-import { usePatientQuery, usePharmaciesQuery } from "../../generated/graphql";
 import { useRouter } from "next/router";
+import React from "react";
 import { TableComponent } from "../../components/tables/TableComponent";
-import { MapViewModal } from "../../components/sections/modal/MapViewModal";
-import { RateModal } from "../../components/sections/modal/RateModal";
-import { SubscribeModal } from "../../components/sections/modal/SubscribeModal";
+import { usePharmaciesQuery } from "../../generated/graphql";
 
 
 const PharmaciesTable = () => {

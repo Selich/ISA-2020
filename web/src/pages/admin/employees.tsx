@@ -1,9 +1,9 @@
 import { Avatar, Box, Button, HStack, Input, Link, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import DataTable from 'react-data-table-component';
-import { CreateAdminModal } from '../../../components/sections/modal/CreateAdminModal';
-import { CreateEmployeeModal } from '../../../components/sections/modal/CreateEmployeeModal';
-import { useEmployeesQuery } from "../../../generated/graphql";
+import { CreateAdminModal } from '../../components/sections/modal/CreateAdminModal';
+import { CreateEmployeeModal } from '../../components/sections/modal/CreateEmployeeModal';
+import { useEmployeesQuery } from "../../generated/graphql";
 
 
 const createUser = () => ({});

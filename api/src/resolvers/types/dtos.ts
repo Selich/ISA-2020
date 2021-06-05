@@ -1,4 +1,5 @@
-import { Field, Float, InputType, ObjectType } from "type-graphql";
+import { Reservation } from "../../entities/Reservation";
+import { Field, Float, ID, InputType, ObjectType } from "type-graphql";
 import { Employee } from "../../entities/Employee";
 import Patient from "../../entities/Patient";
 import User from "../../entities/User";
@@ -14,6 +15,16 @@ export class EmployeeResponse {
 
   @Field(() => Employee, { nullable: true })
   user?: Employee;
+}
+
+@ObjectType()
+export class ReservationResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => Reservation, { nullable: true })
+  reservation?: Reservation;
+
 }
 
 @ObjectType()
@@ -55,7 +66,7 @@ export class AddressInput {
 @InputType()
 export class PharmacyInput {
   @Field({ nullable: true })
-  id?: string;
+  id?: number;
   @Field({ nullable: true })
   name?: string;
   @Field({ nullable: true })
@@ -75,7 +86,7 @@ export class InventoryInput {
 @InputType()
 export class UserInput {
   @Field({ nullable: true })
-  id?: string;
+  id?: number;
   @Field({ nullable: true })
   email?: string;
   @Field({ nullable: true })
@@ -140,32 +151,10 @@ export class MedicineInput {
 	@Field(() => String, {nullable: true})
   info?: string;
 }
-
-@InputType()
-export class MedicineItemInput {
-  @Field({ nullable: true })
-  id?: string;
-  @Field({ nullable: true })
-  name?: string;
-  @Field(() => MedicineInput, { nullable: true })
-  details?: MedicineInput;
-	@Field(() => InventoryInput, { nullable:true })
-  list?: InventoryInput;
-	@Field({nullable:true})
-  quantity?: number;
-	@Field({nullable:true})
-  currentPrice?: number;
-	@Field(() => String, {nullable:true})
-  dateOfPurchase?: string;
-	@Field(() => String, {nullable:true})
-  instructions?: string;
-}
-
-
 @InputType()
 export class AppointmentInput {
   @Field({ nullable: true })
-  id?: string;
+  id?: number;
   @Field({ nullable: true })
   patient?: PatientInput;
   @Field({ nullable: true })
@@ -185,10 +174,41 @@ export class AppointmentInput {
   @Field({ nullable: true})
   isVisited?: Boolean;
   @Field({ nullable: true})
-  begin?: string;
+  begin?: Date;
   @Field({ nullable: true})
   length?: number;
 }
+
+@InputType()
+export class PrescriptionInput {
+  @Field(() => AppointmentInput)
+  appointment?: AppointmentInput;
+  @Field()
+  type?: string;
+  @Field(() => [MedicineItemInput])
+  medicines?: [MedicineItemInput];
+}
+
+@InputType()
+export class MedicineItemInput {
+  @Field({ nullable: true })
+  id?: number;
+  @Field({ nullable: true })
+  name?: string;
+  @Field(() => MedicineInput, { nullable: true })
+  details?: MedicineInput;
+	@Field(() => InventoryInput, { nullable:true })
+  list?: InventoryInput;
+	@Field({nullable:true})
+  quantity?: number;
+	@Field({nullable:true})
+  currentPrice?: number;
+	@Field(() => String, {nullable:true})
+  dateOfPurchase?: string;
+	@Field(() => String, {nullable:true})
+  instructions?: string;
+}
+
 
 @ObjectType()
 @InputType()
@@ -204,8 +224,8 @@ export class WorkingHoursInput{
 }
 @InputType()
 export class HolidayInput {
-  @Field(() => String, {nullable: true})
-  id?: string;
+  @Field(() => ID, {nullable: true})
+  id?: number;
 
   @Field(() => EmployeeInput, {nullable: true})
   employee?: EmployeeInput;
@@ -284,16 +304,18 @@ export class ComplaintInput {
 
 @InputType()
 export class ReservationInput {
-	@Field(() => String, {nullable:true})
-  pharmacyId?: string;
-	@Field(() => String, {nullable:true})
-  patientId?: string;
-	@Field(() => String, {nullable:true})
-  medicineId?: string;
+	@Field(() => Number, {nullable:true})
+  id?: number;
+	@Field(() => Number, {nullable:true})
+  originalId?: number;
+	@Field(() => Number, {nullable:true})
+  pharmacyId?: number;
+	@Field(() => Number, {nullable:true})
+  patientId?: number;
+	@Field(() => Number, {nullable:true})
+  medicineId?: number;
 	@Field(() => String, { nullable: true })
   deadline?: string;
 	@Field(() => Number, { nullable: true })
   quantity?: number;
-	@Field(() => String, { nullable: true })
-  token?: string;
 }

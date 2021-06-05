@@ -3,10 +3,11 @@ import { Query, Ctx, Mutation, Resolver, Arg } from "type-graphql";
 import { Reservation } from "../entities/Reservation";
 import { Medicine } from "../entities/Medicine";
 import Patient from "../entities/Patient";
+import User from "../entities/User";
 import { Pharmacy } from "../entities/Pharmacy";
 import { Inventory } from "../entities/Inventory";
 import { MedicineItem } from "../entities/MedicineItem";
-import { ReservationInput, EmployeeResponse } from "./types/dtos";
+import { ReservationInput, EmployeeResponse, ReservationResponse } from "./types/dtos";
 import { sendReservationMail,sendReservationPickupMail } from "../utils/sendMail";
 import moment from 'moment'
 import jwt from "jsonwebtoken";
@@ -16,14 +17,23 @@ export class ReservationResolver {
 
 
   @Query(() => [Reservation], { nullable: true })
-	async reservations( @Arg("token") token: string) {
-
+	async reservations( 
+    @Arg("token") token: string
+  ) {
 		let temp = jwt.decode(token)
     //@ts-ignore
-		let patient = await Patient.findOne({email: temp.email})
-		if(!patient) return null
+		let patient = await Patient.findOneOrFail({email: temp.email})
+		let reservations = await Reservation.find({patient: patient})
 
-		return patient.reservations
+    reservations.forEach(item => {
+      if(new Date(item.deadline) <= new Date()){
+        patient.penalty += 1
+        item.remove()
+
+      }
+    })
+		return reservations
+
   }
   @Query(() => [Reservation], { nullable: true })
 	async res() {
@@ -32,89 +42,99 @@ export class ReservationResolver {
 		return reservations
   }
 
+  // @Field(() => [FieldError], { nullable: true })
+  // errors?: FieldError[];
 
-  @Mutation(() => Reservation, { nullable: true })
+  // @Field(() => Reservation, { nullable: true })
+  // Reservation?: Reservation;
+
+  @Mutation(() => ReservationResponse, { nullable: true })
   async reserveMedicine(
     @Arg("inputs") inputs: ReservationInput,
-    @Ctx() { req, mailer }: MyContext
+    @Arg("token") token: string,
+    @Ctx() { mailer }: MyContext
   ) {
-		if(!inputs.token) return null
-		let temp = jwt.decode(inputs.token)
+    
+		let temp = jwt.decode(token)
     //@ts-ignore
-		let user = await Patient.findOne({email: temp.email})
-		if(!user) return null
+		let user = await Patient.findOneOrFail({id: temp.id})
+		let medItem = await MedicineItem.findOneOrFail({id: inputs.medicineId})
+		let pharmacy = await Pharmacy.findOneOrFail({id: inputs.pharmacyId})
 
-    //let user = req.session.user;
-    //if (!user)
-			//@ts-ignore
-     // user = await Patient.findOneOrFail({ email: inputs.patient.email });
-		//console.log(user)
 
-    if (!inputs.medicineId) return null;
-    if (!inputs.pharmacyId) return null;
-    //@ts-ignore
-    let medicineId = parseInt(inputs.medicineId);
-    let pharmacyId = parseInt(inputs.pharmacyId);
-    //@ts-ignore
-    let id = parseInt(inputs.pharmacyId);
-		let medicine = await Medicine.findOneOrFail({id: medicineId})
-		let medItem = await MedicineItem.findOneOrFail({details: medicine})
-		let pharmacy = await Pharmacy.findOneOrFail({ id: pharmacyId });
+    if(inputs.quantity && medItem.quantity < inputs.quantity){
+      return null
+    }
+
+    if(inputs.quantity)
+      medItem.quantity -= inputs.quantity
+    medItem.version += 1;
 
     let reservation = new Reservation();
+    medItem.save()
+
     let medicineItem = new MedicineItem();
 
     medicineItem.currentPrice = medItem.currentPrice;
     medicineItem.details = medItem.details;
 
 		if(inputs.quantity)
-    medicineItem.quantity = inputs.quantity;
+      medicineItem.quantity = inputs.quantity;
+
     medicineItem.reservation = reservation;
     medicineItem.save();
 
-    medItem.quantity = medItem.quantity - medicineItem.quantity;
-    medItem.version = medItem.version + 1;
-    medItem.save();
+    console.log(inputs)
 
-    reservation.medicineItem = medicineItem;
-    reservation.patient = user;
     if (inputs.deadline) reservation.deadline = inputs.deadline;
-    reservation.isBought = false;
-    reservation.totalSum = medicineItem.currentPrice * medicineItem.quantity;
-    reservation.save();
+    reservation.medicineItem = medicineItem;
+    reservation.originalId = medItem.id;
+    reservation.pharmacy = pharmacy;
 
+    
+    reservation.patient = user;
+    reservation.isBought = false;
+
+		if(inputs.quantity)
+    reservation.totalSum = medicineItem.currentPrice * inputs.quantity;
+
+    reservation.save()
+
+    if(!user.reservations){
+      user.reservations = []
+    }
 		user.reservations.push(reservation)
 		user.save()
 
-		let code = pharmacyId + medicineId + '' 
-    sendReservationMail(user, mailer, reservation, code);
+    if(inputs.medicineId && inputs.pharmacyId){
+      let code = inputs.pharmacyId + inputs.medicineId + '' 
+      sendReservationMail(user, mailer, reservation, code);
+    }
 
-    return reservation;
+    return {reservation: reservation};
   }
 
-  @Mutation(() => [Reservation], { nullable: true })
+  @Mutation(() => Reservation, { nullable: true })
 	async cancelReservation(
-		@Arg("inputs") inputs: ReservationInput
+		@Arg("inputs") inputs: ReservationInput,
+		@Arg("token") token: string
 	) {
-    if (!inputs.id) return null;
-    let id = parseInt(inputs.id);
-    let reservation = await Reservation.findOneOrFail({ id });
+		let temp = jwt.decode(token)
+    if(!temp) return null
+    let patient = await Patient.findOneOrFail({email: temp.email});
+    let reservation = await Reservation.findOneOrFail({ id: inputs.id })
+    let original = await MedicineItem.findOneOrFail({ id: inputs.originalId })
+    let newItem = await MedicineItem.findOneOrFail({ id: inputs.medicineId })
 
-		let deadlineDate = new Date(reservation.deadline)
-		let nextDay = moment(deadlineDate).hours(24)
-		if(nextDay >= moment()){
-			return null
-		}
+    if(inputs.quantity)
+		  original.quantity += inputs.quantity
 
-    //@ts-ignore
-    let pharmId = parseInt(inputs.pharmacy.id);
-    let pharmacy = await Pharmacy.findOneOrFail({ id: pharmId });
-		let medicineItem = pharmacy.inventory.medicines.filter(item => item.id === reservation.medicineItem.id)[0]
+    original.save()
+    reservation.remove()
+    // patient.reservations.filter(item => item.id !== reservation.id)
+    // patient.save()
 
-		medicineItem.quantity += reservation.medicineItem.quantity
-		medicineItem.save()
-
-    return reservation;
+    return null;
   }
 
   @Mutation(() => Reservation, { nullable: true })

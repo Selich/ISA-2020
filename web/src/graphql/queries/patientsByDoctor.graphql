@@ -1,0 +1,9 @@
+query PatientsByDoctor(
+  $inputs: PatientInput!,
+  $token: String!
+){
+  patientsByDoctor(token: $token, inputs:$inputs){
+    firstName
+    lastName
+  }
+}

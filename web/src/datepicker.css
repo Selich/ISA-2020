@@ -1,3 +1,15 @@
+
+
+.rbc-time-view { 
+  font-size: 14px;
+}
+.rbc-month-view{
+  font-size: 14px;
+
+}
+
+
+
 .react-datepicker {
   font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   overflow: hidden;

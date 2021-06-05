@@ -1,0 +1,11 @@
+query RatingMedicine(
+  $token: String!
+) {
+  ratingMedicine(
+    token: $token
+  ){
+    name
+    rating
+  }
+}
+

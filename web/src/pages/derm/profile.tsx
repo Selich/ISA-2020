@@ -1,23 +1,14 @@
-import {  EmailIcon, PhoneIcon } from "@chakra-ui/icons";
-import { Form, Formik } from "formik";
+import { EmailIcon, PhoneIcon } from "@chakra-ui/icons";
 import {
   Avatar,
-  Box,
-  InputLeftAddon,
-  InputRightAddon,
-  Button,
-  Input,
-  SimpleGrid,
-  InputGroup,
-  Stack,
+  Box, Button,
+  Input, InputGroup, InputLeftAddon, SimpleGrid, Stack,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { MdHome } from "react-icons/md";
-import { FormInput } from "../../components/sections/FormInput";
-import { EditProfileModal } from "../../components/sections/modal/EditProfileModal";
 import { SubListModal } from "../../components/sections/modal/SubListModal";
 import { usePatientQuery } from "../../generated/graphql";
 

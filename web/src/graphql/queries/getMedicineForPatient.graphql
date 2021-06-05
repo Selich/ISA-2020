@@ -1,0 +1,19 @@
+query GetMedicineForPatient(
+  $patientInput: UserInput!,
+  $pharmacyInput: PharmacyInput!,
+){
+  getMedicineForPatient(
+    patientInput:$patientInput,
+    pharmacyInput:$pharmacyInput
+    ){
+
+      id
+      name
+      info
+      kind
+      points
+      form
+      contents
+
+    }
+  }

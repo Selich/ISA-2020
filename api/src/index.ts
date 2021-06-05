@@ -20,6 +20,8 @@ import { EmployeeResolver } from './resolvers/EmployeeResolver';
 import { ReservationResolver } from './resolvers/ReservationResolver';
 import { MedicineResolver } from './resolvers/MedicineResolver';
 import { PharmacyResolver } from './resolvers/PharmacyResolver';
+import { PrescriptionResolver } from './resolvers/PrescriptionResolver';
+import { RateResolver } from './resolvers/RateResolver';
 
 
 const mailerOptions = {
@@ -148,11 +150,11 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [ PatientResolver, EmployeeResolver, MedicineResolver, AuthResolver, PharmacyResolver, AppointmentResolver, ReservationResolver],
+      resolvers: [ RateResolver, PatientResolver, EmployeeResolver, MedicineResolver, AuthResolver, PharmacyResolver, AppointmentResolver, ReservationResolver, PrescriptionResolver],
       validate: false
     }),
     context: ({ req, res }) => ({
-      req , res, redis, mailer
+      req , res, redis, mailer, conn
     })
   });
 

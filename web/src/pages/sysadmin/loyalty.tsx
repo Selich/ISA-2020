@@ -7,7 +7,7 @@ import {
   Text,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { useTiersQuery, useDefinitionsQuery } from '../../../generated/graphql'
+import { useTiersQuery, useDefinitionsQuery } from '../../generated/graphql'
 
 export default function Loyalty() {
     const defCol = [

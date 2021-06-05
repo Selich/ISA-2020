@@ -1,0 +1,14 @@
+mutation CreatePrescription( 
+	$appointmentInputs: AppointmentInput!
+	$medicineInput: MedicineItemInput!
+) {
+  createPrescription( 
+  appointmentInputs: $appointmentInputs,
+  medicineInput: $medicineInput
+  ) { 
+    id
+  }
+}
+
+
+

@@ -1,10 +1,15 @@
 mutation ApproveHoliday( 
 	$inputs: HolidayInput!
+	$token: String!
 ) {
-  approveHoliday(inputs: $inputs
+  approveHoliday(
+    inputs: $inputs
+    token: $token
   ) { 
+    from
+    until
     employee{
-      email
+      firstName
+      lastName
     }
-  	isApproved
 }}

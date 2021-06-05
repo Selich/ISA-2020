@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "src/pages/pharm/index.tss"  ],
   "exclude": [
     "node_modules"
   ]

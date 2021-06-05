@@ -1,0 +1,11 @@
+query Allergies(
+  $token: String!,
+){
+  allergies(token: $token){
+    name
+    form
+    kind
+    info
+
+  }
+}

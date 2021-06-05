@@ -11,9 +11,6 @@ import { Reservation } from './Reservation';
 @Entity()
 export class MedicineItem extends Model{
 
-  @Field(() => ID)
-  @PrimaryGeneratedColumn()
-  id!: number;
 
 	@Field(() => Medicine, { nullable:true })
   @ManyToOne(() => Medicine, item => item.belongsTo ,{ eager: true, cascade: true, nullable:true})
@@ -34,10 +31,10 @@ export class MedicineItem extends Model{
   @Column({ nullable: true})
   quantity: number;
 
+
 	@Field({nullable: true})
   @Column({ nullable: true})
   currentPrice: number;
-
 
 	@Field(() => String, {nullable:true})
   @Column({ nullable: true})

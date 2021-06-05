@@ -1,0 +1,11 @@
+query RatingPharmacy(
+  $token: String!
+) {
+  ratingPharmacy(
+    token: $token
+  ){
+    name
+    averageRating
+  }
+}
+

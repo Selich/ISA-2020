@@ -1,12 +1,12 @@
 import { Avatar, Button, Center, Drawer, DrawerOverlay, Flex, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from "@chakra-ui/react";
+import Cookies from 'js-cookie';
+import { JsonWebTokenError } from "jsonwebtoken";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useLogoutMutation } from "../../generated/graphql";
+import { useLogoutMutation, usePatientQuery } from "../../generated/graphql";
 import { Basket } from "../layouts/Basket";
-import Cookies from 'js-cookie'
 import EPrescriptionDrawer from "../sections/EPrescriptionDrawer";
-import { usePatientQuery } from "../../generated/graphql";
 
 
 const UserMenu: any = ({ user, setUser }) => {
@@ -52,46 +52,18 @@ const UserMenu: any = ({ user, setUser }) => {
               <span>Home</span>
             </MenuItem>
           </NextLink>
-					<NextLink href={`/${user.role}/profile`}>
+					<NextLink href={`/profile`}>
             <MenuItem minH="48px">
               <span>Profile</span>
             </MenuItem>
           </NextLink>
-					<hr/>
-					<NextLink href={`/${user.role}/appointments`}>
-            <MenuItem minH="48px">
-              <span>Appointments</span>
-            </MenuItem>
-          </NextLink>
-					<NextLink href={`/${user.role}/complaints`}>
-            <MenuItem minH="48px">
-              <span>Complaints</span>
-            </MenuItem>
-          </NextLink>
-					<NextLink href={`/${user.role}/reservations`}>
-            <MenuItem minH="48px">
-              <span>Reservations</span>
-            </MenuItem>
-          </NextLink>
-					<NextLink href={`/${user.role}/subscriptions`}>
-            <MenuItem minH="48px">
-              <span>Subscriptions</span>
-            </MenuItem>
-          </NextLink>
-					<NextLink href={`/${user.role}/eprescriptions`}>
-            <MenuItem minH="48px">
-              <span>E-prescriptions</span>
-            </MenuItem>
-          </NextLink>
-          <MenuItem ref={btnRef} onClick={onOpen} minH="48px">
-            <span>E-prescription (Modal)</span>
-          </MenuItem>
-          <hr />
           <MenuItem
             mr={4}
             onClick={() => {
               logout();
               setUser(null)
+              Cookies.remove('token')
+              
               router.push('/')
             }}
             isLoading={logoutFetching}

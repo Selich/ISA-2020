@@ -44,7 +44,7 @@ export class Pharmacy extends Model {
   admins: Employee[];
 
   @Field(() => [AppointmentDefinition])
-  @OneToMany(() => AppointmentDefinition, item => item.pharmacy, {nullable: true})
+  @OneToMany(() => AppointmentDefinition, item => item.pharmacy, {nullable: true, eager:true})
   definitions: AppointmentDefinition[];
 
   @Field(() => [MedicineRequest])

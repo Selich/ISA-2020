@@ -1,0 +1,29 @@
+query Appointments(
+  $inputs: AppointmentInput!,
+  $token: String!,
+){
+  appointments(token: $token,inputs:$inputs){
+    id
+    price
+    length
+    begin
+    employee{
+      averageRating
+      firstName
+      lastName
+    }
+    pharmacy{
+      id
+    }
+    patient{
+      id
+      firstName
+      lastName
+      allergies{
+        id
+        name
+      }
+
+    }
+  }
+}

@@ -10,14 +10,7 @@ export const Header: any = ({user, setUser}) => {
 	if (!user) {
 	 body = ( <GuestMenu setUser={setUser}/>)
   } else {
-		if(user.role === "patient")
-      body = ( <UserMenu setUser={setUser} user={user}/>)
-    else if(user.role === "derm" || user.role === "pharm")
-      body = ( <EmployeeMenu setUser={setUser} user={user}/>)
-    else if(user.role === "admin")
-      body = ( <PharmAdminMenu setUser={setUser} user={user}/>)
-    else if(user.role === "sysadmin")
-      body = ( <SysAdminMenu setUser={setUser} user={user}/>)
+   body = ( <UserMenu setUser={setUser} user={user}/>)
   }
 
   return (

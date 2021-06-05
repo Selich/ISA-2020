@@ -1,5 +1,14 @@
-mutation AddReservation( $inputs: ReservationInput! ) {
-  reserveMedicine( inputs: $inputs) {
-      id
+mutation AddReservation( $inputs: ReservationInput!, $token: String! ) {
+  reserveMedicine( inputs: $inputs, token: $token) {
+    reservation{
+      deadline
+
+    }
+    errors{
+      field
+      message
+    }
+
+
   }
 }

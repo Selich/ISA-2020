@@ -20,18 +20,51 @@ const roles = {
 export class AuthResolver {
 
     @Query(() => User, { nullable: true })
-    me(@Arg("token") token: string, @Ctx() { req }: MyContext) {
+    async me(@Arg("token") token: string, @Ctx() { req }: MyContext) {
         let decode = jwt.decode(token);
-        console.log(decode);
-        let temp = Patient.findOne({ id: req.session.id });
-        if (!temp) {
-            let temp2 = Employee.findOne({ id: req.session.id });
-            if (!temp2) return null;
-            //@ts-ignore
-            temp = temp2;
-        }
+        // @ts-ignore
+        return await User.findOne({ email: decode.email });
+    }
 
-        return temp;
+    @Mutation(() => User, { nullable: true })
+    async editUser(
+        @Arg("token") token: string, 
+        @Arg("inputs") inputs: UserInput, 
+    ) {
+        let decode = jwt.decode(token);
+        // @ts-ignore
+        if(!inputs || !inputs.address) return null
+        let user =  await User.findOne({ email: inputs.email });
+        if(!user) return null
+        let { street, city, country } = inputs.address
+        let address = await Address.findOne({ street, city, country });
+        if (!address){
+            let url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+ 
+            street?.replace(' ', '+') + 
+            '+' + city?.replace(' ', '+') + 
+            '+' + country?.replace(' ', '+')
+            +'&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
+            let res = await axios.get(url)
+            console.log(url)
+            console.log(res.data)
+            let lat = res.data.results[0].geometry.location.lat
+            let long = res.data.results[0].geometry.location.lng
+
+            user.address = await Address.save( new Address({ street, city, country,  lat, long, user: user, }));
+        }
+        else 
+            user.address = address
+        
+        if(inputs.firstName)
+        user.firstName = inputs.firstName
+        if(inputs.lastName)
+        user.lastName = inputs.lastName
+        if(inputs.telephone)
+        user.telephone = inputs.telephone
+
+        user.save()
+        return user
+        
     }
 
     @Mutation(() => UserResponse)
@@ -45,8 +78,8 @@ export class AuthResolver {
                 errors: [
                 { field: "email", message: "Invalid credentials" },
                 { field: "password", message: "Invalid credentials" },
-        ] 
-    };
+                ] 
+            };
 
         user.isEnabled = true
         if (!user.isEnabled)
@@ -61,7 +94,7 @@ export class AuthResolver {
             ] }
 
         let token = jwt.sign(
-            { id: user.id, email: user.email, },
+            { id: user.id, email: user.email, role: user.role},
             "secret",
             { expiresIn: "20m" }
         );

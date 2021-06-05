@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { useShopQuery } from "../generated/graphql";
+import { useReserveMedicineMutation, useShopQuery } from "../generated/graphql";
 import { useAddReservationMutation } from "../generated/graphql";
 import { useContainsMedicineQuery } from "../generated/graphql";
 import { Input, useDisclosure, } from "@chakra-ui/react";
@@ -40,25 +40,11 @@ const Shop = (): JSX.Element => {
 		setMedicine(item)
 	}
 	const Select = (item) => {
+		console.log(item)
+		console.log('testset')
 		setPharmacy(item)
 	}
 
-	const handleSubmit = () => {
-		let {day, month, year} = date
-		let rdate = new Date(parseInt(year), parseInt(month), parseInt(day))
-
-		let inputs = {
-			'deadline': rdate + '',
-			'pharmacyId': pharmacy.id,
-			'medicineId': medicine.id,
-			'quantity': quantity,
-			'token': token
-		}
-
-		addReservation({inputs})
-			.then(res => console.log(res))
-			.catch(res => console.log(res))
-	}
 	
 	let variables = { token: token }
 	let pharmacyVariables = { id: '1' }
@@ -91,7 +77,7 @@ const Shop = (): JSX.Element => {
 				disclosure={dateModal}
 				title={'Reservation'}
 			>
-				<ReservationForm/>
+				<ReservationForm pharmacy={pharmacy} medicine={medicine} onClose={dateModal.onClose} Close={buyItemModal.onClose}/>
 			</ModalComponent>
 		</ModalComponent>
     </Box>
@@ -100,20 +86,44 @@ const Shop = (): JSX.Element => {
 }
 
 
-export const ReservationForm = () => {
+export const ReservationForm = ({pharmacy, medicine, onClose, Close}) => {
+	const [,addReservation] = useAddReservationMutation()
+	const token = Cookies.get('token')
+
+	const handleSubmit = (data) => {
+
+		let inputs = {
+			'deadline': data.date.toLocaleDateString() + '',
+			'pharmacyId': parseInt(pharmacy.pharmacy.id),
+			'medicineId': parseInt(pharmacy.medicineItem.id),
+			'quantity': parseInt(data.quantity),
+		}
+		console.log(inputs)
+
+		addReservation({inputs, token: token})
+			.then(res => {
+				if(!res.data.reserveMedicine){
+					alert('Not enough items for selected quantity')
+				} else {
+					onClose()
+					Close()
+				}
+				console.log(res)
+			})
+			.catch(res => console.log(res))
+	}
 
 	return (
 		<div>
 			<Formik
 				initialValues={{ 
 					date: "",
-					qunatity: 1,
+					quantity: "1",
 				}}
 				onSubmit={(data, {setSubmitting}) => {
 					setSubmitting(true)
-					console.log(data);
+					handleSubmit(data)
 					setSubmitting(false)
-					
 
 				}}
 			>{({ values, errors, isSubmitting}) => (
@@ -128,6 +138,7 @@ export const ReservationForm = () => {
 					Quantity
 					<Field
 						name="quantity"
+						value={values.quantity}
 						type="input"
 						as={Input}
 						/>

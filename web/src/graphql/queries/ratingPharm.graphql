@@ -1,0 +1,13 @@
+query RatingPharm(
+  $token: String!
+) {
+  ratingPharm(
+    token: $token
+  ){
+    email
+    firstName
+    lastName
+    averageRating
+  }
+}
+

@@ -1,0 +1,24 @@
+query FreePharms($inputs: DateInput!) {
+  freePharms(inputs: $inputs) {
+    email
+    firstName
+    lastName
+    averageRating
+    workingHours {
+      from
+      until
+    }
+    pharmacy {
+      definitions{
+        price
+        kind
+      }
+      name
+      averageRating
+      address {
+        street
+        city
+      }
+    }
+  }
+}

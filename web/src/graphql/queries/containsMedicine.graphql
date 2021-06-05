@@ -5,6 +5,7 @@ query ContainsMedicine($id: String!) {
       name
     }
     medicineItem{
+      id
       currentPrice
     }
     

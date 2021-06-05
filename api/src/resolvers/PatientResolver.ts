@@ -1,5 +1,8 @@
+import { isNotEmpty } from "class-validator";
 import jwt from "jsonwebtoken";
+import { Appointment } from "../entities/Appointment";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Any } from "typeorm";
 import { Complaint } from "../entities/Complaint";
 import { Employee } from "../entities/Employee";
 import { Medicine } from "../entities/Medicine";
@@ -8,10 +11,29 @@ import { Pharmacy } from "../entities/Pharmacy";
 import { Rating } from "../entities/Rating";
 import { Tier } from "../entities/Tier";
 import { MyContext } from "../types";
-import { ComplaintInput, RatingInput, SubscriptionInput } from "./types/dtos";
+import { ComplaintInput, MedicineInput, PatientInput, RatingInput, SubscriptionInput } from "./types/dtos";
 
 @Resolver(Patient)
 export class PatientResolver {
+
+  @Query(() => [Medicine], { nullable: true })
+	async allergies( 
+		@Arg("token") token: string
+	) {
+    let temp = jwt.decode(token)
+    // @ts-ignore
+    let patient = await Patient.findOne({ email: temp.email });
+    return patient?.allergies
+  }
+
+  @Query(() => [Appointment], { nullable: true })
+	async getPatient( 
+		@Arg("inputs") inputs: PatientInput
+	) {
+    let patient = await Patient.findOne({ id: inputs.id });
+    let appointments = await Appointment.find({patient: patient})
+    return appointments
+  }
 
   @Query(() => Patient, { nullable: true })
 	async patient( 
@@ -27,9 +49,28 @@ export class PatientResolver {
 
   @Query(() => [Patient], { nullable: true })
   async patients(
+		@Arg("token") token: string,
+		@Arg("inputs") inputs: PatientInput,
   ) {
-    //@ts-ignore
-    return await Patient.find({});
+		if (!inputs) return await Patient.find({})
+  }
+
+  @Query(() => [Patient], { nullable: true })
+  async patientsByDoctor(
+		@Arg("token") token: string,
+		@Arg("inputs") inputs: PatientInput,
+  ) {
+		if (!inputs) return null
+
+    let temp = jwt.decode(token)
+    // @ts-ignore
+    // let employee = await Employee.findOne({ email: temp.email });
+    let employee = await Employee.findOne({ email: temp.email });
+    let appointments = await Appointment.find({ employee: employee})
+    let patients = appointments.map(item => item.patient)
+
+    return [ ... new Set(patients)]
+
   }
 
   @Query(() => [Tier], { nullable: true })
@@ -39,19 +80,19 @@ export class PatientResolver {
 
   @Mutation(() => Patient, { nullable: true })
   async addAllergie(
-    @Arg("allergies") allergies: string,
+    @Arg("inputs") inputs: MedicineInput,
+    @Arg("token") token: string,
     @Ctx() { req }: MyContext
   ) {
-    let temp = JSON.parse(allergies);
-    let medicines = [];
-    for (const item in temp) {
-      //@ts-ignore
-      let med = await Medicine.findOne({ name: item.value });
-      if (med) medicines.push(med);
+    let temp = jwt.decode(token)
+    let med = await Medicine.findOneOrFail({ name: inputs.name });
+    // @ts-ignore
+    let user = await Patient.findOneOrFail({ email: temp.email });
+
+    if(user.allergies.length == 0){
+      user.allergies = []
     }
-    let user = await Patient.findOneOrFail({ id: req.session.userId });
-    console.log(user);
-    user.allergies = medicines;
+    user.allergies.push(med);
     user = await Patient.save(user);
     return user;
   }
@@ -238,6 +279,8 @@ export class PatientResolver {
     return user
 
   }
+
+
 
   @Mutation(() => Patient, { nullable: true })
   async subscribe(

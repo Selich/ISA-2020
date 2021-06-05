@@ -1,0 +1,20 @@
+mutation EditUser(
+  $inputs: UserInput!
+  $token: String!
+  
+  ) {
+  editUser( 
+    inputs: $inputs,
+    token: $token
+     ) {
+       firstName
+       lastName
+       address{
+         street
+         city
+         country
+       }
+       telephone
+       email
+  }
+}

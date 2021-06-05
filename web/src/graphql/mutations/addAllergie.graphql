@@ -1,32 +1,14 @@
-mutation AddAllergie($allergies: String!) {
-  addAllergie( allergies: $allergies ) {
-      email
-      firstName
-      lastName
-      role
-      allergies{
-        name
-      }
-      tier{
-        name
-        discount
-      }
-      appointments {
-        employee {
-          firstName
-          lastName
-          email
-          averageRating
-        }
-        begin
-        length
-        kind
-        isVisited
-        price
-        pharmacy {
-          name
-        }
-      }
-
+mutation AddAllergie(
+  $inputs: MedicineInput!
+  $token: String!
+  
+  ) {
+  addAllergie( 
+    inputs: $inputs,
+    token: $token
+     ) {
+    allergies{
+      name
+    }
   }
 }
