@@ -14,10 +14,13 @@ database: isa_super
 port: 5432
 ```
 
-### Video uputstvo koriscenja aplikacije
+## Video uputstvo koriscenja aplikacije
 
 Video klipovi se nalaze na Google Drive-u na [linku](https://drive.google.com/drive/folders/1NRJ668fUAeZKRTFkIO6hQ8IX-Op6kTdJ?usp=sharing)
 
+### Dump SQL baze
+
+Dump SQL baze se nalazi na [linku]( https://drive.google.com/drive/u/1/folders/1aOOK3CV7BB5vG-ntpBgifMQkrUB8Nkv0)
 
 
 Za formiranje i popunjavanje tabela u bazi koristiti sledecu komandu u terminalu
