@@ -14,6 +14,12 @@ database: isa_super
 port: 5432
 ```
 
+### Video uputstvo koriscenja aplikacije
+
+Video klipovi se nalaze na Google Drive-u na [linku](https://drive.google.com/drive/folders/1NRJ668fUAeZKRTFkIO6hQ8IX-Op6kTdJ?usp=sharing)
+
+
+
 Za formiranje i popunjavanje tabela u bazi koristiti sledecu komandu u terminalu
 ```
 psql -U isa_super -d isa_super < dump.sql
