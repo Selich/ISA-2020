@@ -134,7 +134,7 @@ const RateDerm = () => {
   }
   const columns = [
     {name: "FirstName", selector:"firstName", sortable:true},
-    {name: "LastName", selector:"lastName", sortable:true},
+    // {name: "LastName", selector:"lastName", sortable:true},
     {name: "Rating", selector:"averageRating", sortable:true},
           {
           name: "",
@@ -170,7 +170,7 @@ const RatePharm = () => {
   }
   const columns = [
     {name: "FirstName", selector:"firstName", sortable:true},
-    {name: "LastName", selector:"lastName", sortable:true},
+    // {name: "LastName", selector:"lastName", sortable:true},
     {name: "Rating", selector:"averageRating", sortable:true},
           {
           name: "",

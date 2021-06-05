@@ -9,6 +9,7 @@ query FreePharms($inputs: DateInput!) {
       until
     }
     pharmacy {
+      id
       definitions{
         price
         kind

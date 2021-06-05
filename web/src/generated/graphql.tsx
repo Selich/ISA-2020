@@ -72,12 +72,6 @@ export type QueryPatientArgs = {
 };
 
 
-export type QueryPatientsArgs = {
-  inputs: PatientInput;
-  token: Scalars['String'];
-};
-
-
 export type QueryPatientsByDoctorArgs = {
   inputs: PatientInput;
   token: Scalars['String'];
@@ -109,6 +103,8 @@ export type QueryAppointmentsArgs = {
 
 
 export type QueryFreeAppointmentsArgs = {
+  kind: Scalars['String'];
+  token: Scalars['String'];
   pharmacyId: Scalars['String'];
 };
 
@@ -665,6 +661,7 @@ export type Mutation = {
   unschedulePatient?: Maybe<Appointment>;
   createDefinition?: Maybe<AppointmentDefinition>;
   unschedule?: Maybe<Appointment>;
+  scheduleAppointmentEmployee?: Maybe<Appointment>;
   scheduleConsultation?: Maybe<Appointment>;
   schedule?: Maybe<Appointment>;
   addFreeApp?: Maybe<Appointment>;
@@ -754,6 +751,12 @@ export type MutationCreateDefinitionArgs = {
 
 export type MutationUnscheduleArgs = {
   inputs: AppointmentInput;
+};
+
+
+export type MutationScheduleAppointmentEmployeeArgs = {
+  inputs: AppointmentInput;
+  token: Scalars['String'];
 };
 
 
@@ -1408,6 +1411,27 @@ export type ScheduleMutation = (
   )> }
 );
 
+export type ScheduleAppointmentEmployeeMutationVariables = Exact<{
+  inputs: AppointmentInput;
+  token: Scalars['String'];
+}>;
+
+
+export type ScheduleAppointmentEmployeeMutation = (
+  { __typename?: 'Mutation' }
+  & { scheduleAppointmentEmployee?: Maybe<(
+    { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
+    & { patient?: Maybe<(
+      { __typename?: 'Patient' }
+      & Pick<Patient, 'firstName'>
+    )>, employee?: Maybe<(
+      { __typename?: 'Employee' }
+      & Pick<Employee, 'lastName'>
+    )> }
+  )> }
+);
+
 export type ScheduleConsultationMutationVariables = Exact<{
   inputs: AppointmentInput;
   token: Scalars['String'];
@@ -1418,9 +1442,13 @@ export type ScheduleConsultationMutation = (
   { __typename?: 'Mutation' }
   & { scheduleConsultation?: Maybe<(
     { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
     & { patient?: Maybe<(
       { __typename?: 'Patient' }
       & Pick<Patient, 'firstName'>
+    )>, employee?: Maybe<(
+      { __typename?: 'Employee' }
+      & Pick<Employee, 'lastName'>
     )> }
   )> }
 );
@@ -1515,7 +1543,7 @@ export type FreePharmsQuery = (
       & Pick<WorkingHours, 'from' | 'until'>
     )>>, pharmacy?: Maybe<(
       { __typename?: 'Pharmacy' }
-      & Pick<Pharmacy, 'name' | 'averageRating'>
+      & Pick<Pharmacy, 'id' | 'name' | 'averageRating'>
       & { definitions: Array<(
         { __typename?: 'AppointmentDefinition' }
         & Pick<AppointmentDefinition, 'price' | 'kind'>
@@ -1601,7 +1629,10 @@ export type AppointmentsPatientQuery = (
   & { appointmentsPatient?: Maybe<Array<(
     { __typename?: 'Appointment' }
     & Pick<Appointment, 'id' | 'kind' | 'begin' | 'price' | 'length' | 'isVisited'>
-    & { employee?: Maybe<(
+    & { pharmacy?: Maybe<(
+      { __typename?: 'Pharmacy' }
+      & Pick<Pharmacy, 'name'>
+    )>, employee?: Maybe<(
       { __typename?: 'Employee' }
       & Pick<Employee, 'firstName' | 'lastName' | 'role' | 'email' | 'averageRating'>
     )>, patient?: Maybe<(
@@ -1717,6 +1748,8 @@ export type EprescriptionsMutation = (
 
 export type FreeAppointmentsQueryVariables = Exact<{
   pharmacyId: Scalars['String'];
+  token: Scalars['String'];
+  kind: Scalars['String'];
 }>;
 
 
@@ -1844,6 +1877,17 @@ export type PatientQuery = (
       & Pick<Reservation, 'id'>
     )> }
   )> }
+);
+
+export type PatientsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PatientsQuery = (
+  { __typename?: 'Query' }
+  & { patients?: Maybe<Array<(
+    { __typename?: 'Patient' }
+    & Pick<Patient, 'firstName' | 'lastName' | 'email'>
+  )>> }
 );
 
 export type PatientsByDoctorQueryVariables = Exact<{
@@ -2431,11 +2475,34 @@ export const ScheduleDocument = gql`
 export function useScheduleMutation() {
   return Urql.useMutation<ScheduleMutation, ScheduleMutationVariables>(ScheduleDocument);
 };
-export const ScheduleConsultationDocument = gql`
-    mutation ScheduleConsultation($inputs: AppointmentInput!, $token: String!) {
-  scheduleConsultation(inputs: $inputs, token: $token) {
+export const ScheduleAppointmentEmployeeDocument = gql`
+    mutation ScheduleAppointmentEmployee($inputs: AppointmentInput!, $token: String!) {
+  scheduleAppointmentEmployee(token: $token, inputs: $inputs) {
     patient {
       firstName
+    }
+    begin
+    length
+    employee {
+      lastName
+    }
+  }
+}
+    `;
+
+export function useScheduleAppointmentEmployeeMutation() {
+  return Urql.useMutation<ScheduleAppointmentEmployeeMutation, ScheduleAppointmentEmployeeMutationVariables>(ScheduleAppointmentEmployeeDocument);
+};
+export const ScheduleConsultationDocument = gql`
+    mutation ScheduleConsultation($inputs: AppointmentInput!, $token: String!) {
+  scheduleConsultation(token: $token, inputs: $inputs) {
+    patient {
+      firstName
+    }
+    begin
+    length
+    employee {
+      lastName
     }
   }
 }
@@ -2522,6 +2589,7 @@ export const FreePharmsDocument = gql`
       until
     }
     pharmacy {
+      id
       definitions {
         price
         kind
@@ -2616,6 +2684,9 @@ export const AppointmentsPatientDocument = gql`
   appointmentsPatient(token: $token, inputs: $inputs, type: $type) {
     id
     kind
+    pharmacy {
+      name
+    }
     employee {
       firstName
       lastName
@@ -2752,8 +2823,8 @@ export function useEprescriptionsMutation() {
   return Urql.useMutation<EprescriptionsMutation, EprescriptionsMutationVariables>(EprescriptionsDocument);
 };
 export const FreeAppointmentsDocument = gql`
-    query FreeAppointments($pharmacyId: String!) {
-  freeAppointments(pharmacyId: $pharmacyId) {
+    query FreeAppointments($pharmacyId: String!, $token: String!, $kind: String!) {
+  freeAppointments(pharmacyId: $pharmacyId, token: $token, kind: $kind) {
     id
     employee {
       firstName
@@ -2901,6 +2972,19 @@ export const PatientDocument = gql`
 
 export function usePatientQuery(options: Omit<Urql.UseQueryArgs<PatientQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<PatientQuery>({ query: PatientDocument, ...options });
+};
+export const PatientsDocument = gql`
+    query Patients {
+  patients {
+    firstName
+    lastName
+    email
+  }
+}
+    `;
+
+export function usePatientsQuery(options: Omit<Urql.UseQueryArgs<PatientsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<PatientsQuery>({ query: PatientsDocument, ...options });
 };
 export const PatientsByDoctorDocument = gql`
     query PatientsByDoctor($inputs: PatientInput!, $token: String!) {

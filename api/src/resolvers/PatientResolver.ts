@@ -49,10 +49,8 @@ export class PatientResolver {
 
   @Query(() => [Patient], { nullable: true })
   async patients(
-		@Arg("token") token: string,
-		@Arg("inputs") inputs: PatientInput,
   ) {
-		if (!inputs) return await Patient.find({})
+		return await Patient.find({})
   }
 
   @Query(() => [Patient], { nullable: true })

@@ -44,46 +44,46 @@ export class PrescriptionResolver {
   ) {
   }
 
-  @Mutation(() => Prescription, { nullable: true })
+  @Mutation(() => Prescription)
   async createPrescription(
     @Arg("appointmentInputs") appointmentInputs: AppointmentInput,
     @Arg("medicineInput") medicineInput: MedicineItemInput,
-    @Ctx() { req, res }: MyContext
   ) {
 
-    if(!medicineInput) return null
 
-    let medicine = null
     // @ts-ignore
     let appointment = await Appointment.findOneOrFail({id: appointmentInputs.id})
-
+    console.log(appointment)
     // @ts-ignore
-
-    // @ts-ignore
-    let details = await Medicine.findOneOrFail({id: medicineInput.details.id})
-    let pharm = await Pharmacy.findOne({id: appointment.id})
-
-    if(!details) return null
-
-    // @ts-ignore
-    medicine = pharm?.inventory.medicines.find(item => item.details == details)
-    // todo: handle message
-    if(!medicine) return null
 
     let prescription = new Prescription()
+    // @ts-ignore
+    if(medicineInput.details.id){
+       // @ts-ignore
+      let details = await Medicine.findOne({id: medicineInput.details.id})
+      if(!details) return null
+      let medicine = appointment.pharmacy.inventory.medicines.find(item => item.details == details)
+      if(!prescription.medicines)
+        prescription.medicines = []
+      if(medicine)
+        prescription.medicines.push(medicine)
+    }
 
     if(appointmentInputs.report)
       appointment.report = appointmentInputs.report
     
     appointment.isVisited = true
+    
     appointment.save()
     
-
-    prescription.patient = await Patient.findOneOrFail({id: appointment.patient?.id})
-    prescription.employee = await Employee.findOneOrFail({id: appointment.employee?.id})
-    prescription.medicines = []
-    prescription.medicines.push(medicine)
+    prescription.appointment = appointment
+    prescription.patient = appointment.patient
+    let date = new Date()
+    prescription.deadline = new Date(date.setMonth(date.getMonth()+8));
+    prescription.employee = appointment.employee
+    
     prescription.save()
+    return prescription
 
   }
 

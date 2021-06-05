@@ -110,18 +110,25 @@ export const ExaminationModal: any = ({
   const [medicines, setMedicines] = useState([]);
   const examModal = useDisclosure();
 
+
+  const handleNotArived = () => {
+
+  }
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
         <ModalContent maxW="56rem" maxH="106rem">
-          <ModalHeader>Start Examination</ModalHeader>
+          <ModalHeader>Start Appointment</ModalHeader>
           <ModalCloseButton />
           <ModalFooter>
             <Button mr={3} onCLick={() => onClose()} colorScheme="red">
-              Cancel
+              Not Arrived
             </Button>
-            <Button onClick={() => examModal.onOpen()}>Start</Button>
+            <Button onClick={() => {
+              examModal.onOpen()
+              onClose()
+              }}>Start</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -199,7 +206,7 @@ export const StepThreeModal: any = ({
 
     let appointmentInputs =
     {
-      id: appointment.id + '',
+      id: parseInt(appointment.id),
       report: comment
     }
     let medicineInput =
@@ -207,7 +214,7 @@ export const StepThreeModal: any = ({
           id: medicine.id
         } , quantity: 1}
 
-    createPrescription({appointmentInputs, medicineInput}).then(res=>console.log(res))
+    createPrescription({appointmentInputs, medicineInput}).then(res=> onClose())
 
   }
 

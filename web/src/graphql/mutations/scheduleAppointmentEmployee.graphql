@@ -1,0 +1,15 @@
+mutation ScheduleAppointmentEmployee(
+  $inputs: AppointmentInput!,
+  $token: String!
+){
+  scheduleAppointmentEmployee(token: $token, inputs:$inputs){
+    patient{
+      firstName
+    }
+    begin
+  	length
+    employee{
+      lastName
+    }
+  }
+}

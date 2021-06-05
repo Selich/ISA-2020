@@ -88,7 +88,9 @@ const CurrentConsult = ({type}) => {
     const columns = [
       { name: "Begin", selector: "begin", sortable: true },
       { name: "Kind", selector: "kind", sortable: true },
-      { name: "Doctor", selector: "employee.lastName", sortable: true },
+      { name: "Price", selector: "price", sortable: true },
+      { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
+      // { name: "Doctor", selector: "employee.lastName", sortable: true },
       {
         name: "",
         button: true,
@@ -191,7 +193,6 @@ export const ScheduleConsultation = ({ isOpen, onClose }) => {
 };
 
 
-import * as R from 'rambda'
 const PharmacyList = ({ isOpen, time, onClose }) => {
   console.log(time);
   const [employees,setEmployees] = useState([])
@@ -218,10 +219,6 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
   if(fetching) body = <div>Loading</div>
   else if(!data) body = <div>Loading</div>
   else {
-    // @ts-ignore
-
-    let temp = []
-
     const columns = [
       { name: "Name", selector: "pharmacy.name", sortable: true },
       { name: "Rating", selector: "pharmacy.averageRating", sortable: true },
@@ -294,6 +291,9 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
         employee: {
           email: row.email
         },
+        pharmacy: {
+          id: parseInt(row.pharmacy.id)
+        },
         price: row.pharmacy.definitions[0].price,
         begin: date
 
@@ -312,7 +312,7 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
   }
   const columns = [
     { name: "Name", selector: "firstName", sortable: true },
-    { name: "LastName", selector: "lastName", sortable: true },
+    // { name: "LastName", selector: "lastName", sortable: true },
     { name: "Price", selector: "averageRating", sortable: true },
     {
       name: "",

@@ -1,7 +1,13 @@
 query FreeAppointments(
   $pharmacyId:String!
+  $token:String!
+  $kind:String!
 ) {
-	freeAppointments(pharmacyId: $pharmacyId){
+	freeAppointments(pharmacyId: $pharmacyId
+  token:$token,
+  kind:$kind,
+
+  ){
     id
     employee{
       firstName
