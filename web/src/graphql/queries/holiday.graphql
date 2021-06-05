@@ -1,10 +1,12 @@
 query Holiday($token: String!) {
   holiday(token: $token) {
+    id
     from
     until
     isApproved
     comments
     employee {
+      role
       firstName
       lastName
       email

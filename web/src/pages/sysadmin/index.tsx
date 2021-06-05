@@ -20,6 +20,7 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import DataTable from "react-data-table-component";
+import { AdminHolidays } from "../../components/AdminHoliday";
 import { EmployeeTable } from "../../components/tables/EmployeeTable";
 import {
   useAddEmployeeMutation,
@@ -29,6 +30,49 @@ import {
 } from "../../generated/graphql";
 import { MyDateInput, MyTimeInput } from "../../utils/utils";
 
+
+const TabMenu = () => (
+  <TabList>
+    <Tab>System Admins</Tab>
+    <Tab>Employees</Tab>
+    <Tab>Pharmacies</Tab>
+    <Tab>Medicines</Tab>
+    <Tab>Pharm Admin</Tab>
+    <Tab>Complaints</Tab>
+    <Tab>Loyalty Program</Tab>
+    <Tab>Holidays</Tab>
+  </TabList>
+);
+export default function Index() {
+  // @ts-ignore
+  return (
+    <>
+      <Box m="4" p="8" fontSize="2rem">
+        <Box>
+          <Tabs isFitted colorScheme="green">
+            <TabMenu />
+            <TabPanels>
+              <TabPanel>
+                {/* <DermExaminations events={data.appointments}/> */}
+              </TabPanel>
+              <TabPanel>
+                <Employees />
+              </TabPanel>
+              <TabPanel></TabPanel>
+              <TabPanel>
+                <Medicine/>
+              </TabPanel>
+              <TabPanel>{/* <Profile/> */}</TabPanel>
+              <TabPanel>
+                <AdminHolidays />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
+      </Box>
+    </>
+  );
+}
 const SelectedPharmModal: any = ({
   isOpen,
   onClose,
@@ -95,18 +139,6 @@ const ScheduleConsultations = () => {
   );
 };
 
-const TabMenu = () => (
-  <TabList>
-    <Tab>Holidays</Tab>
-    <Tab>System Admins</Tab>
-    <Tab>Employees</Tab>
-    <Tab>Pharmacies</Tab>
-    <Tab>Medicines</Tab>
-    <Tab>Pharm Admin</Tab>
-    <Tab>Complaints</Tab>
-    <Tab>Loyalty Program</Tab>
-  </TabList>
-);
 
 export const Patients = ({ events }) => {
   // TODO
@@ -197,37 +229,6 @@ const Holidays = () => {
   return body;
 };
 
-export default function Index() {
-  // @ts-ignore
-  return (
-    <>
-      <Box m="4" p="8" fontSize="2rem">
-        <Box>
-          <Tabs isFitted colorScheme="green">
-            <TabMenu />
-            <TabPanels>
-              <TabPanel>
-                <Holidays />
-              </TabPanel>
-              <TabPanel>
-                {/* <DermExaminations events={data.appointments}/> */}
-              </TabPanel>
-              <TabPanel>
-                <Employees />
-              </TabPanel>
-              <TabPanel></TabPanel>
-              <TabPanel>
-                <Medicine/>
-
-              </TabPanel>
-              <TabPanel>{/* <Profile/> */}</TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Box>
-      </Box>
-    </>
-  );
-}
 
 const Medicine = () => {
   const [{fetching,data}] = useMedicineQuery()
@@ -365,6 +366,15 @@ const Employees = () => {
 		{ name: "Role", selector: "role", sortable: true },
 		{ name: "Pharmacy", selector: "pharmacy.name", sortable: true },
 		{ name: "Email", selector: "email", sortable: true },
+    {
+        name: "",
+        button: true,
+        cell: (row: any) => (
+          <Button size="sm" onClick={() => handler(row)}>
+            {item.name}
+          </Button>
+        ),
+    }
 	];
   let body = null
   if(fetching) body = <div>Loading</div>

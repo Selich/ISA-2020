@@ -36,13 +36,6 @@ export class PrescriptionResolver {
     return medicines
 
   }
-  @Mutation(() => Prescription, { nullable: true })
-  async notVisited(
-    @Arg("appointmentInputs") appointmentInputs: AppointmentInput,
-    @Arg("prescriptionInputs") prescriptionInputs: PrescriptionInput,
-    @Ctx() { req, res }: MyContext
-  ) {
-  }
 
   @Mutation(() => Prescription)
   async createPrescription(
@@ -73,8 +66,13 @@ export class PrescriptionResolver {
       appointment.report = appointmentInputs.report
     
     appointment.isVisited = true
+
     
     appointment.save()
+
+    let patient = appointment.patient
+    patient.score += appointment.score
+    patient.save()
     
     prescription.appointment = appointment
     prescription.patient = appointment.patient

@@ -33,6 +33,10 @@ export class Reservation extends Model{
 	@Field(() => String, { nullable: true })
   @Column({ nullable: true })
   pickupDate: string;
+  
+	@Field(() => String, { nullable: true })
+  @Column({ nullable: true })
+  code: string;
 
 	@Field({nullable: true})
   @Column({ nullable: true})

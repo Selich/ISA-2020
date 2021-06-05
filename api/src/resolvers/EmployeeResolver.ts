@@ -9,6 +9,7 @@ import { Field, Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
 import { UserResponse, HolidayInput, EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import { IsNull } from "typeorm";
 
 
 
@@ -21,13 +22,26 @@ export class EmployeeResolver {
 		@Ctx() { req }: MyContext
 	) {
 
-		if (!token) return await Holiday.find({})
 
+		if (!token) return await Holiday.find({})
 		let temp = jwt.decode(token)
 		// @ts-ignore
+
 		let user = await Employee.findOneOrFail({ email: temp.email })
-		let holidays = await Holiday.find({ pharmacyId: user.pharmacy.id })
-		return holidays
+		// @ts-ignore
+		if(user.role === 'admin'){
+			let holidays = await Holiday.find(
+				{ pharmacyId: user.pharmacy.id }
+			)
+			return holidays
+		} else if (user.role === 'sysadmin'){
+			let holidays = await Holiday.find(
+				{ pharmacyId: IsNull() }
+			)
+			return holidays
+
+		}
+		// @ts-ignore
 
 	}
 
@@ -123,8 +137,12 @@ export class EmployeeResolver {
 			holiday.from = inputs.from
 		if (inputs.until)
 			holiday.until = inputs.until
+
 		holiday.isApproved = false
 		holiday.employee = user
+		if(user.role === 'pharm'){
+			holiday.pharmacyId = user.pharmacy.id
+		}
 		holiday.save()
 		return holiday
 	}

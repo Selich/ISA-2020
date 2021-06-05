@@ -10,67 +10,72 @@ import { Box, Button} from "@chakra-ui/react";
 import DatePicker from 'react-datepicker'
 import Cookies from "js-cookie";
 import { Field, Form, Formik, useField, useFormikContext } from "formik";
+import DataTable from "react-data-table-component";
 
 
 const Shop = (): JSX.Element => {
   const token = Cookies.get("token");
 	const [medicine,setMedicine] = useState({id: ''})
-	const [pharmacy,setPharmacy] = useState({id: ''})
 	const [quantity,setQuantity] = useState(1)
 	const [date, setDate] = useState({day: '', month: '' , year: ''})
 
+	const [pharmacy,setPharmacy] = useState({id: ''})
   const [, addReservation] = useAddReservationMutation();
 
   const buyItemModal = useDisclosure();
   const dateModal = useDisclosure();
+	const [{fetching, data}] = useShopQuery()
 
   const medicineColumns = [
     { name: "Name", selector: "name", sortable: true },
     { name: "Type", selector: "type", sortable: true },
     { name: "Form", selector: "form", sortable: true },
     { name: "Rating", selector: "rating", sortable: true },
+      {
+        name: "",
+        button: true,
+        cell: (row: any) => (
+          <Button hidden={(!token)} size="sm" onClick={() => Buy(row)}>
+						Buy
+          </Button>
+        ),
+      }
 	]
 
-	const pharmacyColumns = [
-		{ name: "Name",  selector: "pharmacy.name",							sortable: true },
-		{ name: "Price", selector: "medicineItem.currentPrice", sortable: true },
-	];
 
 	const Buy = (item) => {
 		setMedicine(item)
-	}
-	const Select = (item) => {
-		console.log(item)
-		console.log('testset')
-		setPharmacy(item)
+		buyItemModal.onOpen()
 	}
 
-	
-	let variables = { token: token }
-	let pharmacyVariables = { id: '1' }
+  let body = null;
+  if (fetching) body = <p>loading...</p>;
+  else if (!data) body = <p>Null data...</p>;
+  else {
+		body = (
+        <DataTable
+          //@ts-ignore
+          data={data.shop}
+          columns={medicineColumns}
+        />
 
+
+		)
+	}
 	return	(
 	<>
     <Box m={10} mx={20}>
-		<TableComponent 
-			query={useShopQuery}
-			handler={[Buy]}
-			modal={buyItemModal}
-			columns={medicineColumns}
-			buttonName={'Buy'}
-		/>
+			{body}
 		<ModalComponent
 			handler={setPharmacy}
 			disclosure={buyItemModal}
 			title={'Pharmacy'}
 		>
-			<TableComponent 
-				query={useContainsMedicineQuery}
-				handler={[Select]}
-				modal={dateModal}
-				variables={{id: '1'}}
-				columns={pharmacyColumns}
-				buttonName={'Select'}
+			<ContainsMedicine
+			pharmacy={pharmacy}
+			setPharmacy={setPharmacy}
+				medicine={medicine}
+				dateModal={dateModal}
 			/>
 			<ModalComponent
 				handler={setDate}
@@ -85,6 +90,43 @@ const Shop = (): JSX.Element => {
 	)
 }
 
+const ContainsMedicine = ({ medicine, dateModal, setPharmacy, pharmacy}) => {
+	const [{fetching, data}] = useContainsMedicineQuery({variables: {id: medicine.id}})
+
+	const Select = (item) => {
+		setPharmacy(item)
+		dateModal.onOpen()
+	}
+
+	const pharmacyColumns = [
+		{ name: "Name",  selector: "pharmacy.name",							sortable: true },
+		{ name: "Price", selector: "medicineItem.currentPrice", sortable: true },
+      {
+        name: "",
+        button: true,
+        cell: (row: any) => (
+          <Button size="sm" onClick={() => Select(row)}>
+						Select
+          </Button>
+        ),
+      }
+	];
+
+  let body = null;
+  if (fetching) body = <p>loading...</p>;
+  else if (!data) body = <p>Null data...</p>;
+  else {
+		body = (
+        <DataTable
+          //@ts-ignore
+          data={data.containsMedicine}
+          columns={pharmacyColumns}
+        />
+		)
+	}
+	return body
+}
+
 
 export const ReservationForm = ({pharmacy, medicine, onClose, Close}) => {
 	const [,addReservation] = useAddReservationMutation()
@@ -93,7 +135,7 @@ export const ReservationForm = ({pharmacy, medicine, onClose, Close}) => {
 	const handleSubmit = (data) => {
 
 		let inputs = {
-			'deadline': data.date.toLocaleDateString() + '',
+			'deadline': data.date,
 			'pharmacyId': parseInt(pharmacy.pharmacy.id),
 			'medicineId': parseInt(pharmacy.medicineItem.id),
 			'quantity': parseInt(data.quantity),
@@ -102,13 +144,13 @@ export const ReservationForm = ({pharmacy, medicine, onClose, Close}) => {
 
 		addReservation({inputs, token: token})
 			.then(res => {
+				console.log(res)
 				if(!res.data.reserveMedicine){
 					alert('Not enough items for selected quantity')
 				} else {
 					onClose()
 					Close()
 				}
-				console.log(res)
 			})
 			.catch(res => console.log(res))
 	}

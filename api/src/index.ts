@@ -24,56 +24,10 @@ import { PrescriptionResolver } from './resolvers/PrescriptionResolver';
 import { RateResolver } from './resolvers/RateResolver';
 
 
-const mailerOptions = {
-		host: "smtp:ethereal.email",
-		port: 587,
-		secure: false,
-}
-
 const main = async () => {
   const conn = await createConnection(dbConfig);
 
   conn.runMigrations()
-
-		/*
-
-	let sysadmin = new Employee() 
-	sysadmin.email = 'uros@gmail.com'
-	sysadmin.password = 'pass'
-	sysadmin.role = 'patient'
-	await Employee.save(sysadmin)
-
-	let derm = new Employee() 
-	derm.email = 'derm@gmail.com'
-	derm.password = 'pass'
-	derm.role = ''
-	await Employee.save(derm)
-
-	let pharm = new Employee() 
-	pharm.email = 'pharm@gmail.com'
-	phare = 'pharm'
-	await Employee.save(pharm)
-	let regular = new Tier() 
-	regular.name = 'Regular'
-	regular.discount = 0
-	regular.scoreMin = 0
-	regular.scoreMax = 14
-	await Tier.save(regular)
-
-	let silver = new Tier() 
-	silver.name = 'Silver'
-	silver.discount = 20
-	silver.scoreMin = 15
-	silver.scoreMax = 29
-	await Tier.save(silver)
-
-	let gold = new Tier() 
-	gold.name = 'Gold'
-	gold.discount = 30
-	gold.scoreMin = 30
-	gold.scoreMax = 999
-	await Tier.save(gold)
-		 */
 
   const app = express()
   const RedisStore = connectRedis(session)

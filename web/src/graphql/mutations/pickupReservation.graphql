@@ -1,8 +1,8 @@
 mutation PickupReservation(
-  $token: String!
+  $inputs: ReservationInput!
 ) {
   pickupReservation(
-    token: $token
+    inputs: $inputs
   ){
     deadline
     isBought

@@ -16,20 +16,16 @@ import DataTable from "react-data-table-component";
 import {
   useFreeAppointmentsQuery,
   usePatientsQuery,
-  useScheduleAppointmentEmployeeMutation,
 } from "../../generated/graphql";
 import { DatePickerField } from "../../pages/shop";
 
-const pharmacyIds = ["19", "20", "21"];
-
-export const Examinations = () => {
+export const Consultations = () => {
   const token = Cookies.get("token");
-  const [pharmacyId, setPharmacyId] = useState("19");
   const [{ fetching, data }] = useFreeAppointmentsQuery({
     variables: {
-      pharmacyId: pharmacyId,
+      pharmacyId: "",
       token: token,
-      kind: "derm",
+      kind: "pharm",
     },
   });
   let selectedModal = useDisclosure();
@@ -51,10 +47,6 @@ export const Examinations = () => {
     },
   ];
 
-  useEffect(() => {
-    console.log(pharmacyId);
-  }, [pharmacyId]);
-
   let body = null;
   if (fetching) body = <div>Loading</div>;
   else if (!data) body = <div>Loading</div>;
@@ -74,14 +66,8 @@ export const Examinations = () => {
       >
         Schedule New Appointment
       </Button>
-      <select onChange={(e) => setPharmacyId(e.target.value)}>
-        {pharmacyIds.map((item) => (
-          <option>{item}</option>
-        ))}
-      </select>
       {body}
       <ScheduleExam
-        pharmacyId={pharmacyId}
         isOpen={selectedModal.isOpen}
         onClose={selectedModal.onClose}
       />
@@ -93,7 +79,7 @@ const arrayHours = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
   22, 23,
 ];
-const ScheduleExam = ({ pharmacyId, isOpen, onClose }) => {
+const ScheduleExam = ({ isOpen, onClose }) => {
   const [time, setTime] = useState({});
   const [selectedPharmacy, setSelectedPharmacy] = useState();
   const stageTwoModal = useDisclosure();
@@ -154,18 +140,16 @@ const ScheduleExam = ({ pharmacyId, isOpen, onClose }) => {
       </Modal>
       <PatientList
         time={time}
-        pharmacyId={pharmacyId}
         isOpen={stageTwoModal.isOpen}
         onClose={stageTwoModal.onClose}
       />
     </>
   );
 };
-const PatientList = ({ pharmacyId, isOpen, time, onClose }) => {
+const PatientList = ({ isOpen, time, onClose }) => {
   const token = Cookies.get("token");
   const [employees, setEmployees] = useState([]);
   const [{ fetching, data }] = usePatientsQuery();
-  const [, scheduleApp] = useScheduleAppointmentEmployeeMutation();
 
   const handler = (row) => {
     let date = new Date(time.date);
@@ -176,10 +160,7 @@ const PatientList = ({ pharmacyId, isOpen, time, onClose }) => {
       date.setTime(date.getTime() + parseInt(time.minutes) * 60 * 1000);
     let variables = {
       inputs: {
-        kind: "derm",
-        pharmacy: {
-          id: parseInt(pharmacyId),
-        },
+        kind: "pharm",
         patient: {
           email: row.email,
         },
@@ -187,7 +168,6 @@ const PatientList = ({ pharmacyId, isOpen, time, onClose }) => {
       },
       token: token,
     };
-    scheduleApp(variables).then((res) => console.log(res));
     onClose();
   };
 

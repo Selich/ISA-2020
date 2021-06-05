@@ -95,6 +95,20 @@ export class AppointmentResolver {
 	}
 
 	@Mutation(() => Appointment, { nullable: true })
+	async notArrived(
+		@Arg("inputs") inputs: AppointmentInput,
+	) {
+		let appointment = await Appointment.findOneOrFail({ id: inputs.id })
+		let patient = appointment.patient
+
+		patient.penalty += 1
+		patient.save()
+		appointment.remove()
+
+
+	}
+
+	@Mutation(() => Appointment, { nullable: true })
 	async unschedulePatient(
 		@Arg("inputs") inputs: AppointmentInput,
 		@Arg("token") token: string,
@@ -290,6 +304,7 @@ export class AppointmentResolver {
 		return app
 	}
 
+	
 	@Mutation(() => Appointment, { nullable: true })
 	async scheduleConsultation(
 		@Arg("token") token: string,
@@ -356,41 +371,6 @@ export class AppointmentResolver {
 
 		return appointment
 
-
-		/**
-		//Check if free
-		let employeeWH = employee.workingHours.filter(item => item.pharmacy.id === pharmacy.id)[0]
-
-		if(!inputs.begin || !inputs.length) return null
-		let begin = new Date(inputs.begin)
-		let hours = Math.floor(inputs.length / 60);  
-		let minutes = inputs.length % 60;
-		let end = begin
-		end.setHours(hours)
-		end.setMinutes(minutes)
-
-		let fromDate = new Date();
-		let untilDate = new Date();
-
-		fromDate.setHours(parseInt(employeeWH.from.split(':')[0]))
-		untilDate.setMinutes(parseInt(employeeWH.from.split(':')[1]))
-
-		if(begin <= fromDate || end >= untilDate) return null
-
-		let app = new Appointment()
-		app.employee = employee
-		if(!inputs.discount)  inputs.discount = 0;
-		app.price = definitions.price * ( 1 - inputs.discount )
-		app.pharmacy = pharmacy
-		app.patient = patient
-		if(!inputs.begin) return;
-			app.begin = '' + begin
-		if(!inputs.length) return;
-			app.length = inputs.length
-
-		app.save()
-		return app
-		**/
 
 	}
 

@@ -30,6 +30,7 @@ export default function LoginForm({ onClose, setUser }) {
             setErrors(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.token) {
             let { token, user } = response.data.login
+            router.push("/" + user.role);
             Cookies.set('token', token)
             setUser(user)
             if (roles.employees.includes(user.role) && !user.isEnabled)

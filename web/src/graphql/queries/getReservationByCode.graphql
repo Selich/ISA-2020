@@ -1,7 +1,7 @@
-query Reservations( 
-	$token: String!
+mutation GetReservationByCode( 
+	$code: String!
 ) {
-  reservations(token: $token) {
+  getReservationByCode(code: $code) {
     id
     deadline
     code
@@ -13,6 +13,5 @@ query Reservations(
       }
       quantity
     }
-    isBought
   }
 }

@@ -1,9 +1,9 @@
-import { Field, ID, InputType, ObjectType } from "type-graphql";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { Column, Entity, JoinTable, ManyToOne } from "typeorm";
+import { Employee } from "./Employee";
 import { Model } from "./Model";
 import Patient from "./Patient";
 import { Pharmacy } from "./Pharmacy";
-import { Employee } from "./Employee";
 
 @ObjectType()
 @Entity()

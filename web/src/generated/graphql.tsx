@@ -432,6 +432,7 @@ export type Reservation = {
   medicineItem?: Maybe<MedicineItem>;
   deadline?: Maybe<Scalars['String']>;
   pickupDate?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']>;
   originalId?: Maybe<Scalars['Float']>;
   isBought?: Maybe<Scalars['Boolean']>;
   totalSum?: Maybe<Scalars['Float']>;
@@ -665,6 +666,7 @@ export type Mutation = {
   register: UserResponse;
   confirmRegistration: PatientResponse;
   logout: Scalars['Boolean'];
+  notArrived?: Maybe<Appointment>;
   unschedulePatient?: Maybe<Appointment>;
   createDefinition?: Maybe<AppointmentDefinition>;
   unschedule?: Maybe<Appointment>;
@@ -679,6 +681,7 @@ export type Mutation = {
   removeEmployee: Employee;
   addEmployee: EmployeeResponse;
   confirmPassword: UserResponse;
+  getReservationByCode?: Maybe<Reservation>;
   reserveMedicine?: Maybe<ReservationResponse>;
   cancelReservation?: Maybe<Reservation>;
   pickupReservation?: Maybe<Reservation>;
@@ -690,7 +693,6 @@ export type Mutation = {
   eprescriptions?: Maybe<Array<EPrescription>>;
   createPharmacy?: Maybe<Pharmacy>;
   removePharmacy?: Maybe<Pharmacy>;
-  notVisited?: Maybe<Prescription>;
   createPrescription: Prescription;
 };
 
@@ -744,6 +746,11 @@ export type MutationRegisterArgs = {
 
 export type MutationConfirmRegistrationArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationNotArrivedArgs = {
+  inputs: AppointmentInput;
 };
 
 
@@ -832,6 +839,11 @@ export type MutationConfirmPasswordArgs = {
 };
 
 
+export type MutationGetReservationByCodeArgs = {
+  code: Scalars['String'];
+};
+
+
 export type MutationReserveMedicineArgs = {
   token: Scalars['String'];
   inputs: ReservationInput;
@@ -845,7 +857,7 @@ export type MutationCancelReservationArgs = {
 
 
 export type MutationPickupReservationArgs = {
-  token: Scalars['String'];
+  inputs: ReservationInput;
 };
 
 
@@ -888,12 +900,6 @@ export type MutationCreatePharmacyArgs = {
 
 export type MutationRemovePharmacyArgs = {
   inputs: PharmacyInput;
-};
-
-
-export type MutationNotVisitedArgs = {
-  prescriptionInputs: PrescriptionInput;
-  appointmentInputs: AppointmentInput;
 };
 
 
@@ -972,12 +978,6 @@ export type ReservationInput = {
   medicineId?: Maybe<Scalars['Float']>;
   deadline?: Maybe<Scalars['String']>;
   quantity?: Maybe<Scalars['Float']>;
-};
-
-export type PrescriptionInput = {
-  appointment: AppointmentInput;
-  type: Scalars['String'];
-  medicines: Array<MedicineItemInput>;
 };
 
 export type InputExamFragment = (
@@ -1355,8 +1355,28 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type NotArrivedMutationVariables = Exact<{
+  inputs: AppointmentInput;
+}>;
+
+
+export type NotArrivedMutation = (
+  { __typename?: 'Mutation' }
+  & { notArrived?: Maybe<(
+    { __typename?: 'Appointment' }
+    & Pick<Appointment, 'begin' | 'length'>
+    & { patient?: Maybe<(
+      { __typename?: 'Patient' }
+      & Pick<Patient, 'firstName' | 'lastName' | 'email'>
+    )>, employee?: Maybe<(
+      { __typename?: 'Employee' }
+      & Pick<Employee, 'lastName'>
+    )> }
+  )> }
+);
+
 export type PickupReservationMutationVariables = Exact<{
-  token: Scalars['String'];
+  inputs: ReservationInput;
 }>;
 
 
@@ -1922,6 +1942,27 @@ export type GetPatientQuery = (
   )>> }
 );
 
+export type GetReservationByCodeMutationVariables = Exact<{
+  code: Scalars['String'];
+}>;
+
+
+export type GetReservationByCodeMutation = (
+  { __typename?: 'Mutation' }
+  & { getReservationByCode?: Maybe<(
+    { __typename?: 'Reservation' }
+    & Pick<Reservation, 'id' | 'deadline' | 'code' | 'originalId'>
+    & { medicineItem?: Maybe<(
+      { __typename?: 'MedicineItem' }
+      & Pick<MedicineItem, 'id' | 'quantity'>
+      & { details?: Maybe<(
+        { __typename?: 'Medicine' }
+        & Pick<Medicine, 'name'>
+      )> }
+    )> }
+  )> }
+);
+
 export type HolidayQueryVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -1931,10 +1972,10 @@ export type HolidayQuery = (
   { __typename?: 'Query' }
   & { holiday?: Maybe<Array<(
     { __typename?: 'Holiday' }
-    & Pick<Holiday, 'from' | 'until' | 'isApproved' | 'comments'>
+    & Pick<Holiday, 'id' | 'from' | 'until' | 'isApproved' | 'comments'>
     & { employee?: Maybe<(
       { __typename?: 'Employee' }
-      & Pick<Employee, 'firstName' | 'lastName' | 'email'>
+      & Pick<Employee, 'role' | 'firstName' | 'lastName' | 'email'>
     )> }
   )>> }
 );
@@ -2138,7 +2179,7 @@ export type ReservationsQuery = (
   { __typename?: 'Query' }
   & { reservations?: Maybe<Array<(
     { __typename?: 'Reservation' }
-    & Pick<Reservation, 'id' | 'deadline' | 'originalId'>
+    & Pick<Reservation, 'id' | 'deadline' | 'code' | 'originalId' | 'isBought'>
     & { medicineItem?: Maybe<(
       { __typename?: 'MedicineItem' }
       & Pick<MedicineItem, 'id' | 'quantity'>
@@ -2532,9 +2573,29 @@ export const LogoutDocument = gql`
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
+export const NotArrivedDocument = gql`
+    mutation NotArrived($inputs: AppointmentInput!) {
+  notArrived(inputs: $inputs) {
+    patient {
+      firstName
+      lastName
+      email
+    }
+    begin
+    length
+    employee {
+      lastName
+    }
+  }
+}
+    `;
+
+export function useNotArrivedMutation() {
+  return Urql.useMutation<NotArrivedMutation, NotArrivedMutationVariables>(NotArrivedDocument);
+};
 export const PickupReservationDocument = gql`
-    mutation PickupReservation($token: String!) {
-  pickupReservation(token: $token) {
+    mutation PickupReservation($inputs: ReservationInput!) {
+  pickupReservation(inputs: $inputs) {
     deadline
     isBought
   }
@@ -3110,14 +3171,37 @@ export const GetPatientDocument = gql`
 export function useGetPatientQuery(options: Omit<Urql.UseQueryArgs<GetPatientQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetPatientQuery>({ query: GetPatientDocument, ...options });
 };
+export const GetReservationByCodeDocument = gql`
+    mutation GetReservationByCode($code: String!) {
+  getReservationByCode(code: $code) {
+    id
+    deadline
+    code
+    originalId
+    medicineItem {
+      id
+      details {
+        name
+      }
+      quantity
+    }
+  }
+}
+    `;
+
+export function useGetReservationByCodeMutation() {
+  return Urql.useMutation<GetReservationByCodeMutation, GetReservationByCodeMutationVariables>(GetReservationByCodeDocument);
+};
 export const HolidayDocument = gql`
     query Holiday($token: String!) {
   holiday(token: $token) {
+    id
     from
     until
     isApproved
     comments
     employee {
+      role
       firstName
       lastName
       email
@@ -3342,6 +3426,7 @@ export const ReservationsDocument = gql`
   reservations(token: $token) {
     id
     deadline
+    code
     originalId
     medicineItem {
       id
@@ -3350,6 +3435,7 @@ export const ReservationsDocument = gql`
       }
       quantity
     }
+    isBought
   }
 }
     `;

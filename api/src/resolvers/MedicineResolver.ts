@@ -91,6 +91,7 @@ export class MedicineResolver {
 		return medicine
 
 	}
+	
 	@Mutation(() => MedicineItem, { nullable: true })
 	async addMedicine(
 		@Arg("inputs") inputs: MedicineItemInput,
@@ -130,7 +131,6 @@ export class MedicineResolver {
 				//@ts-ignore
 				medicineItem.quantity = inputs.quantity
 				medicineItem.version = 1
-				medicineItem.save()
 
 				inventory.medicines.push(medicineItem)
 				inventory.save()

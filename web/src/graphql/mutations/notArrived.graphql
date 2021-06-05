@@ -1,0 +1,16 @@
+mutation NotArrived(
+  $inputs: AppointmentInput!,
+){
+  notArrived(inputs:$inputs){
+    patient{
+      firstName
+      lastName
+      email
+    }
+    begin
+  	length
+    employee{
+      lastName
+    }
+  }
+}

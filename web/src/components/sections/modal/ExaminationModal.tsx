@@ -1,37 +1,23 @@
-import { EmailIcon } from "@chakra-ui/icons";
 import {
-  Text,
-  Button,
-  HStack,
-  Modal,
+  Box, Button, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Center,
-  Box,
-  SimpleGrid,
-  Input,
-  InputGroup,
-  InputLeftAddon,
-  useDisclosure,
-  Container,
-  Select,
-  Textarea,
+  ModalOverlay, SimpleGrid, Text, Textarea, useDisclosure
 } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
+import Cookies from "js-cookie";
+import moment from "moment";
 import React, { useState } from "react";
-import { Calendar } from "react-big-calendar";
+import { Calendar, momentLocalizer } from "react-big-calendar";
 import DataTable from "react-data-table-component";
 import {
   useAppointmentsQuery,
   useCreatePrescriptionMutation,
   useGetMedicineForPatientQuery,
-  useGetPatientQuery,
-  usePatientQuery,
-  useScheduleAppointmentEmployeeMutation,
-  useScheduleConsultationMutation,
+  useGetPatientQuery, useNotArrivedMutation, useScheduleAppointmentEmployeeMutation
 } from "../../../generated/graphql";
 import { DatePickerField } from "../../../pages/shop";
 import { TableComponent } from "../../tables/TableComponent";
@@ -62,20 +48,40 @@ export const Prescription = ({
   setComment,
   medicine,
 }) => {
+
+  const Prescribe = (row) => { setMedicine(row); };
+
   let columns = [
     { name: "Name", selector: "name", sortable: true },
     { name: "Type", selector: "type", sortable: true },
+        {
+        name: "",
+        button: true,
+        cell: (row: any) => (
+          <Button size="sm" onClick={() => Prescribe(row)}>
+              Prescribe
+          </Button>
+        ),
+      }
   ];
   const variables = {
     patientInput: { id: parseInt(appointment.patient.id) },
     pharmacyInput: { id: parseInt(appointment.pharmacy.id) },
   };
+  const [{fetching, data}] = useGetMedicineForPatientQuery({variables})
 
-  const Prescribe = (row) => {
-    setMedicine(row);
-    console.log(comment);
-    console.log(medicine);
-  };
+  let body = null;
+  if (fetching) body = <p>loading...</p>;
+  else if (!data) body = <p>Null data...</p>;
+  else {
+    body = (
+      <DataTable
+        data={data.getMedicineForPatient}
+        columns={columns}
+
+        />
+    )
+  }
 
   return (
     <SimpleGrid columns={2} spacing={3}>
@@ -101,17 +107,21 @@ export const Prescription = ({
   );
 };
 
-export const ExaminationModal: any = ({
-  appointment,
-  onOpen,
-  isOpen,
-  onClose,
-}) => {
-  const [desc, setDesc] = useState("");
-  const [medicines, setMedicines] = useState([]);
+export const ExaminationModal: any = ({ appointment, isOpen, onClose, }) => {
   const examModal = useDisclosure();
+  const [, notArrived] = useNotArrivedMutation()
 
-  const handleNotArived = () => {};
+  const handleNotArrived = () => {
+
+      notArrived({inputs: appointment}).then(
+        res => {
+          console.log(res)
+          onClose()
+        }
+      )
+
+
+  };
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
@@ -120,7 +130,7 @@ export const ExaminationModal: any = ({
           <ModalHeader>Start Appointment</ModalHeader>
           <ModalCloseButton />
           <ModalFooter>
-            <Button mr={3} onCLick={() => onClose()} colorScheme="red">
+            <Button mr={3} onCLick={() => handleNotArrived()} colorScheme="red">
               Not Arrived
             </Button>
             <Button
@@ -240,10 +250,6 @@ export const StepThreeModal: any = ({
   );
 };
 
-import { momentLocalizer } from "react-big-calendar";
-import moment from "moment";
-import Cookies from "js-cookie";
-import { Formik, Form, Field } from "formik";
 export const ScheduleExamForm = ({ appointment }) => {
   let token = Cookies.get("token");
   const localizer = momentLocalizer(moment);

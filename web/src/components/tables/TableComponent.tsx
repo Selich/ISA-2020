@@ -1,5 +1,5 @@
 import DataTable from "react-data-table-component";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
 
 interface TableProps {
@@ -14,13 +14,11 @@ interface TableProps {
 }
 
 export const TableComponent = (props: TableProps) => {
-  let variables = props.variables;
+  let loaded = false
   const [resetPaginationToggle, _] = useState(false);
 
-  console.log(props)
-  const [{ fetching, data }] = props.query({ variables: props.variables });
-  console.log("Table Contents\n" + data);
-
+  useEffect(() => {
+    if(!loaded){
     props.handler.forEach((item) => {
       const handler = (row) => {
         if (props.modal) props.modal.onOpen();
@@ -39,6 +37,14 @@ export const TableComponent = (props: TableProps) => {
       }
       );
     });
+    loaded = true
+
+    }
+  }, [loaded])
+
+  const [{ fetching, data }] = props.query({ variables: props.variables });
+  console.log("Table Contents\n" + data);
+
   let body = null;
   if (fetching) body = <p>loading...</p>;
   else if (!data) body = <p>Null data...</p>;
