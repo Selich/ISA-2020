@@ -1,8 +1,10 @@
 mutation AddEmployee(
   $inputs: EmployeeInput!, 
+  $token: String!, 
   ) {
   addEmployee(
     inputs: $inputs,
+    token: $token,
   ){
   user{
     email

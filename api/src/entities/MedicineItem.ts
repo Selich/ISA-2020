@@ -22,6 +22,10 @@ export class MedicineItem extends Model{
   @JoinTable()
   list: MedicineList;
 
+	@Field(() => [Price], {nullable: true})
+	@OneToMany(() => Price, item => item.medicine, { nullable: true, cascade:true})
+  prices: Price[];
+
   @Field(() => Reservation)
 	@OneToOne(() => Reservation, {nullable:true})
   @JoinTable()

@@ -30,6 +30,8 @@ import {
   useGetMedicineForPatientQuery,
   useGetPatientQuery,
   usePatientQuery,
+  useScheduleAppointmentEmployeeMutation,
+  useScheduleConsultationMutation,
 } from "../../../generated/graphql";
 import { DatePickerField } from "../../../pages/shop";
 import { TableComponent } from "../../tables/TableComponent";
@@ -53,8 +55,13 @@ import { TableComponent } from "../../tables/TableComponent";
 // mogućnost da pacijentu prepiše neki od zamenskih lekova (ukoliko pacijent nije
 // alergičan).
 
-export const Prescription = ({ appointment, setMedicine, comment, setComment, medicine }) => {
-
+export const Prescription = ({
+  appointment,
+  setMedicine,
+  comment,
+  setComment,
+  medicine,
+}) => {
   let columns = [
     { name: "Name", selector: "name", sortable: true },
     { name: "Type", selector: "type", sortable: true },
@@ -65,28 +72,22 @@ export const Prescription = ({ appointment, setMedicine, comment, setComment, me
   };
 
   const Prescribe = (row) => {
-    setMedicine(row)
-    console.log(comment)
-    console.log(medicine)
+    setMedicine(row);
+    console.log(comment);
+    console.log(medicine);
   };
 
   return (
     <SimpleGrid columns={2} spacing={3}>
       <Box p={10}>
         <Text>Comments</Text>
-          <Textarea type="text" onChange={(e) => setComment(e.target.value)}/>
+        <Textarea type="text" onChange={(e) => setComment(e.target.value)} />
       </Box>
       <Box p={10}>
-        <div>
-          Selected Medicine: 
-        </div>
-        <hr/>
-        <div>
-          Name: {medicine.name}
-        </div>
-        <div>
-          Type: {medicine.type}
-        </div>
+        <div>Selected Medicine:</div>
+        <hr />
+        <div>Name: {medicine.name}</div>
+        <div>Type: {medicine.type}</div>
         <div>
           <TableComponent
             query={useGetMedicineForPatientQuery}
@@ -110,10 +111,7 @@ export const ExaminationModal: any = ({
   const [medicines, setMedicines] = useState([]);
   const examModal = useDisclosure();
 
-
-  const handleNotArived = () => {
-
-  }
+  const handleNotArived = () => {};
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
@@ -125,10 +123,14 @@ export const ExaminationModal: any = ({
             <Button mr={3} onCLick={() => onClose()} colorScheme="red">
               Not Arrived
             </Button>
-            <Button onClick={() => {
-              examModal.onOpen()
-              onClose()
-              }}>Start</Button>
+            <Button
+              onClick={() => {
+                examModal.onOpen();
+                onClose();
+              }}
+            >
+              Start
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -145,22 +147,21 @@ export const ExaminationModal: any = ({
 export const StepTwoModal: any = ({ appointment, onOpen, isOpen, onClose }) => {
   const [desc, setDesc] = useState("");
   const [medicines, setMedicines] = useState([]);
-  const [comment, setComment ] = useState("")
-  const [medicine, setMedicine ] = useState({name: '', type: ''})
+  const [comment, setComment] = useState("");
+  const [medicine, setMedicine] = useState({ name: "", type: "" });
   const examModal = useDisclosure();
 
   let body = <div>Loading</div>;
   if (appointment.patient) {
-    body = <Prescription 
-    
-    comment={comment}
-    setComment={setComment}
-    medicine={medicine}
-    setMedicine={setMedicine}
-    
-    appointment={appointment} 
-    
-    />;
+    body = (
+      <Prescription
+        comment={comment}
+        setComment={setComment}
+        medicine={medicine}
+        setMedicine={setMedicine}
+        appointment={appointment}
+      />
+    );
   }
   return (
     <>
@@ -171,10 +172,14 @@ export const StepTwoModal: any = ({ appointment, onOpen, isOpen, onClose }) => {
           <ModalCloseButton />
           <ModalBody>{body}</ModalBody>
           <ModalFooter>
-            <Button onClick={() => {
-              examModal.onOpen()
-              onClose()
-             }}>Next</Button>
+            <Button
+              onClick={() => {
+                examModal.onOpen();
+                onClose();
+              }}
+            >
+              Next
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -200,23 +205,24 @@ export const StepThreeModal: any = ({
 }) => {
   const [desc, setDesc] = useState("");
   const [medicines, setMedicines] = useState([]);
-    const [,createPrescription] = useCreatePrescriptionMutation()
+  const [, createPrescription] = useCreatePrescriptionMutation();
 
   const handleSubmit = () => {
-
-    let appointmentInputs =
-    {
+    let appointmentInputs = {
       id: parseInt(appointment.id),
-      report: comment
-    }
-    let medicineInput =
-        {details:{
-          id: medicine.id
-        } , quantity: 1}
+      report: comment,
+    };
+    let medicineInput = {
+      details: {
+        id: medicine.id,
+      },
+      quantity: 1,
+    };
 
-    createPrescription({appointmentInputs, medicineInput}).then(res=> onClose())
-
-  }
+    createPrescription({ appointmentInputs, medicineInput }).then((res) =>
+      onClose()
+    );
+  };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="2xl">
@@ -291,7 +297,7 @@ export const ScheduleExamForm = ({ appointment }) => {
             />
           </Box>
           <Box>
-            <ScheduleForm appointment={appointment}/>
+            <ScheduleForm appointment={appointment} />
           </Box>
         </SimpleGrid>
       );
@@ -300,18 +306,54 @@ export const ScheduleExamForm = ({ appointment }) => {
   return body;
 };
 
-const arrayHours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-const ScheduleForm = ({appointment}) => {
+const arrayHours = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+  22, 23,
+];
+const ScheduleForm = ({ appointment }) => {
+  const [, scheduleConsultation] = useScheduleAppointmentEmployeeMutation();
+  const token = Cookies.get("token");
+
+  const handler = (values) => {
+          let date = new Date(values.date);
+          date.setTime(date.getTime() + 2 * 60 * 60 * 1000);
+          if (values.hours)
+            date.setTime(
+              date.getTime() + values.hours * 60 * 60 * 1000
+            );
+          if (values.minutes)
+            date.setTime(date.getTime() + values.minutes * 60 * 1000);
+          let variables = {
+            inputs: {
+              patient: {
+                email: appointment.patient.email,
+              },
+              pharmacy: {
+                id: parseInt(appointment.pharmacy.id),
+              },
+              kind: appointment.kind,
+              begin: date,
+            },
+            token: token,
+          };
+          console.log(variables)
+          scheduleConsultation(variables).then((res) => {
+            console.log(res);
+          });
+
+  }
+
   return (
     <div>
       <Formik
         initialValues={{
           date: "",
-          qunatity: 1,
+          hours: 0,
+          minutes: 0,
         }}
-        onSubmit={(data, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting }) => {
           setSubmitting(true);
-          console.log(data);
+          handler(values)
           setSubmitting(false);
         }}
       >
@@ -321,25 +363,24 @@ const ScheduleForm = ({appointment}) => {
             <DatePickerField name="date" value={values.date} />
             <div>
               Time
-              <Select>
-                {arrayHours.map(item => (<option> {item} </option>))}
-
-              </Select>
-              <Select>
-                <option>00</option>
-                <option>15</option>
-                <option>30</option>
-                <option>45</option>
-              </Select>
+              <Field type="number" name="hours" />
+              <Field type="number" name="minutes" />
+            </div>
+            <hr />
+            <div>
+              Patient:{" "}
+              {appointment.patient.firstName +
+                " " +
+                appointment.patient.lastName}
             </div>
             <div>
-              Patient: {appointment.patient.firstName + " "  + appointment.patient.lastName}
+              Doctor:{" "}
+              {appointment.employee.firstName +
+                " " +
+                appointment.employee.lastName}
             </div>
             <div>
-              Doctor: {appointment.employee.firstName + " "  + appointment.employee.lastName}
-            </div>
-            <div>
-              <Button>Schedule New Appointment</Button>
+              <Button type="submit">Schedule New Appointment</Button>
             </div>
           </Form>
         )}

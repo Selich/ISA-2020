@@ -1,39 +1,30 @@
 import {
   Box,
-  Button,
-  HStack,
-  Input,
-  Modal,
+  Button, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Select,
-  SimpleGrid,
-  Tab,
+  ModalOverlay, Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
-import { Formik, Form, Field } from "formik";
+import { Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { FaFacebook } from "react-icons/fa";
 import { MyCalendar } from "../../components/employee/MyCalendar";
-import CreateAdminForm from "../../components/sections/forms/CreateAdminForm";
 import {
   useAppointmentsQuery,
   useFreeAppointmentsQuery,
   usePatientsQuery,
-  useScheduleAppointmentEmployeeMutation,
+  useScheduleAppointmentEmployeeMutation
 } from "../../generated/graphql";
-import { MyDateInput, MyTimeInput } from "../../utils/utils";
 import { DatePickerField } from "../shop";
 
 const TabMenu = () => (

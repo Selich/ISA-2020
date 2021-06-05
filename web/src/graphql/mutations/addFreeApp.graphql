@@ -1,14 +1,16 @@
 mutation AddFreeApp(
   $from: String!, 
   $length: Float!,
-  $employee: String!,
+  $token: String!,
   $discount: Float!,
+  $employee: EmployeeInput!,
   ) {
   addFreeApp(
     from: $from,
     length: $length,
-    employee: $employee,
+    token: $token,
     discount: $discount,
+    employee: $employee,
   ){
     begin
     length

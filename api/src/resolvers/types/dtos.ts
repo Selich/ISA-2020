@@ -129,7 +129,7 @@ export class EmployeeInput extends UserInput{
 @InputType()
 export class MedicineInput {
   @Field({ nullable: true })
-  id?: string;
+  id?: number;
   @Field({ nullable: true })
   name?: string;
   @Field({ nullable: true })

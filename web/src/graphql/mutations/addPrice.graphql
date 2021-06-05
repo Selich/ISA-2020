@@ -1,8 +1,8 @@
-mutation AddMedicine( 
+mutation AddPrice( 
 	$inputs: MedicineItemInput!,
 	$token: String!
 ) {
-  addMedicine( 
+  addPrice( 
   inputs: $inputs,
   token: $token
   ) { 
@@ -11,5 +11,6 @@ mutation AddMedicine(
       name
       code
     }
+    currentPrice
   }
 }

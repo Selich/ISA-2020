@@ -1,5 +1,6 @@
 import { Field, Arg, Ctx, Mutation, ObjectType, Query, Resolver, InputType } from 'type-graphql';
 import { Address } from '../entities/Address';
+import jwt from 'jsonwebtoken'
 import { Inventory } from '../entities/Inventory';
 import { MedicineItem } from '../entities/MedicineItem';
 import { Price } from '../entities/Price';
@@ -35,7 +36,7 @@ export class PharmacyResolver{
   async pharmacy(
 		@Arg('inputs') inputs: PharmacyInput,
 	) {
-		return await Pharmacy.find({})
+		return await Pharmacy.findOneOrFail({id: inputs.id})
   }
 
   @Query(() => [Employee], { nullable: true })
@@ -52,6 +53,7 @@ export class PharmacyResolver{
 			date.setTime(date.getTime() + (parseInt(inputs.minutes)*60*1000))
 
 
+			console.log(inputs)
 
 		let pharm = await Pharmacy.find({})
 		let allEmpl = await Employee.find({role: 'pharm'})
@@ -70,22 +72,44 @@ export class PharmacyResolver{
 		let appo = allEmpl.map(item => item.schedule)
 
 
-		allEmpl = allEmpl.filter(
+		// @ts-ignore
+		let temp = []
+		allEmpl.forEach(
 			item => {
-				let fromWh = item.workingHours[0].from
-				let untilWh = item.workingHours[0].until
-				let time = date.toLocaleTimeString('it-IT')
-				return (fromWh <= time && untilWh >= time)
+				if(item.workingHours && item.workingHours[0]){
+					let fromWh = item.workingHours[0].from
+					let untilWh = item.workingHours[0].until
+					let time = date.toLocaleTimeString('it-IT')
+					if (fromWh <= time && untilWh >= time){
+						temp.push(item)
+					}
+				}
 			}
 		)
 
-		return allEmpl
+		// @ts-ignore
+		console.log(temp)
+
+		// @ts-ignore
+		return temp
 
 	}
 
 
 
 
+  @Query(() => [MedicineItem], { nullable: true })
+  async inventory(
+		@Arg('token') token: string,
+	) {
+		let temp = jwt.decode(token)
+		if(!temp) return null
+		// @ts-ignore
+		let admin  = await Employee.findOne({email: temp.email})
+
+		return admin?.pharmacy.inventory.medicines
+
+  }
 
 
 

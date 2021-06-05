@@ -1,12 +1,9 @@
-query Employees 
+query DermsByPharm 
 (
-  $inputs: EmployeeInput!
   $token: String!
 ) {
-  employees (
-    inputs: $inputs
+  dermsByPharm (
     token: $token
-
   ){
     id
     email,

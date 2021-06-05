@@ -1,6 +1,7 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 import { EPrescription } from '../entities/EPrescription';
 import { Inventory } from '../entities/Inventory';
+import jwt from 'jsonwebtoken'
 import { Medicine } from '../entities/Medicine';
 import { MedicineItem } from '../entities/MedicineItem';
 import Patient from '../entities/Patient';
@@ -8,6 +9,7 @@ import { Pharmacy } from '../entities/Pharmacy';
 import { Price } from '../entities/Price';
 import { MyContext } from '../types';
 import { MedicineInput, MedicineItemInput } from "./types/dtos";
+import { Employee } from '../entities/Employee';
 
 @Resolver()
 export class MedicineResolver {
@@ -56,61 +58,113 @@ export class MedicineResolver {
 
 
 	}
-	@Mutation(() => Inventory, { nullable: true })
+	@Mutation(() => Medicine, { nullable: true })
+	async addMedicineDefinition(
+		@Arg("inputs") inputs: MedicineInput,
+		@Ctx() { }: MyContext
+	) {
+		if (!inputs.code) return null;
+		let medicine = await Medicine.findOne({ code: inputs.code })
+		if (medicine) return null
+
+
+		medicine = new Medicine()
+		if (inputs.name)
+			medicine.name = inputs.name
+		if (inputs.info)
+			medicine.info = inputs.info
+		if (inputs.kind)
+			medicine.kind = inputs.kind
+		if (inputs.code)
+			medicine.code = inputs.code
+		if (inputs.points)
+			medicine.points = inputs.points
+		if (inputs.form)
+			medicine.form = inputs.form
+		if (inputs.contents)
+			medicine.contents = inputs.contents
+
+
+		medicine.save()
+		console.log(medicine)
+
+		return medicine
+
+	}
+	@Mutation(() => MedicineItem, { nullable: true })
 	async addMedicine(
 		@Arg("inputs") inputs: MedicineItemInput,
+		@Arg("token") token: string,
 		@Ctx() { }: MyContext
 	) {
 
-		if (!inputs.details) return null;
-		let medicine = await Medicine.findOneOrFail({ code: inputs.details.code })
+		let temp = jwt.decode(token)
+		if (!temp) return null
+		// @ts-ignore
+		let admin = await Employee.findOne({ email: temp.email })
+
+		// @ts-ignore
+		let medicine = await Medicine.findOne({ code: inputs.details.code })
 		if (!medicine) return null
-		//@ts-ignore
-		if (!inputs.list.id) return null
-		//@ts-ignore
-		let id = parseInt(inputs.list.id)
-		let inventory = await Inventory.findOneOrFail({ id })
-		//@ts-ignore
-		let res = inventory.medicines.filter(item => item.details.code === inputs.details.code)
-		if (!res) {
-			let medicineItem = new MedicineItem()
-			medicineItem.details.prices = []
-			if (inputs.quantity)
-				medicineItem.quantity = inputs.quantity
-			if (inputs.currentPrice) {
-				medicineItem.details.prices.push(new Price({
-					price: inputs.currentPrice,
-					medicineItem: medicineItem,
-					from: new Date()
-				}))
-				medicineItem.currentPrice = inputs.currentPrice
 
-			}
-			medicineItem.details = medicine
-			console.log(inventory)
-			medicineItem.list = inventory
-			let item = medicineItem.save()
-			inventory.medicines.push(medicineItem)
-			inventory.save()
+
+
+		let inventory = admin?.pharmacy.inventory
+		if (!inventory) return null
+		if (inputs.details) {
+			let items = inventory.medicines
 			//@ts-ignore
-			let arr = []
-			if (!inventory.medicines) {
+			let item = items.filter(item => item.details.code === inputs.details.code)[0]
+			if (item) {
 				//@ts-ignore
-				inventory.medicines = arr
+				item.quantity += inputs.quantity
+				item.version += 1
+				item.save()
+				console.log(inputs.quantity)
+				inventory.medicines.push(item)
+				inventory.save()
+				return item
+			} else {
+				let medicineItem = new MedicineItem()
+				medicineItem.details = medicine
+				//@ts-ignore
+				medicineItem.quantity = inputs.quantity
+				medicineItem.version = 1
+				medicineItem.save()
+
+				inventory.medicines.push(medicineItem)
+				inventory.save()
+				return medicineItem
 			}
-
-			return inventory
-
 		}
-		//@ts-ignore
-		let im = res[0]
-		if (inputs.quantity)
-			im.quantity += inputs.quantity
-		im.save()
-		return inventory
-
+		return null
 	}
 
+	@Mutation(() => MedicineItem, { nullable: true })
+	async addPrice(
+		@Arg("inputs") inputs: MedicineItemInput,
+		@Arg("token") token: string,
+		@Ctx() { }: MyContext
+	) {
+
+		let temp = jwt.decode(token)
+		if (!temp) return null
+
+		let item = await MedicineItem.findOne({ id: inputs.id })
+		console.log(item)
+		if(item && inputs.currentPrice){
+			let price = new Price()
+			item.currentPrice = inputs.currentPrice
+			item.version += 1
+			item.save()
+			price.medicine = item
+			price.price = inputs.currentPrice
+			price.from = new Date() + ''
+			price.version = 1
+			price.save()
+		}
+		return item
+}
 	@Mutation(() => [EPrescription], { nullable: true })
 	async eprescriptions(
 		@Arg("email") email: string,

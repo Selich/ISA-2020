@@ -19,7 +19,12 @@ import { Formik, Form, Field } from "formik";
 import { values } from "rambda";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
-import { useAppointmentsPatientQuery, useFreePharmsQuery, useScheduleConsultationMutation, useUnschedulePatientMutation } from "../../generated/graphql";
+import {
+  useAppointmentsPatientQuery,
+  useFreePharmsQuery,
+  useScheduleConsultationMutation,
+  useUnschedulePatientMutation,
+} from "../../generated/graphql";
 import { DatePickerField } from "../../pages/shop";
 import { HistoryTablePharm } from "../tables/HistoryTablePharm";
 
@@ -37,10 +42,10 @@ export const Consultations = () => {
             <Button onClick={() => examModal.onOpen()}>
               Schedule Consultation
             </Button>
-            <CurrentConsult type={'current'}/>
+            <CurrentConsult type={"current"} />
           </TabPanel>
           <TabPanel>
-            <CurrentConsult type={'history'}/>
+            <CurrentConsult type={"history"} />
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -52,77 +57,72 @@ export const Consultations = () => {
   );
 };
 
-const CurrentConsult = ({type}) => {
-  const token = Cookies.get('token')
+const CurrentConsult = ({ type }) => {
+  const token = Cookies.get("token");
   let [{ fetching, data }] = useAppointmentsPatientQuery({
     variables: {
       token: token,
       inputs: {
-        kind: 'pharm'
+        kind: "pharm",
       },
-      type: type
+      type: type,
     },
   });
-  let [,unschedulePatient] = useUnschedulePatientMutation()
+  let [, unschedulePatient] = useUnschedulePatientMutation();
 
   const handler = (row) => {
     const variables = {
       inputs: {
         id: parseInt(row.id),
-        begin: row.begin
-
+        begin: row.begin,
       },
-      token: token
-    }
-    console.log(variables)
+      token: token,
+    };
+    console.log(variables);
 
-    unschedulePatient(variables).then(
-      res => {
-        console.log(res)
-        if(!res.data.unschedulePatient) alert('Less then 24h from the consulations')
+    unschedulePatient(variables).then((res) => {
+      console.log(res);
+      if (!res.data.unschedulePatient)
+        alert("Less then 24h from the consulations");
+    });
+  };
+  ;
 
-      }
-    )
-
-  }
-    const columns = [
-      { name: "Begin", selector: "begin", sortable: true },
-      { name: "Kind", selector: "kind", sortable: true },
-      { name: "Price", selector: "price", sortable: true },
-      { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
-      // { name: "Doctor", selector: "employee.lastName", sortable: true },
-      {
-        name: "",
-        button: true,
-        cell: (row: any) => (
-          <Button hidden={type === 'history'} size="sm" onClick={() => handler(row)}>
-            Cancel
-          </Button>
-        ),
-      }
-    ];
-  
-  let body = null
-  if(fetching) body = <div>Loading</div>
-  else if(!data) body = <div>Loading</div>
+  let body = null;
+  if (fetching) body = <div>Loading</div>;
+  else if (!data) body = <div>Loading</div>;
   else {
-    if(!data.appointmentsPatient) body = <div>Empty</div>
-    else{
-      console.log(data.appointmentsPatient)
-
-    body = (
-    <DataTable
-      data={data.appointmentsPatient}
-      columns={columns}
-
-    />
-
-    )
+    if (!data.appointmentsPatient) body = <div>Empty</div>;
+    else {
+      console.log(data.appointmentsPatient);
+const columns = [
+    { name: "Begin", selector: "begin", sortable: true },
+    { name: "Kind", selector: "kind", sortable: true },
+    { name: "Price", selector: "price", sortable: true },
+    // { name: "Doctor", selector: "employee.lastName", sortable: true },
+    // { name: "Email", selector: "employee.email", sortable: true },
+    // { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
+    // { name: "Doctor", selector: "employee.lastName", sortable: true },
+    {
+      name: "",
+      button: true,
+      cell: (row: any) => (
+        <Button
+          hidden={type === "history"}
+          size="sm"
+          onClick={() => handler(row)}
+        >
+          Cancel
+        </Button>
+      ),
+    },
+  ]
+      body = <DataTable data={data.appointmentsPatient} columns={columns} />;
     }
   }
 
-  return body
-}
+  return body;
+};
 
 const arrayHours = [
   0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -147,8 +147,8 @@ export const ScheduleConsultation = ({ isOpen, onClose }) => {
             }}
             onSubmit={(data, { setSubmitting }) => {
               setTime(data);
-              stageTwoModal.onOpen()
-              onClose()
+              stageTwoModal.onOpen();
+              onClose();
             }}
           >
             {({ values, errors, isSubmitting }) => (
@@ -165,7 +165,7 @@ export const ScheduleConsultation = ({ isOpen, onClose }) => {
                         <option value={item}> {item} </option>
                       ))}
                     </Field>
-                    <Field component="select" id="minutes" name="minutes" >
+                    <Field component="select" id="minutes" name="minutes">
                       <option value={"00"}>00</option>
                       <option value={"15"}>15</option>
                       <option value={"30"}>30</option>
@@ -174,9 +174,7 @@ export const ScheduleConsultation = ({ isOpen, onClose }) => {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button type="submit" >
-                    Next
-                  </Button>
+                  <Button type="submit">Next</Button>
                 </ModalFooter>
               </Form>
             )}
@@ -192,75 +190,69 @@ export const ScheduleConsultation = ({ isOpen, onClose }) => {
   );
 };
 
-
 const PharmacyList = ({ isOpen, time, onClose }) => {
   console.log(time);
-  const [employees,setEmployees] = useState([])
+  const [employees, setEmployees] = useState([]);
   const [{ fetching, data }] = useFreePharmsQuery({
     variables: {
       inputs: {
         date: time.date,
         hours: time.hours,
-        minutes: time.minutes
-      }
-    }
+        minutes: time.minutes,
+      },
+    },
   });
 
   const stageThreeModal = useDisclosure();
   const handler = (row) => {
-    setEmployees(row)
-    stageThreeModal.onOpen()
-    onClose()
+    setEmployees(row);
+    stageThreeModal.onOpen();
+    onClose();
+  };
 
-  }
-
-
-  let body = null
-  if(fetching) body = <div>Loading</div>
-  else if(!data) body = <div>Loading</div>
+  let body = null;
+  if (fetching) body = <div>Loading</div>;
+  else if (!data) body = <div>Loading</div>;
   else {
-    const columns = [
-      { name: "Name", selector: "pharmacy.name", sortable: true },
-      { name: "Rating", selector: "pharmacy.averageRating", sortable: true },
-      { name: "Price", selector: "pharmacy.definitions[0].price", sortable: true },
-      {
-        name: "",
-        button: true,
-        cell: (row: any) => (
-          <Button size="sm" onClick={() => handler(data.freePharms)}>
-            Pick
-          </Button>
-        ),
-      }
-    ];
-    console.log(data.freePharms)
-
-    body = (
-      <>
-      <DataTable
-        data={data.freePharms}
-        columns={columns}
-      />
-      </>
-    )
-
+      const columns = [
+        { name: "Name", selector: "pharmacy.name", sortable: true },
+        { name: "Rating", selector: "pharmacy.averageRating", sortable: true },
+        {
+          name: "Price",
+          selector: "pharmacy.definitions[0].price",
+          sortable: true,
+        },
+        {
+          name: "",
+          button: true,
+          cell: (row: any) => (
+            <Button size="sm" onClick={() => handler(data.freePharms)}>
+              Pick
+            </Button>
+          ),
+        },
+      ];
+      console.log(data.freePharms);
+      body = (
+        <>
+          <DataTable data={data.freePharms} columns={columns} />
+        </>
+      );
   }
 
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
-      <ModalOverlay />
-      <ModalContent maxW="56rem" maxH="106rem">
-        <ModalHeader>Choose Pharmacy</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          {body}
-        </ModalBody>
-        <ModalFooter>
-          <Button>Next</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+        <ModalOverlay />
+        <ModalContent maxW="56rem" maxH="106rem">
+          <ModalHeader>Choose Pharmacy</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{body}</ModalBody>
+          <ModalFooter>
+            <Button>Next</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       <EmployeeList
         time={time}
         employees={employees}
@@ -274,42 +266,37 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
 import swal from "sweetalert";
 import Cookies from "js-cookie";
 const EmployeeList = ({ employees, isOpen, time, onClose }) => {
-  const [, createConsultation] = useScheduleConsultationMutation()
-  const token = Cookies.get('token')
-
+  const [, createConsultation] = useScheduleConsultationMutation();
+  const token = Cookies.get("token");
 
   const handler = (row, time) => {
-		let date = new Date(time.date)
-		date.setTime(date.getTime() + (2*60*60*1000))
-		if(time.hours)
-			date.setTime(date.getTime() + (parseInt(time.hours)*60*60*1000))
-		if(time.minutes)
-			date.setTime(date.getTime() + (parseInt(time.minutes)*60*1000))
+    let date = new Date(time.date);
+    date.setTime(date.getTime() + 2 * 60 * 60 * 1000);
+    if (time.hours)
+      date.setTime(date.getTime() + parseInt(time.hours) * 60 * 60 * 1000);
+    if (time.minutes)
+      date.setTime(date.getTime() + parseInt(time.minutes) * 60 * 1000);
 
-     let variables = {
-       inputs: {
+    let variables = {
+      inputs: {
         employee: {
-          email: row.email
+          email: row.email,
         },
         pharmacy: {
-          id: parseInt(row.pharmacy.id)
+          id: parseInt(row.pharmacy.id),
         },
         price: row.pharmacy.definitions[0].price,
-        begin: date
-
+        begin: date,
       },
-      token:token
-    }
-    console.log(variables)
+      token: token,
+    };
+    console.log(variables);
 
-    createConsultation(variables).then(
-      res=>{
-        console.log('Return')
-        console.log(res)
-      }
-    )
-
-  }
+    createConsultation(variables).then((res) => {
+      console.log("Return");
+      console.log(res);
+    });
+  };
   const columns = [
     { name: "Name", selector: "firstName", sortable: true },
     // { name: "LastName", selector: "lastName", sortable: true },
@@ -322,26 +309,23 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
           Pick
         </Button>
       ),
-    }
+    },
   ];
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} size="2xl">
-      <ModalOverlay />
-      <ModalContent maxW="56rem" maxH="106rem">
-        <ModalHeader>Choose Pharmacy</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-      <DataTable
-        data={employees}
-        columns={columns}
-      />
-        </ModalBody>
-        <ModalFooter>
-          <Button>Next</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+      <Modal isOpen={isOpen} onClose={onClose} size="2xl">
+        <ModalOverlay />
+        <ModalContent maxW="56rem" maxH="106rem">
+          <ModalHeader>Choose Pharmacy</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <DataTable data={employees} columns={columns} />
+          </ModalBody>
+          <ModalFooter>
+            <Button>Next</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       {/* <
         time={time}
         isOpen={stageThreeModal.isOpen}

@@ -1,0 +1,13 @@
+query Medicine{
+  medicines{
+      id
+      name
+      code
+      info
+      kind
+      points
+      form
+      contents
+
+    }
+}

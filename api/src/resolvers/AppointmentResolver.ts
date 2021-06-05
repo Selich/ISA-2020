@@ -12,7 +12,7 @@ import { Employee } from "../entities/Employee";
 import { WorkingHours } from "../entities/WorkingHours";
 import User from '../entities/User';
 import Patient from "../entities/Patient";
-import { UserInput, AppointmentInput } from "./types/dtos";
+import { UserInput, AppointmentInput, EmployeeInput } from "./types/dtos";
 import { isNonNullType } from "graphql";
 
 
@@ -154,7 +154,7 @@ export class AppointmentResolver {
 		if(kind === 'derm'){
 			let id = parseInt(pharmacyId)
 			let pharmacy = await Pharmacy.findOneOrFail({ id: id })
-			let app = await Appointment.find({ pharmacy: pharmacy, patient: IsNull() })
+			let app = await Appointment.find({ pharmacy: pharmacy, patient: IsNull(), kind: 'derm' })
 			return app
 		} else if (kind === 'pharm'){
 			const temp = jwt.decode(token)
@@ -224,9 +224,10 @@ export class AppointmentResolver {
 		let id = parseInt(inputs.id)
 		let appointment = await Appointment.findOneOrFail({ id: id })
 		//@ts-ignore
-		appointment.patient = null
+		
 
-		appointment.save()
+		appointment.remove()
+		return appointment
 
 
 
@@ -261,7 +262,6 @@ export class AppointmentResolver {
 				}
 			}
 		)
-
 		let app = new Appointment()
 		if(!inputs.begin) return null
 		app.begin = inputs.begin
@@ -314,7 +314,8 @@ export class AppointmentResolver {
 		app.employee = employee
 		app.pharmacy = pharmacy
 		app.isVisited = false
-		app.kind = 'pharm'
+		if(inputs.kind)
+			app.kind = inputs.kind
 		app.patient = patient
 		app.save()
 		if(!patient.appointments){
@@ -399,20 +400,23 @@ export class AppointmentResolver {
 		@Arg("from") from: string,
 		@Arg("length") length: number,
 		@Arg("discount") discount: number,
-		@Arg("employee") employee: string,
+		@Arg("token") token: string,
+		@Arg("employee") employee: EmployeeInput,
 		@Ctx() { req, res }: MyContext
 	) {
-		let user = req.session.user
-		let temp = await Employee.findOneOrFail({ id: parseInt(employee) })
-		if (!temp) return null;
 
-		let workingHours = temp.workingHours.filter(item => item.pharmacy === user.pharmacy)[0]
+		let temp = jwt.decode(token)
+		if (!temp) return null
+
+		// @ts-ignore
+		let admin = await Employee.findOneOrFail({ email: temp.email })
 
 		let app = new Appointment()
-		app.begin = from
+		app.begin = new Date(from)
 		app.length = length
-		app.employee = await Employee.findOneOrFail({ id: parseInt(employee) })
-		app.pharmacy = user.pharmacy
+		app.employee = await Employee.findOneOrFail({ email: employee.email })
+		app.pharmacy = admin.pharmacy
+		app.save()
 		return app
 
 	}

@@ -70,8 +70,5 @@ export class Medicine extends Model {
   @JoinColumn()
   alternatives: Medicine[];
 
-	@Field(() => [Price], {nullable: true})
-	@OneToMany(() => Price, item => item.medicine, { nullable: true, cascade:true})
-  prices: Price[];
 
 }

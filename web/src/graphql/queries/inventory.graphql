@@ -1,0 +1,18 @@
+query Inventory(
+  $token: String!
+) {
+  inventory(
+    token: $token
+  ){
+    id
+    details{
+      name
+      code
+    }
+    quantity
+    currentPrice
+
+  }
+}
+
+

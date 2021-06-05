@@ -1,0 +1,9 @@
+mutation AddMedicineDefinition( 
+	$inputs: MedicineInput!
+) {
+  addMedicineDefinition( 
+  inputs: $inputs
+  ) { 
+    name
+  }
+}

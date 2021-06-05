@@ -9,6 +9,7 @@ export const Examinations = () => {
   return (
     <Tabs colorScheme="green">
       <TabList>
+        <Tab>Free Appointments</Tab>
         <Tab>Currently Scheduled</Tab>
         <Tab>History</Tab>
       </TabList>

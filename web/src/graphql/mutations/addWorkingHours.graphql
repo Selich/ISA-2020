@@ -1,0 +1,12 @@
+mutation AddWorkingHours(
+  $inputs: EmployeeInput!, 
+  $token: String!, 
+  ) {
+  addWorkingHours(
+    inputs: $inputs,
+    token: $token,
+  ){
+    email
+
+  }
+}

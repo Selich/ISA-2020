@@ -1,6 +1,7 @@
 import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import {  Medicine } from "./Medicine";
+import { MedicineItem } from "./MedicineItem";
 import { Model } from "./Model";
 import { Pharmacy } from "./Pharmacy";
 
@@ -14,10 +15,10 @@ export class Price extends Model{
   @JoinTable()
   pharmacy: Pharmacy;
 
-  @Field(() => Medicine)
-  @ManyToOne(() => Medicine, item => item.prices )
+  @Field(() => MedicineItem)
+  @ManyToOne(() => MedicineItem, item => item.prices )
   @JoinTable()
-  medicine: Medicine;
+  medicine: MedicineItem;
 
   @Field()
   @Column( {nullable:true})

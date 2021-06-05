@@ -5,6 +5,7 @@ query Employee(
     token: $token
   ){
     id
+    role
     email
     firstName
     lastName
