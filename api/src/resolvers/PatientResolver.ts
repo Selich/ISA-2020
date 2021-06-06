@@ -11,7 +11,7 @@ import { Pharmacy } from "../entities/Pharmacy";
 import { Rating } from "../entities/Rating";
 import { Tier } from "../entities/Tier";
 import { MyContext } from "../types";
-import { ComplaintInput, MedicineInput, PatientInput, RatingInput, SubscriptionInput } from "./types/dtos";
+import { ComplaintInput, MedicineInput, PatientInput, RatingInput, SubscriptionInput, TierInput } from "./types/dtos";
 
 @Resolver(Patient)
 export class PatientResolver {
@@ -75,6 +75,31 @@ export class PatientResolver {
   async tiers() {
     return await Tier.find({});
   }
+
+	@Mutation(() => Tier, { nullable: true })
+	async createTier(
+		@Arg("inputs") inputs: TierInput,
+		@Ctx() { req }: MyContext
+	): Promise<Tier> {
+		let tier = await Tier.findOne({ name: inputs.name })
+
+		if (!tier) {
+			tier = new Tier()
+      // @ts-ignore
+			tier.name = inputs.name
+		}
+
+		if (inputs.discount)
+			tier.discount = inputs.discount
+		if (inputs.scoreMax)
+			tier.scoreMax = inputs.scoreMax
+		if (inputs.scoreMin)
+			tier.scoreMin = inputs.scoreMin
+
+		tier.save()
+		return tier
+	}
+
 
   @Mutation(() => Patient, { nullable: true })
   async addAllergie(

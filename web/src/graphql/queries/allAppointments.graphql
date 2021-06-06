@@ -1,0 +1,6 @@
+query AllAppointments{
+  allAppointments{
+    kind
+    begin
+  }
+}

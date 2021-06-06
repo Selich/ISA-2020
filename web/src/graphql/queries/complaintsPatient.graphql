@@ -1,0 +1,21 @@
+query ComplaintsPatient (
+  $token: String!
+)
+  {
+  complaintsPatient(token: $token){
+    createdAt
+    description
+    employee{
+      firstName
+      lastName
+      email
+      role
+    }
+    patient{
+      firstName
+      lastName
+      email
+
+    }
+  }
+}

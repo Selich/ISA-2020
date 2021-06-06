@@ -18,6 +18,7 @@ import {
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { PatientComplaints } from "../../components/employee/PatientComplaints";
 import { PatientDetails } from "../../components/layouts/patient/PatientDetails";
 import { Consultations } from "../../components/patient/Consultations";
 import { EPrescriptions } from "../../components/patient/EPrescriptions";
@@ -35,6 +36,7 @@ const TabMenu = () => (
     <Tab>E-Prescriptions</Tab>
     <Tab>Reservations</Tab>
     <Tab>Subscriptions</Tab>
+    <Tab>Complaints</Tab>
     <Tab>Rate</Tab>
     <Tab>Profile</Tab>
   </TabList>
@@ -62,7 +64,10 @@ export default function Index() {
               <TabPanel>
                 <ReservationsTable />
               </TabPanel>
-              <TabPanel></TabPanel>
+              <TabPanel>Subs</TabPanel>
+              <TabPanel>
+                <PatientComplaints/>
+              </TabPanel>
               <TabPanel>
                 <Rate />
               </TabPanel>

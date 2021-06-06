@@ -23,13 +23,11 @@ const UserMenu: any = ({ user, setUser }) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const router = useRouter();
   const btnRef = React.useRef()
-  return (
-    <Flex align="center">
-      <Basket />
-      <Menu>
-        {/* @ts-ignore */}
-				<MenuButton as={Button} rightIcon={<Avatar src="https://bit.ly/dan-abramov" size="sm" pd={2} />} >
-        </MenuButton>
+
+  let body = null
+
+  if(user){
+   body = (
         <MenuList>
           <NextLink href="/[role]/[id]" as={`/${user.role}/${user.id}`}>
             <Center>
@@ -73,6 +71,18 @@ const UserMenu: any = ({ user, setUser }) => {
           </MenuItem>
 
         </MenuList>
+
+  )
+
+  }
+  return (
+    <Flex align="center">
+      <Basket />
+      <Menu>
+        {/* @ts-ignore */}
+				<MenuButton as={Button} rightIcon={<Avatar src="https://bit.ly/dan-abramov" size="sm" pd={2} />} >
+        </MenuButton>
+          {body}
         <Drawer
           size="md"
           isOpen={isOpen}

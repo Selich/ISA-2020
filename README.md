@@ -3,8 +3,47 @@ Tim 9
 - Dušan Urošević IN16/2017
 - Nikola Selić IN43/2017
 
-Baza-PostgreSQL
-Backup file **dump.sql**.
+## Deployed Website
+
+- API:  [api.selich.me](https://api.selich.me)
+- WEB-APP:  [selich.me](https://selich.me)
+
+
+## Tehnologije  
+- Frontend - React.js
+
+- Backend - Node.js, Express, ApolloServer, GraphQL
+
+- Baza Podataka - PostgreSQL
+
+## Dependencies for dev
+1) Instalirati node.js
+2) Instalirati yarn
+[link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
+3) Instalirati postgres
+[link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+
+4) Instalirati sve neophodne bibiloteke
+```bash
+cd <Naziv Projekta>
+yarn install
+```
+
+## Testiranje
+
+- Testiranje se vrsi koriscenjem [Jest](https://jestjs.io/)
+
+Testovi se nalaze na putanji
+```
+/api/tests/
+```
+
+Pokretanje se vrsi pomocu
+```
+  npm run test
+```
+
+## Database dump
 
 Potrebno je prvo u pgAdminu napraviti Server i Bazu sa sledecim kredencijalima
 ```
@@ -14,12 +53,6 @@ database: isa_super
 port: 5432
 ```
 
-## Video uputstvo koriscenja aplikacije
-
-Video klipovi se nalaze na Google Drive-u na [linku](https://drive.google.com/drive/folders/1NRJ668fUAeZKRTFkIO6hQ8IX-Op6kTdJ?usp=sharing)
-
-### Dump SQL baze
-
 Dump SQL baze se nalazi na [linku]( https://drive.google.com/drive/u/1/folders/1aOOK3CV7BB5vG-ntpBgifMQkrUB8Nkv0)
 
 
@@ -27,11 +60,21 @@ Za formiranje i popunjavanje tabela u bazi koristiti sledecu komandu u terminalu
 ```
 psql -U isa_super -d isa_super < dump.sql
 ```
+
+## Konkurentni pristup bazi
+Dokumentacija za resenja konfliktnih situacija pri konkurentnim pristupima bazi se nalazi na [linku](https://docs.google.com/document/d/1W29tMjwFOUvmU5z-Gb3UjlViXFlqz7KZYtTrfUqkf3s/edit)
+
+
+## Video uputstvo koriscenja aplikacije
+
+Video klipovi se nalaze na Google Drive-u na [linku](https://drive.google.com/drive/folders/1NRJ668fUAeZKRTFkIO6hQ8IX-Op6kTdJ?usp=sharing)
+
+## Proof of Concept
+
+Predlog arhitekture se nalazi na [linku](./docs/Proof of Concept.pdf)
+
 Prilikom akcija koje generisu e-mail, adresa na koju je mail poslat se pojavljuje u konzoli.
 Potrebno je kopirati tu adresu u address bar browsera.
-
-## Frontend app, web -> AWS ElasticBean,
-## Backend app, api -> Digital Ocean, dokku
 
 ### Run scripts
 Pozivanje:
@@ -53,28 +96,4 @@ Da bi generisao nove zahteve potrebno je generisati nove graphql upite
 yarn gen
 ```
 
-### Dependencies for dev
-1) Instalirati node.js
-2) Instalirati yarn
-[link](https://classic.yarnpkg.com/en/docs/install/#windows-stable)
-3) Instalirati postgres
-[link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
 
-3) Instaliraj windows terminal
-[link](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701)
-4) Instalirace sve neophodne bibiloteke
-```bash
-cd <Naziv Projekta>
-yarn install
-```
-
-### Frontend
-- React 
-- Redux
-- Next.js
-- Chakra UI
-- Jest
-### Backend
-- Express.js
-- Redis
-- Azure

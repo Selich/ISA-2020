@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import axios from 'axios'
 import jwt from "jsonwebtoken";
+import { Tier } from "../entities/Tier";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Address } from "../entities/Address";
 import { Employee } from "../entities/Employee";
@@ -122,8 +123,6 @@ export class AuthResolver {
         if(inputs.role && roles.users.includes(inputs.role)){
             user = new Patient({...inputs})
             token = await sendVerificationMail(user, mailer)
-        } else if(inputs.role && roles.employees.includes(inputs.role)){
-            user = new Employee({...inputs})
         }
         if(!user) return { errors: [{ field: "email", message: "Invalid register info" }] };
 
@@ -151,6 +150,7 @@ export class AuthResolver {
         if(inputs.password)
             user.password = await argon2.hash(inputs.password);
 
+        user.tier = await Tier.findOneOrFail({name: 'Regular'})
         user.save()
         return { token, user }
 

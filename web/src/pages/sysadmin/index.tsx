@@ -1,6 +1,7 @@
 import {
   Box,
-  Button, Modal,
+  Button,
+  Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
@@ -17,29 +18,31 @@ import {
 import { Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import moment from "moment";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import DataTable from "react-data-table-component";
+import { AppointmentDefinition } from "../../components/admin/AppointmentDefinition";
+import { LoyaltyProgram } from "../../components/admin/LoyaltyProgram";
+import { Pharmacies } from "../../components/admin/Pharmacies";
+import { SysAdminComplaints } from "../../components/admin/SysAdminComplaints";
+import { SysAdminMedicine } from "../../components/admin/SysAdminMedicine";
 import { AdminHolidays } from "../../components/AdminHoliday";
 import { EmployeeTable } from "../../components/tables/EmployeeTable";
 import {
-  useAddEmployeeMutation,
-  useAddMedicineDefinitionMutation,
-  useAddMedicineMutation,
-  useEmployeesQuery, useHolidayQuery, useMedicineQuery
+  useAddEmployeeMutation, useEmployeesQuery,
+  useHolidayQuery
 } from "../../generated/graphql";
 import { MyDateInput, MyTimeInput } from "../../utils/utils";
 
-
 const TabMenu = () => (
   <TabList>
-    <Tab>System Admins</Tab>
     <Tab>Employees</Tab>
     <Tab>Pharmacies</Tab>
     <Tab>Medicines</Tab>
-    <Tab>Pharm Admin</Tab>
     <Tab>Complaints</Tab>
     <Tab>Loyalty Program</Tab>
+    <Tab>Appointment Definition</Tab>
     <Tab>Holidays</Tab>
   </TabList>
 );
@@ -53,16 +56,23 @@ export default function Index() {
             <TabMenu />
             <TabPanels>
               <TabPanel>
-                {/* <DermExaminations events={data.appointments}/> */}
-              </TabPanel>
-              <TabPanel>
                 <Employees />
               </TabPanel>
-              <TabPanel></TabPanel>
               <TabPanel>
-                <Medicine/>
+                <Pharmacies />
               </TabPanel>
-              <TabPanel>{/* <Profile/> */}</TabPanel>
+              <TabPanel>
+                <SysAdminMedicine />
+              </TabPanel>
+              <TabPanel>
+                <SysAdminComplaints/>
+              </TabPanel>
+              <TabPanel>
+                <LoyaltyProgram/>
+              </TabPanel>
+              <TabPanel>
+                <AppointmentDefinition/>
+              </TabPanel>
               <TabPanel>
                 <AdminHolidays />
               </TabPanel>
@@ -73,6 +83,7 @@ export default function Index() {
     </>
   );
 }
+
 const SelectedPharmModal: any = ({
   isOpen,
   onClose,
@@ -88,7 +99,7 @@ const SelectedPharmModal: any = ({
       <ModalOverlay />
       <ModalContent maxW="56rem" maxH="106rem">
         <ModalHeader>
-          <Text fontSize="xl">{selectedPharmacy.name}</Text>
+          {/* <Text fontSize="xl">{selectedPharmacy.name}</Text> */}
           <Text fontSize="xl">Select Pharmacist: </Text>
         </ModalHeader>
         <ModalBody>
@@ -138,7 +149,6 @@ const ScheduleConsultations = () => {
     </>
   );
 };
-
 
 export const Patients = ({ events }) => {
   // TODO
@@ -230,146 +240,26 @@ const Holidays = () => {
 };
 
 
-const Medicine = () => {
-  const [{fetching,data}] = useMedicineQuery()
-  const createModal = useDisclosure();
-
-	const columns = [
-		{ name: "Name", selector: "name", sortable: true },
-		{ name: "Kind", selector: "kind", sortable: true },
-		{ name: "Form", selector: "form", sortable: true },
-		{ name: "Points", selector: "points", sortable: true },
-	];
-
-  let body = null
-  if(fetching) body = <div>Loading</div>
-  else if(!data) body = <div>Loading</div>
-  else{
-    body = (
-      <DataTable
-      data={data.medicines}
-      columns={columns}
-      />
-
-    )
-  }
-
-  return (
-    <>
-      <Button onClick={() => createModal.onOpen()}>Create Medicine</Button>
-      {body}
-      <MedicineModal
-        onOpen={createModal.onOpen}
-        isOpen={createModal.isOpen}
-        onClose={createModal.onClose}
-      />
-      </>
-
-  )
-
-}
-const MedicineModal = ({ onOpen, isOpen, onClose }) => {
-  const [, addMedicine] = useAddMedicineDefinitionMutation();
-  const token = Cookies.get('token')
-
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} size="">
-      <ModalOverlay />
-      <ModalContent maxW="56rem" maxH="106rem">
-        <ModalHeader>
-          <Text fontSize="xl">Create Medicine:</Text>
-        </ModalHeader>
-        <ModalBody>
-          <Formik
-            initialValues={{ 
-              name: "", 
-              info: "", 
-              kind: "", 
-              points:'',
-              code:'',
-              form: "", 
-              contents: "", 
-            }}
-            onSubmit={async (values, { setErrors }) => {
-              let variables = {
-                inputs: {
-                  name: values.name,
-                  info: values.info,
-                  kind: values.kind,
-                  code: values.code + '',
-                  points: parseInt(values.points),
-                  form: values.form,
-                  contents: values.contents,
-                },
-              }
-
-              addMedicine(variables).then(res => {
-                console.log(res)
-                onClose()
-              })
-
-            }}
-          >
-            {({ isSubmitting }) => (
-              <Form>
-                <div>
-                Name:
-                <Field type="text" name="name"/>
-                  </div>
-                <div>
-                Info:
-                <Field type="text" name="info"/>
-                </div>
-                <div>
-                Kind:
-                <Field type="text" name="kind"/>
-                </div>
-                <div>
-                Code:
-                <Field type="text" name="code"/>
-                </div>
-                <div>
-                Points:
-                <Field type="text" name="points"/>
-                </div>
-                <div>
-                Form:
-                <Field type="text" name="form"/>
-                </div>
-                <div>
-                Contents:
-                <Field type="text" name="contents"/>
-                </div>
-                <Button type="submit">Create Medicine</Button>
-              </Form>
-            )}
-          </Formik>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-};
-
 const Employees = () => {
   const createModal = useDisclosure();
-  const token = Cookies.get('token')
-  let variables =
-  {
-    inputs:{
-      role: "any"
+  const token = Cookies.get("token");
+  let variables = {
+    inputs: {
+      role: "any",
     },
-    token: token
-  }
-  const handler = (row) => {
-
-  }
-  const [{fetching,data}] = useEmployeesQuery({variables})
-	const columns = [
-		{ name: "FirstName", selector: "firstName", sortable: true },
-		{ name: "Role", selector: "role", sortable: true },
-		{ name: "Pharmacy", selector: "pharmacy.name", sortable: true },
-		{ name: "Email", selector: "email", sortable: true },
-    {
+    token: token,
+  };
+  const handler = (row) => {};
+  const [{ fetching, data }] = useEmployeesQuery({ variables });
+  let body = null;
+  if (fetching) body = <div>Loading</div>;
+  else if (!data) body = <div>Loading</div>;
+  else {
+    const columns = [
+      { name: "FirstName", selector: "firstName", sortable: true },
+      { name: "Role", selector: "role", sortable: true },
+      { name: "Email", selector: "email", sortable: true },
+      {
         name: "",
         button: true,
         cell: (row: any) => (
@@ -377,23 +267,20 @@ const Employees = () => {
             Report
           </Button>
         ),
+      },
+    ];
+    if (data.employees) {
+      console.log(data.employees)
+      body = <DataTable data={data.employees} columns={columns} />;
+    } else {
+      console.log('Employees')
+      console.log(data.employees)
+      body = <DataTable data={[]} columns={columns} />;
     }
-	];
-  let body = null
-  if(fetching) body = <div>Loading</div>
-  else if(!data) body = <div>Loading</div>
-  else{
-    body = (
-      <DataTable
-      data={data.employees}
-      columns={columns}
-      />
-    )
-
   }
   return (
     <>
-      <Button onClick={() => createModal.onOpen()}>Create Dermatologist</Button>
+      <Button onClick={() => createModal.onOpen()}>Create Employee</Button>
       {body}
       <CreateModal
         onOpen={createModal.onOpen}
@@ -406,7 +293,9 @@ const Employees = () => {
 
 const CreateModal = ({ onOpen, isOpen, onClose }) => {
   const [, addEmployee] = useAddEmployeeMutation();
-  const token = Cookies.get('token')
+  const router = useRouter()
+
+  const token = Cookies.get("token");
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="">
@@ -417,16 +306,17 @@ const CreateModal = ({ onOpen, isOpen, onClose }) => {
         </ModalHeader>
         <ModalBody>
           <Formik
-            initialValues={{ 
-              email: "", 
-              firstName: "", 
-              lastName: "", 
-              address:{
-                street: '',
-                city: '',
-                country: ''
-              }, 
-              telephone: "", 
+            initialValues={{
+              email: "",
+              firstName: "",
+              lastName: "",
+              address: {
+                street: "",
+                city: "",
+                country: "",
+              },
+              telephone: "",
+              role: "",
             }}
             onSubmit={async (values, { setErrors }) => {
               let variables = {
@@ -435,25 +325,57 @@ const CreateModal = ({ onOpen, isOpen, onClose }) => {
                   firstName: values.firstName,
                   lastName: values.lastName,
                   telephone: values.telephone,
-                  role: 'derm',
+                  role: values.role,
                 },
-                token: token
-              }
-              console.log(variables)
+                token: token,
+              };
+              console.log(variables);
 
-              addEmployee(variables).then(res => console.log(res))
-
+              addEmployee(variables).then((res) => {
+                alert("Employee Created.");
+                onClose();
+                router.reload()
+              });
             }}
           >
             {({ isSubmitting }) => (
               <Form>
-                <Field type="email" name="email"/>
-                <Field type="text" name="firstName"/>
-                <Field type="text" name="lastName"/>
-                <Field type="text" name="address.street"/>
-                <Field type="text" name="address.city"/>
-                <Field type="text" name="address.country"/>
-                <Field type="text" name="telephone"/>
+                <div>
+                  Email:
+                  <Field type="email" name="email" />
+                </div>
+                <div>
+                  First Name:
+                  <Field type="text" name="firstName" />
+                </div>
+                <div>
+                  Last Name:
+                  <Field type="text" name="lastName" />
+                </div>
+                <div>
+                  Role:
+                  <Field as="select" name="role">
+                    <option value="derm">Dermatologist</option>
+                    <option value="pharm">Pharmacist</option>
+                    <option value="admin">Pharmacy Admin</option>
+                  </Field>
+                </div>
+                <div>
+                  Street:
+                  <Field type="text" name="address.street" />
+                </div>
+                <div>
+                  City:
+                  <Field type="text" name="address.city" />
+                </div>
+                <div>
+                  Country:
+                  <Field type="text" name="address.country" />
+                </div>
+                <div>
+                  Telephone:
+                  <Field type="text" name="telephone" />
+                </div>
                 <Button type="submit">Create Employee</Button>
               </Form>
             )}

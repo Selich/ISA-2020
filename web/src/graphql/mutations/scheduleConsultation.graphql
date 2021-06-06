@@ -9,6 +9,7 @@ mutation ScheduleConsultation(
     begin
   	length
     employee{
+      firstName
       lastName
     }
   }

@@ -1,0 +1,12 @@
+mutation AddAdmin(
+  $inputs: EmployeeInput!
+  ) {
+  addAdmin( 
+    inputs: $inputs,
+     ) {
+
+       firstName
+       lastName
+       email
+  }
+}

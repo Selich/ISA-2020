@@ -1,0 +1,10 @@
+mutation CreateTier( 
+	$inputs: TierInput!,
+) {
+  createTier( 
+  inputs: $inputs
+  ) { 
+    name
+    discount
+  }
+}

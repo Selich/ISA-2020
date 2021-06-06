@@ -1,11 +1,14 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import Cookies from "js-cookie";
 import { Provider as AuthProvider } from "next-auth/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createClient, Provider } from "urql";
 import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
+import { Loading } from "../components/Loading";
 import { Header } from "../components/sections/Header";
 import '../datepicker.css';
+import { useMeQuery } from "../generated/graphql";
 import theme from "../theme";
 import Index from "./index";
 
@@ -27,7 +30,26 @@ const roles = {
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  let token = Cookies.get('token')
+
   let [user, setUser] = useState(null);
+  let body = null
+  if(!token) body =  
+          <Header setUser={setUser} user={user} />
+	let [{fetching, data}] = useMeQuery({variables:{
+    token: token
+  }})
+
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
+  else {
+
+    setUser(data.me)
+    body = (
+          <Header setUser={setUser} user={user} />
+
+    )
+  }
   let allowed = true
 
 

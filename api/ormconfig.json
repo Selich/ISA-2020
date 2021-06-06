@@ -5,6 +5,5 @@
   "username": "isa_super",
   "password": "pass",
   "database": "isa_super",
-  "entities": ["dist/entities/*.js"],
-  "migrations": ["dist/migrations/*.js"]
+  "entities": ["dist/entities/*.js"]
 }

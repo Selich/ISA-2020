@@ -1,0 +1,10 @@
+query FreePharmacists{
+	freePharmacists{
+    firstName
+    email
+    lastName
+    averageRating
+    role
+
+  }
+}

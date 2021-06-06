@@ -4,12 +4,13 @@ import { WorkingHours } from "../entities/WorkingHours";
 import { sendCreateTokenMail, sendHolidayStatusUpdate } from "../utils/sendMail";
 import { Pharmacy } from "../entities/Pharmacy";
 import { Appointment } from "../entities/Appointment";
-import { MyContext } from "src/types";
+import { MyContext } from "../types";
 import { Field, Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
 import { UserResponse, HolidayInput, EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { getConnection, IsNull } from "typeorm";
+import { Complaint } from "../entities/Complaint";
 
 
 
@@ -36,11 +37,14 @@ export class EmployeeResolver {
 			return holidays
 		} else if (user.role === 'sysadmin') {
 			let holidays = await Holiday.find(
-				{ pharmacyId: IsNull() }
-			)
-			return holidays
-
+				{ pharmacyId: IsNull() })
+		  return holidays
+		} else if (user.role === 'derm') {
+			let holidays = await Holiday.find(
+				{ employee: user })
+		  return holidays
 		}
+
 		return await Holiday.find({})
 
 	}
@@ -101,7 +105,11 @@ export class EmployeeResolver {
 		@Arg('token') token: string,
 		@Ctx() { req }: MyContext
 	) {
-		if (inputs.role === "any") return await Employee.find({})
+		console.log(inputs)
+		console.log(token)
+		if (inputs.role === "any") {
+			return await Employee.find({})
+		}
 		if (inputs.role === "derm") return await Employee.find({
 			where: {
 				role: 'derm'
@@ -189,28 +197,31 @@ export class EmployeeResolver {
 		await queryRunner.connect();
 		await queryRunner.startTransaction();
 
+		let holiday = await Holiday.findOneOrFail({ id: inputs.id })
+		if (!inputs.employee) return null
+		let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
+
+		let comment = 'Approved'
+		if (inputs.comments) { comment = inputs.comments }
+
+		holiday.isApproved = true
+
 		try {
 
-			let holiday = await Holiday.findOneOrFail({ id: inputs.id })
-			if (!inputs.employee) return null
-			let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
 
-			let comment = 'Approved'
-			if (inputs.comments) { comment = inputs.comments }
-
-			holiday.isApproved = true
-
+			sendHolidayStatusUpdate(employee, mailer, employee, holiday.isApproved, comment)
 
 			await queryRunner.manager.save(holiday);
 			await queryRunner.commitTransaction();
-			sendHolidayStatusUpdate(employee, mailer, employee, holiday.isApproved, comment)
+
+
 		} catch (err) {
 			await queryRunner.rollbackTransaction();
 		} finally {
 			await queryRunner.release();
 		}
-
 		return holiday
+
 	}
 
 	@Mutation(() => Employee, { nullable: true })
@@ -235,6 +246,7 @@ export class EmployeeResolver {
 			let wh = new WorkingHours()
 			wh.employee = employee
 			wh.pharmacy = user.pharmacy
+			employee.pharmacy = user.pharmacy
 			res = wh
 		}
 
@@ -336,5 +348,21 @@ export class EmployeeResolver {
 		user.save
 
 		return { user };
+	}
+
+	@Query(() => [Holiday], { nullable: true })
+	async complaints(
+		@Arg('token') token: string,
+		@Ctx() { req }: MyContext
+	) {
+		let temp = jwt.decode(token)
+
+		// @ts-ignore
+		let user = await Employee.findOneOrFail({ email: temp.email })
+
+		return await Complaint.find({
+			description: IsNull()
+		})
+
 	}
 }

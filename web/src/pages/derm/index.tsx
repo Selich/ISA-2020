@@ -9,16 +9,17 @@ import {
 import Cookies from "js-cookie";
 import moment from "moment";
 import React from "react";
+import DataTable from "react-data-table-component";
 import { Examinations } from "../../components/employee/Examinations";
 import { MyCalendar } from "../../components/employee/MyCalendar";
 import { RequestHoliday } from "../../components/employee/RequestHoliday";
+import { Loading } from "../../components/Loading";
 import {
-  useAppointmentsQuery
+  useAppointmentsQuery, useHolidayQuery
 } from "../../generated/graphql";
 
 const TabMenu = () => (
   <TabList>
-    <Tab>Patients</Tab>
     <Tab>Examinations</Tab>
     <Tab>Calendars</Tab>
     <Tab>Holidays</Tab>
@@ -65,16 +66,15 @@ export default function Index() {
               <TabMenu />
               <TabPanels>
                 <TabPanel>
-                  <div>Patients</div>
-                </TabPanel>
-                <TabPanel>
                   <Examinations />
                 </TabPanel>
                 <TabPanel>
                   <RequestHoliday/>
                   <MyCalendar events={events} />
                 </TabPanel>
-                <TabPanel>{/* <DermHolidays /> */}</TabPanel>
+                <TabPanel>
+                  <Holidays />
+                </TabPanel>
                 <TabPanel>{/* <Profile/> */}</TabPanel>
               </TabPanels>
             </Tabs>
@@ -84,4 +84,35 @@ export default function Index() {
     );
   }
   return body;
+}
+
+const Holidays = () => {
+  
+
+  const token = Cookies.get('token')
+  const [{ fetching, data }] = useHolidayQuery({ variables: { token: token } });
+
+	const columns = [
+		{ name: "From", selector: "from", sortable: true },
+		{ name: "Until", selector: "until", sortable: true },
+		{ name: "Holiday Approved", id:'isApproved', accessor: item => item.isApproved.toString(), sortable: true
+  },
+
+	];
+  
+  let body = null;
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
+  else {
+  body = (
+    <DataTable
+    data={data.holiday}
+    columns={columns}
+    />
+  )
+  }
+
+  return body
+
+
 }

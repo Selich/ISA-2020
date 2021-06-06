@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component";
 import React, { useEffect, useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
+import { Loading } from "../Loading";
 
 interface TableProps {
   filter?: boolean;
@@ -46,8 +47,8 @@ export const TableComponent = (props: TableProps) => {
   console.log("Table Contents\n" + data);
 
   let body = null;
-  if (fetching) body = <p>loading...</p>;
-  else if (!data) body = <p>Null data...</p>;
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
   else {
     let values = Object.values(data)[0];
     if (!values) values = [];

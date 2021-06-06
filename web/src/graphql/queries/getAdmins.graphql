@@ -1,0 +1,27 @@
+query GetAdmins 
+(
+  $inputs: PharmacyInput!
+) {
+  getAdmins (
+    inputs: $inputs
+  ){
+    id
+    email,
+    role
+    firstName,
+    lastName,
+    pharmacy{
+      name
+    }
+    holidays {
+      from
+      until
+    }
+    workingHours{
+      from
+      until
+    }
+    averageRating
+
+  }
+}

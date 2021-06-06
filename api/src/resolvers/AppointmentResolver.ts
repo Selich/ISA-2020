@@ -1,19 +1,16 @@
+import jwt from "jsonwebtoken";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { getConnection, IsNull, Not } from 'typeorm';
 import { Appointment } from "../entities/Appointment";
 import { AppointmentDefinition } from "../entities/AppointmentDefinition";
-import jwt from "jsonwebtoken";
-import { getConnection, IsNull, MoreThanOrEqual, Not } from 'typeorm'
-import moment from 'moment'
-import { MyContext } from "../types";
-import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
-import { GraphQLDateTime } from 'graphql-iso-date'
-import { sendAppointmentMail } from "../utils/sendMail";
-import { Pharmacy } from "../entities/Pharmacy";
 import { Employee } from "../entities/Employee";
-import { WorkingHours } from "../entities/WorkingHours";
-import User from '../entities/User';
 import Patient from "../entities/Patient";
-import { UserInput, AppointmentInput, EmployeeInput } from "./types/dtos";
-import { isNonNullType } from "graphql";
+import { Pharmacy } from "../entities/Pharmacy";
+import User from '../entities/User';
+import { WorkingHours } from "../entities/WorkingHours";
+import { MyContext } from "../types";
+import { sendAppointmentMail } from "../utils/sendMail";
+import { AppointmentDefinitionInput, AppointmentInput, EmployeeInput } from "./types/dtos";
 
 
 function addMinutes(date: Date, minutes: number) {
@@ -127,6 +124,11 @@ export class AppointmentResolver {
 		return appointment
 	}
 
+	@Query(() => [Appointment], { nullable: true })
+	async allAppointments() {
+		return await Appointment.find({})
+	}
+
 
 	@Query(() => [Appointment], { nullable: true })
 	async appointments(
@@ -190,12 +192,18 @@ export class AppointmentResolver {
 
 	@Mutation(() => AppointmentDefinition, { nullable: true })
 	async createDefinition(
-		@Arg("inputs") inputs: AppointmentInput,
+		@Arg("inputs") inputs: AppointmentDefinitionInput,
 		@Ctx() { req }: MyContext
 	): Promise<AppointmentDefinition> {
-		let definition = await AppointmentDefinition.findOneOrFail({ kind: inputs.kind })
+		let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmId })
+		console.log(pharmacy)
+		let definition = await AppointmentDefinition.findOne({
+			kind: inputs.kind,
+			pharmacy: pharmacy
+		})
 		if (!definition) {
 			definition = new AppointmentDefinition()
+			definition.pharmacy = pharmacy
 		}
 		if (inputs.kind)
 			definition.kind = inputs.kind
@@ -311,83 +319,80 @@ export class AppointmentResolver {
 	) {
 		const temp = jwt.decode(token)
 		if (!temp) return null
-		const connection = getConnection();
-		const queryRunner = connection.createQueryRunner();
-
-		await queryRunner.connect();
-		await queryRunner.startTransaction();
 
 		// @ts-ignore
-		try {
-			let patient = await Patient.findOneOrFail({ email: temp?.email })
-			if (!inputs.employee) return null
-			if (!inputs.pharmacy) return null
+		let patient = await Patient.findOneOrFail({ email: temp?.email })
+		if (!inputs.employee) return null
+		if (!inputs.pharmacy) return null
 
-			let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
-			let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
+		let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
+		let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
 
-			let app = new Appointment()
-			if (!inputs.begin) return null
-			app.begin = inputs.begin
-			if (!inputs.price) return null
-			app.price = inputs.price
-			app.employee = employee
-			app.pharmacy = pharmacy
-			app.isVisited = false
-			if (inputs.kind)
-				app.kind = inputs.kind
-			app.patient = patient
-			if (!patient.appointments) {
-				patient.appointments = []
+		let app = new Appointment()
 
-			}
-			patient.appointments.push(app)
-			await queryRunner.manager.save(app);
-			await queryRunner.manager.save(patient);
-			await queryRunner.commitTransaction();
+		// // @ts-ignore
+		if (!inputs.begin) return null
+		app.begin = inputs.begin
+		if (!inputs.price) return null
+		let tier = patient.tier
+		let price = inputs.price
+		price = (price / 100) * tier.discount
+		app.price = price
+		if (!inputs.score) return null
+		app.score = inputs.score
 
-			return app
-		} catch (err) {
-			await queryRunner.rollbackTransaction();
-		} finally {
-			await queryRunner.release();
+		app.employee = employee
+		app.length = 30
+
+		app.pharmacy = pharmacy
+		app.isVisited = false
+		if (inputs.kind)
+			app.kind = inputs.kind
+		app.patient = patient
+		if (!patient.appointments) {
+			patient.appointments = []
+
 		}
+		app.save()
+		patient.appointments.push(app)
+		patient.save()
+		return app
 
-}
+	}
 
 
 
-@Mutation(() => Appointment, { nullable: true })
-async schedule(
+	@Mutation(() => Appointment, { nullable: true })
+	async schedule(
 		@Arg("token") token: string,
 		@Arg("inputs") inputs: AppointmentInput,
 		@Ctx() { mailer }: MyContext
 	) {
 
-	const temp = jwt.decode(token)
-	if (!temp) return null
+		const temp = jwt.decode(token)
+		if (!temp) return null
 
-	if (!inputs.id) return null
+		if (!inputs.id) return null
 
-	let appointment = await Appointment.findOneOrFail({ id: inputs.id })
-	//@ts-ignore
-	let patient = await Patient.findOneOrFail({ email: temp?.email })
-	appointment.patient = patient
-	appointment.save()
-	sendAppointmentMail(patient, appointment, mailer).then(
-		res => console.log(res)
-	)
-	//@ts-ignore
-	//let definitions = await AppointmentDefinition.findOneOrFail({ kind: inputs.kind })
+		let appointment = await Appointment.findOneOrFail({ id: inputs.id })
+		//@ts-ignore
+		let patient = await Patient.findOneOrFail({ email: temp?.email })
+		appointment.patient = patient
+		appointment.save()
+		sendAppointmentMail(patient, appointment, mailer).then(
+			res => console.log(res)
+		)
+		//@ts-ignore
+		//let definitions = await AppointmentDefinition.findOneOrFail({ kind: inputs.kind })
 
-	return appointment
-
-
-}
+		return appointment
 
 
-@Mutation(() => Appointment, { nullable: true })
-async addFreeApp(
+	}
+
+
+	@Mutation(() => Appointment, { nullable: true })
+	async addFreeApp(
 		@Arg("from") from: string,
 		@Arg("length") length: number,
 		@Arg("discount") discount: number,
@@ -396,20 +401,20 @@ async addFreeApp(
 		@Ctx() { req, res }: MyContext
 	) {
 
-	let temp = jwt.decode(token)
-	if (!temp) return null
+		let temp = jwt.decode(token)
+		if (!temp) return null
 
-	// @ts-ignore
-	let admin = await Employee.findOneOrFail({ email: temp.email })
+		// @ts-ignore
+		let admin = await Employee.findOneOrFail({ email: temp.email })
 
-	let app = new Appointment()
-	app.begin = new Date(from)
-	app.length = length
-	app.employee = await Employee.findOneOrFail({ email: employee.email })
-	app.pharmacy = admin.pharmacy
-	app.save()
-	return app
+		let app = new Appointment()
+		app.begin = new Date(from)
+		app.length = length
+		app.employee = await Employee.findOneOrFail({ email: employee.email })
+		app.pharmacy = admin.pharmacy
+		app.save()
+		return app
 
-}
+	}
 
 }

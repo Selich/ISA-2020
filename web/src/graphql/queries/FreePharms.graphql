@@ -12,6 +12,7 @@ query FreePharms($inputs: DateInput!) {
       id
       definitions{
         price
+        score
         kind
       }
       name

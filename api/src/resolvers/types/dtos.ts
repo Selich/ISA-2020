@@ -152,6 +152,30 @@ export class MedicineInput {
   info?: string;
 }
 @InputType()
+export class AppointmentDefinitionInput {
+  @Field({ nullable: true })
+  price?: number;
+  @Field({ nullable: true })
+  kind?: string;
+  @Field({ nullable: true })
+  score?: number;
+  @Field({ nullable: true })
+  pharmId?: number;
+}
+
+@InputType()
+export class TierInput {
+  @Field({ nullable: true })
+  name?: string;
+  @Field({ nullable: true })
+  discount?: number;
+  @Field({ nullable: true })
+  scoreMin?: number;
+  @Field({ nullable: true })
+  scoreMax?: number;
+}
+
+@InputType()
 export class AppointmentInput {
   @Field({ nullable: true })
   id?: number;
@@ -300,6 +324,9 @@ export class ComplaintInput {
 
   @Field({nullable: true})
   description?: string;
+
+  @Field({nullable: true})
+  answer?: string;
 }
 
 @InputType()

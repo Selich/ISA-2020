@@ -8,10 +8,11 @@ import Patient from '../entities/Patient';
 import { Pharmacy } from '../entities/Pharmacy';
 import { Medicine } from '../entities/Medicine';
 import { MyContext } from '../types';
-import { PharmacyInput, UserInput } from "./types/dtos";
+import { EmployeeInput, PharmacyInput, UserInput } from "./types/dtos";
 import { Employee } from '../entities/Employee';
 import { Appointment } from '../entities/Appointment';
 import { WorkingHours } from 'src/entities/WorkingHours';
+import { IsNull } from 'typeorm';
 
 @InputType()
 class DateInput {
@@ -125,6 +126,37 @@ export class PharmacyResolver{
 
   }
 
+  @Query(() => [Employee], { nullable: true })
+  async getAdmins(
+		@Arg('inputs') inputs: PharmacyInput,
+	) {
+		let pharmacy = await Pharmacy.findOneOrFail({id: inputs.id})
+		return await Employee.find({
+			role: 'admin',
+			pharmacy: pharmacy
+		})
+  }
+
+  @Query(() => [Employee], { nullable: true })
+  async freePharmacists() {
+		return await Employee.find({
+			role: 'admin',
+			pharmacy: IsNull()
+		})
+  }
+
+  @Mutation(() => Employee, { nullable: true })
+  async addAdmin(
+		@Arg('inputs') inputs: EmployeeInput,
+	) {
+		// @ts-ignore
+		let pharm = await Pharmacy.findOneOrFail({id: inputs.pharmacy})
+		let employee = await Employee.findOneOrFail({email: inputs.email})
+
+		employee.pharmacy = pharm
+		employee.save()
+  }
+
 
   @Mutation(() => Pharmacy, { nullable: true })
   async createPharmacy(
@@ -148,6 +180,7 @@ export class PharmacyResolver{
 		inventory.medicines = []
 
 		pharm.inventory = inventory
+		pharm.averageRating = 3
 		
 		pharm.save()
 		return pharm

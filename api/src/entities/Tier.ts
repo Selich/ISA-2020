@@ -7,27 +7,24 @@ import Patient from "./Patient";
 @Entity()
 export class Tier extends Model{
 
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @Field()
+  @Column({nullable: true})
+  name: string;
 
   @Field()
-  @Column()
-  name: String;
-
-  @Field()
-  @Column()
+  @Column({nullable: true})
   discount: number;
 
   @Field()
-  @Column()
+  @Column({nullable: true})
   scoreMin: number;
 
   @Field()
-  @Column()
+  @Column({nullable: true})
   scoreMax: number;
 
   @Field(() => [Patient])
-  @OneToMany(() => Patient, item => item.tier)
+  @OneToMany(() => Patient, item => item.tier, {nullable:true})
   patients: Patient[];
 
 }

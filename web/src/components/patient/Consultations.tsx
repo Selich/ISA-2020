@@ -89,8 +89,8 @@ const CurrentConsult = ({ type }) => {
   ;
 
   let body = null;
-  if (fetching) body = <div>Loading</div>;
-  else if (!data) body = <div>Loading</div>;
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
   else {
     if (!data.appointmentsPatient) body = <div>Empty</div>;
     else {
@@ -98,8 +98,8 @@ const CurrentConsult = ({ type }) => {
 const columns = [
     { name: "Begin", selector: "begin", sortable: true },
     { name: "Kind", selector: "kind", sortable: true },
-    { name: "Price", selector: "price", sortable: true },
-    // { name: "Doctor", selector: "employee.lastName", sortable: true },
+    // { name: "Price", selector: "price", sortable: true },
+    { name: "Doctor", selector: "employee.lastName", sortable: true },
     // { name: "Email", selector: "employee.email", sortable: true },
     // { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
     // { name: "Doctor", selector: "employee.lastName", sortable: true },
@@ -235,7 +235,7 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
       console.log(data.freePharms);
       body = (
         <>
-          <DataTable data={data.freePharms} columns={columns} />
+          <DataTable noHeader data={data.freePharms} columns={columns} />
         </>
       );
   }
@@ -249,7 +249,6 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
           <ModalCloseButton />
           <ModalBody>{body}</ModalBody>
           <ModalFooter>
-            <Button>Next</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -265,6 +264,7 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
 
 import swal from "sweetalert";
 import Cookies from "js-cookie";
+import { Loading } from "../Loading";
 const EmployeeList = ({ employees, isOpen, time, onClose }) => {
   const [, createConsultation] = useScheduleConsultationMutation();
   const token = Cookies.get("token");
@@ -285,7 +285,9 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
         pharmacy: {
           id: parseInt(row.pharmacy.id),
         },
+        kind: 'pharm',
         price: row.pharmacy.definitions[0].price,
+        score: row.pharmacy.definitions[0].score,
         begin: date,
       },
       token: token,
@@ -300,7 +302,7 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
   const columns = [
     { name: "Name", selector: "firstName", sortable: true },
     // { name: "LastName", selector: "lastName", sortable: true },
-    { name: "Price", selector: "averageRating", sortable: true },
+    { name: "Rating", selector: "averageRating", sortable: true },
     {
       name: "",
       button: true,
@@ -316,10 +318,10 @@ const EmployeeList = ({ employees, isOpen, time, onClose }) => {
       <Modal isOpen={isOpen} onClose={onClose} size="2xl">
         <ModalOverlay />
         <ModalContent maxW="56rem" maxH="106rem">
-          <ModalHeader>Choose Pharmacy</ModalHeader>
+          <ModalHeader>Choose Pharmacists</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <DataTable data={employees} columns={columns} />
+            <DataTable noHeader data={employees} columns={columns} />
           </ModalBody>
           <ModalFooter>
             <Button>Next</Button>

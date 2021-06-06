@@ -1,14 +1,8 @@
 mutation CreateDefinition( 
-	$kind: String,
-  $price: Float,
-  $score: Float,
+	$inputs: AppointmentDefinitionInput!,
 ) {
   createDefinition( 
-  inputs: {
-    kind: $kind,
-    price: $price,
-    score: $score,
-  }
+  inputs: $inputs
   ) { 
 		kind
     price

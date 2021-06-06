@@ -69,7 +69,7 @@ export const AdminHolidays = () => {
     console.log(data.holiday);
     body = (
       <>
-        <DataTable columns={columns} data={data.holiday} />
+        <DataTable title='Holiday Requests' columns={columns} data={data.holiday} />
         <CommentModal
           setComment={setComment}
           selected={selected}

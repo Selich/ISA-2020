@@ -6,7 +6,7 @@ export default
     {
     type: "postgres",
     url: process.env.DATABASE_URL,
-    logging: true,
+    logging: false,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [ "dist/entities/**/*.js", ]

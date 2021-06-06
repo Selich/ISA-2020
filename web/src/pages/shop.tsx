@@ -1,4 +1,4 @@
-import { Box, Button, Input, useDisclosure } from "@chakra-ui/react";
+import { Text, Box, Button, Input, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
 import { Field, Form, Formik, useField, useFormikContext } from "formik";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
@@ -12,26 +12,35 @@ const Shop = (): JSX.Element => {
   const token = Cookies.get("token");
 	const [medicine,setMedicine] = useState({id: ''})
 	const [quantity,setQuantity] = useState(1)
+	const [selected,setSelected] = useState({})
 	const [date, setDate] = useState({day: '', month: '' , year: ''})
 
 	const [pharmacy,setPharmacy] = useState({id: ''})
 
   const buyItemModal = useDisclosure();
   const dateModal = useDisclosure();
+  const detailsModal = useDisclosure();
 
 	const [{fetching, data}] = useShopQuery()
 
+
+	const handlerDetails = (row) => {
+		setSelected(row)
+		detailsModal.onOpen()
+
+	}
+
   const medicineColumns = [
     { name: "Name", selector: "name", sortable: true },
-    { name: "Type", selector: "type", sortable: true },
+    { name: "Code", selector: "code", sortable: true },
     { name: "Form", selector: "form", sortable: true },
     { name: "Rating", selector: "rating", sortable: true },
       {
         name: "",
         button: true,
         cell: (row: any) => (
-          <Button hidden={(!token)} size="sm" onClick={() => Buy(row)}>
-						Buy
+          <Button  size="sm" onClick={() => handlerDetails(row)}>
+						Details
           </Button>
         ),
       },
@@ -43,10 +52,8 @@ const Shop = (): JSX.Element => {
 						Buy
           </Button>
         ),
-      }
+      },
 	]
-
-
 	const Buy = (item) => {
 		setMedicine(item)
 		buyItemModal.onOpen()
@@ -65,6 +72,9 @@ const Shop = (): JSX.Element => {
 
 
 		)
+	}
+	const details = () => {
+
 	}
 	return	(
 	<>
@@ -89,9 +99,59 @@ const Shop = (): JSX.Element => {
 				<ReservationForm pharmacy={pharmacy} medicine={medicine} onClose={dateModal.onClose} Close={buyItemModal.onClose}/>
 			</ModalComponent>
 		</ModalComponent>
+			<DetailsModal 
+			disclosure={detailsModal}
+			selected={selected}
+
+			/>
     </Box>
 	</>
 	)
+}
+
+const DetailsModal = ({disclosure, selected}) => {
+
+
+	return (
+    <Modal isOpen={disclosure.isOpen} onClose={disclosure.onClose} size="">
+      <ModalOverlay />
+      <ModalContent maxW="56rem" maxH="106rem">
+        <ModalHeader>
+          <Text fontSize="xl">Medicine Details:</Text>
+        </ModalHeader>
+        <ModalBody>
+					<div>
+					Name: {"   "}
+					{selected.name}
+					</div>
+					<div>
+
+					Form: {"   "}
+					{selected.form}
+					</div>
+					<div>
+					Code: {"   "}
+					{selected.code}
+					</div>
+					<div>
+					Points: {"   "}
+					{selected.points}
+					</div>
+					<div>
+					Contents: {"   "}
+					{selected.contents}
+					</div>
+					<div>
+					Rating: {"   "}
+					{selected.rating}
+					</div>
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+
+
+	)
+
 }
 
 const ContainsMedicine = ({ medicine, dateModal, setPharmacy, pharmacy}) => {
