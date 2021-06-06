@@ -76,6 +76,8 @@ Predlog arhitekture se nalazi na [linku](https://github.com/Selich/ISA-2020/blob
 Prilikom akcija koje generisu e-mail, adresa na koju je mail poslat se pojavljuje u konzoli.
 Potrebno je kopirati tu adresu u address bar browsera.
 
+
+
 ### Run scripts
 Pozivanje:
 - api dev
@@ -95,5 +97,10 @@ Da bi generisao nove zahteve potrebno je generisati nove graphql upite
 ```bash
 yarn gen
 ```
-
-
+### Mail servis
+Za slanje e-mail-a koriscen je [Nodemailer](https://nodemailer.com/about/)
+Kredencijali:
+```
+user: 'barry85@ethereal.email'
+pass: '4GK92dcVH8byXMht53'
+```
