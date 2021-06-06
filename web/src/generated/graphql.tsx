@@ -54,6 +54,7 @@ export type Query = {
   getAdmins?: Maybe<Array<Employee>>;
   freePharmacists?: Maybe<Array<Employee>>;
   containsMedicine?: Maybe<Array<PharmacyPrice>>;
+  getPrescriptionsByPatient?: Maybe<Array<Prescription>>;
   getMedicineForPatient?: Maybe<Array<Medicine>>;
   ratingDerm?: Maybe<Array<Employee>>;
   ratingPharm?: Maybe<Array<Employee>>;
@@ -199,6 +200,11 @@ export type QueryGetAdminsArgs = {
 
 export type QueryContainsMedicineArgs = {
   id: Scalars['String'];
+};
+
+
+export type QueryGetPrescriptionsByPatientArgs = {
+  token: Scalars['String'];
 };
 
 
@@ -1278,6 +1284,23 @@ export type CancelReservationMutation = (
   )> }
 );
 
+export type ComplaintMutationVariables = Exact<{
+  inputs: ComplaintInput;
+}>;
+
+
+export type ComplaintMutation = (
+  { __typename?: 'Mutation' }
+  & { createComplaint?: Maybe<(
+    { __typename?: 'Complaint' }
+    & Pick<Complaint, 'description'>
+    & { patient?: Maybe<(
+      { __typename?: 'Patient' }
+      & Pick<Patient, 'firstName' | 'lastName'>
+    )> }
+  )> }
+);
+
 export type ConfirmPasswordMutationVariables = Exact<{
   oldPass: Scalars['String'];
   password: Scalars['String'];
@@ -2130,6 +2153,26 @@ export type GetPatientQuery = (
   )>> }
 );
 
+export type GetPrescriptionsByPatientQueryVariables = Exact<{
+  token: Scalars['String'];
+}>;
+
+
+export type GetPrescriptionsByPatientQuery = (
+  { __typename?: 'Query' }
+  & { getPrescriptionsByPatient?: Maybe<Array<(
+    { __typename?: 'Prescription' }
+    & Pick<Prescription, 'deadline' | 'isUsed'>
+    & { medicines?: Maybe<Array<(
+      { __typename?: 'MedicineItem' }
+      & { details?: Maybe<(
+        { __typename?: 'Medicine' }
+        & Pick<Medicine, 'name'>
+      )> }
+    )>> }
+  )>> }
+);
+
 export type GetReservationByCodeMutationVariables = Exact<{
   code: Scalars['String'];
 }>;
@@ -2633,6 +2676,21 @@ export const CancelReservationDocument = gql`
 
 export function useCancelReservationMutation() {
   return Urql.useMutation<CancelReservationMutation, CancelReservationMutationVariables>(CancelReservationDocument);
+};
+export const ComplaintDocument = gql`
+    mutation Complaint($inputs: ComplaintInput!) {
+  createComplaint(inputs: $inputs) {
+    patient {
+      firstName
+      lastName
+    }
+    description
+  }
+}
+    `;
+
+export function useComplaintMutation() {
+  return Urql.useMutation<ComplaintMutation, ComplaintMutationVariables>(ComplaintDocument);
 };
 export const ConfirmPasswordDocument = gql`
     mutation ConfirmPassword($oldPass: String!, $password: String!, $confirmPassword: String!) {
@@ -3507,6 +3565,23 @@ export const GetPatientDocument = gql`
 
 export function useGetPatientQuery(options: Omit<Urql.UseQueryArgs<GetPatientQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetPatientQuery>({ query: GetPatientDocument, ...options });
+};
+export const GetPrescriptionsByPatientDocument = gql`
+    query GetPrescriptionsByPatient($token: String!) {
+  getPrescriptionsByPatient(token: $token) {
+    deadline
+    isUsed
+    medicines {
+      details {
+        name
+      }
+    }
+  }
+}
+    `;
+
+export function useGetPrescriptionsByPatientQuery(options: Omit<Urql.UseQueryArgs<GetPrescriptionsByPatientQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<GetPrescriptionsByPatientQuery>({ query: GetPrescriptionsByPatientDocument, ...options });
 };
 export const GetReservationByCodeDocument = gql`
     mutation GetReservationByCode($code: String!) {

@@ -20,7 +20,7 @@ import { useAppointmentsQuery } from "../../generated/graphql";
 
 const TabMenu = () => (
   <TabList>
-    <Tab>Patients</Tab>
+    <Tab>Reservations</Tab>
     <Tab>Consultations</Tab>
     <Tab>Calendars</Tab>
     <Tab>Profile</Tab>

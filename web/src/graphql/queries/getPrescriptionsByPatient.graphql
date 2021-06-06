@@ -1,0 +1,18 @@
+query GetPrescriptionsByPatient(
+  $token: String!
+) {
+  getPrescriptionsByPatient(
+    token: $token
+  ){
+    deadline
+    isUsed
+    medicines {
+      details{
+        name
+      }
+
+    }
+  }
+}
+
+

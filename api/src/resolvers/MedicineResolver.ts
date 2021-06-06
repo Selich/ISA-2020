@@ -157,7 +157,6 @@ export class MedicineResolver {
 					medicineItem.version = 1
 
 					inventory.medicines.push(medicineItem)
-					inventory.save()
 					await queryRunner.manager.save(inventory);
 					await queryRunner.commitTransaction();
 

@@ -1,0 +1,14 @@
+mutation Complaint(
+  $inputs: ComplaintInput!, 
+  ) {
+  createComplaint(
+    inputs: $inputs
+  ){
+    patient{
+      firstName
+      lastName
+    }
+    description
+
+  }
+}

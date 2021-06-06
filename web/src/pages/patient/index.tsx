@@ -24,6 +24,7 @@ import { Consultations } from "../../components/patient/Consultations";
 import { EPrescriptions } from "../../components/patient/EPrescriptions";
 import { Examinations } from "../../components/patient/Examinations";
 import { EmployeeTable } from "../../components/tables/EmployeeTable";
+import { PrescriptionTable } from "../../components/tables/PrescriptionTable";
 import { ReservationsTable } from "../../components/tables/ReservationsTable";
 import { SubscriptionTable } from "../../components/tables/SubscriptionTable";
 import { useRatingDermQuery } from "../../generated/graphql";
@@ -33,6 +34,7 @@ const TabMenu = () => (
   <TabList>
     <Tab>Examinations</Tab>
     <Tab>Consultation</Tab>
+    <Tab>Prescriptions</Tab>
     <Tab>E-Prescriptions</Tab>
     <Tab>Reservations</Tab>
     <Tab>Subscriptions</Tab>
@@ -57,6 +59,9 @@ export default function Index() {
               </TabPanel>
               <TabPanel>
                 <Consultations />
+              </TabPanel>
+              <TabPanel>
+                <PrescriptionTable />
               </TabPanel>
               <TabPanel>
                 <EPrescriptions />

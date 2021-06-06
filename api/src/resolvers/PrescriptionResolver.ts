@@ -5,14 +5,21 @@ import { Prescription } from "../entities/Prescription";
 import { MyContext } from "../types";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { AppointmentInput, MedicineInput, MedicineItemInput, PatientInput, PharmacyInput, PrescriptionInput, UserInput } from "./types/dtos";
-import { MedicineDetailsInput } from "./types/MedicineTypes";
-import User from "../entities/User";
-import { Employee } from "../entities/Employee";
 import { Appointment } from "../entities/Appointment";
-import { MedicineItem } from "../entities/MedicineItem";
+import jwt from "jsonwebtoken";
 
 @Resolver(Prescription)
 export class PrescriptionResolver {
+
+  @Query(() => [Prescription], { nullable: true })
+  async getPrescriptionsByPatient(
+    @Arg("token") token: string
+  ) {
+    let temp = jwt.decode(token)
+    // @ts-ignore
+    let patient = await Patient.findOne({ email: temp.email });
+    return patient?.prescritions
+  }
 
   @Query(() => [Medicine], { nullable: true })
   async getMedicineForPatient(
@@ -23,7 +30,6 @@ export class PrescriptionResolver {
 
     if(!patientInput) return null
     if(!pharmacyInput) return null
-
 
     let patient = await Patient.findOneOrFail({id: patientInput.id})
     let pharm = await Pharmacy.findOneOrFail({id: pharmacyInput.id})
