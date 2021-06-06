@@ -3,7 +3,7 @@ import { useRemoveEmployeeMutation, useEmployeesQuery, } from "../../generated/g
 import {TableComponent} from './TableComponent'
 
 
-export const EmployeeTable = (): JSX.Element => {
+export const EmployeeTable = ({handler,action,kind, pharmacy}): JSX.Element => {
 	const variables = { inputs: { role:  "any" } }
 	let columns = [
 		{ name: "FirstName", selector: "firstName", sortable: true },

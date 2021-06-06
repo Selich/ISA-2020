@@ -1,10 +1,7 @@
 FROM node:14
 
-
 WORKDIR /usr/src/app
 
-
-# for caching results
 COPY package.json ./
 COPY yarn.lock ./
 
@@ -14,6 +11,7 @@ COPY . .
 COPY .env.production .env
 
 RUN yarn build
+
 
 ENV NODE_ENV production
 

@@ -1,6 +1,5 @@
 import { Text, Button, HStack, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Center } from "@chakra-ui/react";
 import React from "react";
-import CreateAppointmentForm from "../forms/CreateAppointmenForm";
 
 
 export const CreateAppointmentModal: any = ({ onOpen, isOpen, onClose }) => {
@@ -12,7 +11,7 @@ export const CreateAppointmentModal: any = ({ onOpen, isOpen, onClose }) => {
         <ModalHeader><Text fontSize="3xl">Create Appointment: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateAppointmentForm onClose={onClose}/>
+          {/* <CreateAppointmentForm onClose={onClose}/> */}
         </ModalBody>
         <ModalFooter >
         </ModalFooter>
@@ -31,7 +30,7 @@ export const CreateConsultationsModal: any = ({ onOpen, isOpen, onClose }) => {
         <ModalHeader><Text fontSize="3xl">Create Tier: </Text> </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <CreateAppointmentForm onClose={onClose}/>
+          {/* <CreateAppointmentForm onClose={onClose}/> */}
         </ModalBody>
         <ModalFooter >
         </ModalFooter>

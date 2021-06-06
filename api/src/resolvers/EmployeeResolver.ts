@@ -9,7 +9,7 @@ import { Field, Arg, Mutation, Query, Ctx, Resolver } from "type-graphql";
 import { UserResponse, HolidayInput, EmployeeResponse, WorkingHoursInput, EmployeeInput } from "./types/dtos";
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import { IsNull } from "typeorm";
+import { getConnection, IsNull } from "typeorm";
 
 
 
@@ -29,19 +29,19 @@ export class EmployeeResolver {
 
 		let user = await Employee.findOneOrFail({ email: temp.email })
 		// @ts-ignore
-		if(user.role === 'admin'){
+		if (user.role === 'admin') {
 			let holidays = await Holiday.find(
 				{ pharmacyId: user.pharmacy.id }
 			)
 			return holidays
-		} else if (user.role === 'sysadmin'){
+		} else if (user.role === 'sysadmin') {
 			let holidays = await Holiday.find(
 				{ pharmacyId: IsNull() }
 			)
 			return holidays
 
 		}
-		// @ts-ignore
+		return await Holiday.find({})
 
 	}
 
@@ -105,15 +105,16 @@ export class EmployeeResolver {
 		if (inputs.role === "derm") return await Employee.find({
 			where: {
 				role: 'derm'
-		}})
+			}
+		})
 		if (inputs.role) return await Employee.find({ role: inputs.role })
 		if (inputs.role === 'pharm') {
 			let temp = jwt.decode(token)
-			if(!temp) return null
+			if (!temp) return null
 			// @ts-ignore
-			let user = await Employee.findOne({email: temp.email})
-			if(!user) return null
-			let ret =  await Employee.find({})
+			let user = await Employee.findOne({ email: temp.email })
+			if (!user) return null
+			let ret = await Employee.find({})
 			return ret
 		}
 		return await Employee.find({})
@@ -140,7 +141,7 @@ export class EmployeeResolver {
 
 		holiday.isApproved = false
 		holiday.employee = user
-		if(user.role === 'pharm'){
+		if (user.role === 'pharm') {
 			holiday.pharmacyId = user.pharmacy.id
 		}
 		holiday.save()
@@ -182,18 +183,32 @@ export class EmployeeResolver {
 
 		if (!inputs) return null
 
-		let holiday = await Holiday.findOneOrFail({ id: inputs.id })
-		if (!inputs.employee) return null
-		let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
+		const connection = getConnection();
+		const queryRunner = connection.createQueryRunner();
 
-		let comment = 'Approved'
-		if (inputs.comments) { comment = inputs.comments }
+		await queryRunner.connect();
+		await queryRunner.startTransaction();
 
-		holiday.isApproved = true
+		try {
 
-		holiday.save()
+			let holiday = await Holiday.findOneOrFail({ id: inputs.id })
+			if (!inputs.employee) return null
+			let employee = await Employee.findOneOrFail({ email: inputs.employee.email })
 
-		sendHolidayStatusUpdate(employee, mailer, employee, holiday.isApproved, comment)
+			let comment = 'Approved'
+			if (inputs.comments) { comment = inputs.comments }
+
+			holiday.isApproved = true
+
+
+			await queryRunner.manager.save(holiday);
+			await queryRunner.commitTransaction();
+			sendHolidayStatusUpdate(employee, mailer, employee, holiday.isApproved, comment)
+		} catch (err) {
+			await queryRunner.rollbackTransaction();
+		} finally {
+			await queryRunner.release();
+		}
 
 		return holiday
 	}
@@ -211,7 +226,7 @@ export class EmployeeResolver {
 		// @ts-ignore
 		let user = await Employee.findOneOrFail({ email: temp.email })
 
-		if (!employee.workingHours) 
+		if (!employee.workingHours)
 			employee.workingHours = []
 
 		let res = employee.workingHours.filter(item => item.pharmacy === user.pharmacy)[0]
@@ -223,18 +238,18 @@ export class EmployeeResolver {
 			res = wh
 		}
 
-		if(inputs.workingHours){
-			if(inputs.workingHours[0].from){
+		if (inputs.workingHours) {
+			if (inputs.workingHours[0].from) {
 				res.from = inputs.workingHours[0].from
 			}
-			if(inputs.workingHours[0].until){
+			if (inputs.workingHours[0].until) {
 				res.until = inputs.workingHours[0].until
 			}
 
 		}
 		res.save()
 
-	
+
 
 		return employee
 	}
@@ -279,19 +294,19 @@ export class EmployeeResolver {
 		employee.isEnabled = false
 		employee.schedule = []
 
-		if(inputs.role === 'pharm'){
+		if (inputs.role === 'pharm') {
 			let temp = jwt.decode(token)
-		// @ts-ignore
+			// @ts-ignore
 			let admin = await Employee.findOneOrFail({ email: temp.email })
 			console.log(admin)
 			employee.workingHours = []
 			employee.pharmacy = admin.pharmacy
 			let wh = new WorkingHours()
-			if(inputs.workingHours){
-				if(inputs.workingHours[0].from)
-					wh.from  = inputs.workingHours[0].from
-				if(inputs.workingHours[0].until)
-					wh.until  = inputs.workingHours[0].until
+			if (inputs.workingHours) {
+				if (inputs.workingHours[0].from)
+					wh.from = inputs.workingHours[0].from
+				if (inputs.workingHours[0].until)
+					wh.until = inputs.workingHours[0].until
 				wh.pharmacy = admin.pharmacy
 				employee.workingHours.push(wh)
 			}

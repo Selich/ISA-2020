@@ -195,7 +195,9 @@ const FreeDermExams = () => {
           discount: values.discount,
           token: token,
           employee: {
+            // @ts-ignore
             id: parseInt(selected.id),
+            // @ts-ignore
             email: selected.email
           }
         };
@@ -320,7 +322,7 @@ const MedicineModal = ({ selected, onOpen, isOpen, onClose }) => {
             onSubmit={async (values, { setErrors }) => {
               let variables = {
                 inputs: {
-                  quantity: parseInt(values.quantity),
+                  quantity: values.quantity,
                   details: {
                     name: selected.name,
                     code: selected.code,
@@ -339,7 +341,7 @@ const MedicineModal = ({ selected, onOpen, isOpen, onClose }) => {
               <Form>
                 <div>
                   Select Quantity:
-                  <Field type="text" name="quantity" />
+                  <Field type="number" name="quantity" />
                 </div>
                 <Button type="submit">Order</Button>
               </Form>

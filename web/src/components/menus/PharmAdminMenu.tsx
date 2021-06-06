@@ -14,10 +14,10 @@ const PharmAdminMenu: any = ({ user }) => {
     <Flex align="center">
       <Basket />
       <Menu>
+        {/* @ts-ignore */}
         <MenuButton as={Button} rightIcon={<Avatar name={user.email.split('@')[0]} src="" size="sm" pd={2} />} >
-          {(user.role === "patient") ?
-            user.email.split('@')[0] :
-            user.role
+          {
+            user.email.split('@')[0]
           }
         </MenuButton>
         <MenuList>

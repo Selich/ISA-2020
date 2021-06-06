@@ -14,8 +14,13 @@ export function HistoryTablePharm({ kind }) {
   let [{ fetching, data }] = useAppointmentsByUserQuery({
     variables: {
       token: token,
-      from: "2020-12-22",
-      until: "2020-12-26",
+      inputs: {
+      // @ts-ignore
+        from: "2020-12-22",
+      // @ts-ignore
+        until: "2020-12-26",
+
+      }
     },
   });
   let body = null;
@@ -73,6 +78,7 @@ export function HistoryTablePharm({ kind }) {
         data={arr}
         expandableRows
         expandableRowsComponent={<ExpandedComponent data={this} />}
+        // @ts-ignore
         columns={columns}
       />
     );
@@ -101,23 +107,6 @@ export const ExpandedComponent = ({ data }) => {
         </Box>
         <Box m={6}>
           Rating:
-          <ReactStars
-            count={5}
-            value={data.employee.averageRating}
-            onChange={(val) => {
-              rate({
-                variables: {
-                  inputs: {
-                    rating: val,
-                    patient: data.patient,
-                    employee: data.employee,
-                  },
-                },
-              }).then((response) => console.log(response));
-            }}
-            size={32}
-            activeColor="#008080"
-          ></ReactStars>
           <Button>Report</Button>
         </Box>
       </SimpleGrid>

@@ -1,11 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import { Header } from '../../components/sections/Header'
-import { Box, Button, HStack, Input, useDisclosure, } from "@chakra-ui/react"
-import faker from 'faker'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
-import { PharmacyProfileModal } from '../../components/sections/modal/PharmacyProfileModal'
-import { EPrescriptionModal } from '../sections/modal/EPrescriptionModal'
-import { useEprescriptionsMutation } from '../../generated/graphql'
 
 
 const columns = [

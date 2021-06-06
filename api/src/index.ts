@@ -23,6 +23,7 @@ import { PharmacyResolver } from './resolvers/PharmacyResolver';
 import { PrescriptionResolver } from './resolvers/PrescriptionResolver';
 import { RateResolver } from './resolvers/RateResolver';
 
+import "dotenv-safe/config"
 
 const main = async () => {
   const conn = await createConnection(dbConfig);
@@ -47,7 +48,8 @@ const main = async () => {
   })
 
 	app.use(fileUpload({ createParentPath: true }))
-  app.use(cors({ origin: 'http://localhost:3000' , credentials: true })) 
+  app.set('trust proxy', 1)
+  app.use(cors({ origin: process.env.CORS_ORIGIN , credentials: true })) 
 	app.use(express.json())
 	app.use(express.urlencoded({ extended: true }))
 	app.use(morgan("dev"))
@@ -96,6 +98,7 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true,
         sameSite: "lax", // csrf
+        secure: __prod__,
       },
       secret: 'somesecret',
       resave: false,
@@ -114,7 +117,7 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
   
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log('localhost:4000');
   })
 

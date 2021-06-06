@@ -158,8 +158,7 @@ export class PharmacyResolver{
 		@Arg('inputs') inputs: PharmacyInput,
 	) {
 		if(!inputs.id) return null
-		let id = parseInt(inputs.id)
-		return await Pharmacy.delete({id})
+		return await Pharmacy.delete({id: inputs.id})
 
   }
 

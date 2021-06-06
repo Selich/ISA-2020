@@ -262,8 +262,7 @@ export class PatientResolver {
     }
     if (!inputs.pharmacy?.id) return null
 
-    let id = parseInt(inputs.pharmacy.id)
-    let pharmacy = await Pharmacy.findOneOrFail({ id })
+    let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
 
     if (!pharmacy.subscribers) pharmacy.subscribers = []
 
@@ -291,8 +290,7 @@ export class PatientResolver {
     }
     if (!inputs.pharmacy?.id) return null
 
-    let id = parseInt(inputs.pharmacy.id)
-    let pharmacy = await Pharmacy.findOneOrFail({ id })
+    let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
 
     if (!pharmacy.subscribers) pharmacy.subscribers = []
 

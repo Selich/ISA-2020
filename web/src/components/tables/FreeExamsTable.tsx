@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import ReactStars from "react-rating-stars-component";
 import Cookies from "js-cookie";
 
 import { useFreeAppointmentsQuery } from "../../generated/graphql";
@@ -16,7 +15,13 @@ import { useScheduleMutation } from "../../generated/graphql";
 
 
 export function FreeExamsTable({user, pharmacyId}) {
-  let [{ fetching, data }] = useFreeAppointmentsQuery({ variables: { pharmacyId: pharmacyId, }, });
+  const token  = Cookies.get('token')
+  let [{ fetching, data }] = useFreeAppointmentsQuery({ variables: { 
+    pharmacyId: pharmacyId, 
+    token: token,
+    kind: 'derm'
+  }, });
+
   const [_, schedule] = useScheduleMutation();
   let body = null;
 
@@ -49,6 +54,7 @@ export function FreeExamsTable({user, pharmacyId}) {
 
 					console.log('Request')
 					console.log(inputs)
+      // @ts-ignore
 					schedule({inputs: inputs}).then(res => console.log(res))
 
 				}}
@@ -60,10 +66,12 @@ export function FreeExamsTable({user, pharmacyId}) {
 		},
 	];
     body = (
+      // @ts-ignore
       <DataTable
         data={data.freeAppointments}
         expandableRows
         expandableRowsComponent={<ExpandedComponent data={this} />}
+      // @ts-ignore
         columns={columns}
       />
     );

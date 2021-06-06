@@ -23,13 +23,20 @@ export default function FstLogin() {
               <Formik
                 initialValues={{ oldPass: "", passsword: "", confirmPassword: "" }}
                 onSubmit={async (values, { setErrors }) => {
+                  // @ts-ignore
                   const response = await confirmPassword(values);
 
+                  // @ts-ignore
                   if (response.data?.login.errors) {
+                  // @ts-ignore
                     setErrors(toErrorMap(response.data.login.errors));
+                  // @ts-ignore
                   } else if (response.data?.login.user) {
+                  // @ts-ignore
                     let user = response.data.login.user;
+                  // @ts-ignore
                     let token = response.data.login.token;
+                  // @ts-ignore
                     sessionStorage.setItem("token", JSON.stringify(token));
                   }
                 }}

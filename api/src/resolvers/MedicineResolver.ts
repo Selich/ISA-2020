@@ -10,6 +10,7 @@ import { Price } from '../entities/Price';
 import { MyContext } from '../types';
 import { MedicineInput, MedicineItemInput } from "./types/dtos";
 import { Employee } from '../entities/Employee';
+import { getConnection } from 'typeorm';
 
 @Resolver()
 export class MedicineResolver {
@@ -91,7 +92,7 @@ export class MedicineResolver {
 		return medicine
 
 	}
-	
+
 	@Mutation(() => MedicineItem, { nullable: true })
 	async addMedicine(
 		@Arg("inputs") inputs: MedicineItemInput,
@@ -101,12 +102,25 @@ export class MedicineResolver {
 
 		let temp = jwt.decode(token)
 		if (!temp) return null
+
 		// @ts-ignore
 		let admin = await Employee.findOne({ email: temp.email })
 
 		// @ts-ignore
 		let medicine = await Medicine.findOne({ code: inputs.details.code })
 		if (!medicine) return null
+
+
+		const connection = getConnection();
+		const queryRunner = connection.createQueryRunner();
+
+		await queryRunner.connect();
+		await queryRunner.startTransaction();
+
+
+
+
+
 
 
 
@@ -117,24 +131,42 @@ export class MedicineResolver {
 			//@ts-ignore
 			let item = items.filter(item => item.details.code === inputs.details.code)[0]
 			if (item) {
-				//@ts-ignore
-				item.quantity += inputs.quantity
-				item.version += 1
-				item.save()
-				console.log(inputs.quantity)
-				inventory.medicines.push(item)
-				inventory.save()
-				return item
+				try {
+					//@ts-ignore
+					item.quantity += inputs.quantity
+					item.version += 1
+					item.save()
+					console.log(inputs.quantity)
+					inventory.medicines.push(item)
+					inventory.save()
+					await queryRunner.manager.save(item);
+					await queryRunner.manager.save(inventory);
+					await queryRunner.commitTransaction();
+					return item
+				} catch (err) {
+					await queryRunner.rollbackTransaction();
+				} finally {
+					await queryRunner.release();
+				}
 			} else {
-				let medicineItem = new MedicineItem()
-				medicineItem.details = medicine
-				//@ts-ignore
-				medicineItem.quantity = inputs.quantity
-				medicineItem.version = 1
+				try {
+					let medicineItem = new MedicineItem()
+					medicineItem.details = medicine
+					//@ts-ignore
+					medicineItem.quantity = inputs.quantity
+					medicineItem.version = 1
 
-				inventory.medicines.push(medicineItem)
-				inventory.save()
-				return medicineItem
+					inventory.medicines.push(medicineItem)
+					inventory.save()
+					await queryRunner.manager.save(inventory);
+					await queryRunner.commitTransaction();
+
+					return medicineItem
+				} catch (err) {
+					await queryRunner.rollbackTransaction();
+				} finally {
+					await queryRunner.release();
+				}
 			}
 		}
 		return null
@@ -152,7 +184,7 @@ export class MedicineResolver {
 
 		let item = await MedicineItem.findOne({ id: inputs.id })
 		console.log(item)
-		if(item && inputs.currentPrice){
+		if (item && inputs.currentPrice) {
 			let price = new Price()
 			item.currentPrice = inputs.currentPrice
 			item.version += 1
@@ -164,7 +196,7 @@ export class MedicineResolver {
 			price.save()
 		}
 		return item
-}
+	}
 	@Mutation(() => [EPrescription], { nullable: true })
 	async eprescriptions(
 		@Arg("email") email: string,

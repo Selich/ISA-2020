@@ -1,16 +1,11 @@
-import React, {useState} from "react";
-import { useReserveMedicineMutation, useShopQuery } from "../generated/graphql";
-import { useAddReservationMutation } from "../generated/graphql";
-import { useContainsMedicineQuery } from "../generated/graphql";
-import { Input, useDisclosure, } from "@chakra-ui/react";
-import { ModalComponent } from "../components/sections/modal/ModalComponent";
-import { TableComponent } from '../components/tables/TableComponent'
-import { MyNumberInput, MyDateInput } from '../utils/utils'
-import { Box, Button} from "@chakra-ui/react";
-import DatePicker from 'react-datepicker'
-import Cookies from "js-cookie";
+import { Box, Button, Input, useDisclosure } from "@chakra-ui/react";
 import { Field, Form, Formik, useField, useFormikContext } from "formik";
+import Cookies from "js-cookie";
+import React, { useState } from "react";
 import DataTable from "react-data-table-component";
+import DatePicker from 'react-datepicker';
+import { ModalComponent } from "../components/sections/modal/ModalComponent";
+import { useAddReservationMutation, useContainsMedicineQuery, useShopQuery } from "../generated/graphql";
 
 
 const Shop = (): JSX.Element => {
@@ -20,10 +15,10 @@ const Shop = (): JSX.Element => {
 	const [date, setDate] = useState({day: '', month: '' , year: ''})
 
 	const [pharmacy,setPharmacy] = useState({id: ''})
-  const [, addReservation] = useAddReservationMutation();
 
   const buyItemModal = useDisclosure();
   const dateModal = useDisclosure();
+
 	const [{fetching, data}] = useShopQuery()
 
   const medicineColumns = [
@@ -31,6 +26,15 @@ const Shop = (): JSX.Element => {
     { name: "Type", selector: "type", sortable: true },
     { name: "Form", selector: "form", sortable: true },
     { name: "Rating", selector: "rating", sortable: true },
+      {
+        name: "",
+        button: true,
+        cell: (row: any) => (
+          <Button hidden={(!token)} size="sm" onClick={() => Buy(row)}>
+						Buy
+          </Button>
+        ),
+      },
       {
         name: "",
         button: true,

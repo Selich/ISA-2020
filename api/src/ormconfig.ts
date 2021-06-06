@@ -1,16 +1,12 @@
 import path from "path";
 import { ConnectionOptions } from "typeorm";
-
+import "dotenv-safe/config"
 
 export default
     {
     type: "postgres",
-    host: 'localhost',
-    port: 5432,
+    url: process.env.DATABASE_URL,
     logging: true,
-    username: 'isa_super',
-    password: 'pass',
-    database: 'isa_super',
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [ "dist/entities/**/*.js", ]

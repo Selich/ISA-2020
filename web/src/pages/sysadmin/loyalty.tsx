@@ -4,7 +4,6 @@ import NextLink from "next/link";
 import {
   Box,
   Button,
-  Text,
   SimpleGrid,
 } from "@chakra-ui/react";
 import { useTiersQuery, useDefinitionsQuery } from '../../generated/graphql'

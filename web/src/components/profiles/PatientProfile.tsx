@@ -24,7 +24,7 @@ const View = ({ data }) => (
   <>
     <Box m="4" p="8" fontSize="2rem">
       <Box>
-        <PatientDetails data={data} />
+        <PatientDetails/>
         <hr />
         <Tabs isFitted colorScheme="green">
           <TabMenu />

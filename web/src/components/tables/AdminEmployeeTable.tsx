@@ -1,36 +1,22 @@
 import {
-  Center,
-  HStack,
-  SimpleGrid,
-  Select,
-  FormLabel,
-  Switch,
-  Input,
-  Box,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Link,
-  Button,
-  Flex,
-  useDisclosure,
+  Box, Button
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
-import {
-  useRemoveEmployeeMutation,
-  useEmployeesQuery,
-} from "../../generated/graphql";
+import Cookies from "js-cookie";
+import React from "react";
 import DataTable from "react-data-table-component";
 import swal from "sweetalert";
+import {
+  useEmployeesQuery, useRemoveEmployeeMutation
+} from "../../generated/graphql";
 
 export const AdminEmployeeTable = (): JSX.Element => {
+  const token = Cookies.get('token')
   const [{ fetching, data }] = useEmployeesQuery({
     variables: {
       inputs: {
         role: "any",
       },
+      token: token
     },
   });
   const [, removeEmployee] = useRemoveEmployeeMutation();

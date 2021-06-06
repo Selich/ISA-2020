@@ -360,6 +360,9 @@ const Employees = () => {
     },
     token: token
   }
+  const handler = (row) => {
+
+  }
   const [{fetching,data}] = useEmployeesQuery({variables})
 	const columns = [
 		{ name: "FirstName", selector: "firstName", sortable: true },
@@ -371,7 +374,7 @@ const Employees = () => {
         button: true,
         cell: (row: any) => (
           <Button size="sm" onClick={() => handler(row)}>
-            {item.name}
+            Report
           </Button>
         ),
     }

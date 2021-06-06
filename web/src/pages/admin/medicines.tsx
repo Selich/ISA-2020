@@ -7,7 +7,6 @@ import {
     Input,
     useDisclosure,
 } from "@chakra-ui/react"
-import ReservationsTable from '../../components/tables/ReservationsTable'
 import faker from 'faker'
 import DataTable from 'react-data-table-component'
 import { ConfirmMedicinesModal } from '../../components/sections/modal/ConfirmMedicines'

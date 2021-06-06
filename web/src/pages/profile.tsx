@@ -11,21 +11,18 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import Cookies from "js-cookie";
-import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { MdHome } from "react-icons/md";
 import { AddAllergieModal } from "../components/sections/modal/AddAllergieModal";
 import {
   useAllergiesQuery,
   useEditUserMutation,
-  useMeQuery,
+  useMeQuery
 } from "../generated/graphql";
-import { login } from "../services/authService";
-import { toErrorMap } from "../types";
 
 export default function Profile() {
   let token = Cookies.get("token");

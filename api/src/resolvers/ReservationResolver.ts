@@ -161,6 +161,7 @@ export class ReservationResolver {
   ) {
     let temp = jwt.decode(token)
     if (!temp) return null
+    // @ts-ignore
     let patient = await Patient.findOneOrFail({ email: temp.email });
     let reservation = await Reservation.findOneOrFail({ id: inputs.id })
     let original = await MedicineItem.findOneOrFail({ id: inputs.originalId })

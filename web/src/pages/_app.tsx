@@ -1,24 +1,23 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider as AuthProvider } from "next-auth/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createClient, Provider } from "urql";
+import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css';
 import { Header } from "../components/sections/Header";
+import '../datepicker.css';
 import theme from "../theme";
-import Cookies from "js-cookie";
 import Index from "./index";
-import { usePatientQuery } from "../generated/graphql";
 
-import '../datepicker.css'
-import '../../node_modules/react-big-calendar/lib/css/react-big-calendar.css'
 
 
 
 
 
 const client = createClient({
-  url: "http://localhost:4000/graphql",
+  url: process.env.NEXT_PUBLIC_API_URL,
 });
+
 const allowedRoutes = ["/pharmacies", "/shop"];
 
 const roles = {

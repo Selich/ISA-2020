@@ -43,7 +43,7 @@ export const AddFreeAppModal: any = ({ onOpen, isOpen, onClose }) => {
                 discount: 0,
               }}
               onSubmit={async (values, { setErrors }) => {
-                const response = await addFreeApp(values);
+                // const response = await addFreeApp(values);
                 // if (response.data?.addFreeApp.errors) {
                 //   setErrors(toErrorMap(response.data.addFreeApp.errors));
                 //   console.log(response.data);

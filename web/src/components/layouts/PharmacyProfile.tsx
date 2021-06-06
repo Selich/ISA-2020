@@ -12,7 +12,10 @@ export function PharmacyProfile({pharm}) {
 	const { id } = router.query
 	const [{ fetching, data }] = usePharmacyQuery({
 		variables:{
-			id: pharm.id + '' 
+      inputs: {
+			  id: pharm.id
+
+      }
 		}
 	});
 
@@ -31,7 +34,7 @@ export function PharmacyProfile({pharm}) {
 			<Text fontSize={19}>{data.pharmacy.address.country} </Text>
         </Box>
 			<Box align="right">
-				<FreeExamsTable/>
+				<FreeExamsTable user={''} pharmacyId={''} />
 				
 			</Box>
 			</SimpleGrid>

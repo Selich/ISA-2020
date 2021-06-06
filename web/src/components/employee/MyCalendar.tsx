@@ -18,8 +18,10 @@ export const MyCalendar = ({events}) => {
   // @ts-ignore
 
   const byPharm = R.groupBy(function(events) {
+  // @ts-ignore
   if(events.pharmacy){
 
+  // @ts-ignore
     return events.pharmacy.id
   }
   // @ts-ignore
