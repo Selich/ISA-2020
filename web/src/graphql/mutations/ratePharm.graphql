@@ -1,0 +1,11 @@
+mutation RatePharm( 
+  $inputs: EmployeeInput! 
+  $token: String! 
+  ) {
+  ratePharm( 
+    inputs: $inputs
+    token: $token
+    ) {
+rating
+  }
+}

@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import { Tier } from "../entities/Tier";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Address } from "../entities/Address";
-import { Employee } from "../entities/Employee";
 import Patient from "../entities/Patient";
 import User from "../entities/User";
 import { MyContext } from "../types";
 import { sendVerificationMail } from "../utils/sendMail";
 import { PatientInput, PatientResponse, UserInput, UserResponse } from "./types/dtos";
+import { getConnection } from "typeorm";
 
 
 const roles = {
@@ -29,73 +29,95 @@ export class AuthResolver {
 
     @Mutation(() => User, { nullable: true })
     async editUser(
-        @Arg("token") token: string, 
-        @Arg("inputs") inputs: UserInput, 
+        @Arg("token") token: string,
+        @Arg("inputs") inputs: UserInput,
     ) {
-        let decode = jwt.decode(token);
         // @ts-ignore
-        if(!inputs || !inputs.address) return null
-        let user =  await User.findOne({ email: inputs.email });
-        if(!user) return null
-        let { street, city, country } = inputs.address
-        let address = await Address.findOne({ street, city, country });
-        if (!address){
-            let url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+ 
-            street?.replace(' ', '+') + 
-            '+' + city?.replace(' ', '+') + 
-            '+' + country?.replace(' ', '+')
-            +'&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
-            let res = await axios.get(url)
-            console.log(url)
-            console.log(res.data)
-            let lat = res.data.results[0].geometry.location.lat
-            let long = res.data.results[0].geometry.location.lng
+        let user = await User.findOne({ email: inputs.email });
+        if (!user) return null
+        if (!inputs.address) return null
 
-            user.address = await Address.save( new Address({ street, city, country,  lat, long, user: user, }));
+        const connection = getConnection();
+        const queryRunner = connection.createQueryRunner();
+
+        await queryRunner.connect();
+        await queryRunner.startTransaction()
+
+        try {
+            if (inputs.version != user.version) return null
+            let { street, city, country } = inputs.address
+            let address = await Address.findOne({ street, city, country });
+            if (!address) {
+                let url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+                    street?.replace(' ', '+') +
+                    '+' + city?.replace(' ', '+') +
+                    '+' + country?.replace(' ', '+')
+                    + '&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
+                let res = await axios.get(url)
+                console.log(url)
+                console.log(res.data)
+                let lat = res.data.results[0].geometry.location.lat
+                let long = res.data.results[0].geometry.location.lng
+
+                user.address = await Address.save(new Address({ street, city, country, lat, long, user: user, }));
+            }
+            else
+                user.address = address
+
+            if (inputs.firstName)
+                user.firstName = inputs.firstName
+            if (inputs.lastName)
+                user.lastName = inputs.lastName
+            if (inputs.telephone)
+                user.telephone = inputs.telephone
+            user.version += 1
+
+            await queryRunner.manager.save(user);
+            await queryRunner.commitTransaction();
+        } catch (err) {
+            await queryRunner.rollbackTransaction();
+        } finally {
+            await queryRunner.release();
         }
-        else 
-            user.address = address
-        
-        if(inputs.firstName)
-        user.firstName = inputs.firstName
-        if(inputs.lastName)
-        user.lastName = inputs.lastName
-        if(inputs.telephone)
-        user.telephone = inputs.telephone
-
-        user.save()
         return user
-        
+
     }
 
     @Mutation(() => UserResponse)
     async login(
-        @Arg("inputs") inputs: UserInput, 
-        @Ctx() { req }: MyContext) 
-    {
+        @Arg("inputs") inputs: UserInput,
+        @Ctx() { req }: MyContext) {
         let user = await User.findOne({ email: inputs.email });
         if (!user)
-            return { 
+            return {
                 errors: [
-                { field: "email", message: "Invalid credentials" },
-                { field: "password", message: "Invalid credentials" },
-                ] 
+                    { field: "email", message: "Invalid credentials" },
+                    { field: "password", message: "Invalid credentials" },
+                ]
             };
 
-        user.isEnabled = true
+        if(user.role === 'sysadmin'){
+            user.isEnabled = true
+        }
+
         if (!user.isEnabled)
             return { errors: [{ field: "email", message: "User not activated. Please check your email." }] };
 
 
-        if(inputs.password && !argon2.verify(user.password, inputs.password))
-            return { 
+        console.log(inputs)
+
+        if (inputs.password && !argon2.verify(user.password, inputs.password))
+            return {
                 errors: [
-                { field: "email", message: "Invalid credentials" },
-                { field: "password", message: "Invalid credentials" },
-            ] }
+                    { field: "email", message: "Invalid credentials" },
+                    { field: "password", message: "Invalid credentials" },
+                ]
+            }
+        
+        
 
         let token = jwt.sign(
-            { id: user.id, email: user.email, role: user.role},
+            { id: user.id, email: user.email, role: user.role },
             "secret",
             { expiresIn: "20m" }
         );
@@ -118,39 +140,40 @@ export class AuthResolver {
         let user = null
         let token: string | boolean = 'test'
 
-        if(!inputs.role) return { errors: [{ field: "role", message: "No role defined" }] };
+        if (!inputs.role) return { errors: [{ field: "role", message: "No role defined" }] };
 
-        if(inputs.role && roles.users.includes(inputs.role)){
-            user = new Patient({...inputs})
+        if (inputs.role && roles.users.includes(inputs.role)) {
+            user = new Patient({ ...inputs })
             token = await sendVerificationMail(user, mailer)
         }
-        if(!user) return { errors: [{ field: "email", message: "Invalid register info" }] };
+        if (!user) return { errors: [{ field: "email", message: "Invalid register info" }] };
 
         let address = null
-        if(inputs.address){
+        if (inputs.address) {
             let { street, city, country } = inputs.address
             address = await Address.findOne({ street, city, country });
-            if (!address){
-                let url = 'https://maps.googleapis.com/maps/api/geocode/json?address='+ 
-                street?.replace(' ', '+') + 
-                '+' + city?.replace(' ', '+') + 
-                '+' + country?.replace(' ', '+')
-                +'&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
+            if (!address) {
+                let url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+                    street?.replace(' ', '+') +
+                    '+' + city?.replace(' ', '+') +
+                    '+' + country?.replace(' ', '+')
+                    + '&key=' + 'AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0'
                 let res = await axios.get(url)
                 console.log(url)
                 console.log(res.data)
                 let lat = res.data.results[0].geometry.location.lat
                 let long = res.data.results[0].geometry.location.lng
 
-                user.address = await Address.save( new Address({ street, city, country,  lat, long, user: temp, }));
+                user.address = await Address.save(new Address({ street, city, country, lat, long, user: temp, }));
             }
-            else 
+            else
                 user.address = address
         }
-        if(inputs.password)
+        if (inputs.password)
             user.password = await argon2.hash(inputs.password);
 
-        user.tier = await Tier.findOneOrFail({name: 'Regular'})
+        user.appointments = []
+        user.tier = await Tier.findOneOrFail({ name: 'Regular' })
         user.save()
         return { token, user }
 

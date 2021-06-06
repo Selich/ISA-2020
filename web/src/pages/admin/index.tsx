@@ -1,11 +1,7 @@
 import {
   Box,
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
+  Button, Container, Input, Modal,
+  ModalBody, ModalContent,
   ModalHeader,
   ModalOverlay,
   SimpleGrid,
@@ -16,28 +12,27 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
 import moment from "moment";
+import { Loader } from "next/dynamic";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
+import { PharmacyDetails } from "../../components/admin/PharmacyDetails";
 import { AdminHolidays } from "../../components/AdminHoliday";
+import { Loading } from "../../components/Loading";
+import { Profile } from "../../components/Profile";
 import {
   useAddEmployeeMutation,
   useAddFreeAppMutation,
   useAddMedicineMutation,
   useAddPriceMutation,
   useAddWorkingHoursMutation,
-  useAppointmentsQuery,
-  useApproveHolidayMutation,
-  useDenyHolidayMutation,
-  useDermsByPharmQuery,
-  useEmployeesQuery,
-  useHolidayQuery,
-  useInventoryQuery,
-  useMedicineQuery,
+  useAppointmentsQuery, useDermsByPharmQuery,
+  useEmployeesQuery, useInventoryQuery,
+  useMedicineQuery
 } from "../../generated/graphql";
 import { DatePickerField } from "../shop";
 
@@ -48,9 +43,9 @@ const TabMenu = () => (
     <Tab>Inventory</Tab>
     <Tab>Order</Tab>
     <Tab>Derm Examinations</Tab>
-    <Tab>Add Pharmacists</Tab>
     <Tab>Pharmacy</Tab>
     <Tab>Holidays</Tab>
+    <Tab>Profile</Tab>
   </TabList>
 );
 
@@ -65,22 +60,10 @@ export default function Index() {
     },
   });
   let body = null;
-  if (fetching) body = 
-  (
-    <>
-  <div>Loading...</div>
-  <Spinner />
-  </>
-
+  if (fetching) body = ( <Loading/>
   )
 
-  else if (!data) body = 
-  (
-    <>
-  <div>Loading...</div>
-  <Spinner />
-  </>
-
+  else if (!data) body = ( <Loading/>
   )
   else {
     // @ts-ignore
@@ -119,13 +102,16 @@ export default function Index() {
                   <Medicine />
                 </TabPanel>
                 <TabPanel>
-                  {" "}
-                  <FreeDermExams />{" "}
+                  <FreeDermExams />
                 </TabPanel>
-                <TabPanel>{/* <DermHolidays /> */}</TabPanel>
-                <TabPanel>{/* <Profile/> */}</TabPanel>
+                <TabPanel>
+                  <PharmacyDetails />
+                </TabPanel>
                 <TabPanel>
                   <AdminHolidays />
+                </TabPanel>
+                <TabPanel>
+                  <Profile/>
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -167,7 +153,7 @@ const FreeDermExams = () => {
   else {
     if(data.dermsByPharm){
 
-      body = <DataTable data={data.dermsByPharm} columns={columns} />;
+      body = <DataTable title='Dermatologists working in Pharmacy' data={data.dermsByPharm} columns={columns} />;
     }
   }
 
@@ -285,7 +271,7 @@ const Medicine = () => {
   if (fetching) body = <div>Loading</div>;
   else if (!data) body = <div>Loading</div>;
   else {
-    body = <DataTable data={data.medicines} columns={columns} />;
+    body = <DataTable title='Order Medicines' data={data.medicines} columns={columns} />;
   }
 
   return (
@@ -386,7 +372,7 @@ const Inventory = () => {
   if (fetching) body = <div>Loading</div>;
   else if (!data) body = <div>Loading</div>;
   else {
-    body = <DataTable data={data.inventory} columns={columns} />;
+    body = <DataTable title='Current Inventory' data={data.inventory} columns={columns} />;
   }
 
   return (
@@ -454,6 +440,24 @@ const SetPriceModal = ({ selected, onOpen, isOpen, onClose }) => {
 };
 
 
+const FilterComponent = ({ filterText, onFilter, onClear }) => (
+  <>
+  <Container alignSelf="right">
+    <Input
+      id="search"
+      type="text"
+      w={500}
+      placeholder="Filter By Name"
+      aria-label="Search Input"
+      value={filterText}
+      onChange={onFilter}
+    />
+    <Button type="button" onClick={onClear}>
+      X
+    </Button>
+  </Container>
+  </>
+);
 const Employees = ({ type }) => {
   const createModal = useDisclosure();
   const whModal = useDisclosure();
@@ -466,6 +470,16 @@ const Employees = ({ type }) => {
     token: token,
   };
   const [{ fetching, data }] = useEmployeesQuery({ variables });
+  const [filterText, setFilterText] = useState("");
+  const subHeaderComponentMemo = React.useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setFilterText('');
+      }
+    };
+
+    return <FilterComponent onFilter={e => setFilterText(e.target.value)} onClear={handleClear} filterText={filterText} />;
+  }, [filterText]);
   const handler = (row) => {
     setSelected(row);
     whModal.onOpen();
@@ -484,19 +498,23 @@ const Employees = ({ type }) => {
       ),
     },
   ];
-  // if(type === 'pharm'){
-  //  columns = [
-  //   { name: "FirstName", selector: "firstName", sortable: true },
-  //   { name: "Role", selector: "role", sortable: true },
-  //   { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
-  //   { name: "Email", selector: "email", sortable: true },
-  // ];
-  // }
+  if(type === 'pharm'){
+   columns = [
+    { name: "FirstName", selector: "firstName", sortable: true },
+    { name: "Role", selector: "role", sortable: true },
+    { name: "Pharmacy", selector: "pharmacy.name", sortable: true },
+    { name: "Email", selector: "email", sortable: true },
+  ];
+  }
   let body = null;
   if (fetching) body = <div>Loading</div>;
   else if (!data) body = <div>Loading</div>;
   else {
-    body = <DataTable data={data.employees} columns={columns} />;
+    const filteredItems = data.employees.filter(
+      (item) =>
+        item.firstName && item.firstName.toLowerCase().includes(filterText.toLowerCase())
+    );
+    body = <DataTable title='Employees' data={filteredItems} columns={columns} />;
   }
   return (
     <>

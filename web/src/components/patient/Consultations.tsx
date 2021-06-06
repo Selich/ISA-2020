@@ -211,8 +211,8 @@ const PharmacyList = ({ isOpen, time, onClose }) => {
   };
 
   let body = null;
-  if (fetching) body = <div>Loading</div>;
-  else if (!data) body = <div>Loading</div>;
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
   else {
       const columns = [
         { name: "Name", selector: "pharmacy.name", sortable: true },

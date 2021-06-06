@@ -36,8 +36,18 @@ export class PharmacyResolver{
   @Query(() => Pharmacy, { nullable: true })
   async pharmacy(
 		@Arg('inputs') inputs: PharmacyInput,
+		@Arg('token') token: string,
 	) {
-		return await Pharmacy.findOneOrFail({id: inputs.id})
+
+		if(inputs.id === 0){
+			let temp = jwt.decode(token)
+			if(!temp) return null
+			// @ts-ignore
+			let admin  = await Employee.findOne({email: temp.email})
+			return admin?.pharmacy
+		} else {
+			return await Pharmacy.findOneOrFail({id: inputs.id})
+		}
   }
 
   @Query(() => [Employee], { nullable: true })
@@ -117,10 +127,12 @@ export class PharmacyResolver{
 
   @Query(() => [Pharmacy], { nullable: true })
   async subscribedPharmacies(
-		@Arg('inputs') inputs: UserInput,
+		@Arg('token') token: string,
 	) {
-		let patient  = await Patient.findOne({id: inputs.id})
-
+		let temp = jwt.decode(token)
+		if(!temp) return null
+		// @ts-ignore
+		let patient  = await Patient.findOne({email: temp.email})
 		if(!patient) return null
 		return patient.subscriptions
 

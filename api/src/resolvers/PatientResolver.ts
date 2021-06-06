@@ -279,23 +279,16 @@ export class PatientResolver {
   @Mutation(() => Patient, { nullable: true })
   async unsubscribe(
     @Arg("inputs") inputs: SubscriptionInput,
+    @Arg("token") token: string,
     @Ctx() { req }: MyContext) {
-    let user = req.session.user
-    if (!user) {
-      if (inputs.patient)
-        user = await Patient.findOneOrFail({ email: inputs.patient.email })
-    }
-    if (!inputs.pharmacy?.id) return null
+    let temp = jwt.decode(token)
+    // @ts-ignore
+    let user = await Patient.findOneOrFail({ email: temp.email });
 
-    let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
-
-    if (!pharmacy.subscribers) pharmacy.subscribers = []
 
     //@ts-ignore
-    user.subscriptions = user.subscriptions.filter(item => item.id !== pharmacy.id)
+    user.subscriptions = user.subscriptions.filter(item => item.id !== inputs.pharmacy.id)
     user.save()
-    pharmacy.subscribers = pharmacy.subscribers.filter(item => item.id !== user.id)
-    pharmacy.save()
 
 
     return user
@@ -307,14 +300,13 @@ export class PatientResolver {
   @Mutation(() => Patient, { nullable: true })
   async subscribe(
     @Arg("inputs") inputs: SubscriptionInput,
+    @Arg("token") token: string,
     @Ctx() { req }: MyContext) {
-    let user = req.session.user
-    if (!user) {
-      if (inputs.patient)
-        user = await Patient.findOneOrFail({ email: inputs.patient.email })
-    }
-    if (!inputs.pharmacy?.id) return null
+    let temp = jwt.decode(token)
+    // @ts-ignore
+    let user = await Patient.findOneOrFail({ email: temp.email });
 
+    if (!inputs.pharmacy?.id) return null
     let pharmacy = await Pharmacy.findOneOrFail({ id: inputs.pharmacy.id })
 
     if (!pharmacy.subscribers) pharmacy.subscribers = []

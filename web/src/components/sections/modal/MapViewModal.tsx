@@ -46,7 +46,7 @@ export const MapViewModal: any = ({ data, onOpen, isOpen, onClose }) => {
       <ModalOverlay />
       <ModalContent maxW="36rem" maxH="36rem">
         <ModalHeader>
-          <Text fontSize="sm">Map View: {data.name}</Text>{" "}
+          {/* <Text fontSize="sm">Map View: {data.name}</Text>{" "} */}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -55,8 +55,8 @@ export const MapViewModal: any = ({ data, onOpen, isOpen, onClose }) => {
               apiKey="AIzaSyAAQDnv95Dl24FWuV-cuFSrazikHP9Lau0"
               opts={{
                 center: {
-                  lat: parseFloat(data.lat),
-                  lng: parseFloat(data.long),
+                  // lat: parseFloat(data.lat),
+                  // lng: parseFloat(data.long),
                 },
                 zoom: 18,
               }}
@@ -73,8 +73,8 @@ export const MapViewModal: any = ({ data, onOpen, isOpen, onClose }) => {
               id="marker"
               opts={{
                 position: {
-                  lat: parseFloat(data.lat),
-                  lng: parseFloat(data.long),
+                  // lat: parseFloat(data.lat),
+                  // lng: parseFloat(data.long),
                 },
               }}
             />

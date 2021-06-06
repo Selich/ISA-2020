@@ -10,6 +10,9 @@ query Patient(
     tier{
       name
     }
+    tier{
+      name
+    }
     score
     penalty
     address{

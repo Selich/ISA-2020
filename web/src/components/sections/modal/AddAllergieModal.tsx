@@ -80,6 +80,7 @@ export const AddAllergieModal: any = ({ onOpen, isOpen, onClose }) => {
       <DataTable
       data={data.shop}
       columns={columns}
+      noHeader
       />
 
       </>

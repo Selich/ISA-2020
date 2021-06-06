@@ -1,10 +1,13 @@
-import { Box, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
-import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import React from "react";
+import { Box, Text, SimpleGrid, useDisclosure } from "@chakra-ui/react";
+import { useFreeAppointmentsQuery, useFreePharmsQuery, usePharmacyQuery, useScheduleMutation } from "../../generated/graphql";
+import { ListFreeAppModal } from "../sections/modal/ListFreeAppModal";
+import { FreeExamsTable } from "../tables/FreeExamsTable";
+import { AppointmentsTable } from "../tables/AppointmentsTable";
+import Cookies from "js-cookie";
 import DataTable from "react-data-table-component";
-import { Loading } from "../../components/Loading";
-import { useFreeAppointmentsQuery, usePharmacyQuery, useScheduleMutation } from "../../generated/graphql";
+import { Loading } from "../Loading";
 
 const Schedule = (row) => {
   const [, schedule] = useScheduleMutation();
@@ -41,6 +44,7 @@ const FreeApp = ({id}) => {
   else {
     body = (
       <DataTable
+      title='Free Appointments'
       data={data.freeAppointments}
       columns={columns}
       />
@@ -50,16 +54,15 @@ const FreeApp = ({id}) => {
 
   return body
 }
-export default function PharmacyID({ user }) {
+export const PharmacyDetails = () => {
   const modal = useDisclosure();
   const router = useRouter();
   const token = Cookies.get("token");
-  const { id } = router.query;
   const [{ fetching, data }] = usePharmacyQuery({
     variables: {
       inputs: {
         // @ts-ignore
-        id: parseInt(id),
+        id: 0,
       },
       token: token
     },
@@ -80,7 +83,7 @@ export default function PharmacyID({ user }) {
             <Text fontSize={19}>{data.pharmacy.address.country} </Text>
           </Box>
           <Box align="right">
-            <FreeApp id={id}/>
+            <FreeApp id={data.pharmacy.id}/>
           </Box>
         </SimpleGrid>
       </>

@@ -10,7 +10,7 @@ import { Pharmacy } from "./Pharmacy";
 export class Complaint extends Model{
 
 	@Field(() => Patient, {nullable:true})
-	@ManyToOne(() => Patient, item => item.complaints,  { eager: true, cascade: true, nullable: true })
+	@ManyToOne(() => Patient, item => item.complaints,  { cascade: true, nullable: true })
   @JoinTable()
   patient: Patient;
 

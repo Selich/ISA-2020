@@ -4,10 +4,12 @@ query RatingDerm(
   ratingDerm(
     token: $token
   ){
+    id
     email
     firstName
     lastName
     averageRating
+
   }
 }
 

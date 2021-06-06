@@ -57,7 +57,7 @@ export const ReservationsTable = () => {
   else {
     console.log("Reservations");
     console.log(data.reservations);
-    body = <DataTable title="Pharmacies" data={data.reservations} columns={columns} />;
+    body = <DataTable title="Reservations" data={data.reservations} columns={columns} />;
   }
   return body;
 };

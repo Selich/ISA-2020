@@ -242,6 +242,7 @@ export class EmployeeResolver {
 
 		let res = employee.workingHours.filter(item => item.pharmacy === user.pharmacy)[0]
 
+		employee.ratings = []
 		if (!res) {
 			let wh = new WorkingHours()
 			wh.employee = employee

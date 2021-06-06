@@ -1,12 +1,12 @@
-query RatingMedicine(
+query SubscribedPharmacies (
   $token: String!
 ) {
-  ratingMedicine(
+  subscribedPharmacies(
     token: $token
   ){
     id
     name
-    rating
   }
 }
+
 

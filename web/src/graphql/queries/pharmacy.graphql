@@ -1,5 +1,12 @@
-query Pharmacy($inputs: PharmacyInput!) {
-  pharmacy(inputs: $inputs){
+query Pharmacy(
+  $inputs: PharmacyInput!
+  $token: String!
+) {
+  pharmacy(
+    inputs: $inputs
+    token: $token
+    ){
+      id
       name
       averageRating
       address{

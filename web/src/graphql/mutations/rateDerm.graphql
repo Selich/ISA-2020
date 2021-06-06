@@ -1,0 +1,11 @@
+mutation RateDerm( 
+  $inputs: EmployeeInput! 
+  $token: String! 
+  ) {
+  rateDerm( 
+    inputs: $inputs
+    token: $token
+    ) {
+rating
+  }
+}

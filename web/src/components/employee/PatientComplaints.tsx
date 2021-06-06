@@ -43,8 +43,8 @@ export const PatientComplaints = () => {
           //@ts-ignore
           expandableRows
           expandableRowsComponent={<ExpandedComponent />}
-          data={data.complaintsPatient}
-          // data={[]}
+          // data={data.complaintsPatient}
+          data={[]}
           columns={columns}
         />
         <CreateModal

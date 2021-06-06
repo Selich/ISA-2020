@@ -12,6 +12,7 @@ import React from "react";
 import DataTable from "react-data-table-component";
 import { Examinations } from "../../components/employee/Examinations";
 import { MyCalendar } from "../../components/employee/MyCalendar";
+import { PatientSearch } from "../../components/employee/PatientSearch";
 import { RequestHoliday } from "../../components/employee/RequestHoliday";
 import { Loading } from "../../components/Loading";
 import {
@@ -22,6 +23,7 @@ const TabMenu = () => (
   <TabList>
     <Tab>Examinations</Tab>
     <Tab>Calendars</Tab>
+    <Tab>Patients</Tab>
     <Tab>Holidays</Tab>
     <Tab>Profile</Tab>
   </TabList>
@@ -71,6 +73,9 @@ export default function Index() {
                 <TabPanel>
                   <RequestHoliday/>
                   <MyCalendar events={events} />
+                </TabPanel>
+                <TabPanel>
+                  <PatientSearch/>
                 </TabPanel>
                 <TabPanel>
                   <Holidays />

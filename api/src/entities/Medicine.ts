@@ -60,7 +60,7 @@ export class Medicine extends Model {
   requests: MedicineRequest[];
 
   @Field(() => [Rating])
-  @OneToMany(() => Rating, item => item.medicine,{nullable: true})
+  @OneToMany(() => Rating, item => item.medicine,{nullable: true} )
   ratings: Rating[];
 
   @OneToMany(() => MedicineItem, item => item.details, { nullable: true})

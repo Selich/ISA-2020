@@ -19,11 +19,7 @@ export const SysAdminComplaints = () => {
 
   }
   let columns = [
-    // { name: "Patient Email", selector: "patient.email", sortable: true },
     { name: "Complaint", selector: "description", sortable: true },
-    { name: "City", selector: "city", sortable: true },
-    { name: "Country", selector: "country", sortable: true },
-    { name: "Rating", selector: "averageRating", sortable: true },
      {
         name: "",
         button: true,
@@ -48,7 +44,6 @@ export const SysAdminComplaints = () => {
         data={data.complaints}
         title='Complaints'
 
-        // data={[]}
         columns={columns}
       />
       <CreateModal

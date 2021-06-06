@@ -12,6 +12,8 @@ export const Header: any = ({user, setUser}) => {
     token: token
   }})
 
+  useEffect(() => {} ,[user])
+
   let body = null;
 	if (!token) {
 	 body = ( <GuestMenu setUser={setUser}/>)

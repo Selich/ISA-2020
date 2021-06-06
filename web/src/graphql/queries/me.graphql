@@ -4,6 +4,7 @@ query Me($token: String!) {
     lastName
     role
     email
+    version
     address{
       street
       city

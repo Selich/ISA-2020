@@ -11,18 +11,22 @@ import {
 import Cookies from "js-cookie";
 import moment from "moment";
 import React from "react";
+import DataTable from "react-data-table-component";
 import { ApproveReservation } from "../../components/employee/ApproveReservation";
 import { Consultations } from "../../components/employee/Consultations";
 import { MyCalendar } from "../../components/employee/MyCalendar";
+import { PatientSearch } from "../../components/employee/PatientSearch";
 import { RequestHoliday } from "../../components/employee/RequestHoliday";
 import { Loading } from "../../components/Loading";
-import { useAppointmentsQuery } from "../../generated/graphql";
+import { useAppointmentsQuery, useHolidayQuery } from "../../generated/graphql";
 
 const TabMenu = () => (
   <TabList>
     <Tab>Reservations</Tab>
     <Tab>Consultations</Tab>
     <Tab>Calendars</Tab>
+    <Tab>Patients</Tab>
+    <Tab>Holidays</Tab>
     <Tab>Profile</Tab>
   </TabList>
 );
@@ -75,7 +79,12 @@ export default function Index() {
                   <RequestHoliday />
                   <MyCalendar events={events} />
                 </TabPanel>
-                <TabPanel>{/* <Profile/> */}</TabPanel>
+                <TabPanel>
+                  <PatientSearch/>
+                </TabPanel>
+                <TabPanel>
+                  <Holidays />
+                </TabPanel>
               </TabPanels>
             </Tabs>
           </Box>
@@ -84,4 +93,35 @@ export default function Index() {
     );
   }
   return body;
+}
+
+const Holidays = () => {
+  
+
+  const token = Cookies.get('token')
+  const [{ fetching, data }] = useHolidayQuery({ variables: { token: token } });
+
+	const columns = [
+		{ name: "From", selector: "from", sortable: true },
+		{ name: "Until", selector: "until", sortable: true },
+		{ name: "Holiday Approved", id:'isApproved', accessor: item => item.isApproved.toString(), sortable: true
+  },
+
+	];
+  
+  let body = null;
+  if (fetching) body = <Loading/>;
+  else if (!data) body = <Loading/>;
+  else {
+  body = (
+    <DataTable
+    data={data.holiday}
+    columns={columns}
+    />
+  )
+  }
+
+  return body
+
+
 }

@@ -1,0 +1,11 @@
+mutation RatePharmacy( 
+  $inputs: PharmacyInput! 
+  $token: String! 
+  ) {
+  ratePharmacy( 
+    inputs: $inputs
+    token: $token
+    ) {
+    name
+  }
+}

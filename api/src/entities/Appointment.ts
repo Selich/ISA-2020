@@ -16,7 +16,7 @@ export class Appointment extends Model{
   patient: Patient;
 
 	@Field(() => Employee, {nullable: true})
-  @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: false })
+  @ManyToOne(() => Employee, item => item.schedule,  { eager: true, cascade: false, nullable:true })
   @JoinTable()
   employee: Employee;
 

@@ -1,5 +1,4 @@
-query GetSchedule
-(
+query GetSchedule (
   $token: String!
 ) {
   getSchedule(

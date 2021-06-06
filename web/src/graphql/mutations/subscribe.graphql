@@ -1,7 +1,11 @@
 mutation Subscribe( 
 	$inputs: SubscriptionInput!
+	$token: String!
 ) {
-  subscribe(inputs: $inputs) {
+  subscribe(
+    inputs: $inputs
+    token: $token
+    ) {
  		email
     subscriptions{
       name

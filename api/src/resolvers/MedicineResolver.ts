@@ -118,12 +118,6 @@ export class MedicineResolver {
 		await queryRunner.startTransaction();
 
 
-
-
-
-
-
-
 		let inventory = admin?.pharmacy.inventory
 		if (!inventory) return null
 		if (inputs.details) {

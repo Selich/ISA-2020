@@ -15,9 +15,12 @@ import {
 import React from "react";
 import { useSubscribeMutation } from "../../../generated/graphql";
 import swal from "sweetalert";
+import Cookies from "js-cookie";
 
-export const SubscribeModal: any = ({ user, data, onOpen, isOpen, onClose }) => {
+export const SubscribeModal: any = ({ selected, isOpen, onClose }) => {
   const [, subscribe] = useSubscribeMutation();
+  const token = Cookies.get('token')
+
   const btnRef = React.useRef();
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xs" isCentered>
@@ -29,7 +32,7 @@ export const SubscribeModal: any = ({ user, data, onOpen, isOpen, onClose }) => 
             <Center>
               <VStack>
                 <Text fontSize="2xl">
-                  Confirm subscribing to the {data.name}?
+                  {/* Confirm subscribing to the {data.name}? */}
                 </Text>
               </VStack>
             </Center>
@@ -41,18 +44,18 @@ export const SubscribeModal: any = ({ user, data, onOpen, isOpen, onClose }) => 
               colorScheme="teal"
               onClick={() => {
 								let req = {
-									"inputs": {
-										"patient": {
-											"email": user.patient.email
+									inputs: {
+										pharmacy: {
+											id: parseInt(selected.id)
 										},
-										"pharmacy": {
-											"id": data.id
-										},
-									}
+									},
+                  token: token
 								}
 								console.log(req)
-								subscribe(req).then(res => console.log(res))
-                onClose();
+								subscribe(req).then(res => {
+                  console.log(res)
+                  onClose();
+                })
               }}
             >
               Confirm

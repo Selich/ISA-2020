@@ -96,6 +96,8 @@ export class UserInput {
   @Field({ nullable: true})
   role?: string;
   @Field({ nullable: true})
+  version?: number;
+  @Field({ nullable: true})
   firstName?: string;
   @Field({ nullable: true})
   lastName?: string;

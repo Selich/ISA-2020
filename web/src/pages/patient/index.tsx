@@ -1,7 +1,5 @@
 import {
-  Box,
-  Button,
-  Modal,
+  Box, Modal,
   ModalBody,
   ModalContent,
   ModalHeader,
@@ -13,21 +11,20 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
-import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { PatientComplaints } from "../../components/employee/PatientComplaints";
 import { PatientDetails } from "../../components/layouts/patient/PatientDetails";
 import { Consultations } from "../../components/patient/Consultations";
 import { EPrescriptions } from "../../components/patient/EPrescriptions";
 import { Examinations } from "../../components/patient/Examinations";
+import { Rate } from "../../components/patient/Rate";
+import { Subscription } from "../../components/patient/Subscriptions";
+import { Profile } from "../../components/Profile";
 import { EmployeeTable } from "../../components/tables/EmployeeTable";
 import { PrescriptionTable } from "../../components/tables/PrescriptionTable";
 import { ReservationsTable } from "../../components/tables/ReservationsTable";
-import { SubscriptionTable } from "../../components/tables/SubscriptionTable";
-import { useRatingDermQuery } from "../../generated/graphql";
 import { MyDateInput, MyTimeInput } from "../../utils/utils";
 
 const TabMenu = () => (
@@ -54,9 +51,9 @@ export default function Index() {
           <Tabs isFitted colorScheme="green">
             <TabMenu />
             <TabPanels>
-              <TabPanel>
+               <TabPanel>
                 <Examinations />
-              </TabPanel>
+              </TabPanel> 
               <TabPanel>
                 <Consultations />
               </TabPanel>
@@ -69,15 +66,18 @@ export default function Index() {
               <TabPanel>
                 <ReservationsTable />
               </TabPanel>
-              <TabPanel>Subs</TabPanel>
+              <TabPanel>
+                <Subscription/>
+                </TabPanel>
               <TabPanel>
                 <PatientComplaints/>
               </TabPanel>
               <TabPanel>
                 <Rate />
-              </TabPanel>
-              <TabPanel>{/* <SubscriptionTable/> */}</TabPanel>
-              <TabPanel></TabPanel>
+              </TabPanel> 
+              <TabPanel>
+                <Profile/>
+              </TabPanel> 
             </TabPanels>
           </Tabs>
         </Box>
@@ -89,7 +89,6 @@ export default function Index() {
 const SelectedPharmModal: any = ({
   isOpen,
   onClose,
-  onOpen,
   selectedPharmacy,
 }) => {
   const [selectedEmployee, setSelectedEmployee] = useState();
@@ -149,111 +148,3 @@ const ScheduleConsultations = () => {
 	)
 
 }
-
-// TODO: FIX PATIENT PROFILE
-// dermatologa (samo ukoliko je imao održan bar jedan pregled kod tog dermatologa),
-// farmaceuta (samo ukoliko je imao održano bar jedno savetovanje kod tog farmaceuta),
-// lek (samo ukoliko je bar jednom rezervisao i preuzeo lek ili mu je prepisan putem Recepta),
-// apoteku (samo ukoliko je bar jednom rezervisao i preuzeo lek ili mu je prepisan putem eRecepta ili je imao održan bar jedan pregled ili jedno
-// -uto.
-const RateDerm = () => {
-  const token = Cookies.get('token')
-  const [{fetching, data}] = useRatingDermQuery({variables: {token: token}})
-  const handler = (row) => {
-
-  }
-  const columns = [
-    {name: "FirstName", selector:"firstName", sortable:true},
-    // {name: "LastName", selector:"lastName", sortable:true},
-    {name: "Rating", selector:"averageRating", sortable:true},
-          {
-          name: "",
-          button: true,
-          cell: (row: any) => (
-            <Button colorScheme="red" size="sm" onClick={() => handler(row)}>
-                Rate
-            </Button>
-          ),
-        }
-  ]
-  let body = null
-  if (fetching) body = <div>Loading</div>
-  else if (!data) body = <div>Loading</div>
-  else {
-    if(!data.ratingDerm) body = <div>Empty</div>
-    else
-    body =(
-    <DataTable
-    data={data.ratingDerm}
-    columns={columns}
-    />
-
-  )
-  }
-  return body
-}
-const RatePharm = () => {
-  const token = Cookies.get('token')
-  const [{fetching, data}] = useRatingDermQuery({variables: {token: token}})
-  const handler = (row) => {
-
-  }
-  const columns = [
-    {name: "FirstName", selector:"firstName", sortable:true},
-    // {name: "LastName", selector:"lastName", sortable:true},
-    {name: "Rating", selector:"averageRating", sortable:true},
-          {
-          name: "",
-          button: true,
-          cell: (row: any) => (
-            <Button colorScheme="red" size="sm" onClick={() => handler(row)}>
-                Rate
-            </Button>
-          ),
-        }
-  ]
-  let body = null
-  if (fetching) body = <div>Loading</div>
-  else if (!data) body = <div>Loading</div>
-  else {
-    if(!data.ratingDerm) body = <div>Empty</div>
-    else
-    body =(
-    <DataTable
-    data={data.ratingDerm}
-    columns={columns}
-    />
-
-  )
-  }
-  return body
-}
-const RateMedicine = () => {
-  return (
-    <div>Test</div>
-  )
-}
-const RatePharmacy = () => {
-  return (
-    <div>Test</div>
-  )
-}
-const Rate = () => {
-  return (
-    <Tabs>
-
-  <TabList>
-    <Tab>Examinations</Tab>
-    <Tab>Consultation</Tab>
-    <Tab>E-Prescriptions</Tab>
-    <Tab>Reservations</Tab>
-    </TabList>
-    <TabPanel><RateDerm/></TabPanel>
-    <TabPanel><RatePharm/></TabPanel>
-    <TabPanel><RateMedicine/></TabPanel>
-    <TabPanel><RatePharmacy/></TabPanel>
-   </Tabs>
-
-  )
-}
-

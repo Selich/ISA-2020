@@ -1,18 +1,5 @@
 query Complaints {
   complaints{
-    createdAt
     description
-    employee{
-      firstName
-      lastName
-      email
-      role
-    }
-    patient{
-      firstName
-      lastName
-      email
-
-    }
   }
 }

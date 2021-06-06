@@ -27,8 +27,10 @@ export class ComplaintResolver {
 		let temp = jwt.decode(token)
 		if (!temp) return null
     // @ts-ignore
-    let patient = await Patient.findOneOrFail({id: temp.id})
-		return await Complaint.find({patient: patient })
+    let patient = await Patient.findOne({id: temp.id})
+    let comp = Complaint.find({patient: patient })
+    if(!comp) return []
+    else return comp
 	}
 	@Mutation(() => Complaint, { nullable: true })
 	async createComplaint(
