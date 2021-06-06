@@ -150,6 +150,22 @@ export async function sendAppointmentMail(to: Patient, appointment: Appointment,
   return nodemailer.getTestMessageUrl(info)
 }
 
+export async function sendComplaintAnswer(to: Patient, answer: string, mailer: any) {
+  let hello = "<h3> Hello " + to.firstName + " " + to.lastName + "</h3>"
+
+  let info = await mailer.sendMail({
+    from: '"Admin Admin" <barry85@ethereal.email>',
+    to: to.email,
+    subject: "Confirm your account ✔",
+    text: "Confirm your account",
+    html: hello + answer,
+  });
+
+  console.log("Message sent: " + info.messageId);
+  console.log(nodemailer.getTestMessageUrl(info));
+  return nodemailer.getTestMessageUrl(info)
+}
+
 
 export async function sendVerificationMail(to: Patient, mailer: any) {
   let hello = "<h3> Hello " + to.firstName + " " + to.lastName + "</h3>"

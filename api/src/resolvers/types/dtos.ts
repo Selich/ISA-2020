@@ -315,6 +315,9 @@ export class PriceInput {
 
 @InputType()
 export class ComplaintInput {
+  @Field({nullable: true})
+  id?: number;
+
 	@Field(() => PatientInput, {nullable: true})
   patient?: PatientInput;
 

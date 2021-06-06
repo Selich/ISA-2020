@@ -1,4 +1,4 @@
-import { Text, Button, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, useDisclosure, Container } from "@chakra-ui/react";
+import { Text, Button, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, useDisclosure, Container, Input } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
@@ -103,7 +103,10 @@ const AddAdmin = ({ selected,onOpen, isOpen, onClose }) => {
           <Text fontSize="xl">Add Admin:</Text>
         </ModalHeader>
         <ModalBody>
-        <div>test</div>
+          Answer
+          <Input type="text"></Input>
+          <Button>Submit</Button>
+          
         </ModalBody>
       </ModalContent>
     </Modal>

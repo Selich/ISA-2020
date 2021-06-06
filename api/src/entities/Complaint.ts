@@ -28,4 +28,5 @@ export class Complaint extends Model{
 	@Column({ nullable: true })
   description: string;
 
+
 }

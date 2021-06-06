@@ -62,7 +62,7 @@ export default function Index() {
                 <Pharmacies />
               </TabPanel>
               <TabPanel>
-                {/* <SysAdminMedicine /> */}
+                <SysAdminMedicine />
               </TabPanel>
               <TabPanel>
                 <SysAdminComplaints/>
