@@ -71,7 +71,7 @@ Video klipovi se nalaze na Google Drive-u na [linku](https://drive.google.com/dr
 
 ## Proof of Concept
 
-Predlog arhitekture se nalazi na [linku](./docs/Proof of Concept.pdf)
+Predlog arhitekture se nalazi na [linku](https://github.com/Selich/ISA-2020/blob/master/docs/Proof%20of%20Concept.pdf)
 
 Prilikom akcija koje generisu e-mail, adresa na koju je mail poslat se pojavljuje u konzoli.
 Potrebno je kopirati tu adresu u address bar browsera.
