@@ -55,7 +55,16 @@ port: 5432
 
 Dump SQL baze se nalazi na [linku]( https://drive.google.com/drive/u/1/folders/1aOOK3CV7BB5vG-ntpBgifMQkrUB8Nkv0)
 
-
+## Predefinisani korisnici:
+```
+Email
+Pacijent (korisnik): pacijent@gmail.com
+Dermatolog: dermatolog@gmail.com
+Farmaceut: farmaceut@gmail.com
+Administrator apoteke: adminapoteke@gmail.com
+Administrator sistema: sysadmin@gmail.com
+Password za sve je: 1234
+```
 Za formiranje i popunjavanje tabela u bazi koristiti sledecu komandu u terminalu
 ```
 psql -U isa_super -d isa_super < dump.sql
@@ -99,7 +108,9 @@ yarn gen
 ```
 ### Mail servis
 Za slanje e-mail-a koriscen je [Nodemailer](https://nodemailer.com/about/)
+
 Kredencijali:
+
 ```
 user: 'barry85@ethereal.email'
 pass: '4GK92dcVH8byXMht53'
